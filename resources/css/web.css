@@ -1,0 +1,26 @@
+#map-pos {
+    position: absolute;
+    top: 130px;
+    left: 100px;
+}
+#map-container {
+    position: relative;
+    width: 1200px;
+    height: 826px;
+    background-image: url('map.jpg'); 
+    background-size: cover;
+}
+
+.lot {
+    cursor: pointer;
+    transition: transform 0.2s ease, fill 0.2s ease;
+}
+
+.lot:hover {
+    fill: rgba(255, 255, 255, 0.5);
+    stroke: #ffffff;
+    stroke-width: 2;
+    transform: scale(1.009);
+}
+
+
