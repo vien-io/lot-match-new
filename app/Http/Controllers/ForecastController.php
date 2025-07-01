@@ -149,4 +149,51 @@ class ForecastController extends Controller
 
         return response()->json(['summary' => $summary]);
     }   
+
+    public function getCombinedBlockInsight($blockId)
+    {
+        // get stored ai summary
+        $summaryModel = \App\Models\BlockSummary::where('block_id', $blockId)->first();
+        $summary = $summaryModel ? $summaryModel->summary : 'No AI summary available yet.';
+
+        // forecasted rating
+        $forecastedRating = $this->calculateForecast($blockId);
+     
+        // determine living condition label
+        $ratingLabel = 'Unavailable';
+        if ($forecastedRating !== null) {
+            if ($forecastedRating >= 4) {
+                $ratingLabel = 'Looks great for future residents.';
+            } else if ($forecastedRating >= 3) {
+                $ratingLabel = 'Looks decent for future residents.';
+            } else {
+                $ratingLabel = 'May not be ideal for now.';
+            }
+        }
+
+        // get latest sentiment stats
+        $sentiments = $this->fetchSentimentTrends($blockId);
+        $latestMonth = array_key_last($sentiments);
+        $latestSentiment = $sentiments[$latestMonth] ?? ['positive' => 0, 'neutral' => 0, 'negative' => 0];
+
+        $total = array_sum($latestSentiment) ?: 1;
+        $positivePct = round(($latestSentiment['positive'] ?? 0) / $total * 100);
+        $neutralPct = round(($latestSentiment['neutral'] ?? 0) / $total * 100);
+        $negativePct = round(($latestSentiment['negative'] ?? 0) / $total * 100);
+
+        // final json resp
+        return response()->json([
+            'block_id' => $blockId,
+            'summary' => $summary,
+            'forecasted_rating' => $forecastedRating,
+            'living_condition' => $ratingLabel,
+            'recent_sentiment' => [
+                'positive' => $positivePct,
+                'neutral' => $neutralPct,
+                'negative' => $negativePct,
+            ]
+            ]);
+
+        
+    }
 }

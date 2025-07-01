@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use App\Jobs\GenerateBlockSummaryJob;
 
 
 class ReviewController extends Controller
@@ -33,20 +34,6 @@ class ReviewController extends Controller
             ]);
 
 
-            // analyze and update sentiment
-            /* if ($request->comment) {
-                $sentiment = $this->analyzeSentimentViaHuggingFace($request->comment);
-
-                Log::info('Sentiment Result (update):', [
-                    'comment' => $request->comment,
-                    'sentiment' => $sentiment
-                ]);
-
-
-                $existingReview->sentiment = strtolower($sentiment);
-                $existingReview->save();
-            } */
-
 
         } else {
             // create new review
@@ -58,18 +45,7 @@ class ReviewController extends Controller
                 'comment' => $request->comment,
             ]);
 
-            // analyze and update sentiment
-            /* if ($request->comment) {
-                $sentiment = $this->analyzeSentimentViaHuggingFace($request->comment);
-
-                Log::info('Sentiment Result (new):', [
-                    'comment' => $request->comment,
-                    'sentiment' => $sentiment
-                ]);
-
-                $review->sentiment = strtolower($sentiment);
-                $review->save();
-            } */
+            
         }
 
         // unify
@@ -88,8 +64,11 @@ class ReviewController extends Controller
             $finalReview->save();
         }
 
+        // dispatch AI summary job
+        GenerateBlockSummaryJob::dispatch($request->block_id);
+
         // generate AI summary using Hugging Face
-        if ($request->comment) {
+       /*  if ($request->comment) {
             $summaryService = new SummaryService();
             $summary = $summaryService->generateBlockSummaryViaHuggingFace($request->block_id);
 
@@ -99,7 +78,9 @@ class ReviewController extends Controller
                     ['summary' => $summary]
                 );
             }
-        }
+        } */
+
+        
         
 
        

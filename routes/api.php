@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ForecastController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReviewController;
@@ -20,3 +21,5 @@ Route::post('/test-sentiment', function (Request $request) {
         'sentiment' => $sentiment,
     ]);
 });
+
+Route::get('/blocks/{blockId}/insight', [ForecastController::class, 'getCombinedBlockInsight']);
