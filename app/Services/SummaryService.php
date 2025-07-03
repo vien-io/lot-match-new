@@ -24,14 +24,47 @@ class SummaryService
         $textToSummarize = implode(' ', $reviews);
         Log::info('Length of summary input (chars): ' . strlen($textToSummarize));
 
+       
+        
+        $input = Str::words($textToSummarize, 150);
+
+        // chatgpt prio
+        $openAiKey = config('services.openai.api_key');
+        if ($openAiKey) {
+            try {
+                $response = Http::withToken($openAiKey)
+                ->timeout(30)
+                ->post('https://api.openai.com/v1/chat/completions', [
+                    'model' => 'gpt-3.5-turbo',
+                    'messages' => [
+                        ['role' => 'system', 'content' => 'Summarize these resident comments in a helpful tone.'],
+                        ['role' => 'user', 'content' => $input]
+                    ],
+                    'temperature' => 0.7,
+                    'max_tokens' => 150,
+                ]);
+
+                if ($response->successful()) {
+                    $summary = $response->json()['choices'][0]['message']['content'] ?? null;
+                    Log::info('OpenAI summary used.');
+                    return $summary;
+                } else {
+                    Log::warning('OpenAI failed. Falling back to Hugging Face', ['status' => $response->status()]);
+                }
+            } catch (\Exception $e) {
+                Log::error('OpenAI request failed. Falling back to Hugging Face', ['message' => $e->getMessage()]);
+            }
+        } else {
+            Log::warning('OpenAI key not set. Using Hugging Face instead.');
+        }
+
+        // fallback to Hugging Face
         $apiKey = config('services.huggingface.api_key');
 
         if (!$apiKey) {
             Log::error('Hugging Face API key is missing.');
             return "Summary cannot be generated: API Key is missing.";
         }
-        
-        $input = Str::words($textToSummarize, 150);
         
         try {
             $response = Http::withHeaders([
