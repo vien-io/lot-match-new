@@ -26,42 +26,41 @@ class SummaryService
 
         
         try {
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . config('services.huggingface.api_key'),
-        ])
-        ->timeout(60)
-        ->retry(3, 5000)
-        ->post('https://api-inference.huggingface.co/models/sshleifer/distilbart-cnn-12-6', [
-            'inputs' => Str::limit($textToSummarize, 1024),
-            'parameters' => [
-                'max_length' => 100,
-                'min_length' => 40,
-            ]
-        ]);
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . config('services.huggingface.api_key'),
+            ])
+            ->timeout(90)
+            ->retry(3, 5000)
+            ->post('https://api-inference.huggingface.co/models/sshleifer/distilbart-cnn-12-6', [
+                'inputs' => Str::limit($textToSummarize, 1024),
+                'parameters' => [
+                    'max_length' => 100,
+                    'min_length' => 40,
+                ]
+            ]);
 
-        if ($response->successful()) {
-            $summary = $response->json()[0]['summary_text'] ?? null;
-            
-            Log::info('Hugging Face AI Summary:', ['summary' => $summary]);
-            Log::info('Hugging Face Summary Raw Response:', $response->json());
+            if ($response->successful()) {
+                $summary = $response->json()[0]['summary_text'] ?? null;
+                
+                Log::info('Hugging Face AI Summary:', ['summary' => $summary]);
+                Log::info('Hugging Face Summary Raw Response:', $response->json());
 
-            return $summary;    
-        }
+                return $summary;    
+            }
 
-        Log::error('Hugging Face summary failed.', [
-            'block_id' => $blockId,
-            'status' => $response->status(),
-            'body' => $response->body()
-        ]);
-    } catch (\Exception $e) {
+            Log::error('Hugging Face summary failed.', [
+                'block_id' => $blockId,
+                'status' => $response->status(),
+                'body' => $response->body()
+            ]);
+        } catch (\Exception $e) {
             Log::error('Hugging Face API request exception', [
                 'block_id' => $blockId,
                 'message' => $e->getMessage(),
             ]);
         }
-        
-        Log::info('Hugging Face Summary Raw Response:', $response->json());
-        return null;
+
+        return "Summary is currently unavailable. Please try again later.";
     }
 }
 

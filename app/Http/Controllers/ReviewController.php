@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Jobs\GenerateBlockSummaryJob;
+use App\Jobs\AnalyzeSentimentJob;
 
 
 class ReviewController extends Controller
@@ -52,7 +53,7 @@ class ReviewController extends Controller
         $finalReview = $existingReview ?? $review;
 
         // analyze and update sentiment
-        if ($request->comment && isset($finalReview)) {
+        /* if ($request->comment && isset($finalReview)) {
             $sentiment = $this->analyzeSentimentViaHuggingFace($request->comment);
 
             Log::info('Sentiment Result (store):', [
@@ -62,23 +63,29 @@ class ReviewController extends Controller
 
             $finalReview->sentiment = strtolower($sentiment);
             $finalReview->save();
+        } */
+
+       
+        /* 
+        if ($request->comment && isset($finalReview)) {
+            AnalyzeSentimentJob::dispatch($finalReview->id, $request->comment);
+        } */
+
+
+       /*  AnalyzeSentimentJob::withChain([
+            new GenerateBlockSummaryJob($request->block_id)
+        ])->dispatch($finalReview->id, $request->comment); */
+
+        if ($request->comment && isset($finalReview)) {
+            AnalyzeSentimentJob::withChain([
+                new GenerateBlockSummaryJob($request->block_id)
+            ])->dispatch($finalReview->id, $request->comment);
         }
 
         // dispatch AI summary job
-        GenerateBlockSummaryJob::dispatch($request->block_id);
+        // GenerateBlockSummaryJob::dispatch($request->block_id);
 
-        // generate AI summary using Hugging Face
-       /*  if ($request->comment) {
-            $summaryService = new SummaryService();
-            $summary = $summaryService->generateBlockSummaryViaHuggingFace($request->block_id);
-
-            if ($summary) {
-                BlockSummary::updateOrCreate(
-                    ['block_id' => $request->block_id],
-                    ['summary' => $summary]
-                );
-            }
-        } */
+       
 
         
         
