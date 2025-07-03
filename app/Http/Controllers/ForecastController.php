@@ -181,6 +181,19 @@ class ForecastController extends Controller
         $neutralPct = round(($latestSentiment['neutral'] ?? 0) / $total * 100);
         $negativePct = round(($latestSentiment['negative'] ?? 0) / $total * 100);
 
+        // just logs
+        Log::info('Combined AI Block Insight:', [
+        'block_id' => $blockId,
+        'summary' => $summary,
+        'forecasted_rating' => $forecastedRating,
+        'living_condition' => $ratingLabel,
+        'recent_sentiment' => [
+            'positive' => $positivePct,
+            'neutral' => $neutralPct,
+            'negative' => $negativePct,
+        ]
+        ]);
+
         // final json resp
         return response()->json([
             'block_id' => $blockId,

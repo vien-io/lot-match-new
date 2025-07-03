@@ -24,6 +24,14 @@ class SummaryService
         $textToSummarize = implode(' ', $reviews);
         Log::info('Length of summary input (chars): ' . strlen($textToSummarize));
 
+        $apiKey = config('services.huggingface.api_key');
+
+        if (!$apiKey) {
+            Log::error('Hugging Face API key is missing.');
+            return "Summary cannot be generated: API Key is missing.";
+        }
+        
+        $input = Str::words($textToSummarize, 150);
         
         try {
             $response = Http::withHeaders([
@@ -32,7 +40,7 @@ class SummaryService
             ->timeout(90)
             ->retry(3, 5000)
             ->post('https://api-inference.huggingface.co/models/sshleifer/distilbart-cnn-12-6', [
-                'inputs' => Str::limit($textToSummarize, 1024),
+                'inputs' => $input,
                 'parameters' => [
                     'max_length' => 100,
                     'min_length' => 40,
@@ -46,13 +54,15 @@ class SummaryService
                 Log::info('Hugging Face Summary Raw Response:', $response->json());
 
                 return $summary;    
+            } else {
+                Log::error('Hugging Face summary failed.', [
+                    'block_id' => $blockId,
+                    'status' => $response->status(),
+                    'body' => $response->body()
+                ]);
             }
 
-            Log::error('Hugging Face summary failed.', [
-                'block_id' => $blockId,
-                'status' => $response->status(),
-                'body' => $response->body()
-            ]);
+         
         } catch (\Exception $e) {
             Log::error('Hugging Face API request exception', [
                 'block_id' => $blockId,
@@ -60,11 +70,8 @@ class SummaryService
             ]);
         }
 
-        return "Summary is currently unavailable. Please try again later.";
+        return "[AI summary unavailable due to server error.]";
     }
 }
-
-
-
 
 ?>
