@@ -28,6 +28,8 @@ class SummaryService
         
         $input = Str::words($textToSummarize, 150);
 
+        // TODO: planning to replace hugging face with claude
+
         // chatgpt prio
         $openAiKey = config('services.openai.api_key');
         if ($openAiKey) {
