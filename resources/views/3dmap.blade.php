@@ -10,7 +10,7 @@
        /*  const isAdmin = @json(auth()->check() && auth()->user()->is_admin);
         console.log(isAdmin); */
     </script>
-    @vite(['resources/js/app.js', 'resources/css/homepage.css'])
+    @vite(['resources/js/app.js', 'resources/sass/app.scss'])
 </head>
 
 <body class="threedbody" 
