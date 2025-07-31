@@ -25,7 +25,7 @@ class GenerateBlockSummaryJob implements ShouldQueue
     public function handle()
     {
         $summaryService = new SummaryService();
-        $summary = $summaryService->generateBlockSummaryViaHuggingFace($this->blockId);
+        $summary = $summaryService->generateBlockSummaryViaGPT($this->blockId);
 
         if ($summary) {
             BlockSummary::updateOrCreate(
@@ -33,6 +33,7 @@ class GenerateBlockSummaryJob implements ShouldQueue
                 ['summary' => $summary]
             );
         Log::info('AI summary job completed for block ID: ' . $this->blockId);
+    
         } else {
             Log::warning('AI summary job failed or returned null for block ID: ' . $this->blockId);
         }

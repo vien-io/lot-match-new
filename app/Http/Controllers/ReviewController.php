@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Jobs\GenerateBlockSummaryJob;
 use App\Jobs\AnalyzeSentimentJob;
+use Illuminate\Support\Facades\DB;
 
 
 class ReviewController extends Controller
@@ -52,41 +53,20 @@ class ReviewController extends Controller
         // unify
         $finalReview = $existingReview ?? $review;
 
-        // analyze and update sentiment
-        /* if ($request->comment && isset($finalReview)) {
-            $sentiment = $this->analyzeSentimentViaHuggingFace($request->comment);
-
-            Log::info('Sentiment Result (store):', [
-                'comment' => $request->comment,
-                'sentiment' => $sentiment
-            ]);
-
-            $finalReview->sentiment = strtolower($sentiment);
-            $finalReview->save();
-        } */
-
-       
-        /* 
+        // dispatch AI summary job
         if ($request->comment && isset($finalReview)) {
-            AnalyzeSentimentJob::dispatch($finalReview->id, $request->comment);
-        } */
-
-
-       /*  AnalyzeSentimentJob::withChain([
-            new GenerateBlockSummaryJob($request->block_id)
-        ])->dispatch($finalReview->id, $request->comment); */
-
-        if ($request->comment && isset($finalReview)) {
-            AnalyzeSentimentJob::withChain([
+            DB::afterCommit(function () use ($finalReview, $request) {
+            $chain = [
                 new GenerateBlockSummaryJob($request->block_id)
-            ])->dispatch($finalReview->id, $request->comment);
+            ];
+
+            dispatch((new AnalyzeSentimentJob($finalReview->id, $request->comment))
+                ->delay(now()->addSeconds(10))
+                ->chain($chain));
+            });
         }
 
-        // dispatch AI summary job
-        // GenerateBlockSummaryJob::dispatch($request->block_id);
-
-       
-
+      
         
         
 
