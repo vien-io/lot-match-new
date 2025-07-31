@@ -26,6 +26,18 @@ class AnalyzeSentimentJob implements ShouldQueue
 
     public function handle()
     {
+        if (!env('SENTIMENT_ENABLED', true)) {
+            Log::info('Sentiment analysis skipped for review ID:', ['review_id' => $this->reviewId]);
+            // update review with placeholder
+            $review = Review::find($this->reviewId);
+            if ($review) {
+                $review->sentiment = 'neutral'; // or null
+                $review->save();
+            }
+
+            return;
+        }
+
         try {
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . config('services.huggingface.api_key'),
@@ -35,19 +47,6 @@ class AnalyzeSentimentJob implements ShouldQueue
             ->post('https://api-inference.huggingface.co/models/cardiffnlp/twitter-roberta-base-sentiment', [
                 'inputs' => $this->comment,
             ]);
-
-            /* $label = null;
-            if ($response->successful()) {
-                $result = $response->json()[0];
-                $label = $result[0]['label'] ?? null;
-            }
-
-            $sentiment = match ($label) {
-                'LABEL_0' => 'negative',
-                'LABEL_1' => 'neutral',
-                'LABEL_2' => 'positive',
-                default => 'neutral',
-            }; */
 
             $sentiment = 'neutral';
 

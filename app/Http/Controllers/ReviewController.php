@@ -57,11 +57,12 @@ class ReviewController extends Controller
         if ($request->comment && isset($finalReview)) {
             DB::afterCommit(function () use ($finalReview, $request) {
             $chain = [
-                new GenerateBlockSummaryJob($request->block_id)
+                (new GenerateBlockSummaryJob($request->block_id))
+                    ->delay(now()->addSeconds(2))
             ];
 
             dispatch((new AnalyzeSentimentJob($finalReview->id, $request->comment))
-                ->delay(now()->addSeconds(10))
+                ->delay(now()->addSeconds(5))
                 ->chain($chain));
             });
         }

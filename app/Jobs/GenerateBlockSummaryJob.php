@@ -32,8 +32,6 @@ class GenerateBlockSummaryJob implements ShouldQueue
                 ['block_id' => $this->blockId],
                 ['summary' => $summary]
             );
-        Log::info('AI summary job completed for block ID: ' . $this->blockId);
-    
         } else {
             Log::warning('AI summary job failed or returned null for block ID: ' . $this->blockId);
         }

@@ -12,7 +12,7 @@ class SummaryService
     {
         $reviews = Review::where('block_id', $blockId)
         ->whereNotNull('comment')
-        ->orderBy('created_at', 'desc')
+        ->orderBy('updated_at', 'desc')
         ->limit(10)
         ->pluck('comment')
         ->toArray();
@@ -34,7 +34,8 @@ class SummaryService
 
         // gpt 3.5 turbo
         $openAiKey = config('services.openai.api_key');
-        if ($openAiKey) {
+        $aiEnabled = env('AI_SUMMARY_ENABLED', true);
+        if ($openAiKey && $aiEnabled) {
             try {
                 $response = Http::withToken($openAiKey)
                 ->timeout(30)
@@ -60,7 +61,8 @@ class SummaryService
                 Log::error('OpenAI request failed. ', ['message' => $e->getMessage()]);
             }
         } else {
-            Log::warning('OpenAI key not set.');
+            Log::info('OpenAI summary skipped: AI_SUMMARY_ENABLED is false or missing API key.');
+            return '[AI summary disabled temporarily.]';
         }
 
         
