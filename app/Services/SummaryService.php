@@ -29,6 +29,7 @@ class SummaryService
        
         
         $input = Str::words($textToSummarize, 150);
+        // Log::info('The main string to summarize: ', ['text' => $input]);
 
       
 

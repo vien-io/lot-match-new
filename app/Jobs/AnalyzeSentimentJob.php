@@ -41,24 +41,24 @@ class AnalyzeSentimentJob implements ShouldQueue
         try {
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . config('services.huggingface.api_key'),
+                'Content-Type' => 'application/json',
             ])
             ->timeout(90)
             ->retry(3, 5000)
-            ->post('https://api-inference.huggingface.co/models/cardiffnlp/twitter-roberta-base-sentiment', [
+            ->post('https://api-inference.huggingface.co/models/distilbert/distilbert-base-uncased-finetuned-sst-2-english', [
                 'inputs' => $this->comment,
             ]);
 
             $sentiment = 'neutral';
 
             if ($response->successful()) {
-                $result = $response->json()[0];
-                $label = $result[0]['label'] ?? null;
+                $result = $response->json();
+                $label = $result[0][0]['label'] ?? null;
 
                 $sentiment = match ($label) {
-                    'LABEL_0' => 'negative',
-                    'LABEL_1' => 'neutral',
-                    'LABEL_2' => 'positive',
-                    default => 'normal',
+                    'NEGATIVE' => 'negative',
+                    'POSITIVE' => 'positive',
+                    default => 'neutral',
                 };
             }
 
