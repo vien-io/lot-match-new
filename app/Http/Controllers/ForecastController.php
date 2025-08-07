@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class ForecastController extends Controller
 {
+    // exponential moving average logic
     private function calculateForecast($blockId, $alpha = 0.3)
     {
         $ratingsQuery = DB::table('reviews')
@@ -30,8 +31,7 @@ class ForecastController extends Controller
         return round($ema, 2);
     }
 
-
-
+    // for the chart
     public function forecastBlockRating($blockId, $alpha = 0.3)
     {
         $forecastedRating = $this->calculateForecast($blockId, $alpha);
@@ -58,6 +58,7 @@ class ForecastController extends Controller
         ]);
     }
 
+    // chart 2??
     public function getBlockSentimentTrends($blockId)
     {
         $results = DB::table('reviews')
@@ -85,6 +86,8 @@ class ForecastController extends Controller
         return response()->json($sentimentByMonth);
     }
 
+
+    
     private function fetchSentimentTrends($blockId)
     {
         $results = DB::table('reviews')
@@ -116,7 +119,8 @@ class ForecastController extends Controller
         return $sentimentByMonth;
     }
 
-
+    // blocksummary js calls this
+    // triggered by opening the modal
     public function getBlockSummary ($blockId)
     {
         $forecastedRating = $this->calculateForecast($blockId);

@@ -119,3 +119,4 @@ Route::get('/forecast/summary/{blockId}', [ForecastController::class, 'getBlockS
 Route::get('/test-web', function () {
     return 'web route is working';
 });
+Route::get('/tools/backfill-sentiment', [\App\Http\Controllers\ToolsController::class, 'backfillSentiment']);
