@@ -21,20 +21,20 @@ class SummaryService
         $prompt = <<<PROMPT
         You are analyzing neighborhood livability based on resident reviews, forecasted satisfaction scores, and monthly sentiment trends.
 
-        Here is a summary of recent comments:
+        Here is a brief summary of recent comments:
         {$summary}
 
         The forecasted average rating is {$forecast} (on a scale of 1 to 5).
 
-        Here are the monthly sentiment details:
+        Monthly sentiment data:
         {$sentimentText}
 
         Based on this data, provide:
-        1. Key highlights residents mentioned (positives or issues).
-        2. Noticeable trends over time (e.g., improving, declining, or fluctuating satisfaction).
-        3. A forecast-style narrative for someone considering moving into this block.
+        1. A concise summary of what residents appreciate and complain about/ Avoid repeating the same adjectives — vary word choice and keep it engaging.
+        2. Specific sentiment trends over time (e.g., dips early in the year, mid-year improvements, consistent highs/lows).
+        3. A practical forecast-style closing that interprets the forecast rating and gives friendly advice to someone considering a move.
 
-        Keep it brief, practical, and helpful.
+        Use natural, human language. Avoid robotic tone, unnecessary length, or restating data. Interpret and summarize meaningfully.
         PROMPT;
         
         $response = Http::withToken(config('services.openai.api_key'))
