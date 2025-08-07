@@ -23,3 +23,4 @@ Route::post('/test-sentiment', function (Request $request) {
 });
 
 Route::get('/blocks/{blockId}/insight', [ForecastController::class, 'getCombinedBlockInsight']);
+Route::get('/forecast/summary/{blockId}', [ForecastController::class, 'getBlockSummary']);

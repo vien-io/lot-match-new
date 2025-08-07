@@ -4,11 +4,50 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Services\SummaryService;
 
 
 class ForecastController extends Controller
 {
-    // exponential moving average logic
+    protected $summaryService;
+
+    public function __construct(SummaryService $summaryService)
+    {
+        $this->summaryService = $summaryService;
+    }
+
+
+
+    // blocksummary js calls this
+    // triggered by opening the modal
+    public function getBlockSummary ($blockId)
+    {
+        // get ema
+        $forecastedRating = $this->calculateForecast($blockId);
+
+        // get sentiments
+        $sentiments = $this->fetchSentimentTrends($blockId);
+        Log::info('Sentiments: ', $sentiments);
+
+        // get summary using service
+        $summary = $this->summaryService->generateFullForecastNarrative($blockId, $forecastedRating, $sentiments);
+
+        return response()->json([
+            'summary' => $summary,
+            'forecast' => $forecastedRating,
+            'sentiment' => $sentiments,
+        ]);
+
+    }   
+    
+
+
+
+
+
+
+
+    // exponential moving average logic (EMA)
     private function calculateForecast($blockId, $alpha = 0.3)
     {
         $ratingsQuery = DB::table('reviews')
@@ -119,42 +158,8 @@ class ForecastController extends Controller
         return $sentimentByMonth;
     }
 
-    // blocksummary js calls this
-    // triggered by opening the modal
-    public function getBlockSummary ($blockId)
-    {
-        $forecastedRating = $this->calculateForecast($blockId);
-        $sentiments = $this->fetchSentimentTrends($blockId);
-        Log::info('Sentiments: ', $sentiments);
 
-        $latestMonth = array_key_last($sentiments);
-        $latestSentiment = $sentiments[$latestMonth] ?? ['positive' => 0, 'neutral' => 0, 'negative' => 0];
- 
-        $total = array_sum($latestSentiment) ?: 1;
-        $positivePct = round(($latestSentiment['positive'] ?? 0) / $total * 100);
-        $neutralPct = round(($latestSentiment['neutral'] ?? 0) / $total * 100);
-        $negativePct = round(($latestSentiment['negative'] ?? 0) / $total * 100);
-
-        if ($forecastedRating === null) {
-            return response()->json(['summary' => 'Rating forecast unavailable.'], 200);
-        }
-
-        $summary = "Block $blockId looks ";
-
-        if ($forecastedRating >= 4) {
-            $summary .= "great for living, with a forecasted rating of " . number_format($forecastedRating, 1) . ". ";
-        } elseif ($forecastedRating >= 3) {
-            $summary .= "decent, with a forecasted rating of " . number_format($forecastedRating, 1) . ". ";
-        } else {
-            $summary .= "concerning, with a forecasted rating of " . number_format($forecastedRating, 1) . ". ";
-        }
-
-        $summary .= "Recent sentiment from residents: $positivePct% positive, $neutralPct% neutral, $negativePct% negative.";
-
-        return response()->json(['summary' => $summary]);
-    }   
-
-    public function getCombinedBlockInsight($blockId)
+    /* public function getCombinedBlockInsight($blockId)
     {
         // get stored ai summary
         $summaryModel = \App\Models\BlockSummary::where('block_id', $blockId)->first();
@@ -212,5 +217,7 @@ class ForecastController extends Controller
             ]);
 
         
-    }
+    } */
+
+    
 }
