@@ -119,6 +119,64 @@ class SummaryService
 
         return "[AI summary unavailable due to server error.]";
     }
+
+    public function generateDetailedForecastReport($blockId, $summary, $forecastedRating, $sentiments)
+    {
+        $sentimentText = collect($sentiments)->map(function ($value, $month) {
+            return "$month: " . $value['positive'] . " positive, " . $value['negative'] . " negative.";
+        })->implode('; ');
+
+        $prompt = <<<PROMPT
+        Reformat the following neighborhood forecast into a professional, structured data analytics report.
+        Include:
+        1. Executive SUmmary
+        2. Sentiment Trend Analysis
+        3. Forecast Details
+        4. Recommendations
+
+        Keep the meaning and forecast values exactly the same
+
+        Forecast paragraph:
+        {$summary}
+
+        Monthly Sentiment Data:
+        {$sentimentText}
+
+        Forecasted Rating:
+        {$forecastedRating}
+        PROMPT;
+
+
+        $openAiKey = config('services.openai.api_key');
+        $aiEnabled = env('AI_SUMMARY_ENABLED', true);
+
+        if ($openAiKey && $aiEnabled) {
+            try {
+                $response = Http::withToken($openAiKey)
+                    ->timeout(30)
+                    ->post('https://api.openai.com/v1/chat/completions', [
+                        'model' => 'gpt-3.5-turbo',
+                        'messages' => [
+                            ['role' => 'system', 'content' => 'You are a data analyst summarizing neighborhood livability with structured report.'],
+                            ['role' => 'user', 'content' => $prompt]
+                        ],
+                        'temperature' => 0.7,
+                        'max_tokens' => 300,
+                    ]);
+
+                    if ($response->successful()){
+                        return $response->json()['choices'][0]['message']['content'] ?? '[No content returned]';
+                    } else {
+                        Log::warning('OpenAI detailed report failed', ['status' => $response->status()]);
+                    }
+            } catch (\Exception $e) {
+                Log::error('OpenAI request failed for detailed report', ['message' => $e->getMessage()]);
+            }
+        } else {
+            Log::info('OpenAI detailed report skipped or missing an API key');
+        }
+        return '[Detailed forecast report unavailable]';
+    }
 }
 
 ?>

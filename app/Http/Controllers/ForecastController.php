@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Services\SummaryService;
+
 
 
 class ForecastController extends Controller
@@ -39,12 +41,31 @@ class ForecastController extends Controller
         ]);
 
     }   
+
+    public function getForecastData($blockId)
+    {
+        // get ema
+        $forecastedRating = $this->calculateForecast($blockId);
+
+        // get sentiments
+        $sentiments = $this->fetchSentimentTrends($blockId);
+
+        // get summary
+        $summary = $this->summaryService->generateFullForecastNarrative($blockId, $forecastedRating, $sentiments);
+
+        // generate detailed forecast
+        $detailedReport = $this->summaryService->generateDetailedForecastReport($blockId, $summary, $forecastedRating, $sentiments);
+
+        // return all these data
+        return response()->json([
+            'summary' => $summary,
+            'detailed_report' => $detailedReport,
+            'forecast' => $forecastedRating,
+            'sentiment' => $sentiments,
+        ]);
+    }
     
-
-
-
-
-
+    
 
 
     // exponential moving average logic (EMA)
@@ -157,67 +178,4 @@ class ForecastController extends Controller
 
         return $sentimentByMonth;
     }
-
-
-    /* public function getCombinedBlockInsight($blockId)
-    {
-        // get stored ai summary
-        $summaryModel = \App\Models\BlockSummary::where('block_id', $blockId)->first();
-        $summary = $summaryModel ? $summaryModel->summary : 'No AI summary available yet.';
-
-        // forecasted rating
-        $forecastedRating = $this->calculateForecast($blockId);
-     
-        // determine living condition label
-        $ratingLabel = 'Unavailable';
-        if ($forecastedRating !== null) {
-            if ($forecastedRating >= 4) {
-                $ratingLabel = 'Looks great for future residents.';
-            } else if ($forecastedRating >= 3) {
-                $ratingLabel = 'Looks decent for future residents.';
-            } else {
-                $ratingLabel = 'May not be ideal for now.';
-            }
-        }
-
-        // get latest sentiment stats
-        $sentiments = $this->fetchSentimentTrends($blockId);
-        $latestMonth = array_key_last($sentiments);
-        $latestSentiment = $sentiments[$latestMonth] ?? ['positive' => 0, 'neutral' => 0, 'negative' => 0];
-
-        $total = array_sum($latestSentiment) ?: 1;
-        $positivePct = round(($latestSentiment['positive'] ?? 0) / $total * 100);
-        $neutralPct = round(($latestSentiment['neutral'] ?? 0) / $total * 100);
-        $negativePct = round(($latestSentiment['negative'] ?? 0) / $total * 100);
-
-        // just logs
-        Log::info('Combined AI Block Insight:', [
-        'block_id' => $blockId,
-        'summary' => $summary,
-        'forecasted_rating' => $forecastedRating,
-        'living_condition' => $ratingLabel,
-        'recent_sentiment' => [
-            'positive' => $positivePct,
-            'neutral' => $neutralPct,
-            'negative' => $negativePct,
-        ]
-        ]);
-
-        // final json resp
-        return response()->json([
-            'block_id' => $blockId,
-            'summary' => $summary,
-            'forecasted_rating' => $forecastedRating,
-            'living_condition' => $ratingLabel,
-            'recent_sentiment' => [
-                'positive' => $positivePct,
-                'neutral' => $neutralPct,
-                'negative' => $negativePct,
-            ]
-            ]);
-
-        
-    } */
-
-    
 }
