@@ -16,7 +16,7 @@ class SummaryService
             return "$month: " . $value['positive'] . " positive, " . $value['negative'] . "negative";
         })->implode('; ');
 
-        /* $prompt = "Here is a brief summary of resident comments: {$summary}. The forecasted average rating is {$forecast}. Sentiment trends: {$sentimentText}. Generate a short, helpful narrative for a user deciding whether this block is livable. Give me a forecast on what it's like living on that block."; */
+        
 
         $prompt = <<<PROMPT
         You are analyzing neighborhood livability based on resident reviews, forecasted satisfaction scores, and monthly sentiment trends.
