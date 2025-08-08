@@ -35,12 +35,9 @@
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
     {{-- Left: Map Preview --}}
-    <div class="lg:col-span-2 bg-white shadow rounded-lg p-5">
+    <div class="lg:col-span-2 bg-white shadow rounded-lg p-5 h-[800px]">
       <h2 class="text-xl font-semibold mb-4">3D Map Preview</h2>
-      <div id="dashboard-map-container" class="border border-gray-300 rounded-md h-96 flex items-center justify-center text-gray-400">
-        <!-- Replace below div with your actual 3D Map component -->
-        Interactive 3D Map Placeholder
-      </div>
+      <div id="dashboard-map-container" class="border border-gray-300 rounded-md h-[640px] text-gray-400 overflow-hidden relative"></div>
     </div>
 
     {{-- Right: Analytics & Reviews --}}
@@ -71,7 +68,7 @@
     </div>
   </div>
 
-  {{-- Quick Links Sidebar (optional, at bottom for mobile) --}}
+  {{-- Quick Links Sidebar (ill think about this, at bottom for mobile) --}}
   <div class="mt-10">
     <h2 class="text-xl font-semibold mb-4">Quick Links</h2>
     <div class="flex flex-wrap gap-4">
@@ -116,4 +113,5 @@
     }
   });
 </script>
+@vite('resources/js/dashboardMap.js')
 @endsection
