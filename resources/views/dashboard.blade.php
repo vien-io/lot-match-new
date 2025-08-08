@@ -1,117 +1,119 @@
 @extends('layouts.app')
 
-@section('head')
-    <link rel="stylesheet" href="{{ asset('css/analytics.css') }}">
-@endsection
+@section('title', 'LotMatch Dashboard')
 
 @section('content')
-    <div class="container py-5">
-        <h2 class="analytics-heading text-center mb-4">Block Ratings Analytics</h2>
+<div class="container mx-auto p-6">
 
-        <!-- Row for Charts -->
-        <div class="row">
-            <!-- Block Ratings Chart -->
-            <div class="col-md-12 mb-4">
-                <h3>Block Ratings</h3>
-                <div class="chart-container">
-                    <canvas id="ratingsChart" class="chart-canvas"></canvas>
-                </div>
-            </div>
-        </div>
+  {{-- Welcome Section --}}
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold mb-2">Welcome, {{ auth()->user()->name ?? 'Researcher' }}!</h1>
+    <p class="text-gray-600">Here is the overview of Sameera Subdivision.</p>
+  </div>
 
-
-    <!-- Table for Block Ratings Analytics -->
-    <div class="table-container mb-4">
-            <!-- <h3>Block Ratings Analytics</h3> -->
-            <table class="analytics-table table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>Block</th>
-                        <th>Average Rating</th>
-                        <th>Total Reviews</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($blockRatings as $row)
-                    <tr>
-                        <td>{{ $row->name }}</td>
-                        <td>{{ number_format($row->avg_rating, 2) }}</td>
-                        <td>{{ $row->total_reviews }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-
-
-
-        <!-- Row for Rating Distribution and Top 5 Highest Rated Lots -->
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <h3>Rating Distribution</h3>
-                <div class="chart-container">
-                    <canvas id="ratingDistributionChart" class="chart-canvas"></canvas>
-                </div>
-            </div>
-
-            <div class="col-md-6 mb-4">
-                <h3>Top 5 Highest Rated Lots</h3>
-                <div class="chart-container">
-                    <canvas id="topRatedLotsChart" class="chart-canvas"></canvas>
-                </div>
-            </div>
-        </div>
-        <!-- Top Rated Lots Cards -->
-        <div id="top-rated-lots" class="top-rated-cards-container mb-5">
-            <!-- Cards will be populated here dynamically -->
-        </div>
-
-       
-
-        <!-- Row for Recent Reviews and Lot Availability -->
-        <div class="row mt-4">
-            <!-- Recent Reviews Table -->
-            <div class="col-md-6">
-                <h3>Recent Reviews</h3>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Lot</th>
-                            <th>User</th>
-                            <th>Rating</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($recentReviews as $review)
-                        <tr>
-                            <td>{{ $review->lot_id }}</td>
-                            <td>{{ $review->user_name }}</td>
-                            <td>{{ $review->rating }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Lot Availability Info -->
-            <div class="col-md-6 lot-availability">
-                <h3>Lot Availability</h3>
-                <p><strong>Available Lots:</strong> {{ $availableLots }}</p>
-                <p><strong>Reserved Lots:</strong> {{ $reservedLots }}</p>
-            </div>
-        </div>
-
-        <!-- Hidden Data for Charts -->
-        <div id="ratings-data"
-            data-block-labels='@json($blockRatings->pluck("name"))'
-            data-block-ratings='@json($blockRatings->pluck("avg_rating"))'
-            data-rating-labels='@json($ratingDistribution->pluck("rating"))'
-            data-rating-counts='@json($ratingDistribution->pluck("count"))'
-            data-block-reviews='@json($blockRatings->pluck("total_reviews"))'>
-        </div>
-        <div id="top-rated-data"
-            data-labels='@json($topRatedLots->pluck("id"))'
-            data-ratings='@json($topRatedLots->pluck("avg_rating"))'>
-        </div>
+  {{-- Statistic Cards --}}
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+    <div class="bg-white shadow rounded-lg p-5 text-center">
+      <div class="text-4xl font-semibold text-blue-600">{{ $totalBlocks }}</div>
+      <div class="mt-2 text-gray-600">Total Blocks</div>
     </div>
+    <div class="bg-white shadow rounded-lg p-5 text-center">
+      <div class="text-4xl font-semibold text-green-600">{{ $totalLots }}</div>
+      <div class="mt-2 text-gray-600">Total Lots</div>
+    </div>
+    <div class="bg-white shadow rounded-lg p-5 text-center">
+      <div class="text-4xl font-semibold text-yellow-600">{{ number_format($avgRating, 1) }}/5</div>
+      <div class="mt-2 text-gray-600">Average Rating</div>
+    </div>
+    <div class="bg-white shadow rounded-lg p-5 text-center">
+      <div class="text-4xl font-semibold text-purple-600">{{ $newReviewsThisMonth }}</div>
+      <div class="mt-2 text-gray-600">New Reviews This Month</div>
+    </div>
+  </div>
+
+  {{-- Main Content Grid --}}
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    {{-- Left: Map Preview --}}
+    <div class="lg:col-span-2 bg-white shadow rounded-lg p-5">
+      <h2 class="text-xl font-semibold mb-4">3D Map Preview</h2>
+      <div id="dashboard-map-container" class="border border-gray-300 rounded-md h-96 flex items-center justify-center text-gray-400">
+        <!-- Replace below div with your actual 3D Map component -->
+        Interactive 3D Map Placeholder
+      </div>
+    </div>
+
+    {{-- Right: Analytics & Reviews --}}
+    <div class="flex flex-col gap-6">
+
+      {{-- Charts --}}
+      <div class="bg-white shadow rounded-lg p-5">
+        <h2 class="text-xl font-semibold mb-4">Ratings Distribution</h2>
+        <canvas id="ratingsChart" height="200"></canvas>
+      </div>
+
+      {{-- Recent Reviews --}}
+      <div class="bg-white shadow rounded-lg p-5">
+        <h2 class="text-xl font-semibold mb-4">Recent Reviews</h2>
+        <ul class="space-y-3 max-h-64 overflow-y-auto">
+          @forelse ($recentReviews as $review)
+            <li class="border-b border-gray-200 pb-2">
+              <p class="font-medium">{{ $review->user_name ?? 'Anonymous' }}</p>
+              <p class="text-gray-700">{{ Str::limit($review->comment, 100) }}</p>
+              <p class="text-sm text-gray-500">Rating: {{ $review->rating ?? 'N/A' }}/5</p>
+            </li>
+          @empty
+            <li class="text-gray-500">No recent reviews.</li>
+          @endforelse
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  {{-- Quick Links Sidebar (optional, at bottom for mobile) --}}
+  <div class="mt-10">
+    <h2 class="text-xl font-semibold mb-4">Quick Links</h2>
+    <div class="flex flex-wrap gap-4">
+      <a href="{{ route('properties.index') }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Manage Properties</a>
+      <a href="{{ route('map') }}" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">View 3D Map</a>
+      <a href="{{ route('reviews.index') }}" class="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition">View Reviews</a>
+    </div>
+  </div>
+
+</div>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('ratingsChart').getContext('2d');
+
+  const ratingsData = @json($ratingsDistribution);
+
+  const labels = Object.keys(ratingsData);
+  const data = Object.values(ratingsData);
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Number of Ratings',
+        data: data,
+        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+        borderColor: 'rgba(59, 130, 246, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          precision: 0
+        }
+      }
+    }
+  });
+</script>
 @endsection

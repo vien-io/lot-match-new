@@ -38,7 +38,7 @@
                     <!-- <a class="nav-link" href="#">Explore</a> -->
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('properties') }}">Properties</a>
+                    <a class="nav-link" href="{{ route('properties.index') }}">Properties</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('about') }}">About</a>

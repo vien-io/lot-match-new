@@ -3,7 +3,7 @@
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\LotController;  // import lot controller
+use App\Http\Controllers\LotController;  
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
@@ -14,6 +14,8 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MapController;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +45,11 @@ Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
 
 // route for properties button
 Route::get('/properties', [PropertyController::class, 'index'])->name('properties');
+
+// dashboard stuff
+Route::resource('properties', PropertyController::class);
+Route::get('/map', [MapController::class, 'index'])->name('map');
+Route::resource('reviews', ReviewController::class);
 
 // routes using pagecontroller (static)
 Route::get('/about', [PageController::class, 'about'])->name('about');
@@ -96,7 +103,8 @@ Route::post('/signup', [RegisterController::class, 'register'])->name('signup');
 Route::get('/analytics/block-ratings', [AnalyticsController::class, 'blockRatings'])->name('analytics.block_ratings');
 
 // dashboard
-Route::get('/dashboard', [AnalyticsController::class, 'dashboard'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+Route::get('/dashboardA', [AnalyticsController::class, 'dashboard'])->name('dashboardA');
 
 
 // reviews
