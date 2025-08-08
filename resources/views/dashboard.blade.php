@@ -3,81 +3,94 @@
 @section('title', 'LotMatch Dashboard')
 
 @section('content')
-<div class="container mx-auto p-6">
+<div class="tw-bg-gradient-to-br tw-from-green-50 tw-to-white tw-min-h-screen tw-flex">
 
-  {{-- Welcome Section --}}
-  <div class="mb-6">
-    <h1 class="text-3xl font-bold mb-2">Welcome, {{ auth()->user()->name ?? 'Researcher' }}!</h1>
-    <p class="text-gray-600">Here is the overview of Sameera Subdivision.</p>
-  </div>
-
-  {{-- Statistic Cards --}}
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-    <div class="bg-white shadow rounded-lg p-5 text-center">
-      <div class="text-4xl font-semibold text-blue-600">{{ $totalBlocks }}</div>
-      <div class="mt-2 text-gray-600">Total Blocks</div>
+  {{-- Sidebar --}}
+  <div class="tw-bg-white tw-w-20 tw-flex tw-flex-col tw-items-center tw-py-6 tw-shadow-lg tw-rounded-r-2xl">
+    <div class="tw-text-gray-400 tw-my-4 tw-p-5 tw-rounded-xl tw-cursor-pointer hover:tw-bg-green-100 hover:tw-text-green-500">
+      <i class="fas fa-home tw-text-2xl"></i>
     </div>
-    <div class="bg-white shadow rounded-lg p-5 text-center">
-      <div class="text-4xl font-semibold text-green-600">{{ $totalLots }}</div>
-      <div class="mt-2 text-gray-600">Total Lots</div>
+    <div class="tw-text-gray-400 tw-my-3 tw-p-5 tw-rounded-xl tw-cursor-pointer hover:tw-bg-green-100 hover:tw-text-green-500">
+      <i class="fas fa-chart-bar tw-text-2xl"></i>
     </div>
-    <div class="bg-white shadow rounded-lg p-5 text-center">
-      <div class="text-4xl font-semibold text-yellow-600">{{ number_format($avgRating, 1) }}/5</div>
-      <div class="mt-2 text-gray-600">Average Rating</div>
-    </div>
-    <div class="bg-white shadow rounded-lg p-5 text-center">
-      <div class="text-4xl font-semibold text-purple-600">{{ $newReviewsThisMonth }}</div>
-      <div class="mt-2 text-gray-600">New Reviews This Month</div>
+    <div class="tw-text-gray-400 tw-my-3 tw-p-5 tw-rounded-xl tw-cursor-pointer hover:tw-bg-green-100 hover:tw-text-green-500">
+      <i class="fas fa-cog tw-text-2xl"></i>
     </div>
   </div>
 
-  {{-- Main Content Grid --}}
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  {{-- Main Content --}}
+  <div class="tw-flex-1 tw-p-8">
 
-    {{-- Left: Map Preview --}}
-    <div class="lg:col-span-2 bg-white shadow rounded-lg p-5 h-[800px]">
-      <h2 class="text-xl font-semibold mb-4">3D Map Preview</h2>
-      <div id="dashboard-map-container" class="border border-gray-300 rounded-md h-[640px] text-gray-400 overflow-hidden relative"></div>
+    {{-- Welcome Section --}}
+    <div class="tw-mb-8">
+      <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800">Welcome, {{ auth()->user()->name ?? 'Researcher' }}!</h1>
+      <p class="tw-text-gray-600">Here is the overview of Sameera Subdivision.</p>
     </div>
 
-    {{-- Right: Analytics & Reviews --}}
-    <div class="flex flex-col gap-6">
+    {{-- Statistic Cards --}}
+    <div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-4 tw-gap-6 tw-mb-10">
+      <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6 tw-text-center">
+        <div class="tw-text-4xl tw-font-semibold tw-text-blue-500">{{ $totalBlocks }}</div>
+        <div class="tw-text-gray-500 tw-mt-2">Total Blocks</div>
+      </div>
+      <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6 tw-text-center">
+        <div class="tw-text-4xl tw-font-semibold tw-text-green-500">{{ $totalLots }}</div>
+        <div class="tw-text-gray-500 tw-mt-2">Total Lots</div>
+      </div>
+      <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6 tw-text-center">
+        <div class="tw-text-4xl tw-font-semibold tw-text-yellow-500">{{ number_format($avgRating, 1) }}/5</div>
+        <div class="tw-text-gray-500 tw-mt-2">Average Rating</div>
+      </div>
+      <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6 tw-text-center">
+        <div class="tw-text-4xl tw-font-semibold tw-text-purple-500">{{ $newReviewsThisMonth }}</div>
+        <div class="tw-text-gray-500 tw-mt-2">New Reviews This Month</div>
+      </div>
+    </div>
 
-      {{-- Charts --}}
-      <div class="bg-white shadow rounded-lg p-5">
-        <h2 class="text-xl font-semibold mb-4">Ratings Distribution</h2>
-        <canvas id="ratingsChart" height="200"></canvas>
+    {{-- Main Content Grid --}}
+    <div class="tw-grid tw-grid-cols-1 lg:tw-grid-cols-3 tw-gap-6">
+
+      {{-- Left: Map Preview --}}
+      <div class="lg:tw-col-span-2 tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6 tw-h-[800px]">
+        <h2 class="tw-text-xl tw-font-semibold tw-mb-4 tw-text-gray-800">3D Map Preview</h2>
+        <div id="dashboard-map-container" class="tw-border tw-border-gray-200 tw-rounded-lg tw-h-[640px] tw-bg-gray-50 tw-overflow-hidden tw-relative">
+          <div id="tooltiip">
+            <span id="tooltip-text"></span>
+          </div>
+        </div>
       </div>
 
-      {{-- Recent Reviews --}}
-      <div class="bg-white shadow rounded-lg p-5">
-        <h2 class="text-xl font-semibold mb-4">Recent Reviews</h2>
-        <ul class="space-y-3 max-h-64 overflow-y-auto">
-          @forelse ($recentReviews as $review)
-            <li class="border-b border-gray-200 pb-2">
-              <p class="font-medium">{{ $review->user_name ?? 'Anonymous' }}</p>
-              <p class="text-gray-700">{{ Str::limit($review->comment, 100) }}</p>
-              <p class="text-sm text-gray-500">Rating: {{ $review->rating ?? 'N/A' }}/5</p>
-            </li>
-          @empty
-            <li class="text-gray-500">No recent reviews.</li>
-          @endforelse
-        </ul>
+      {{-- Right: Analytics & Reviews --}}
+      <div class="tw-flex tw-flex-col tw-gap-6">
+
+        {{-- Ratings Chart --}}
+        <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6">
+          <h2 class="tw-text-xl tw-font-semibold tw-mb-4 tw-text-gray-800">Ratings Distribution</h2>
+          <div style="width: 100%; height: 300px;">
+            <canvas id="ratingsChart" height="200"></canvas>
+          </div>
+        </div>
+
+        {{-- Recent Reviews --}}
+        <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6">
+          <h2 class="tw-text-xl tw-font-semibold tw-mb-4 tw-text-gray-800">Recent Reviews</h2>
+          <ul class="tw-space-y-3 tw-max-h-64 tw-overflow-y-auto">
+            @forelse ($recentReviews as $review)
+              <li class="tw-border-b tw-border-gray-200 tw-pb-2">
+                <p class="tw-font-medium">{{ $review->user_name ?? 'Anonymous' }}</p>
+                <p class="tw-text-gray-700">{{ Str::limit($review->comment, 100) }}</p>
+                <p class="tw-text-sm tw-text-gray-500">Rating: {{ $review->rating ?? 'N/A' }}/5</p>
+              </li>
+            @empty
+              <li class="tw-text-gray-500">No recent reviews.</li>
+            @endforelse
+          </ul>
+        </div>
+
       </div>
-
     </div>
-  </div>
 
-  {{-- Quick Links Sidebar (ill think about this, at bottom for mobile) --}}
-  <div class="mt-10">
-    <h2 class="text-xl font-semibold mb-4">Quick Links</h2>
-    <div class="flex flex-wrap gap-4">
-      <a href="{{ route('properties.index') }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Manage Properties</a>
-      <a href="{{ route('map') }}" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">View 3D Map</a>
-      <a href="{{ route('reviews.index') }}" class="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition">View Reviews</a>
-    </div>
   </div>
-
 </div>
 @endsection
 
@@ -86,8 +99,11 @@
 <script>
   const ctx = document.getElementById('ratingsChart').getContext('2d');
 
-  const ratingsData = @json($ratingsDistribution);
+  const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+  gradient.addColorStop(0, 'rgba(34, 197, 94, 0.8)');
+  gradient.addColorStop(1, 'rgba(34, 197, 94, 0.3)');
 
+  const ratingsData = @json($ratingsDistribution);
   const labels = Object.keys(ratingsData);
   const data = Object.values(ratingsData);
 
@@ -98,19 +114,71 @@
       datasets: [{
         label: 'Number of Ratings',
         data: data,
-        backgroundColor: 'rgba(59, 130, 246, 0.7)',
-        borderColor: 'rgba(59, 130, 246, 1)',
-        borderWidth: 1
+        backgroundColor: gradient,
+        borderColor: 'rgba(34, 197, 94, 1)',
+        borderWidth: 1,
+        borderRadius: {topLeft: 10, topRight: 10, bottomLeft: 2, bottomRight: 2},
+        maxBarThickness: 40,
+        hoverBackgroundColor: 'rgba(34, 197, 94, 1)',
+        hoverBorderColor: 'rgba(21, 128, 61, 1)',
+        hoverBorderWidth: 2,
       }]
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1000, easing: 'easeOutQuart' },
       scales: {
+        x: {
+          ticks: { color: '#334155', font: { family: "'Nunito', sans-serif", weight: '600', size: 14 } },
+          grid: { display: false },
+        },
         y: {
           beginAtZero: true,
-          precision: 0
+          precision: 0,
+          ticks: { color: '#334155', font: { family: "'Nunito', sans-serif", weight: '600', size: 14 } },
+          grid: { color: 'rgba(148, 163, 184, 0.3)', drawBorder: false, borderDash: [5, 5] }
+        }
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: 'Ratings Distribution Overview',
+          color: '#166534',
+          font: { family: "'Nunito', sans-serif", size: 18, weight: '700' },
+          padding: { top: 10, bottom: 20 }
+        },
+        legend: {
+          display: true,
+          labels: { color: '#334155', font: { family: "'Nunito', sans-serif", size: 14, weight: '600' } }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(34, 197, 94, 0.9)',
+          titleFont: { family: "'Nunito', sans-serif", size: 16, weight: '700' },
+          bodyFont: { family: "'Nunito', sans-serif", size: 14 },
+          padding: 10,
+          cornerRadius: 6,
+          callbacks: {
+            label: ctx => `Count: ${ctx.parsed.y}`,
+            title: ctx => `Rating: ${ctx[0].label}`
+          }
         }
       }
-    }
+    },
+    plugins: [{
+      id: 'barShadow',
+      beforeDatasetDraw(chart) {
+        const ctx = chart.ctx;
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,0,0,0.15)';
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 4;
+      },
+      afterDatasetDraw(chart) {
+        chart.ctx.restore();
+      }
+    }]
   });
 </script>
 @vite('resources/js/dashboardMap.js')

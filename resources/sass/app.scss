@@ -13,6 +13,7 @@
 
 
 
+
 /* Custom Navbar */
 .custom-navbar {
     background-color: rgb(42, 115, 115); /* Dark teal background for the navbar */
@@ -1089,7 +1090,21 @@ textarea:hover {
 }
 
 
+/* tooltip display 2*/
+#tooltiip {
+    position: absolute;
+    pointer-events: none;
+    display: none;
+    padding: 5px 10px; 
+    background-color: rgba(0, 0, 0, 0.7); 
+    color: white; 
+    border-radius: 5px; 
+    font-size: 14px;
+}
 
+.py-4 {
+    position: relative;
+}
 
 
 

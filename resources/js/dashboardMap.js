@@ -13,7 +13,7 @@ function initThreeJS() {
 
     // scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xD3D3D3);
+    scene.background = new THREE.Color(0xFFFFFF);
 
     // camera
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
@@ -28,8 +28,8 @@ function initThreeJS() {
     container.appendChild(renderer.domElement);
 
     // helper
-    const axesHelper = new THREE.AxesHelper(5);
-    const gridHelper = new THREE.GridHelper(80, 20);
+    const axesHelper = new THREE.AxesHelper(10);
+    const gridHelper = new THREE.GridHelper(90, 35, 0xEEEEEE, 0xEEEEEE);
     scene.add(axesHelper, gridHelper);
 
     // controls
@@ -164,12 +164,14 @@ function initThreeJS() {
     const mouse = new THREE.Vector2();
     let selectedHouse = null;
     let selectedBlock = null;
-    const tooltip = document.getElementById('tooltip');
+    const tooltip = document.getElementById('tooltiip');
     const tooltipText = document.getElementById('tooltip-text');
     
     window.addEventListener("mousemove", (event) => {
+        
        
         const rect = renderer.domElement.getBoundingClientRect();
+        
         
         // updt mouse coords
         mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -224,8 +226,9 @@ function initThreeJS() {
                     tooltipText.textContent = `Block: ${hoveredObject.name.split("_")[1]}`;
                     tooltip.style.display = 'block';
                 }
-                tooltip.style.left = `${event.clientX + 10}px`;
-                tooltip.style.top = `${event.clientY + 10}px`;
+                const containerRect = container.getBoundingClientRect();
+                tooltip.style.left = `${event.clientX - containerRect.left + 10}px`;
+                tooltip.style.top = `${event.clientY - containerRect.top + 10}px`;
                 return;
                 
             }
@@ -305,8 +308,9 @@ function initThreeJS() {
                 tooltipText.textContent = `Lot: ${lotId}, Block: ${blockId}`;
                 tooltip.style.display = 'block'; 
                 
-                tooltip.style.left = `${event.clientX + 10}px`; 
-                tooltip.style.top = `${event.clientY + 10}px`; 
+                const containerRect = container.getBoundingClientRect();
+                tooltip.style.left = `${event.clientX - containerRect.left + 10}px`;
+                tooltip.style.top = `${event.clientY - containerRect.top + 10}px`;
             }
     
         } else {
