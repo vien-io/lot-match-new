@@ -5,7 +5,7 @@
 @section('content')
 <div class="tw-bg-gradient-to-br tw-from-green-50 tw-to-white tw-min-h-screen tw-flex">
 
-  {{-- Sidebar --}}
+<!--   {{-- Sidebar --}}
   <div class="tw-bg-white tw-w-20 tw-flex tw-flex-col tw-items-center tw-py-6 tw-shadow-lg tw-rounded-r-2xl">
     <div class="tw-text-gray-400 tw-my-4 tw-p-5 tw-rounded-xl tw-cursor-pointer hover:tw-bg-green-100 hover:tw-text-green-500">
       <i class="fas fa-home tw-text-2xl"></i>
@@ -17,7 +17,7 @@
       <i class="fas fa-cog tw-text-2xl"></i>
     </div>
   </div>
-
+ -->
   {{-- Main Content --}}
   <div class="tw-flex-1 tw-p-8">
 
@@ -120,7 +120,7 @@
         borderRadius: {topLeft: 10, topRight: 10, bottomLeft: 2, bottomRight: 2},
         maxBarThickness: 40,
         hoverBackgroundColor: 'rgba(34, 197, 94, 1)',
-        hoverBorderColor: 'rgba(21, 128, 61, 1)',
+        hoverBorderColor: 'rgba(64, 184, 108, 1)',
         hoverBorderWidth: 2,
       }]
     },

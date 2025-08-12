@@ -36,7 +36,7 @@ function initThreeJS() {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enablePan = true;
     controls.enableRotate = true;
-    controls.enableZoom = true;
+    controls.enableZoom = false;
     controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
     controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
     controls.screenSpacePanning = true;

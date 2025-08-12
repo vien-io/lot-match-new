@@ -2,7 +2,12 @@ import './bootstrap';
 import initThreeJS from './three';
 import '../css/homepage.css';
 import { renderBlockRatingsChart, renderRatingDistributionChart, renderTopRatedLotsChart, renderTopRatedLotsCards } from './charts/blockRatingsChart';
+import Alpine from 'alpinejs';
 
+
+// alpine
+window.Alpine = Alpine;
+Alpine.start();
 
 
 document.addEventListener("DOMContentLoaded", function () {

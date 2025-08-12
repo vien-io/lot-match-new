@@ -62,7 +62,7 @@ Route::post('/contact', [ContactController::class, 'submitForm'])->name('contact
 // route to 3d map
 Route::get('/3dmap', function(){
     return view('3dmap');
-});
+})->name('3dmap');
 
 // route for blocks
 Route::get('/blocks', [BlockController::class, 'getBlocks']);
