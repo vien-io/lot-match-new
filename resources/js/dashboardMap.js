@@ -72,7 +72,8 @@ function initThreeJS() {
     const houseModelLoader = new GLTFLoader();
 
     // load the scene GLB (the one with Empty objects)
-    houseLoader.load("/models/housespawn.glb", (gltf) => {
+     const url = `/models/basic/housespawn.glb?ts=${Date.now()}`;
+    houseLoader.load(url, (gltf) => {
         const sceneModel = gltf.scene;
         housesGroup.add(sceneModel);
 
@@ -127,19 +128,23 @@ function initThreeJS() {
                     onLoad(model, distance);
                 });
             };
+            const scaleFactor = 0.9;
 
-            loadLODLevel("/models/modelH.glb", 0, (model, dist) => {
+            loadLODLevel("/models/basic/modelH_low.glb", 0, (model, dist) => {
                 model.frustumCulled = true;
+                model.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 lod.addLevel(model, dist);
             });
 
-            loadLODLevel("/models/modelH_medium.glb", 25, (model, dist) => {
+            loadLODLevel("/models/basic/modelH_low.glb", 25, (model, dist) => {
                 model.frustumCulled = true;
+                model.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 lod.addLevel(model, dist);
             });
 
-            loadLODLevel("/models/modelH_low.glb", 50, (model, dist) => {
+            loadLODLevel("/models/basic/modelH_low.glb", 50, (model, dist) => {
                 model.frustumCulled = true;
+                model.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 lod.addLevel(model, dist);
             });
 
@@ -187,6 +192,7 @@ function initThreeJS() {
 
             // handle block highlightings
             if (hoveredObject.name.startsWith("block_")) {
+
                 if (hoveredObject !== selectedBlock) {
                     // reset prev block glow
                     if (selectedBlock) {
@@ -194,7 +200,7 @@ function initThreeJS() {
                             if (child.isMesh && child.material) {
                                 if (Array.isArray(child.material)) {
                                     child.material.forEach(mat => {
-                                        mat.emissive.set(0x000000);
+                                        mat.emissive.set(0x800080);
                                         mat.emissiveIntensity = 0;
                                     });
                                 } else {
@@ -207,20 +213,58 @@ function initThreeJS() {
 
                     selectedBlock = hoveredObject; // set new block selection
 
+                    const blockId = hoveredObject.name.split("_")[1];
+                    
+
                     // apply emissive glow to all meshes in the block
                     selectedBlock.traverse(child => {
                         if (child.isMesh && child.material) {
                             if (Array.isArray(child.material)) {
                                 child.material.forEach(mat => {
-                                    mat.emissive.set(0xffffff); // purple glow for blocks
+                                    mat.emissive.set(0x800080); // purple glow for blocks
                                     mat.emissiveIntensity = 1;
                                 });
                             } else {
-                                child.material.emissive.set(0xffffff);
+                                child.material.emissive.set(0x800080);
                                 child.material.emissiveIntensity = 1;
                             }
                         }
                     });
+
+                    // highlight lots on that block
+                    housesGroup.traverse(lot => {
+                        if (lot.userData && lot.userData.blockId === blockId) {
+                            lot.traverse(child => {
+                                if (child.isMesh && child.material) {
+                                    if (Array.isArray(child.material)) {
+                                        child.material.forEach(mat => {
+                                            mat.emissive.set(0xffff00);
+                                            mat.emissiveIntensity = 1;
+                                        });
+                                    } else {
+                                        child.material.emissive.set(0xffff00);
+                                        child.material.emissiveIntensity = 1;
+                                    }
+                                }
+                            });
+                        } else if (lot.userData && lot.userData.blockId) {
+                            // reset other lots
+                            lot.traverse(child => {
+                                if (child.isMesh && child.material){
+                                    if (Array.isArray(child.material)) {
+                                        child.material.forEach(mat => {
+                                            mat.emissive.set(0x000000);
+                                            mat.emissiveIntensity = 0;
+                                        });
+                                    } else {
+                                        child.material.emissive.set(0x000000);
+                                        child.material.emissiveIntensity = 0;
+                                    }
+                                }
+                            });
+                        }
+                    });
+
 
                     // show tooltip for blocks
                     tooltipText.textContent = `Block: ${hoveredObject.name.split("_")[1]}`;
@@ -349,6 +393,25 @@ function initThreeJS() {
                 });
                 selectedHouse = null;
             }
+
+            housesGroup.traverse(lot => {
+                if (lot.userData && lot.userData.blockId) {
+                    lot.traverse(child => {
+                        if (child.isMesh && child.material) {
+                            if (Array.isArray(child.material)) {
+                                child.material.forEach(mat => {
+                                    mat.emissive.set(0x000000);
+                                    mat.emissiveIntensity = 0;
+                                });
+                            } else {
+                                child.material.emissive.set(0x000000);
+                                child.material.emissiveIntensity = 0;
+                            }
+                            
+                        }
+                    });
+                }
+            });
     
             // hide tooltip when no object hovered
             tooltip.style.display = 'none';
