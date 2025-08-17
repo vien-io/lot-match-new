@@ -26,83 +26,107 @@
     <div id="app" class="tw-flex">
         {{-- Sidebar --}}
         @auth
-        <div class="sidebar tw-bg-white tw-shadow-lg tw-w-20 tw-flex tw-flex-col tw-items-center tw-py-6">
+        <div 
+            x-data="{ scrolled: false }"
+            x-init="window.addEventListener('scroll', () => scrolled = window.scrollY > 10)"
+            :class="scrolled ? 'tw-shadow-md' : 'tw-shadow-none'"
+            class="sidebar tw-bg-white tw-shadow-lg tw-w-20 tw-flex tw-flex-col tw-items-center tw-py-6 tw-sticky tw-top-0 tw-h-screen tw-transition-shadow tw-duration-300 tw-z-50"
+        >
 
-         {{-- Logo --}}
-        <div class="tw-mb-6">
+        {{-- Logo --}}
+        <div class="tw-mb-0 tw-mt-4">
             <img src="#" alt="LotM" class="tw-w-10 tw-h-10">
         </div>
+
+       {{-- divider --}}
+        <div 
+            :class="scrolled 
+                ? 'tw-w-14 tw-opacity-100' 
+                : 'tw-w-0 tw-opacity-0'"
+            class="tw-border-t tw-border-gray-300 tw-mx-auto tw-mb-4 tw-transition-all tw-duration-700 tw-ease-in-out">
+        </div>
+
+
         {{-- dashboard --}}
-        <a href="{{ route('dashboard') }}"
-            class="tw-flex tw-items-center tw-justify-center tw-w-12 tw-h-12 tw-my-3 tw-text-gray-400 tw-rounded-xl tw-transition-colors 
-            {{ request()->routeIs('dashboard') 
+        <x-sidebar-icon 
+            href="{{ route('dashboard') }}"
+            icon="fas fa-home"
+            tooltip="Dashboard"
+            :active="request()->routeIs('dashboard')
                 ? 'tw-bg-green-500 tw-text-white'
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500' }}">
-            <i class="fas fa-home tw-text-2xl"></i>
-        </a>
+                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+        />
 
         {{-- 3d map --}}
-        <a href="{{ route('3dmap') }}"
-            class="tw-flex tw-items-center tw-justify-center tw-w-12 tw-h-12 tw-my-3 tw-text-gray-400 tw-rounded-xl tw-transition-colors
-            {{ request()->routeIs('3dmap')
+        <x-sidebar-icon 
+            href="{{ route('3dmap') }}"
+            icon="fas fa-map"
+            tooltip="3d Map"
+            :active="request()->routeIs('3dmap')
                 ? 'tw-bg-green-500 tw-text-white'
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500' }}">
-            <i class="fas fa-map tw-text-2xl"></i>
-        </a>
+                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"  
+        />
 
         {{-- property management --}}
-        <a href="{{ route('properties.index') }}" 
-            class="tw-flex tw-items-center tw-justify-center tw-w-12 tw-h-12 tw-my-3 tw-text-gray-400 tw-rounded-xl tw-transition-colors
-            {{ request()->routeIs('properties.*') 
+        <x-sidebar-icon 
+            href="{{ route('properties.index') }}" 
+            icon="fas fa-vihara" 
+            tooltip="Property Management"
+            :active="request()->routeIs('properties.*') 
                 ? 'tw-bg-green-500 tw-text-white' 
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500' }}">
-            <i class="fas fa-vihara tw-text-2xl"></i>
-        </a>
+                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+        />
 
-        {{-- reviews and ratings --}}
-        <a href="#"
-            class="tw-flex tw-items-center tw-justify-center tw-w-12 tw-h-12 tw-my-3 tw-text-gray-400 tw-rounded-xl tw-transition-colors
-            {{ request()->routeIs('reviews')
-                ? 'tw-bg-green-500 tw-text-white'
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'}}">
-                <i class="fas fa-star tw-text-2xl"></i>
-        </a>
+        {{-- Reviews and Ratings --}}
+        <x-sidebar-icon 
+            href="{{ url('/reviews') }}" 
+            icon="fas fa-star" 
+            tooltip="Reviews & Ratings"
+            :active="request()->is('reviews*') 
+                ? 'tw-bg-green-500 tw-text-white' 
+                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'" 
+        />
 
         {{-- AI Summary & Forecasting --}}
-        <a href="#"
-            class="tw-flex tw-items-center tw-justify-center tw-w-12 tw-h-12 tw-my-3 tw-rounded-xl tw-transition-colors
-            {{ request()->routeIs('#') 
-                ? 'tw-bg-green-500 tw-text-white'
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500' }}">
-            <i class="fas fa-robot tw-text-2xl"></i>
-        </a>
+        <x-sidebar-icon 
+            href="#" 
+            icon="fas fa-robot" 
+            tooltip="AI Summary & Forecasting"
+            :active="request()->routeIs('forecast') 
+                ? 'tw-bg-green-500 tw-text-white' 
+                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+        />
 
         {{-- Data Analytics --}}
-        <a href="#"
-            class="tw-flex tw-items-center tw-justify-center tw-w-12 tw-h-12 tw-my-3 tw-rounded-xl tw-transition-colors
-            {{ request()->routeIs('#') 
-                ? 'tw-bg-green-500 tw-text-white'
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500' }}">
-            <i class="fas fa-chart-line tw-text-2xl"></i>
-        </a>
+        <x-sidebar-icon 
+            href="#" 
+            icon="fas fa-chart-line" 
+            tooltip="Data Analytics"
+            :active="request()->routeIs('analytics') 
+                ? 'tw-bg-green-500 tw-text-white' 
+                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+        />
 
         {{-- User Management --}}
-        <a href="#"
-            class="tw-flex tw-items-center tw-justify-center tw-w-12 tw-h-12 tw-my-3 tw-rounded-xl tw-transition-colors
-            {{ request()->routeIs('#') 
-                ? 'tw-bg-green-500 tw-text-white'
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500' }}">
-            <i class="fas fa-users tw-text-2xl"></i>
-        </a>
+        <x-sidebar-icon 
+            href="#" 
+            icon="fas fa-users" 
+            tooltip="User Management"
+            :active="request()->routeIs('users') 
+                ? 'tw-bg-green-500 tw-text-white' 
+                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+        />
 
         {{-- Technical Documentation / About --}}
-        <a href="#"
-            class="tw-flex tw-items-center tw-justify-center tw-w-12 tw-h-12 tw-my-3 tw-rounded-xl tw-transition-colors
-            {{ request()->routeIs('#') 
-                ? 'tw-bg-green-500 tw-text-white'
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500' }}">
-            <i class="fas fa-info-circle tw-text-2xl"></i>
-        </a>
+        <x-sidebar-icon 
+            href="#" 
+            icon="fas fa-info-circle" 
+            tooltip="Documentation / About"
+            :active="request()->routeIs('about') 
+                ? 'tw-bg-green-500 tw-text-white' 
+                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+        />
+
 
 
         {{-- more here --}}
@@ -121,6 +145,18 @@
                         <span class="tw-font-bold tw-text-lg">{{ config('app.name', 'LotMatch') }}</span>
                     </a>
 
+                    {{-- search bar --}}
+                    <div class="tw-relative tw-flex-grow tw-mx-4" x-data="searchPlaceholderCycle()">
+                        <span class="tw-absolute tw-left-3 tw-top-1/2 tw-transform tw--translate-y-1/2 tw-text-gray-400">
+                            <i class="fas fa-magnifying-glass"></i>
+                        </span>
+                        <input 
+                            type="search" 
+                            :placeholder="placeholders[current]"
+                            class="tw-w-full tw-pl-10 tw-pr-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-green-400 focus:tw-outline-none"
+                        />
+                    </div>
+
                     {{-- Right Actions --}}
                     <div class="tw-flex tw-items-center tw-gap-4">
                         @guest
@@ -138,9 +174,19 @@
                         <div class="tw-relative" x-data="{ open: false }">
                             <button @click="open = !open" 
                                 class="tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-1 tw-rounded-lg tw-text-gray-700 hover:tw-bg-green-100 hover:tw-text-green-500 tw-transition-colors">
+
+                                {{-- user avatar --}}
+                                <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&background=34d399&color=fff&rounded=true' }}" 
+                                    alt="User Avatar"
+                                    class="tw-w-8 tw-h-8 tw-rounded-full tw-object-cover">
+
+                                {{-- username --}}
                                 <span>{{ Auth::user()->name }}</span>
-                                <svg class="tw-w-4 tw-h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                <svg
+                                    :class="{'tw-rotate-180': !open}" 
+                                    class="tw-w-4 tw-h-4 tw-transition-transform tw-duration-300" 
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
                             {{-- dropdown menu --}}
@@ -167,7 +213,6 @@
                     </div>
                 </div>
             </nav>
-
             <main class="tw-p-4">
                 @yield('content')
                 @yield('scripts')

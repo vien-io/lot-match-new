@@ -5,6 +5,32 @@ import { renderBlockRatingsChart, renderRatingDistributionChart, renderTopRatedL
 import Alpine from 'alpinejs';
 
 
+
+
+// search placeholder cycle
+window.searchPlaceholderCycle = function() {
+    return {
+        current: 0,
+        placeholders: [
+            "Search blocks by name or number...",
+            "Search lots by lot number or address...",
+            "Search homeowner reviews or ratings...",
+            'Try "Block A", "Lot 15", or keywords...',
+            "Find properties by area or floor size...",
+            'Search for comments like "quiet neighborhood"...',
+            "Look up recent reviews or ratings...",
+            "Search blocks with high ratings...",
+            "Find lots with specific forecasts...",
+            "Search for your favorite property..."
+        ],
+        init() {
+            setInterval(() => {
+                this.current = (this.current + 1) % this.placeholders.length;
+            }, 5000); 
+        }
+      }
+    }
+
 // alpine
 window.Alpine = Alpine;
 Alpine.start();
