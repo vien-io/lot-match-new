@@ -128,7 +128,7 @@ function initThreeJS() {
                     onLoad(model, distance);
                 });
             };
-            const scaleFactor = 0.9;
+            const scaleFactor = 1.4;
 
             loadLODLevel("/models/basic/modelH_low.glb", 0, (model, dist) => {
                 model.frustumCulled = true;
@@ -275,6 +275,23 @@ function initThreeJS() {
                 tooltip.style.top = `${event.clientY - containerRect.top + 10}px`;
                 return;
                 
+            } else {
+                if (selectedBlock) {
+                    selectedBlock.traverse(child => {
+                        if (child.isMesh && child.material) {
+                            if (Array.isArray(child.material)) {
+                                child.material.forEach(mat => {
+                                    mat.emissive.set(0x000000);
+                                    mat.emissiveIntensity = 0;
+                                });
+                            } else {
+                                child.material.emissive.set(0x000000);
+                                child.material.emissiveIntensity = 0;
+                            }
+                        }
+                    });
+                    selectedBlock = null;
+                }
             }
 
             // reset block highlight when switching to a house
@@ -347,11 +364,48 @@ function initThreeJS() {
     
             // if hovered object has lotId
             if (hoveredObject.userData.lotId) {
+
+                // 1. reset all lots
+                housesGroup.traverse(lot => {
+                    if (lot.userData && lot.userData.blockId) {
+                        lot.traverse(child => {
+                            if (child.isMesh && child.material) {
+                                if (Array.isArray(child.material)) {
+                                    child.material.forEach(mat => {
+                                        mat.emissive.set(0x000000);
+                                        mat.emissiveIntensity = 0;
+                                    });
+                                } else {
+                                    child.material.emissive.set(0x000000);
+                                    child.material.emissiveIntensity = 0;
+                                }
+                            }
+                        });
+                    }
+                });
+
+                // 2. highlight the hovered lot
+                hoveredObject.traverse(child => {
+                    if (child.isMesh && child.material) {
+                        if (Array.isArray(child.material)) {
+                            child.material.forEach(mat => {
+                                mat.emissive.set(0xffff00);
+                                mat.emissiveIntensity = 1;
+                            });
+                        } else {
+                            child.material.emissive.set(0xffff00);
+                            child.material.emissiveIntensity = 1;
+                        }
+                    }
+                });
+
+                selectedHouse = hoveredObject;
+
+                // 3. tooltip logic
                 const lotId = hoveredObject.userData.lotId;
                 const blockId = hoveredObject.userData.blockId; 
                 tooltipText.textContent = `Lot: ${lotId}, Block: ${blockId}`;
                 tooltip.style.display = 'block'; 
-                
                 const containerRect = container.getBoundingClientRect();
                 tooltip.style.left = `${event.clientX - containerRect.left + 10}px`;
                 tooltip.style.top = `${event.clientY - containerRect.top + 10}px`;

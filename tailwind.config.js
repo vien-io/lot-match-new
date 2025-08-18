@@ -17,6 +17,17 @@ export default {
             },
         },
     },
+    variants: {
+        extend: {
+            textColor: ['group-hover'],
+        },
+    },
+    safelist: [
+    'tw-group-hover:tw-text-blue-500',
+    'tw-group-hover:tw-text-green-500',
+    'tw-group-hover:tw-text-yellow-500',
+    'tw-group-hover:tw-text-purple-500',
+    ],
     corePlugins: {
         collapse: false,
     },

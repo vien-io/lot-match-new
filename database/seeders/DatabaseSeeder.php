@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
                 BlocksTableSeeder::class,            
                 LotSeeder::class,                   
                 ReviewsTableSeeder::class,          
-                UpdateLotsWithModelUrlSeeder::class,
+                // UpdateLotsWithModelUrlSeeder::class,
                 UserTableSeeder::class
             ]);
         }

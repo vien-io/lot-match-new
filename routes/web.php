@@ -103,8 +103,13 @@ Route::post('/signup', [RegisterController::class, 'register'])->name('signup');
 Route::get('/analytics/block-ratings', [AnalyticsController::class, 'blockRatings'])->name('analytics.block_ratings');
 
 // dashboard
-Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 Route::get('/dashboardA', [AnalyticsController::class, 'dashboard'])->name('dashboardA');
+
+
+
+// left nav buttons
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+Route::resource('properties', PropertyController::class);
 
 
 // reviews

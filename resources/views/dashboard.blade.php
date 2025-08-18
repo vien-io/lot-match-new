@@ -5,30 +5,18 @@
 @section('content')
 <div class="tw-bg-gradient-to-br tw-from-green-50 tw-to-white tw-min-h-screen tw-flex">
 
-<!--   {{-- Sidebar --}}
-  <div class="tw-bg-white tw-w-20 tw-flex tw-flex-col tw-items-center tw-py-6 tw-shadow-lg tw-rounded-r-2xl">
-    <div class="tw-text-gray-400 tw-my-4 tw-p-5 tw-rounded-xl tw-cursor-pointer hover:tw-bg-green-100 hover:tw-text-green-500">
-      <i class="fas fa-home tw-text-2xl"></i>
-    </div>
-    <div class="tw-text-gray-400 tw-my-3 tw-p-5 tw-rounded-xl tw-cursor-pointer hover:tw-bg-green-100 hover:tw-text-green-500">
-      <i class="fas fa-chart-bar tw-text-2xl"></i>
-    </div>
-    <div class="tw-text-gray-400 tw-my-3 tw-p-5 tw-rounded-xl tw-cursor-pointer hover:tw-bg-green-100 hover:tw-text-green-500">
-      <i class="fas fa-cog tw-text-2xl"></i>
-    </div>
-  </div>
- -->
+
   {{-- Main Content --}}
   <div class="tw-flex-1 tw-p-8">
 
-    {{-- Welcome Section --}}
-    <div class="tw-mb-8">
-      <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800">Welcome, {{ auth()->user()->name ?? 'Researcher' }}!</h1>
-      <p class="tw-text-gray-600">Here is the overview of Sameera Subdivision.</p>
-    </div>
+  {{-- Welcome Section --}}
+  <div class="tw-mb-8">
+    <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800">Welcome, {{ auth()->user()->name ?? 'Researcher' }}!</h1>
+    <p class="tw-text-gray-600">Here is the overview of Sameera Subdivision.</p>
+  </div>
 
-   {{-- Statistic Cards --}}
-<div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-4 tw-gap-6 tw-mb-10">
+  {{-- Statistic Cards --}}
+  <div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-4 tw-gap-6 tw-mb-10">
 
   {{-- Total Blocks (Blue) --}}
   <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6 tw-text-center

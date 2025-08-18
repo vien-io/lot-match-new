@@ -22,18 +22,21 @@ class BlocksTableSeeder extends Seeder
 
         DB::table('blocks')->insert([
             [
+                'id' => 1,
                 'name' => 'Block 1',
                 'description' => 'This is a description for Block 1.',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
+                'id' => 2,
                 'name' => 'Block 2',
                 'description' => 'This is a description for Block 2.',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
+                'id' => 3,
                 'name' => 'Block 3',
                 'description' => 'This is a description for Block 3.',
                 'created_at' => Carbon::now(),
