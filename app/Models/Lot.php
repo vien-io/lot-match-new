@@ -12,7 +12,15 @@ class Lot extends Model
     protected $table = 'lots';
 
 
-    protected $fillable = ['name', 'description', 'size', 'price', 'block_id']; 
+    protected $fillable = [
+        'name', 
+        'description', 
+        'size', 
+        'price', 
+        'block_id',
+        'lot_area',
+        'floor_area',
+    ]; 
     
  
     public function block()

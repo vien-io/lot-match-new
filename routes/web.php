@@ -110,6 +110,7 @@ Route::get('/dashboardA', [AnalyticsController::class, 'dashboard'])->name('dash
 // left nav buttons
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 Route::resource('properties', PropertyController::class);
+Route::put('/properties/{id}', [PropertyController::class, 'update'])->name('properties.update');
 
 
 // reviews
