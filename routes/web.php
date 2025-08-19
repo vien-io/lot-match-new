@@ -111,7 +111,7 @@ Route::get('/dashboardA', [AnalyticsController::class, 'dashboard'])->name('dash
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 Route::resource('properties', PropertyController::class);
 Route::put('/properties/{id}', [PropertyController::class, 'update'])->name('properties.update');
-
+Route::resource('properties', PropertyController::class)->except(['show', 'create', 'edit']);
 
 // reviews
 Route::middleware(['auth'])->group(function () {

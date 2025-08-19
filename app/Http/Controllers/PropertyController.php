@@ -50,21 +50,34 @@ class PropertyController extends Controller
     {
         $request->validate([
             'block_id'   => 'required|exists:blocks,id',
-            'name'       => 'required|string',
+            'lot_numbers' => 'required|string',
             'lot_area'   => 'required|numeric',
             'floor_area' => 'required|numeric',
         ]);
 
+        $numbers = array_map('trim', explode(',', $request->lot_numbers));
+
+        $lotNumber = $numbers[0]; 
         $property = Lot::findOrFail($id);
 
         $property->update([
             'block_id'   => $request->block_id,
-            'name'       => $request->name,
+            'name'       => 'Lot ' . $lotNumber,
             'lot_area'   => $request->lot_area,
             'floor_area' => $request->floor_area,
-            'size'       => $request->lot_area, // if size = lot_area
+            'size'       => $request->lot_area,
         ]);
 
-        return redirect()->route('properties.index')->with('success', 'Property updated successfully!');
+        return redirect()->route('properties.index')
+                        ->with('success', 'Property updated successfully!');
+    }
+
+    public function destroy($id)
+    {
+        $property = Lot::findOrFail($id);
+        $property->delete();
+
+        return redirect()->route('properties.index')
+                        ->with('success', 'Property deleted successfully!');
     }
 }
