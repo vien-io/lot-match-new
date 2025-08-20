@@ -11,7 +11,7 @@ class PropertyController extends Controller
     // show list of properties
     public function index()
     {
-        $properties = Lot::latest()->paginate(12);
+        $properties = Lot::with('interiorImages')->latest()->paginate(12);
         $blocks = Block::all();
 
         return view('properties.index', compact('properties', 'blocks'));
@@ -25,12 +25,13 @@ class PropertyController extends Controller
             'lot_numbers' => 'required|string',
             'lot_area'  => 'required|numeric',
             'floor_area' => 'required|numeric',
+            'interior_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $numbers = array_map('trim', explode(',', $request->lot_numbers));
 
         foreach($numbers as $num) {
-            Lot::create([
+            $lot = Lot::create([
                 'block_id'  => $request->block_id,
                 'name'      => 'Lot ' . $num,
                 'lot_area'  => $request->lot_area,
@@ -39,6 +40,14 @@ class PropertyController extends Controller
                 'price'     => 0,
                 'description' => '',
             ]);
+
+            // handle interior images
+            if($request->hasFile('interior_images')) {
+                foreach($request->file('interior_images') as $file) {
+                    $path = $file->store('uploads/interiors', 'public');
+                    $lot->interiorImages()->create(['image_path' => 'storage/' . $path]);
+                }
+            }
         }
         
 
@@ -49,17 +58,18 @@ class PropertyController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'block_id'   => 'required|exists:blocks,id',
+            'block_id'    => 'required|exists:blocks,id',
             'lot_numbers' => 'required|string',
-            'lot_area'   => 'required|numeric',
-            'floor_area' => 'required|numeric',
+            'lot_area'    => 'required|numeric',
+            'floor_area'  => 'required|numeric',
+            'interior_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $numbers = array_map('trim', explode(',', $request->lot_numbers));
-
         $lotNumber = $numbers[0]; 
         $property = Lot::findOrFail($id);
 
+        // Update property fields
         $property->update([
             'block_id'   => $request->block_id,
             'name'       => 'Lot ' . $lotNumber,
@@ -68,9 +78,31 @@ class PropertyController extends Controller
             'size'       => $request->lot_area,
         ]);
 
+        // Delete selected interior images (DB + physical file)
+        if ($request->has('delete_images')) {
+            $images = \App\Models\InteriorImage::whereIn('id', $request->delete_images)->get();
+            foreach ($images as $img) {
+                // Delete physical file
+                \Storage::disk('public')->delete(str_replace('storage/', '', $img->image_path));
+                // Delete DB record
+                $img->delete();
+            }
+        }
+
+        // Handle new uploads
+        if ($request->hasFile('interior_images')) {
+            foreach ($request->file('interior_images') as $file) {
+                $path = $file->store('uploads/interiors', 'public');
+                $property->interiorImages()->create([
+                    'image_path' => 'storage/' . $path
+                ]);
+            }
+        }
+
         return redirect()->route('properties.index')
                         ->with('success', 'Property updated successfully!');
     }
+
 
     public function destroy($id)
     {

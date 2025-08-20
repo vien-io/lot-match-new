@@ -112,6 +112,7 @@ Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashb
 Route::resource('properties', PropertyController::class);
 Route::put('/properties/{id}', [PropertyController::class, 'update'])->name('properties.update');
 Route::resource('properties', PropertyController::class)->except(['show', 'create', 'edit']);
+Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
 
 // reviews
 Route::middleware(['auth'])->group(function () {

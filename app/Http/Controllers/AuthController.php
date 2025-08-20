@@ -15,7 +15,7 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)){
-            return redirect()->intended('/3dmap');
+            return redirect()->intended('/dashboard');
         }
         return back()->withErrors([
             'error' => 'You have entered an invalid name or password. Try again.'
