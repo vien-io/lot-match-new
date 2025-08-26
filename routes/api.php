@@ -25,3 +25,11 @@ Route::post('/test-sentiment', function (Request $request) {
 Route::get('/blocks/{blockId}/insight', [ForecastController::class, 'getCombinedBlockInsight']);
 Route::get('/forecast/summary/{blockId}', [ForecastController::class, 'getBlockSummary']);
 Route::get('/forecast/data/{blockId}', [ForecastController::class, 'getForecastData']);
+
+// reviews and ratings
+Route::get('/reviews', [ReviewController::class, 'index']);  // json
+Route::post('/reviews', [ReviewController::class, 'store']); // submit review via modal
+
+
+
+

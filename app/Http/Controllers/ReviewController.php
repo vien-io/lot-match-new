@@ -16,6 +16,64 @@ use Illuminate\Support\Facades\DB;
 
 class ReviewController extends Controller
 {
+
+    public function blockReviews($blockId = null)
+    {
+        $query = Review::with(['user', 'block']);
+
+        if ($blockId) {
+            $query->where('block_id', $blockId);
+        }
+
+        $reviews = $query->latest()->get();
+
+        return response()->json([
+            'reviews' => $reviews,
+            'averageRating' => $reviews->avg('rating') ?? 0,
+            'totalReviews' => $reviews->count(),
+        ]);
+    }
+
+
+
+    public function index(Request $request)
+    {
+        $reviewsQuery = Review::with('user');
+
+        // filter by block if passed
+        if ($request->has('block_id')) {
+            $reviewsQuery->where('block_id', $request->block_id);
+        }
+
+        $reviews = $reviewsQuery->latest()->get();
+
+        // Calculate average rating
+        $averageRating = $reviews->avg('rating') ?? 0;
+
+        // Count ratings by category
+        $ratingCounts = [
+            'Excellent' => $reviews->where('rating', 5)->count(),
+            'Good'      => $reviews->where('rating', 4)->count(),
+            'Average'   => $reviews->where('rating', 3)->count(),
+            'Poor'      => $reviews->where('rating', '<', 3)->count(),
+        ];
+
+        // Return JSON if AJAX
+        if ($request->wantsJson()) {
+            return response()->json($reviews);
+        }
+
+        $blocks = Block::all(); 
+
+        return view('reviews.index', compact('reviews', 'averageRating', 'ratingCounts', 'blocks'));
+    }
+
+
+
+
+
+
+
     public function store(Request $request) {
         $request->validate([
             'block_id' => 'required|exists:blocks,id',  
@@ -75,6 +133,7 @@ class ReviewController extends Controller
 
         // fetch block with its reviews and related user info
         $block = Block::with('reviews.user')->find($request->block_id);
+        
 
         if (!$block) {
             return response()->json([
@@ -82,9 +141,11 @@ class ReviewController extends Controller
             ], 404);
         }
 
+        $finalReview->load('user', 'block'); 
         return response()->json([
             'message' => 'Review submitted successfully!',
             'block' => $block,  
+            'review' => $finalReview,  
         ]);
     }
 
@@ -153,7 +214,7 @@ class ReviewController extends Controller
         return response()->json(['message' => 'Review deleted successfully!']);
     }
 
-
+// this part needs review, mightve been useless now
     private function analyzeSentimentViaHuggingFace($text)
     {
         $response = Http::withHeaders([
@@ -194,5 +255,7 @@ class ReviewController extends Controller
             ]);
         return null;
     }
+
+
 }
 

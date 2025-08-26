@@ -111,7 +111,7 @@ function initThreeJS() {
     const houseModelLoader = new GLTFLoader();
 
     // load the scene GLB (the one with Empty objects)
-    houseLoader.load("/models/housespawn.glb", (gltf) => {
+    houseLoader.load("/models/notbasic/housespawn.glb", (gltf) => {
         const sceneModel = gltf.scene;
         housesGroup.add(sceneModel);
 
@@ -171,17 +171,17 @@ function initThreeJS() {
                 });
             };
 
-            loadLODLevel("/models/modelH.glb", 0, (model, dist) => {
+            loadLODLevel("/models/notbasic/modelH.glb", 0, (model, dist) => {
                 model.frustumCulled = true;
                 lod.addLevel(model, dist);
             });
 
-            loadLODLevel("/models/modelH_medium.glb", 25, (model, dist) => {
+            loadLODLevel("/models/notbasic/modelH_medium.glb", 25, (model, dist) => {
                 model.frustumCulled = true;
                 lod.addLevel(model, dist);
             });
 
-            loadLODLevel("/models/modelH_low.glb", 50, (model, dist) => {
+            loadLODLevel("/models/notbasic/modelH_low.glb", 50, (model, dist) => {
                 model.frustumCulled = true;
                 lod.addLevel(model, dist);
             });

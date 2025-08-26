@@ -129,7 +129,7 @@ class SummaryService
         $prompt = <<<PROMPT
         Reformat the following neighborhood forecast into a professional, structured data analytics report.
         Include:
-        1. Executive SUmmary
+        1. Executive Summary
         2. Sentiment Trend Analysis
         3. Forecast Details
         4. Recommendations
@@ -161,7 +161,7 @@ class SummaryService
                             ['role' => 'user', 'content' => $prompt]
                         ],
                         'temperature' => 0.7,
-                        'max_tokens' => 300,
+                        'max_tokens' => 400,
                     ]);
 
                     if ($response->successful()){

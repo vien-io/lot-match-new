@@ -79,17 +79,17 @@
 
         {{-- Reviews and Ratings --}}
         <x-sidebar-icon 
-            href="{{ url('/reviews') }}" 
+            href="{{ route('reviews.index') }}" 
             icon="fas fa-star" 
             tooltip="Reviews & Ratings"
-            :active="request()->is('reviews*') 
+            :active="request()->routeIs('reviews*') 
                 ? 'tw-bg-green-500 tw-text-white' 
                 : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'" 
         />
 
         {{-- AI Summary & Forecasting --}}
         <x-sidebar-icon 
-            href="#" 
+            href="{{ route('forecast') }}"  
             icon="fas fa-robot" 
             tooltip="AI Summary & Forecasting"
             :active="request()->routeIs('forecast') 

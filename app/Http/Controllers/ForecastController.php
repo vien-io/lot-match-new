@@ -18,7 +18,11 @@ class ForecastController extends Controller
         $this->summaryService = $summaryService;
     }
 
-
+    public function forecastPage()
+    {
+        $blocks = DB::table('blocks')->orderBy('name')->get(); 
+        return view('forecast.index', compact('blocks'));
+    }
 
     // blocksummary js calls this
     // triggered by opening the modal

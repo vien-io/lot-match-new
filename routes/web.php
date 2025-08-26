@@ -113,14 +113,19 @@ Route::resource('properties', PropertyController::class);
 Route::put('/properties/{id}', [PropertyController::class, 'update'])->name('properties.update');
 Route::resource('properties', PropertyController::class)->except(['show', 'create', 'edit']);
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
+Route::get('/forecast', [ForecastController::class, 'forecastPage'])->name('forecast');
+Route::get('/forecast/data/{blockId}', [ForecastController::class, 'getForecastData']);
+
+
+
 
 // reviews
-Route::middleware(['auth'])->group(function () {
-    Route::post('/block-reviews', [ReviewController::class, 'store'])->name('block.reviews.store'); 
-});
+Route::middleware('auth')->post('/block-reviews', [ReviewController::class, 'store'])
+     ->name('block.reviews.store');
 
-Route::put('/block-reviews/{review}', [ReviewController::class, 'update']);
-Route::delete('/block-reviews/{review}', [ReviewController::class, 'destroy']);
+Route::get('/blocks/{blockId}/reviews', [ReviewController::class, 'blockReviews']);
+Route::get('/blocks/all/reviews', [ReviewController::class, 'blockReviews']);
+
 
 
 // forecasting
