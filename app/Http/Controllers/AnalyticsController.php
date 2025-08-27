@@ -65,7 +65,7 @@ class AnalyticsController extends Controller
         });
 
 
-        return view('dashboard', compact('blockRatings', 'topRatedLots', 'recentReviews', 'availableLots', 'reservedLots', 'ratingDistribution'));
+        return view('analytics', compact('blockRatings', 'topRatedLots', 'recentReviews', 'availableLots', 'reservedLots', 'ratingDistribution'));
 
     }
 }

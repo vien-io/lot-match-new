@@ -33,3 +33,4 @@ Route::post('/reviews', [ReviewController::class, 'store']); // submit review vi
 
 
 
+Route::get('/forecast/db/{blockId}', [ForecastController::class, 'getForecastDataFromDb']);

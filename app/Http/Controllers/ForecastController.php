@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Services\SummaryService;
+use App\Models\Block;
 
 
 
@@ -191,4 +192,56 @@ class ForecastController extends Controller
 
         return $sentimentByMonth;
     }
+
+    public function getForecastDataFromDb($blockId)
+    {
+        $block = Block::find($blockId);
+
+        if(!$block) {
+            return response()->json([
+                'summary' => null,
+                'detailed_report' => null,
+                'forecast' => null,
+                'sentiment' => [],
+            ]);
+        }
+
+        return response()->json([
+            'summary' => $block->ai_summary,
+            'detailed_report' => $block->full_forecast_report,
+            'forecast' => $block->forecasted_rating,
+            'sentiment' => json_decode($block->sentiment_data, true) ?? [],
+        ]);
+        
+    }
+
+    /* {
+        // get block
+        $block = Block::findOrFail($blockId);
+
+        // get latest ai summary and forecast data from db (adjust columns to match your schema)
+        $latestForecast = DB::table('forecasts')
+            ->where('block_id', $blockId)
+            ->latest('created_at')
+            ->first();
+
+        // get sentiment trend (grouped by date)
+        $sentimentTrend = Review::where('block_id', $blockId)
+            ->selectRaw('DATE(created_at) as date, AVG(sentiment_score) as score')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        // return json in format frontend expects
+        return response()->json([
+            'summary' => $latestForecast->summary ?? null,
+            'detailed_report' => $latestForecast->detailed_report ?? null,
+            'forecast' => $latestForecast->forecast ?? null,
+            'sentiment_trend' => $sentimentTrend,
+        ]);
+    } */
+
+
+
+    
 }

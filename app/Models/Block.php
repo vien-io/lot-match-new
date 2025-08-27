@@ -10,7 +10,14 @@ class Block extends Model
     use HasFactory;
 
     protected $table = 'blocks'; 
-    protected $fillable = ['name', 'description']; 
+    protected $fillable = [
+        'name', 
+        'description',
+        'ai_summary',
+        'full_forecast_report',
+        'forecasted_rating',
+        'sentiment_data',
+    ]; 
     
     // Block has many lots
     public function lots()

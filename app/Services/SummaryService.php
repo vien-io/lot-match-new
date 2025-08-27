@@ -19,30 +19,31 @@ class SummaryService
         
 
         $prompt = <<<PROMPT
-        You are analyzing neighborhood livability based on resident reviews, forecasted satisfaction scores, and monthly sentiment trends.
+        You are analyzing neighborhood livability for someone considering moving to this block.
 
-        Here is a brief summary of recent comments:
+        Here is the summary of resident comments:
         {$summary}
 
-        The forecasted average rating is {$forecast} (on a scale of 1 to 5).
+        Forecasted average rating: {$forecast} (on a scale of 1 to 5)
+        Monthly sentiment data: {$sentimentText}
 
-        Monthly sentiment data:
-        {$sentimentText}
+        Produce a friendly, human-readable narrative that:
+        - Forecasts what daily life and community experience on this block is like
+        - Highlights what residents enjoy and what challenges they face
+        - Explains positive and negative sentiment trends over time in plain language
+        - Gives practical advice and considerations for someone thinking about moving here
 
-        Based on this data, provide:
-        1. A concise summary of what residents appreciate and complain about/ Avoid repeating the same adjectives — vary word choice and keep it engaging.
-        2. Specific sentiment trends over time (e.g., dips early in the year, mid-year improvements, consistent highs/lows).
-        3. A practical forecast-style closing that interprets the forecast rating and gives friendly advice to someone considering a move.
-
-        Use natural, human language. Avoid robotic tone, unnecessary length, or restating data. Interpret and summarize meaningfully.
+        Focus on a narrative perspective: “what it’s like to live here.” Keep the tone engaging, natural, and concise, avoiding technical jargon or raw data tables.
         PROMPT;
+
+
         
         $response = Http::withToken(config('services.openai.api_key'))
             ->timeout(30)
             ->post('https://api.openai.com/v1/chat/completions', [
                 'model' => 'gpt-3.5-turbo',
                 'messages' => [
-                    ['role' => 'system', 'content' => 'You are an assistant summarizing neigborhood livability based on sentiment trends, forecasted ratings, and resident feedback'],
+                    ['role' => 'system', 'content' => 'You are a neighborhood expert. Your task is to forecast what living on a specific block is like, based on resident comments, sentiment trends, and forecasted ratings. Focus on interpreting the experience, not just summarizing past comments.'],
                     ['role' => 'user', 'content' => $prompt]
                 ],
                 'temperature' => 0.7,
@@ -92,7 +93,7 @@ class SummaryService
                 ->post('https://api.openai.com/v1/chat/completions', [
                     'model' => 'gpt-3.5-turbo',
                     'messages' => [
-                        ['role' => 'system', 'content' => 'Summarize these resident comments in a helpful tone.'],
+                        ['role' => 'system', 'content' => 'Summarize these resident comments.'],
                         ['role' => 'user', 'content' => $input]
                     ],
                     'temperature' => 0.7,
@@ -161,7 +162,7 @@ class SummaryService
                             ['role' => 'user', 'content' => $prompt]
                         ],
                         'temperature' => 0.7,
-                        'max_tokens' => 400,
+                        'max_tokens' => 600,
                     ]);
 
                     if ($response->successful()){

@@ -109,7 +109,7 @@
 
         {{-- User Management --}}
         <x-sidebar-icon 
-            href="#" 
+            href="{{ route('usermanagement.userm') }}"
             icon="fas fa-users" 
             tooltip="User Management"
             :active="request()->routeIs('users') 
