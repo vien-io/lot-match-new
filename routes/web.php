@@ -100,10 +100,12 @@ Route::post('/signup', [RegisterController::class, 'register'])->name('signup');
 
 
 // analytics
-Route::get('/analytics/block-ratings', [AnalyticsController::class, 'blockRatings'])->name('analytics.block_ratings');
+//Route::get('/analytics/block-ratings', [AnalyticsController::class, 'blockRatings'])->name('analytics.block_ratings');
+Route::get('/analytics/block-ratings', [AnalyticsController::class, 'dashboard'])->name('analytics.block_ratings');
+
 
 // dashboard
-Route::get('/dashboardA', [AnalyticsController::class, 'dashboard'])->name('dashboardA');
+// Route::get('/dashboardA', [AnalyticsController::class, 'dashboard'])->name('dashboardA');
 
 
 

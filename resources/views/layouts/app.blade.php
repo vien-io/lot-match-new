@@ -99,7 +99,7 @@
 
         {{-- Data Analytics --}}
         <x-sidebar-icon 
-            href="#" 
+            href="{{ route('analytics.block_ratings') }}" 
             icon="fas fa-chart-line" 
             tooltip="Data Analytics"
             :active="request()->routeIs('analytics') 

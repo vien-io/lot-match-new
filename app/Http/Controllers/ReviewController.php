@@ -112,7 +112,7 @@ class ReviewController extends Controller
         $finalReview = $existingReview ?? $review;
 
         // dispatch AI summary job
-        if ($request->comment && isset($finalReview)) {
+     /*    if ($request->comment && isset($finalReview)) {
             DB::afterCommit(function () use ($finalReview, $request) {
             $chain = [
                 (new GenerateBlockSummaryJob($request->block_id))
@@ -125,7 +125,24 @@ class ReviewController extends Controller
             });
         }
 
-      
+
+ */
+
+        if ($request->comment && isset($finalReview)) {
+            DB::afterCommit(function () use ($finalReview, $request) {
+                $chain = [
+                    (new GenerateBlockSummaryJob($request->block_id))->delay(now()->addSeconds(2)),
+                    (new \App\Jobs\ProcessBlockForecast($request->block_id, app(\App\Services\SummaryService::class)))->delay(now()->addSeconds(3))
+                ];
+
+                dispatch(
+                    (new AnalyzeSentimentJob($finalReview->id, $request->comment))
+                        ->delay(now()->addSeconds(5))
+                        ->chain($chain)
+                );
+            });
+        }
+
         
         
 

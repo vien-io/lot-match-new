@@ -60,12 +60,21 @@ class ForecastController extends Controller
         // generate detailed forecast
         $detailedReport = $this->summaryService->generateDetailedForecastReport($blockId, $summary, $forecastedRating, $sentiments);
 
+        $block = Block::find($blockId);
+        if (!$block) {
+            return response()->json([
+                'summary' => null,
+                'detailed_report' => null,
+                'forecast' => null,
+                'sentiment' => [],
+            ]);
+        }
         // return all these data
         return response()->json([
-            'summary' => $summary,
-            'detailed_report' => $detailedReport,
-            'forecast' => $forecastedRating,
-            'sentiment' => $sentiments,
+            'summary' => $block->ai_summary,
+            'detailed_report' => $block->full_forecast_report,
+            'forecast' => $block->forecasted_rating,
+            'sentiment' => json_decode($block->sentiment_data, true) ?? [],
         ]);
     }
     
@@ -73,7 +82,7 @@ class ForecastController extends Controller
 
 
     // exponential moving average logic (EMA)
-    private function calculateForecast($blockId, $alpha = 0.3)
+    public function calculateForecast($blockId, $alpha = 0.3)
     {
         $ratingsQuery = DB::table('reviews')
         ->where('block_id', $blockId)
@@ -152,7 +161,7 @@ class ForecastController extends Controller
 
 
     
-    private function fetchSentimentTrends($blockId)
+    public function fetchSentimentTrends($blockId)
     {
         $results = DB::table('reviews')
             ->selectRaw('
