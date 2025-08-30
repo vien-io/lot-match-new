@@ -16,6 +16,7 @@ use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MapController;
+use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
