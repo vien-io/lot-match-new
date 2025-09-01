@@ -34,8 +34,9 @@
         >
 
         {{-- Logo --}}
-        <div class="tw-mb-0 tw-mt-4">
-            <img src="#" alt="LotM" class="tw-w-10 tw-h-10">
+        <div class="tw-mb-3 tw-mt-0">
+            <img src="/images/logoLM.png
+            " alt="LotM" class="tw-w-12 tw-h-12">
         </div>
 
        {{-- divider --}}
@@ -141,7 +142,7 @@
                     {{-- Logo --}}
                     <a href="{{ url('/homepage') }}" 
                     class="tw-flex tw-items-center tw-gap-2 tw-text-gray-500 hover:tw-text-green-500 tw-transition-colors">
-                        <i class="fas fa-leaf tw-text-xl"></i>
+                        {{-- <i class="fas fa-leaf tw-text-xl"></i> --}}
                         <span class="tw-font-bold tw-text-lg">{{ config('app.name', 'LotMatch') }}</span>
                     </a>
 

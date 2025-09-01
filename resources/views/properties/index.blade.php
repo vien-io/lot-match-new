@@ -3,99 +3,126 @@
 @section('title', 'Manage Properties')
 
 @section('content')
-<div class="tw-bg-[#e9f3ec] tw-min-h-screen tw-p-8 font-sans text-[#1f2937]">
+<div class="tw-p-6">
+    <!-- Header -->
+    <h1 class="tw-text-2xl tw-font-bold tw-text-center tw-mb-2">Property Management</h1>
+    <p class="tw-text-center tw-text-gray-500 tw-mb-6">
+        Add, edit, and manage subdivision properties in one place.
+    </p>
 
-  {{-- Header --}}
-  <div class="tw-flex tw-items-center tw-justify-between tw-mb-6">
-    <div>
-      <h1 class="tw-text-3xl tw-font-bold">Property Management</h1>
-      <p class="tw-text-[#6b7280]">Add, edit, and manage subdivision properties.</p>
-    </div>
-    <button 
-      class="tw-bg-[#22c55e] hover:tw-bg-green-600 tw-text-white tw-font-semibold tw-px-6 tw-py-3 tw-rounded-[12px] tw-shadow"
-      onclick="document.getElementById('addPropertyModal').classList.remove('tw-hidden')">
-      + Add Property
-    </button>
-  </div>
+    <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-overflow-hidden">
+        <!-- Toolbar -->
+        <div class="tw-flex tw-justify-between tw-items-center tw-p-4 tw-border-b">
+            <div class="tw-flex tw-gap-2">
+                <!-- Filter -->
+                <div class="tw-flex tw-items-center tw-border tw-rounded-lg tw-px-3 tw-py-1 tw-bg-gray-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="tw-w-4 tw-h-4 tw-text-gray-400 tw-mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input placeholder="Filter properties by..." class="tw-bg-transparent tw-outline-none tw-text-sm" />
+                </div>
+                <button class="tw-px-3 tw-py-1 tw-text-sm tw-border tw-rounded-lg tw-hover:tw-bg-gray-100">Block</button>
+                <button class="tw-px-3 tw-py-1 tw-text-sm tw-border tw-rounded-lg tw-hover:tw-bg-gray-100">Lot</button>
+            </div>
 
-  {{-- Flash message --}}
-  @if(session('success'))
-    <div class="tw-mb-4 tw-p-3 tw-bg-[#d1fae5] tw-text-[#065f46] tw-rounded-[12px]">
-      {{ session('success') }}
-    </div>
-  @endif
-
-  {{-- Property Table --}}
-  <div class="tw-bg-white tw-rounded-[12px] tw-shadow tw-overflow-hidden">
-    <table class="tw-min-w-full tw-divide-y tw-divide-gray-200">
-      <thead class="tw-bg-[#f5f7fa]">
-        <tr>
-          <th class="tw-px-6 tw-py-3 tw-text-left tw-font-medium tw-text-[#6b7280]">Block</th>
-          <th class="tw-px-6 tw-py-3 tw-text-left tw-font-medium tw-text-[#6b7280]">Lot</th>
-          <th class="tw-px-6 tw-py-3 tw-text-left tw-font-medium tw-text-[#6b7280]">Lot Area</th>
-          <th class="tw-px-6 tw-py-3 tw-text-left tw-font-medium tw-text-[#6b7280]">Floor Area</th>
-          <th class="tw-px-6 tw-py-3 tw-text-left tw-font-medium tw-text-[#6b7280]">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="tw-bg-white tw-divide-y tw-divide-gray-200">
-        @forelse($properties as $property)
-        <tr class="hover:tw-bg-[#d1fae5] tw-transition-colors">
-            <td class="tw-px-6 tw-py-4">{{ $property->block?->name ?? 'N/A' }}</td>
-            <td class="tw-px-6 tw-py-4">{{ $property->name }}</td>
-            <td class="tw-px-6 tw-py-4">{{ $property->lot_area }} sqm</td>
-            <td class="tw-px-6 tw-py-4">{{ $property->floor_area }} sqm</td>
-            <td class="tw-px-6 tw-py-4 tw-flex tw-gap-4">
-                {{-- Prepare image URLs --}}
-                @php
-                    $imagesArray = $property->interiorImages->map(fn($i) => [
-                        'id' => $i->id,
-                        'url' => asset($i->image_path)
-                    ]);
-                @endphp
-
-                {{-- View Interior --}}
-                <button type="button"
-                    onclick='openInteriorGallery({{ $property->id }}, @json($imagesArray->pluck("url")))'
-                    class="tw-text-blue-500 hover:tw-underline tw-font-medium">
-                    View Interior
+            <div class="tw-flex tw-gap-2">
+               {{--  <button class="tw-px-3 tw-py-1 tw-text-sm tw-border tw-rounded-lg tw-hover:tw-bg-gray-100">Export</button> --}}
+                <button 
+                    class="tw-px-3 tw-py-1 tw-text-sm tw-rounded-lg tw-bg-emerald-800 tw-hover:tw-bg-green-700 tw-text-white "
+                    onclick="document.getElementById('addPropertyModal').classList.remove('tw-hidden')">
+                    + Add Property
                 </button>
+            </div>
+        </div>
 
-                {{-- Edit Property --}}
-                <a href="#"
-                  onclick='openEditModal(
-                      {{ $property->id }},
-                      @json($property->name),
-                      {{ $property->lot_area }},
-                      {{ $property->floor_area }},
-                      {{ $property->block_id }},
-                      @json($imagesArray)
-                  )'
-                  class="tw-text-[#22c55e] hover:tw-underline tw-font-medium">
-                  Edit
-                </a>
+        <!-- Flash Message -->
+        @if(session('success'))
+            <div class="tw-p-3 tw-bg-green-100 tw-text-green-700 tw-text-sm tw-border-b">
+                {{ session('success') }}
+            </div>
+        @endif
 
-                {{-- Delete Property --}}
-                <form method="POST" action="{{ route('properties.destroy', $property->id) }}" onsubmit="return confirm('Delete this property?')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="tw-text-red-500 hover:tw-underline tw-font-medium">Delete</button>
-                </form>
-            </td>
-        </tr>
-        @empty
-        <tr>
-            <td colspan="5" class="tw-text-center tw-py-4 tw-text-[#6b7280]">No properties found.</td>
-        </tr>
-        @endforelse
-        </tbody>
+        <!-- Table -->
+        <div class="tw-overflow-x-auto">
+            <table class="tw-w-full tw-text-sm">
+                <thead class="tw-bg-emerald-800 tw-text-left">
+                    <tr>
+                        <th class="tw-p-2 tw-text-white">Block</th>
+                        <th class="tw-p-2 tw-text-white">Lot</th>
+                        <th class="tw-p-2 tw-text-white">Lot Area</th>
+                        <th class="tw-p-2 tw-text-white">Floor Area</th>
+                        <th class="tw-p-2 tw-text-white">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($properties as $property)
+                        <tr class="tw-border-b hover:tw-bg-[#d1fae5] tw-transition-colors">
+                            <td class="tw-p-2">{{ $property->block?->name ?? 'N/A' }}</td>
+                            <td class="tw-p-2">{{ $property->name }}</td>
+                            <td class="tw-p-2">{{ $property->lot_area }} sqm</td>
+                            <td class="tw-p-2">{{ $property->floor_area }} sqm</td>
+                            <td class="tw-p-2 tw-flex tw-gap-2">
+                            {{-- Prepare image URLs --}}
+                            @php
+                                $imagesArray = $property->interiorImages->map(fn($i) => [
+                                    'id' => $i->id,
+                                    'url' => asset($i->image_path)
+                                ]);
+                            @endphp
 
-    </table>
-  </div>
+                            <!-- View Interior / House Icon -->
+                            <button type="button"
+                                onclick='openInteriorGallery({{ $property->id }}, @json($imagesArray->pluck("url")))'
+                                class="tw-p-2 tw-rounded tw-hover:tw-bg-blue-100 tw-text-blue-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="tw-w-5 tw-h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M4 12v8h16v-8" />
+                                </svg>
+                            </button>
 
-  {{-- Pagination --}}
-  <div class="tw-mt-6">
-    {{ $properties->links() }}
-  </div>
+                            <!-- Edit -->
+                            <a href="#"
+                                onclick='openEditModal(
+                                    {{ $property->id }},
+                                    @json($property->name),
+                                    {{ $property->lot_area }},
+                                    {{ $property->floor_area }},
+                                    {{ $property->block_id }},
+                                    @json($imagesArray)
+                                )'
+                                class="tw-p-2 tw-rounded tw-hover:tw-bg-green-100 tw-text-green-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="tw-w-5 tw-h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M4 20h4.768l10.536-10.536a2 2 0 00-2.828-2.828L4 17.172V20z" />
+                                </svg>
+                            </a>
+
+                            <!-- Delete  -->
+                            <form method="POST" action="{{ route('properties.destroy', $property->id) }}" onsubmit="return confirm('Delete this property?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="tw-p-2 tw-rounded tw-hover:tw-bg-red-100 tw-text-red-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="tw-w-5 tw-h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </td>
+
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="tw-text-center tw-p-4 tw-text-gray-500">No properties found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="tw-p-4 tw-border-t tw-flex tw-justify-between tw-items-center tw-text-sm tw-text-gray-500">
+            <span>Rows per page: 10</span>
+            {{ $properties->links() }}
+        </div>
+    </div>
 </div>
 
 {{-- Add Property Modal --}}
@@ -220,94 +247,9 @@
       </div>
   </div>
 </div>
+@endsection
 
 
-<script>
-// edit modal
-function openEditModal(id, name, lotArea, floorArea, blockId, images = []) {
-    document.getElementById('editPropertyId').value = id;
-    let lotNumber = name.replace(/Lot\s*/i, '');
-    document.getElementById('editLotNumbers').value = lotNumber;
-    document.getElementById('editLotArea').value = lotArea;
-    document.getElementById('editFloorArea').value = floorArea;
-    document.getElementById('editBlockId').value = blockId;
-    document.getElementById('editPropertyForm').action = '/properties/' + id;
-
-    // populate existing images
-    const container = document.getElementById('existingImagesContainer');
-    container.innerHTML = ''; // clear previous
-    images.forEach(img => {
-        const div = document.createElement('div');
-        div.className = 'tw-relative';
-        div.innerHTML = `
-            <img src="${img.url}" class="tw-w-20 tw-h-20 tw-object-cover tw-rounded">
-            <button type="button" class="tw-absolute tw-top-0 tw-right-0 tw-bg-red-500 tw-text-white tw-rounded-full tw-w-5 tw-h-5 tw-flex tw-items-center tw-justify-center hover:tw-bg-red-600" onclick="removeExistingImage(${img.id}, this)">×</button>
-        `;
-        container.appendChild(div);
-    });
-
-    document.getElementById('editPropertyModal').classList.remove('tw-hidden');
-}
-
-function removeExistingImage(imageId, btn) {
-    // mark the image for deletion
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'delete_images[]';
-    input.value = imageId;
-    document.getElementById('editPropertyForm').appendChild(input);
-
-    // remove from UI
-    btn.parentElement.remove();
-}
-
-function closeEditModal() {
-    document.getElementById('editPropertyModal').classList.add('tw-hidden');
-}
-
-
-// interior modal
-    let currentPropertyId = null;
-    let currentImageIndex = 0;
-    let currentImages = [];
-
-    function openInteriorGallery(propertyId, images) {
-        currentImages = images || [];
-        currentPropertyId = propertyId;
-        currentImageIndex = 0;
-        showInteriorImage();
-        document.getElementById('interiorModal').classList.remove('tw-hidden');
-    }
-
-    function closeInteriorModal() {
-        document.getElementById('interiorModal').classList.add('tw-hidden');
-    }
-
-    function showInteriorImage() {
-      const imgEl = document.getElementById('interiorImage');
-      const fallback = document.getElementById('interiorFallback');
-
-      if (currentImages.length > 0) {
-          imgEl.src = currentImages[currentImageIndex];
-          imgEl.classList.remove('tw-hidden');   
-          fallback.classList.add('tw-hidden');    
-      } else {
-          imgEl.src = "";
-          imgEl.classList.add('tw-hidden');    
-          fallback.classList.remove('tw-hidden'); 
-      }
-    }
-
-    function prevInteriorImage() {
-        if (!currentImages.length) return;
-        currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
-        showInteriorImage();
-    }
-
-    function nextInteriorImage() {
-        if (!currentImages) return;
-        currentImageIndex = (currentImageIndex + 1) % currentImages.length;
-        showInteriorImage();
-    }
-</script>
+@section('scripts')
+  @vite('resources/js/properties.js')
 @endsection

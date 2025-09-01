@@ -11,7 +11,7 @@
     
         {{-- Users Table --}}
         <div class="tw-overflow-x-auto">
-            <table class="tw-min-w-full tw-bg-white tw-rounded-xl tw-shadow-sm">
+            <table class="tw-min-w-full tw-bg-white tw-rounded-xl tw-shadow-sm text-sm">
                 <thead class="tw-bg-gray-100">
                     <tr>
                         <th class="tw-text-left tw-px-4 tw-py-2">ID</th>
@@ -22,26 +22,32 @@
                 </thead>
                 <tbody>
                     @foreach ($users as $user)
-                        <tr class="tw-border-b hover:tw-bg-gray-50">
+                        <tr class="tw-border-b hover:tw-bg-[#d1fae5] tw-transition-colors">
                             <td class="tw-px-4 tw-py-2">{{ $user->id }}</td>
                             <td class="tw-px-4 tw-py-2">{{ $user->name }}</td>
                             <td class="tw-px-4 tw-py-2">{{ $user->email }}</td>
                             <td class="tw-px-4 tw-py-2">
                                 <div class="tw-flex tw-gap-2">
-                                    <a href="{{ route('usermanagement.edit', $user->id) }}"
-                                        class="tw-bg-blue-500 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded-lg hover-bg-blue-600">
-                                            Edit
-                                        </a>
-                                        <form action="{{ route('usermanagement.destroy', $user->id) }}"
-                                            method="POST"
-                                            onsubmit="return confirm('Are you sure?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="tw-bg-red-500 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded-lg hover:tw-bg-red-600">
-                                                Delete
-                                            </button>
-                                        </form>
+
+                                    {{-- Edit --}}
+                                    <a href="{{ route('usermanagement.edit', $user->id) }}" 
+                                       class="tw-p-2 tw-rounded tw-hover:tw-bg-blue-100 tw-text-blue-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="tw-w-5 tw-h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M4 20h4.768l10.536-10.536a2 2 0 00-2.828-2.828L4 17.172V20z" />
+                                        </svg>
+                                    </a>
+
+                                    {{-- Delete --}}
+                                    <form action="{{ route('usermanagement.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="tw-p-2 tw-rounded tw-hover:tw-bg-red-100 tw-text-red-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="tw-w-5 tw-h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    </form>
+
                                 </div>
                             </td>
                         </tr>
@@ -50,6 +56,7 @@
             </table>
         </div>
     </div>
+
 
 
     {{-- Right Column: Quick Actions --}}  
