@@ -124,7 +124,7 @@
 
         {{-- Technical Documentation / About --}}
         <x-sidebar-icon 
-            href="#" 
+            href="{{ route('about') }}" 
             icon="fas fa-info-circle" 
             tooltip="Documentation / About"
             :active="request()->routeIs('about') 

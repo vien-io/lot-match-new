@@ -55,7 +55,7 @@
                             <td class="tw-p-2">{{ $user->name }}</td>
                             <td class="tw-p-2">{{ $user->email }}</td>
                             <td class="tw-p-2">
-                                <div class="tw-flex tw-gap-2">
+                                <div class="tw-flex tw-gap-2 tw-items-center">
                                     <!-- Edit Modal Trigger -->
                                     <button type="button"
                                         onclick="openEditUserModal('{{ $user->id }}', '{{ $user->name }}', '{{ $user->email }}')"
@@ -66,10 +66,14 @@
                                     </button>
 
                                     <!-- Delete -->
-                                    <form action="{{ route('usermanagement.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                                    <form
+                                        class="tw-flex tw-items-center" 
+                                        action="{{ route('usermanagement.destroy', $user->id) }}" 
+                                        method="POST" 
+                                        onsubmit="return confirm('Are you sure?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="tw-p-2 tw-rounded tw-hover:tw-bg-red-100 tw-text-red-600">
+                                        <button type="submit" class="tw-p-2 tw-items-center tw-rounded tw-hover:tw-bg-red-100 tw-text-red-600">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="tw-w-5 tw-h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                             </svg>

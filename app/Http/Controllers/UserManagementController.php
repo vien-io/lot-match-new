@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class UserManagementController extends Controller
 {
@@ -18,22 +19,47 @@ class UserManagementController extends Controller
         return view('usermanagement.create');
     }
 
+
     public function store(Request $request)
     {
-        $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users',
-            'password' => 'required|string|min:6', 
-        ]);
+        Log::info('store function reached!!');
+        
+        try {
+            $validated = $request->validate([
+                'name'     => 'required|string|max:255',
+                'email'    => 'required|email|unique:users',
+                'password' => 'required|string|min:6', 
+            ]);
 
-        User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
+            Log::info('Validation passed', $validated);
 
-        return redirect()->route('usermanagement.index')->with('success', 'User created successfully.');
+            // hash password before saving
+            $validated['password'] = bcrypt($validated['password']);
+
+            // create user
+            $user = User::create($validated);
+            Log::info('New user created', $user->toArray());
+
+        } catch (ValidationException $e) {
+            Log::warning('Validation failed', $e->errors());
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Throwable $e) {
+            Log::error('User creation failed: ' . $e->getMessage());
+            return redirect()
+                ->back()
+                ->with('error', 'Something went wrong while creating the user.')
+                ->withInput();
+        }
+
+        return redirect()
+            ->route('usermanagement.index')
+            ->with('success', 'User created successfully.');
     }
+
+
 
 
 
