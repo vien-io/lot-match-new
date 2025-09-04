@@ -3,10 +3,10 @@
 @section('title', 'AI Summary & Forecasting')
 
 @section('content')
-<div class="tw-flex tw-flex-col lg:tw-flex-row tw-gap-8 tw-mt-12 tw-px-6">
+<div class="tw-flex tw-flex-col lg:tw-flex-row tw-gap-8 tw-items-start tw-mt-12 tw-px-6">
 
   {{-- Left Column: AI Summary & Report --}}
-  <div class="tw-flex-1 tw-bg-white tw-rounded-3xl tw-shadow-md tw-p-6">
+  <div class="tw-flex-1 tw-max-w-5xl tw-bg-white tw-rounded-3xl tw-shadow-md tw-p-6">
     <h1 class="tw-text-2xl tw-font-bold tw-mb-6">AI Summary & Forecast</h1>
 
     {{-- Block Selector --}}
@@ -39,7 +39,7 @@
   </div>
 
   {{-- Right Column: Forecast Stats --}}
-  <div class="tw-w-full lg:tw-w-96 tw-bg-white tw-rounded-3xl tw-shadow-md tw-p-6">
+  <div class="tw-w-full lg:tw-w-[40rem] lg:tw-w-96 tw-bg-white tw-rounded-3xl tw-shadow-md tw-p-6 smooth-follow">
     <h2 class="tw-font-bold tw-mb-4">Forecast Insights</h2>
 
     {{-- Forecasted Rating --}}
@@ -68,4 +68,5 @@
 
 @section('scripts')
   @vite('resources/js/charts/forecast.js')
+  @vite('resources/js/smoothSticky.js')
 @endsection

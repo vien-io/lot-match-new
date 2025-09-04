@@ -120,7 +120,7 @@
         <!-- Pagination -->
         <div class="tw-p-4 tw-border-t tw-flex tw-justify-between tw-items-center tw-text-sm tw-text-gray-500">
             <span>Rows per page: 10</span>
-            {{ $properties->links() }}
+            {{ $properties->links('vendor.pagination.custom') }}
         </div>
     </div>
 </div>

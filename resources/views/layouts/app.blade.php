@@ -144,7 +144,7 @@
             <nav class="tw-bg-white tw-shadow-lg tw-px-6 tw-py-3">
                 <div class="tw-flex tw-items-center tw-justify-between">
                     {{-- Logo --}}
-                    <a href="{{ url('/homepage') }}" 
+                    <a href="{{ route('dashboard') }}" 
                     class="tw-flex tw-items-center tw-gap-2 tw-text-gray-500 hover:tw-text-green-500 tw-transition-colors">
                         {{-- <i class="fas fa-leaf tw-text-xl"></i> --}}
                         <span class="tw-font-bold tw-text-lg">{{ config('app.name', 'LotMatch') }}</span>

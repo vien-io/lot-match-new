@@ -3,7 +3,7 @@
 @section('title', 'Reviews & Ratings')
 
 @section('content')
-<div class="tw-flex tw-flex-col lg:tw-flex-row tw-gap-8 tw-mt-12 tw-px-6">
+<div class="tw-flex tw-flex-col lg:tw-flex-row tw-items-start tw-gap-8 tw-mt-12 tw-px-6">
 
   {{-- Left Column: Community Reviews --}}
   <div class="tw-flex-1 tw-bg-white tw-rounded-3xl tw-shadow-md tw-p-6">
@@ -74,7 +74,7 @@
   </div>
 
   {{-- Right Column: Write a Review Form --}}
-  <div class="tw-w-full lg:tw-w-96 tw-bg-white tw-rounded-3xl tw-shadow-md tw-p-6">
+  <div class="tw-w-full lg:tw-w-96 tw-h-auto tw-bg-white tw-rounded-3xl tw-shadow-md tw-p-6 smooth-follow">
     <div id="reviewSuccessMsg" class="tw-mb-2 tw-text-green-600" style="display: none;"></div>
     <h2 class="tw-font-bold tw-mb-4">Write a Review</h2>
     <form id="reviewForm" action="{{ route('block.reviews.store') }}" method="POST">
@@ -120,4 +120,5 @@
 
 @section('scripts')
     @vite('resources/js/reviews.js')
+    @vite('resources/js/smoothSticky.js')
 @endsection

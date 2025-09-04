@@ -1314,4 +1314,6 @@ textarea:hover {
 
 [x-cloak] { display: none !important; }
 
-
+.smooth-sticky {
+  transition: transform 0.3s ease-out;
+}
