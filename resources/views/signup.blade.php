@@ -4,44 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
-    @vite(['resources/css/signup.css', 'resources/js/signup.js'])
+    @vite('resources/css/app.css')
 </head>
-<body>
-    <!-- <div id="hero"></div> -->
-    <div class="create-container">
-        <h2>Create Account</h2>
-        <form action="{{ route('signup') }}" method="POST">
-            @csrf
-            <div class="input-group">
-                <label for="name"></label>
-                <input type="text" id="name" name="name" placeholder="Your Name" require>
-            </div>
-            <div class="input-group">
-                <label for="email"></label>
-                <input type="email" id="email" name="email" placeholder="Your Email" require>
-            </div>
-            <div class="input-group">
-                <label for="password"></label>
-                <input type="password" id="password" name="password" placeholder="Password" require>
-            </div>
-            <div class="input-group">
-                <label for="password"></label>
-                <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" require>
-            </div>
-            <div class="conditions">
-                <input type="checkbox" id="agreeTerms">
-                <p>By signing up, you agree to our <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a></p>
-            </div>
-            @if ($errors->any())
-                <div class="error-message">
-                    @foreach($errors->all() as $error)
-                        <p>{{ $error }}</p>
-                    @endforeach
+<body class="tw-bg-gray-100 tw-flex tw-items-center tw-justify-center tw-min-h-screen">
+
+    <div class="tw-bg-white tw-rounded-2xl tw-shadow-lg tw-overflow-hidden tw-w-full tw-max-w-4xl tw-flex">
+        <!-- Left side (Form) -->
+        <div class="tw-w-1/2 tw-p-8">
+            <h2 class="tw-text-2xl tw-font-bold tw-mb-2">Create Account</h2>
+            <p class="tw-text-gray-500 tw-mb-6">Fill in the details to sign up</p>
+
+            <form method="POST" action="{{ route('signup') }}">
+                @csrf
+                <!-- Name -->
+                <div class="tw-mb-4 tw-relative">
+                    <input type="text" name="name" placeholder="Your Name"
+                           value="{{ old('name') }}"
+                           class="tw-w-full tw-pl-4 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-purple-500">
                 </div>
-            @endif
-            <button type="submit" id="signupBtn" disabled>Sign up</button>
-            <p>Already have an account? <a href="{{ route('login') }}">Sign in</a></p>
-        </form>
+
+                <!-- Email -->
+                <div class="tw-mb-4 tw-relative">
+                    <input type="email" name="email" placeholder="Your Email"
+                           value="{{ old('email') }}"
+                           class="tw-w-full tw-pl-4 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-purple-500">
+                </div>
+
+                <!-- Password -->
+                <div class="tw-mb-4 tw-relative">
+                    <input type="password" name="password" placeholder="Password"
+                           class="tw-w-full tw-pl-4 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-purple-500">
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="tw-mb-4 tw-relative">
+                    <input type="password" name="password_confirmation" placeholder="Confirm Password"
+                           class="tw-w-full tw-pl-4 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-purple-500">
+                </div>
+
+                <!-- Terms -->
+                <div class="tw-flex tw-items-center tw-mb-6 tw-text-sm">
+                    <input type="checkbox" id="agreeTerms" class="tw-mr-2 tw-rounded tw-border-gray-300 tw-text-purple-600 focus:tw-ring-purple-500">
+                    <label for="agreeTerms" class="tw-text-gray-600">
+                        By signing up, you agree to our 
+                        <a href="#" class="tw-text-purple-500 hover:tw-underline">Privacy Policy</a> and 
+                        <a href="#" class="tw-text-purple-500 hover:tw-underline">Terms of Service</a>
+                    </label>
+                </div>
+
+                <!-- Validation Errors -->
+                @if ($errors->any())
+                    <div class="tw-mb-4 tw-text-red-500 tw-text-sm">
+                        @foreach ($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
+                    </div>
+                @endif
+
+                <!-- Button -->
+                <button type="submit" id="signupBtn"
+                        class="tw-w-full tw-py-2 tw-rounded-full tw-bg-gradient-to-r tw-from-purple-500 tw-to-indigo-500 tw-text-white tw-font-semibold hover:tw-opacity-90">
+                    SIGN UP
+                </button>
+
+                <!-- Already have account -->
+                <p class="tw-text-sm tw-text-center tw-mt-6 tw-text-gray-500">
+                    Already have an account? 
+                    <a href="{{ route('login') }}" class="tw-text-purple-500 hover:tw-underline">Sign In</a>
+                </p>
+            </form>
+        </div>
+
+        <!-- Right side (Welcome panel) -->
+        <div class="tw-w-1/2 tw-bg-gradient-to-r tw-from-indigo-500 tw-to-purple-600 tw-text-white tw-flex tw-flex-col tw-justify-center tw-items-center tw-p-8">
+            <h2 class="tw-text-2xl tw-font-bold tw-mb-4">Join Us Today!</h2>
+            <p class="tw-text-center tw-text-white/80">
+                “Create an account and start exploring your subdivision in 3D.
+                Unlock forecasting tools, data analytics, and interactive insights designed for you.”
+            </p>
+        </div>
     </div>
+
 </body>
 </html>

@@ -13,6 +13,7 @@
     <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-overflow-hidden">
         <!-- Toolbar -->
         <div class="tw-flex tw-justify-between tw-items-center tw-p-4 tw-border-b">
+            <!-- Search -->
             <div class="tw-flex tw-items-center tw-border tw-rounded-lg tw-px-3 tw-py-1 tw-bg-gray-50">
                 <svg xmlns="http://www.w3.org/2000/svg" class="tw-w-4 tw-h-4 tw-text-gray-400 tw-mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -20,16 +21,21 @@
                 <input placeholder="Search users..." class="tw-bg-transparent tw-outline-none tw-text-sm" />
             </div>
 
+            <!-- Toolbar Buttons -->
             <div class="tw-flex tw-gap-2">
-                <a href="{{ route('usermanagement.create') }}" 
-                   class="tw-px-3 tw-py-1 tw-text-sm tw-rounded-lg tw-bg-emerald-800 tw-hover:tw-bg-green-700 tw-text-white">
+                <!-- Add User Modal Trigger -->
+                <button type="button"
+                    onclick="document.getElementById('addUserModal').classList.remove('tw-hidden')"
+                    class="tw-bg-emerald-800 tw-text-white tw-px-4 tw-py-1 tw-rounded-lg hover:tw-bg-green-700">
                     + Add User
-                </a>
-               {{--  <button class="tw-px-3 tw-py-1 tw-text-sm tw-border tw-rounded-lg tw-hover:tw-bg-gray-100">
-                    Export
-                </button> --}}
+                </button>
             </div>
         </div>
+        @if(session('success'))
+            <div class="tw-bg-green-100 tw-text-green-700 tw-p-3 tw-rounded-lg tw-mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
 
         <!-- Users Table -->
         <div class="tw-overflow-x-auto">
@@ -50,13 +56,14 @@
                             <td class="tw-p-2">{{ $user->email }}</td>
                             <td class="tw-p-2">
                                 <div class="tw-flex tw-gap-2">
-                                    <!-- Edit -->
-                                    <a href="{{ route('usermanagement.edit', $user->id) }}" 
-                                       class="tw-p-2 tw-rounded tw-hover:tw-bg-blue-100 tw-text-blue-600">
+                                    <!-- Edit Modal Trigger -->
+                                    <button type="button"
+                                        onclick="openEditUserModal('{{ $user->id }}', '{{ $user->name }}', '{{ $user->email }}')"
+                                        class="tw-p-2 tw-rounded tw-hover:tw-bg-blue-100 tw-text-blue-600">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="tw-w-5 tw-h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M4 20h4.768l10.536-10.536a2 2 0 00-2.828-2.828L4 17.172V20z" />
                                         </svg>
-                                    </a>
+                                    </button>
 
                                     <!-- Delete -->
                                     <form action="{{ route('usermanagement.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
@@ -87,3 +94,12 @@
     </div>
 </div>
 @endsection
+
+{{-- JS for modals --}}
+@section('scripts')
+  @vite('resources/js/userModals.js')
+@endsection
+
+{{-- Include Modals --}}
+@include('usermanagement.modals.add')
+@include('usermanagement.modals.edit')

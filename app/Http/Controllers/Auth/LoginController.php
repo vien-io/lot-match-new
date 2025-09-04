@@ -7,21 +7,8 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-
-
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
     /**
@@ -29,33 +16,40 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-
-
-     public function showLoginForm()
-     {
-        return view('signin');
-     }
-
-
-
-
+    protected $redirectTo = '/dashboard';
 
     public function __construct()
     {
-        // $this->middleware('guest')->except('logout');
-        $this->middleware('auth')->only('logout');
+        $this->middleware('guest')->except('logout');
     }
 
-    public function sendFailedLoginResponse(Request $request)
-{
-    return back()->with('error', 'Invalid email or password.');
-}
+    /**
+     * Show the custom login form.
+     */
+    public function showLoginForm()
+    {
+        return view('signin');
+    }
 
+    /**
+     * Override failed login response.
+     */
+    public function sendFailedLoginResponse(Request $request)
+    {
+        return back()->with('error', 'Invalid email or password.');
+    }
+
+    /**
+     * Override logout to always redirect to login page.
+     */
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Redirect to login page after logout
+        return redirect('/login')->with('status', 'You have been logged out.');
+    }
 }

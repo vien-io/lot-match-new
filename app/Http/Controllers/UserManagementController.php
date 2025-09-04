@@ -9,7 +9,7 @@ class UserManagementController extends Controller
 {
     public function index()
     {
-        $users = User::paginate(10);
+        $users = User::paginate(20);
         return view('usermanagement.index', compact('users'));
     }
 
@@ -21,18 +21,18 @@ class UserManagementController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users',
+            'password' => 'required|string|min:6', 
         ]);
 
         User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => bcrypt($request->password),
         ]);
 
-        return redirect()->route('usermanagement.userm')->with('success', 'User created successfully.');
+        return redirect()->route('usermanagement.index')->with('success', 'User created successfully.');
     }
 
 
@@ -51,13 +51,13 @@ class UserManagementController extends Controller
 
         $user->update($request->only('name', 'email'));
 
-        return redirect()->route('usermanagement.userm')->with('success', 'User updated successfully.');
+        return redirect()->route('usermanagement.index')->with('success', 'User updated successfully.');
     }
 
     public function destroy (User $user)
     {
         $user->delete();
-        return redirect()->route('usermanagement.userm')->with('success', 'User deleted successfully');
+        return redirect()->route('usermanagement.index')->with('success', 'User deleted successfully');
     }
 
 }

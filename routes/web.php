@@ -125,7 +125,7 @@ Route::get('/forecast/data/{blockId}', [ForecastController::class, 'getForecastD
 
 // usermanagement
 Route::prefix('usermanagement')->name('usermanagement.')->group(function () {
-    Route::get('/users', [UserManagementController::class, 'index'])->name('userm');
+    Route::get('/users', [UserManagementController::class, 'index'])->name('index');
     Route::get('/users/create', [UserManagementController::class, 'create'])->name('create');
     Route::post('/users', [UserManagementController::class, 'store'])->name('store');
     Route::get('/users/{user}/edit', [UserManagementController::class, 'edit'])->name('edit');

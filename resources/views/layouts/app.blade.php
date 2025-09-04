@@ -68,7 +68,7 @@
             tooltip="3d Map"
             :active="request()->routeIs('3dmap')
                 ? 'tw-bg-green-500 tw-text-white'
-                : 'tw-text-sidebar-gray tw-animate-pulse-color hover:tw-animate-none hover:tw-text-sidebar-green hover:tw-bg-green-200 hover:tw-text-green-600'"  
+                : 'tw-text-sidebar-gray tw-animate-pulse-to-green hover:tw-animate-none hover:tw-text-sidebar-green hover:tw-bg-green-200 hover:tw-text-green-600'"  
         />
 
 
@@ -114,10 +114,10 @@
 
         {{-- User Management --}}
         <x-sidebar-icon 
-            href="{{ route('usermanagement.userm') }}"
+            href="{{ route('usermanagement.index') }}"
             icon="fas fa-users" 
             tooltip="User Management"
-            :active="request()->routeIs('usermanagement.userm') 
+            :active="request()->routeIs('usermanagement.index') 
                 ? 'tw-bg-green-500 tw-text-white' 
                 : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
         />
