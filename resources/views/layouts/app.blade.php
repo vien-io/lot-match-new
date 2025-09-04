@@ -19,6 +19,9 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
 
+    {{-- logo --}}
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
@@ -59,14 +62,15 @@
         />
 
         {{-- 3d map --}}
-        <x-sidebar-icon 
+       <x-sidebar-icon 
             href="{{ route('3dmap') }}"
             icon="fas fa-map"
             tooltip="3d Map"
             :active="request()->routeIs('3dmap')
                 ? 'tw-bg-green-500 tw-text-white'
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"  
+                : 'tw-text-sidebar-gray tw-animate-pulse-color hover:tw-animate-none hover:tw-text-sidebar-green hover:tw-bg-green-200 hover:tw-text-green-600'"  
         />
+
 
         {{-- property management --}}
         <x-sidebar-icon 
@@ -103,7 +107,7 @@
             href="{{ route('analytics.block_ratings') }}" 
             icon="fas fa-chart-line" 
             tooltip="Data Analytics"
-            :active="request()->routeIs('analytics') 
+            :active="request()->routeIs('analytics.block_ratings') 
                 ? 'tw-bg-green-500 tw-text-white' 
                 : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
         />
@@ -113,7 +117,7 @@
             href="{{ route('usermanagement.userm') }}"
             icon="fas fa-users" 
             tooltip="User Management"
-            :active="request()->routeIs('users') 
+            :active="request()->routeIs('usermanagement.userm') 
                 ? 'tw-bg-green-500 tw-text-white' 
                 : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
         />

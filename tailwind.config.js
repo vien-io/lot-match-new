@@ -15,6 +15,22 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+
+            colors: {
+                'sidebar-green': '#22c55e',
+                'sidebar-gray': '#6b7280',
+            },
+
+            keyframes: {
+                pulseColor: {
+                    '0%, 100%': { color: '#6b7280' }, 
+                    '50%': { color: '#22c55e' },       
+                },
+            },
+
+            animation: {
+                'pulse-color': 'pulseColor 2s infinite',
+            },
         },
     },
     variants: {
@@ -23,10 +39,10 @@ export default {
         },
     },
     safelist: [
-    'tw-group-hover:tw-text-blue-500',
-    'tw-group-hover:tw-text-green-500',
-    'tw-group-hover:tw-text-yellow-500',
-    'tw-group-hover:tw-text-purple-500',
+        'tw-group-hover:tw-text-blue-500',
+        'tw-group-hover:tw-text-green-500',
+        'tw-group-hover:tw-text-yellow-500',
+        'tw-group-hover:tw-text-purple-500',
     ],
     corePlugins: {
         collapse: false,
