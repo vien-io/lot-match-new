@@ -11,9 +11,9 @@ class AnalyticsController extends Controller
     {
         // block ratings
         $blockRatings = DB::table('blocks as b')
-        ->join('lots as l', 'b.id', '=', 'l.block_id')
-        ->join('reviews as r', 'l.block_id', '=', 'r.block_id')
-        ->select('b.name', 
+        ->join('reviews as r', 'b.id', '=', 'r.block_id')
+        ->select(
+            'b.name',
             DB::raw('AVG(r.rating) as avg_rating'),
             DB::raw('COUNT(r.id) as total_reviews')
         )

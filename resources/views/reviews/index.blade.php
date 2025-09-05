@@ -36,18 +36,21 @@
 
     {{-- Progress Bars --}}
     <div class="tw-mb-6 tw-space-y-2">
-      @foreach($ratingCounts as $label => $count)
+      @foreach([5,4,3,2,1] as $star)
         @php
-          $percentage = $reviews->count() ? ($count / $reviews->count()) * 100 : 0;
+            $count = $ratingCounts[$star] ?? 0;
+            $percentage = $reviews->count() ? ($count / $reviews->count()) * 100 : 0;
         @endphp
         <div class="tw-flex tw-items-center tw-justify-between tw-text-sm tw-text-gray-600">
-          <span class="tw-w-20">{{ $label }}</span>
-          <div class="tw-flex-1 tw-mx-2 tw-bg-gray-200 tw-rounded-full tw-h-2">
-            <div class="tw-bg-[#22c55e] tw-h-2 tw-rounded-full" style="width: {{ $percentage }}%;"></div>
-          </div>
-          <span class="tw-w-10 tw-text-right tw-text-gray-700">{{ $count }}</span>
+            <span class="tw-w-20">{{ $star }} stars</span>
+            <div class="tw-flex-1 tw-mx-2 tw-bg-gray-200 tw-rounded-full tw-h-2">
+            <div id="rating-bar-{{ $star }}" 
+                class="tw-bg-[#22c55e] tw-h-2 tw-rounded-full" 
+                style="width: {{ $percentage }}%;"></div>
+            </div>
+            <span id="rating-count-{{ $star }}" class="tw-w-10 tw-text-right tw-text-gray-700">{{ $count }}</span>
         </div>
-      @endforeach
+        @endforeach
     </div>
 
     {{-- Reviews --}}

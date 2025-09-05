@@ -21,16 +21,25 @@ class ReviewController extends Controller
     {
         $query = Review::with(['user', 'block']);
 
-        if ($blockId) {
+        if ($blockId && $blockId !== 'all') {
             $query->where('block_id', $blockId);
         }
 
         $reviews = $query->latest()->get();
 
+        $ratingCounts = [
+            5 => $reviews->where('rating', 5)->count(),
+            4 => $reviews->where('rating', 4)->count(),
+            3 => $reviews->where('rating', 3)->count(),
+            2 => $reviews->where('rating', 2)->count(),
+            1 => $reviews->where('rating', 1)->count(),
+        ];
+
         return response()->json([
             'reviews' => $reviews,
             'averageRating' => $reviews->avg('rating') ?? 0,
             'totalReviews' => $reviews->count(),
+            'ratingCounts' => $ratingCounts,
         ]);
     }
 
@@ -40,31 +49,31 @@ class ReviewController extends Controller
     {
         $reviewsQuery = Review::with('user');
 
-        // filter by block if passed
         if ($request->has('block_id')) {
             $reviewsQuery->where('block_id', $request->block_id);
         }
 
         $reviews = $reviewsQuery->latest()->get();
+        $averageRating = $reviewsQuery->avg('rating') ?? 0;
 
-        // Calculate average rating
-        $averageRating = $reviews->avg('rating') ?? 0;
-
-        // Count ratings by category
         $ratingCounts = [
-            'Excellent' => $reviews->where('rating', 5)->count(),
-            'Good'      => $reviews->where('rating', 4)->count(),
-            'Average'   => $reviews->where('rating', 3)->count(),
-            'Poor'      => $reviews->where('rating', '<', 3)->count(),
+            5 => $reviews->where('rating', 5)->count(),
+            4 => $reviews->where('rating', 4)->count(),
+            3 => $reviews->where('rating', 3)->count(),
+            2 => $reviews->where('rating', 2)->count(),
+            1 => $reviews->where('rating', 1)->count(),
         ];
-
-        // Return JSON if AJAX
+        // return JSON if AJAX
         if ($request->wantsJson()) {
-            return response()->json($reviews);
+            return response()->json([
+                'reviews' => $reviews,
+                'averageRating' => $averageRating,
+                'totalReviews' => $reviews->count(),
+                'ratingCounts' => $ratingCounts,
+            ]);
         }
 
         $blocks = Block::all(); 
-
         return view('reviews.index', compact('reviews', 'averageRating', 'ratingCounts', 'blocks'));
     }
 

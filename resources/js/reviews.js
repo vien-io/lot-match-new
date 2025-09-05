@@ -42,13 +42,21 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const url = blockId 
                 ? `/blocks/${blockId}/reviews` 
-                : `/blocks/all/reviews`; // Use the “all” route
+                : `/blocks/all/reviews`; 
             const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
             const data = await res.json();
 
             averageRatingEl.textContent = data.averageRating.toFixed(1);
             averageStarsEl.innerHTML = '★'.repeat(Math.round(data.averageRating)) + '☆'.repeat(5 - Math.round(data.averageRating));
             totalReviewsEl.textContent = `Based on ${data.totalReviews} reviews`;
+
+            for (let i=5; i>=1; i--) {
+                const bar = document.getElementById(`rating-bar-${i}`);
+                const percent = data.totalReviews
+                    ? (data.ratingCounts[i] / data.totalReviews) * 100
+                    : 0;
+                if (bar) bar.style.width = percent + '%';
+            }
 
             renderReviews(data.reviews);
         } catch(err) {
