@@ -23,21 +23,21 @@ class AnalyticsController extends Controller
 
         // top 5 highest rated
         $topRatedLots = DB::table('blocks as b')
-        ->join('reviews as r', 'b.id', '=', 'r.block_id') // Join reviews with blocks
-        ->join('lots as l', 'b.id', '=', 'l.block_id')   // Join blocks with lots
+        ->join('reviews as r', 'b.id', '=', 'r.block_id') 
+        ->join('lots as l', 'b.id', '=', 'l.block_id')  
         ->select('l.id', 'l.price', DB::raw('AVG(r.rating) as avg_rating'))
-        ->groupBy('l.id', 'l.price')  // Group by lot id and price
-        ->orderByDesc('avg_rating')   // Order by average rating descending
-        ->limit(5)                   // Limit to the top 5
+        ->groupBy('l.id', 'l.price')
+        ->orderByDesc('avg_rating')   
+        ->limit(5)                 
         ->get();
 
             
 
         // recent reviews
         $recentReviews = DB::table('reviews as r')
-        ->join('users as u', 'r.user_id', '=', 'u.id')   // Join reviews with users
-        ->join('blocks as b', 'r.block_id', '=', 'b.id')  // Join reviews with blocks
-        ->join('lots as l', 'b.id', '=', 'l.block_id')    // Join blocks with lots
+        ->join('users as u', 'r.user_id', '=', 'u.id') 
+        ->join('blocks as b', 'r.block_id', '=', 'b.id') 
+        ->join('lots as l', 'b.id', '=', 'l.block_id')    
         ->select('r.user_id', 'u.name as user_name', 'r.rating', 'l.id as lot_id')
         ->orderBy('r.created_at', 'desc')
         ->limit(5)
@@ -54,7 +54,7 @@ class AnalyticsController extends Controller
         ->select(DB::raw('FLOOR(rating) as rating'), DB::raw('COUNT(id) as count'))
         ->groupBy(DB::raw('FLOOR(rating)'))
         ->orderBy('rating')
-        ->pluck('count', 'rating'); // gives associative array: [rating => count]
+        ->pluck('count', 'rating'); 
     
         // fill missing ratings with 0
         $ratingDistribution = collect(range(1, 5))->map(function ($rating) use ($rawDistribution) {
@@ -64,8 +64,18 @@ class AnalyticsController extends Controller
             ];
         });
 
+        $totalLots = DB::table('lots')->count();
 
-        return view('analytics', compact('blockRatings', 'topRatedLots', 'recentReviews', 'availableLots', 'reservedLots', 'ratingDistribution'));
+
+        return view('analytics', compact(
+            'blockRatings', 
+            'topRatedLots', 
+            'recentReviews', 
+            'availableLots', 
+            'reservedLots', 
+            'ratingDistribution',
+            'totalLots'
+        ));
 
     }
 }

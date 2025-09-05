@@ -41,7 +41,7 @@
     </div>
 
     {{-- Row: Block Ratings Analytics & Lot Availability --}}
-    <div class="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 tw-gap-6">
+    <div class="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 tw-gap-6 tw-items-start">
 
         {{-- Block Ratings Table --}}
         <div class="tw-bg-white tw-rounded-3xl tw-shadow-md tw-p-6">
@@ -69,8 +69,30 @@
         {{-- Lot Availability --}}
         <div class="tw-bg-white tw-rounded-3xl tw-shadow-md tw-p-6">
             <h2 class="tw-text-xl tw-font-semibold tw-mb-4">Lot Availability</h2>
-            <p class="tw-text-gray-700"><strong>Available Lots:</strong> {{ $availableLots }}</p>
-            <p class="tw-text-gray-700"><strong>Reserved Lots:</strong> {{ $reservedLots }}</p>
+
+            <div class="tw-mb-4">
+                <div class="tw-flex tw-justify-between tw-text-sm tw-text-gray-600">
+                    <span>Available Lots</span>
+                    <span>{{ $availableLots }}</span>
+                </div>
+                <div class="tw-w-full tw-bg-gray-200 tw-rounded-full tw-h-3">
+                    <div class="tw-bg-green-500 tw-h-3 tw-rounded-full" 
+                        style="width: {{ $totalLots ? ($availableLots / $totalLots) * 100 : 0 }}%">
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="tw-flex tw-justify-between tw-text-sm tw-text-gray-600">
+                    <span>Reserved Lots</span>
+                    <span>{{ $reservedLots }}</span>
+                </div>
+                <div class="tw-w-full tw-bg-gray-200 tw-rounded-full tw-h-3">
+                    <div class="tw-bg-red-500 tw-h-3 tw-rounded-full" 
+                        style="width: {{ $totalLots ? ($reservedLots / $totalLots) * 100 : 0 }}%">
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
