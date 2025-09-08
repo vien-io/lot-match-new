@@ -483,14 +483,14 @@ html, body{
 }
 
 /* Three.js full-screen container */
-#threejs-container {
+/* #threejs-container {
     width: 100vw;
     height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
     pointer-events: none;
-}
+} */
 
 
 /* SIDE PANEL */
@@ -1316,4 +1316,13 @@ textarea:hover {
 
 .smooth-sticky {
   transition: transform 0.3s ease-out;
+}
+
+
+#threejs-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+    border: 2px solid red;
+    pointer-events: auto;
 }

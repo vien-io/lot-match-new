@@ -16,7 +16,7 @@ class ReviewsTableSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $blocks = [1, 2, 3]; // Example block IDs, adjust as needed
-        $sentiments = ['positive', 'neutral', 'negative'];
+        $sentiments = ['positive', 'negative']; // Removed neutral
         $comments = [
             'Great place, loved it!',
             'It was okay, nothing special.',
@@ -36,13 +36,10 @@ class ReviewsTableSeeder extends Seeder
             $blockId = $blocks[array_rand($blocks)];
             $sentiment = $sentiments[array_rand($sentiments)];
 
-            // Assign rating based on sentiment roughly
+            // Assign rating based on sentiment
             switch ($sentiment) {
                 case 'positive':
                     $rating = rand(4, 5);
-                    break;
-                case 'neutral':
-                    $rating = rand(2, 3);
                     break;
                 case 'negative':
                     $rating = rand(1, 2);

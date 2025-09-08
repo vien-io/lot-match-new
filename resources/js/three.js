@@ -18,10 +18,20 @@ function initThreeJS() {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xD3D3D3);
 
+     // renderer
+    const container = document.getElementById('threejs-container');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    container.appendChild(renderer.domElement);
+    // renderer.shadowMap.enabled = false; // pang alis ng shadows to optimize
+
     // cam
     const camera = new THREE.PerspectiveCamera(
         40,
-        window.innerWidth / window.innerHeight,
+        width / height,
         0.1,
         1000,
     );
@@ -35,11 +45,36 @@ function initThreeJS() {
     const gridHelper = new THREE.GridHelper(80, 20);
     // scene.add(gridHelper);
 
-    // renderer
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-    // renderer.shadowMap.enabled = false; // pang alis ng shadows to optimize
+// controls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enablePan = true;
+controls.enableRotate = true;
+controls.enableZoom = true;
+controls.mouseButtons = {
+  LEFT: THREE.MOUSE.PAN,
+  RIGHT: THREE.MOUSE.ROTATE
+};
+controls.screenSpacePanning = true;
+controls.panSpeed = 2;
+controls.update();
+
+// disable default browser context menu inside container
+container.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    // lightings
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+    scene.add(ambientLight);
+
+    let light = new THREE.DirectionalLight(0xffffff, 3);
+    light.position.set(20, 10, 20);
+    light.target.position.set(0, 0, 0);
+    scene.add(light);
+    scene.add(light.target);
+    
+    const lightHelper = new THREE.DirectionalLightHelper(light, 2);
+    // scene.add(lightHelper);
+
+
 
    /*  
     
@@ -62,35 +97,6 @@ function initThreeJS() {
     });
 
  */
-
-
-
-
-
-    // controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enablePAN = true;
-    controls.enableRotate = true;
-    controls.enableZoom = true;
-    controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
-    controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
-    controls.screenSpacePanning = true;
-    controls.panSpeed = 2;
-    controls.update();
-   
-    // lightings
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-    scene.add(ambientLight);
-
-    let light = new THREE.DirectionalLight(0xffffff, 3);
-    light.position.set(20, 10, 20);
-    light.target.position.set(0, 0, 0);
-    scene.add(light);
-    scene.add(light.target);
-    
-    const lightHelper = new THREE.DirectionalLightHelper(light, 2);
-    // scene.add(lightHelper);
-
 
 
 

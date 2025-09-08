@@ -1,110 +1,71 @@
-<!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+@extends('layouts.3dmap')
 
-    <title>3D Map - LotMatch</title>
-    <script>
-       /*  const isAdmin = @json(auth()->check() && auth()->user()->is_admin);
-        console.log(isAdmin); */
-    </script>
-    @vite(['resources/js/app.js', 'resources/sass/app.scss'])
-</head>
+@section('title', '3D Map - LotMatch')
 
-<body class="threedbody" 
-    data-user-id="{{ auth()->id() }}"
-    data-is-admin="{{ auth()->check() && auth()->user()->is_admin }}">
-    <!-- profile dropdown -->
-    <div id="profile-container">
-        <button id="profile-icon">👤</button>
-        <div id="profile-dropdown">
-            @auth
-                <p>Logged in as: <strong>{{ Auth::user()->name }}</strong></p>
-                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
-            @else
-                <a href="{{ route('login') }}">Login</a>
-                <a href="{{ route('register') }}">Register</a>
-            @endauth
-        </div>
-    </div>
-    <button id="toggle-panel">☰</button>
-    <!-- <button id="camera-mode-btn">🔄 Camera Mode</button> -->
-    <!-- Side Panel -->
-    <div id="side-panel">
-        <h4>Select a Block</h4>
-        <ul id="block-list"></ul>
+@section('content')
+<div class="tw-flex tw-flex-1 tw-h-[calc(100vh - 64px)]">
+    
+    {{-- 3D Container --}}
+    <div id="threejs-container" 
+        class="tw-flex-1 tw-bg-gray-100 tw-rounded-lg tw-shadow-inner tw-relative tw-h-[640px] tw-w-full tw-overflow-hidden">
     </div>
 
-    <!-- threejs container -->
-    <div id="threejs-container"></div>
+    {{-- Right Sidebar: Block Selector --}}
+    <div id="side-panel" class="tw-w-64 tw-bg-white tw-rounded-lg tw-shadow-md tw-p-4 tw-flex-shrink-0 tw-sticky tw-top-0">
+        <h4 class="tw-font-semibold tw-mb-2">Select a Block</h4>
+        <ul id="block-list" class="tw-space-y-2"></ul>
+    </div>
+</div>
 
-
-<!--container with flexbox layout -->
-<div id="lot-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn lot-close">&times;</span>
+{{-- Lot Modal --}}
+<div id="lot-modal" class="modal tw-fixed tw-inset-0 tw-flex tw-items-center tw-justify-center tw-bg-black/50 tw-z-50 hidden">
+    <div class="modal-content tw-bg-white tw-rounded-lg tw-shadow-lg tw-w-11/12 tw-max-w-4xl tw-p-6 tw-relative">
+        <span class="close-btn lot-close tw-absolute tw-top-4 tw-right-4 tw-text-2xl tw-cursor-pointer">&times;</span>
         <h2>Lot Details</h2>
-        
-        <!-- flexbox to split 2 col -->
-        <div class="modal-inner-content">
-            <!-- left column: lot details/ratings -->
-            <div class="left-column">
+        <div class="modal-inner-content tw-flex tw-gap-4">
+            <div class="left-column tw-flex-1">
                 <div id="lot-details"></div>
                 <div class="reviews"></div>
                 <div id="review-section"></div>
             </div>
-
-            <!-- right column: 3d view -->
-            <div class="right-column">
+            <div class="right-column tw-flex-1">
                 <div id="house-3d-container">
                     <div id="model-container"></div>
-                    <!-- 3d  -->
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- block details modal -->
-<div id="block-modal" class="modal">
-    <div class="modal-content">
-        <div class="topTab">
+{{-- Block Modal --}}
+<div id="block-modal" class="modal tw-fixed tw-inset-0 tw-flex tw-items-center tw-justify-center tw-bg-black/50 tw-z-50 hidden">
+    <div class="modal-content tw-bg-white tw-rounded-lg tw-shadow-lg tw-w-11/12 tw-max-w-5xl tw-p-6 tw-relative">
+        <div class="topTab tw-flex tw-justify-between tw-items-center">
             <h2>Block Details</h2>
-            <span class="close-btn block-close">&times;</span>
+            <span class="close-btn block-close tw-text-2xl tw-cursor-pointer">&times;</span>
         </div>
-        <div class="modal-inner-content">   
-            <!-- left: block details + 3d + forecasting -->
-            <div class="left-outer-column">
-                <div class="top-row">
-                     <div class="mid-column">
-                        <div id="block-3d-container">
-                            <!-- canvas will be injected here -->
-                        </div>
+        <div class="modal-inner-content tw-flex tw-gap-4 tw-mt-4">
+            <div class="left-outer-column tw-flex-1">
+                <div class="top-row tw-flex tw-gap-4">
+                    <div class="mid-column tw-flex-1">
+                        <div id="block-3d-container"></div>
                     </div>
-                    <div class="left-column">
+                    <div class="left-column tw-flex-1">
                         <div id="block-details"></div>
                     </div>
-                   
                 </div>
-                <div class="bottom-row">
+                <div class="bottom-row tw-mt-4">
                     <h3>Forecasting Data</h3>
                     <div id="block-summary"></div>
-                    @if (auth()->check() && auth()->user()->is_admin)
-                    <div id="forecasting-data">
-                        <p><strong>Forecasted Rating:</strong> <span  id="forecast-value"></span></p>
+                    @if(auth()->check() && auth()->user()->is_admin)
+                    <div id="forecasting-data" class="tw-mt-2">
+                        <p><strong>Forecasted Rating:</strong> <span id="forecast-value"></span></p>
                         <canvas id="forecastChart" width="400" height="200"></canvas>
                     </div>
                     @endif
                 </div>
             </div>
-
-            <!-- right: reviews -->
-            <div class="right-column">
+            <div class="right-column tw-flex-1">
                 <div id="block-review-section"></div>
                 <div class="reviews"></div>
             </div>
@@ -112,12 +73,12 @@
     </div>
 </div>
 
+{{-- Tooltip --}}
+<div id="tooltip" class="tw-fixed tw-z-50 tw-bg-gray-800 tw-text-white tw-text-sm tw-px-2 tw-py-1 tw-rounded hidden">
+    <span id="tooltip-text"></span>
+</div>
+@endsection
 
-
-
-    <div id="tooltip">
-        <span id="tooltip-text"></span>
-    </div>
-    
-</body>
-</html>
+@section('scripts')
+    @vite(['resources/js/3dmap.js'])
+@endsection
