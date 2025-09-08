@@ -45,21 +45,17 @@ function initThreeJS() {
     const gridHelper = new THREE.GridHelper(80, 20);
     // scene.add(gridHelper);
 
-// controls
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enablePan = true;
-controls.enableRotate = true;
-controls.enableZoom = true;
-controls.mouseButtons = {
-  LEFT: THREE.MOUSE.PAN,
-  RIGHT: THREE.MOUSE.ROTATE
-};
-controls.screenSpacePanning = true;
-controls.panSpeed = 2;
-controls.update();
-
-// disable default browser context menu inside container
-container.addEventListener('contextmenu', (e) => e.preventDefault());
+    // controls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enablePAN = true;
+    controls.enableRotate = true;
+    controls.enableZoom = true;
+    controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
+    controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
+    controls.screenSpacePanning = true;
+    controls.panSpeed = 2;
+    controls.update();
+    container.addEventListener('contextmenu', (e) => e.preventDefault());
 
     // lightings
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
