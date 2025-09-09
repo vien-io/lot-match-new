@@ -3,15 +3,14 @@
 @section('title', '3D Map - LotMatch')
 
 @section('content')
-<div class="tw-flex tw-flex-1 tw-h-[calc(100vh - 64px)]">
-    
+<div class="tw-flex tw-h-[calc(100vh - 64px)]">
     {{-- 3D Container --}}
     <div id="threejs-container" 
-        class="tw-flex-1 tw-bg-gray-100 tw-rounded-lg tw-shadow-inner tw-relative tw-h-[640px] tw-w-full tw-overflow-hidden">
+        class="tw-flex-grow tw-bg-gray-100 tw-rounded-lg tw-shadow-inner tw-overflow-hidden tw-min-w-0">
     </div>
 
-    {{-- Right Sidebar: Block Selector --}}
-    <div id="side-panel" class="tw-w-64 tw-bg-white tw-rounded-lg tw-shadow-md tw-p-4 tw-flex-shrink-0 tw-sticky tw-top-0">
+    {{-- Right Sidebar --}}
+    <div id="side-panel" class="tw-w-64 tw-bg-white tw-rounded-lg tw-shadow-md tw-p-4 tw-flex-shrink-0 tw-sticky tw-top-16">
         <h4 class="tw-font-semibold tw-mb-2">Select a Block</h4>
         <ul id="block-list" class="tw-space-y-2"></ul>
     </div>

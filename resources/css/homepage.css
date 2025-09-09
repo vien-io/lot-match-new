@@ -73,29 +73,23 @@ html, body{
 }
 
 /* Three.js full-screen container */
-#threejs-container {
+/* #threejs-container {
     width: 100vw;
     height: 100vh;
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     pointer-events: none;
-}
+} */
 
 
 /* SIDE PANEL */
-#side-panel {
-    width: 260px;
-    height: 100vh;
-    background: #ffffff;
-    padding: 20px;
-    border-right: 1px solid #e0e0e0;
-    position: fixed;
-    left: 0;
-    top: 0;
-    transform: translateX(0);
-    transition: transform 0.3s ease-in-out;
-}
+/* #side-panel {
+  width: 260px;
+  background: #ffffff;
+  padding: 20px;
+  border-left: 1px solid #e0e0e0;
+} */
 #side-panel h4{
    margin-top: 60px;
    text-align: center;

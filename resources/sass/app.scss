@@ -494,7 +494,7 @@ html, body{
 
 
 /* SIDE PANEL */
-#side-panel {
+/* #side-panel {
     width: 260px;
     height: 100vh;
     background: #ffffff;
@@ -505,7 +505,7 @@ html, body{
     top: 0;
     transform: translateX(0);
     transition: transform 0.3s ease-in-out;
-}
+} */
 #side-panel h4{
    margin-top: 60px;
    text-align: center;
@@ -1319,10 +1319,16 @@ textarea:hover {
 }
 
 
+#threejs-container {
+  width: 100%;
+  height: calc(100vh - 64px);
+  position: relative;
+}
+
 #threejs-container canvas {
-    width: 100% !important;
-    height: 100% !important;
-    display: block;
-    border: 2px solid red;
-    pointer-events: auto;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  border: 2px solid red;
+  pointer-events: auto;
 }

@@ -23,6 +23,8 @@ function initThreeJS() {
     const width = container.clientWidth;
     const height = container.clientHeight;
 
+    console.log("Container size: ", width, height);
+
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
     container.appendChild(renderer.domElement);
@@ -38,6 +40,17 @@ function initThreeJS() {
     camera.position.set(0 , 90, 0);
     camera.lookAt(0, 0, 0);
     window.threeCamera = camera; 
+
+
+    window.addEventListener('resize', ()=> {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        console.log("Resized:", width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        render.setSize(width, height);
+    });
+
 
     // helpers
     const axesHelper = new THREE.AxesHelper(5);
