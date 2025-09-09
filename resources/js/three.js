@@ -39,7 +39,7 @@ function initThreeJS() {
     );
     camera.position.set(0 , 90, 0);
     camera.lookAt(0, 0, 0);
-    window.threeCamera = camera; 
+    window.threeCamera = camera;
 
 
     window.addEventListener('resize', ()=> {
@@ -262,8 +262,7 @@ function initThreeJS() {
     
 
     
-
-
+    // raycaster logic
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     let selectedHouse = null;
@@ -272,6 +271,7 @@ function initThreeJS() {
     const tooltipText = document.getElementById('tooltip-text');
     
     window.addEventListener("mousemove", (event) => {
+        
         // check if mouse is on left panel
         const leftPanel = document.getElementById("side-panel"); 
         const panelRect = leftPanel.getBoundingClientRect();
@@ -284,12 +284,10 @@ function initThreeJS() {
             return;
         }
 
-
-
-
         // updt mouse coords
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
     
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObjects(selectableObjects, true);
@@ -511,6 +509,7 @@ function initThreeJS() {
             return;
         }
 
+        // raycaster logic
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
         
