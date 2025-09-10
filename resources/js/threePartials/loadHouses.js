@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
+import { addBlockMarkers } from './blockMarkers.js';
 
 export function loadHouses(scene) {
     // house group
@@ -53,6 +54,30 @@ export function loadHouses(scene) {
                 selectableObjects.push(child);
             }
         });
+
+
+
+        // check for the empty
+        const emptyName = "block_11_selector"; 
+        const blockEmpty = sceneModel.getObjectByName(emptyName);
+
+        if (blockEmpty) {
+            console.log(`Empty "${emptyName}" found! Position:`, blockEmpty.position);
+        } else {
+            console.log(`Empty "${emptyName}" NOT found in sceneModel!`);
+        }
+
+
+
+        // block markers
+        const markerData = [
+            { emptyName: 'block_11_selector', color: 0xff0000, blockId: 11 },
+            { emptyName: 'block_12_selector', color: 0x00ff00, blockId: 12 },
+        ];
+
+        addBlockMarkers(sceneModel, scene, markerData, selectableObjects);
+
+
 
         // load the house model and place them at the spawn points
         spawnObjects.forEach(({ position, rotation, lotId, blockId, shouldMirror }) => {

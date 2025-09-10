@@ -10,7 +10,7 @@ export function initCamera(container) {
         0.1,
         1000,
     );
-    camera.position.set(0 , 90, 0);
+    camera.position.set(0 , 590, 0);
     camera.lookAt(0, 0, 0);
 
     // expose globally for debugging

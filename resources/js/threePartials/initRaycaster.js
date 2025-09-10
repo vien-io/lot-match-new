@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { resetBlock } from './blockMarkers';
 
 export function initRaycaster({ container, camera, renderer, housesGroup, selectableObjects }) {
     const raycaster = new THREE.Raycaster();
@@ -30,11 +31,18 @@ export function initRaycaster({ container, camera, renderer, housesGroup, select
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObjects(selectableObjects, true);
 
+        // intersects.forEach(i => console.log("Raycast hit:", i.object.name));
+
         if (intersects.length > 0) {
             let hoveredObject = intersects[0].object;
 
-            // 🔹 Handle block highlighting
+            // handle block highlighting
             if (hoveredObject.name.startsWith("block_")) {
+
+                if (selectedBlock && selectedBlock !== hoveredObject) {
+                    resetBlock(selectedBlock);
+                }
+
                 ({ selectedBlock } = handleBlockHover({
                     hoveredObject, selectedBlock, housesGroup, tooltip, tooltipText, container, event
                 }));
@@ -42,12 +50,13 @@ export function initRaycaster({ container, camera, renderer, housesGroup, select
             } else {
                 // reset block if switching to house
                 if (selectedBlock) {
-                    resetEmissive(selectedBlock);
+                    resetBlock(selectedBlock);
+                    // resetEmissive(selectedBlock);
                     selectedBlock = null;
                 }
             }
 
-            // 🔹 Handle house highlighting
+            // handle house highlighting
             ({ selectedHouse } = handleHouseHover({
                 hoveredObject, selectedHouse, housesGroup, tooltip, tooltipText, container, event, selectableObjects
             }));
@@ -55,7 +64,8 @@ export function initRaycaster({ container, camera, renderer, housesGroup, select
         } else {
             // reset everything when nothing hovered
             if (selectedBlock) {
-                resetEmissive(selectedBlock);
+                resetBlock(selectedBlock);
+                // resetEmissive(selectedBlock);
                 selectedBlock = null;
             }
             if (selectedHouse) {
@@ -91,25 +101,56 @@ function resetLots(housesGroup) {
     });
 }
 
-function handleBlockHover({ hoveredObject, selectedBlock, housesGroup, tooltip, tooltipText, container, event }) {
-    if (hoveredObject !== selectedBlock) {
-        if (selectedBlock) resetEmissive(selectedBlock);
-        selectedBlock = hoveredObject;
+function handleBlockHover({
+    hoveredObject,
+    selectedBlock,
+    housesGroup,
+    tooltip,
+    tooltipText,
+    container,
+    event
+}) {
+    
+    if (selectedBlock && selectedBlock !== hoveredObject) {
+        
+        if (selectedBlock.userData.highlightTween) selectedBlock.userData.highlightTween.pause();
+        selectedBlock.scale.set(10, 10, 1);
 
-        const blockId = hoveredObject.name.split("_")[1];
-        highlightObject(hoveredObject, 0x800080); // purple glow for block
-        highlightLotsByBlock(housesGroup, blockId);
-
-        // tooltip
-        tooltipText.textContent = `Block: ${blockId}`;
-        tooltip.style.display = 'block';
+        
+        const prevBlockId = selectedBlock.name.split("_")[1];
+        housesGroup.traverse(lot => {
+            if (lot.userData && lot.userData.blockId === prevBlockId) {
+                resetEmissive(lot);
+            }
+        });
     }
+
+    selectedBlock = hoveredObject;
+
+    const blockId = hoveredObject.name.split("_")[1];
+
+    
+    if (hoveredObject.userData.highlightTween) hoveredObject.userData.highlightTween.play();
+
+    
+    housesGroup.traverse(lot => {
+        if (lot.userData && lot.userData.blockId === blockId) {
+            highlightObject(lot, 0xffff00); // yellow glow
+        } else if (lot.userData && lot.userData.blockId) {
+            resetEmissive(lot);
+        }
+    });
+
+   
+    tooltipText.textContent = `Block: ${blockId}`;
+    tooltip.style.display = 'block';
     const containerRect = container.getBoundingClientRect();
     tooltip.style.left = `${event.clientX - containerRect.left + 10}px`;
     tooltip.style.top = `${event.clientY - containerRect.top + 10}px`;
 
     return { selectedBlock };
 }
+
 
 function handleHouseHover({ hoveredObject, selectedHouse, housesGroup, tooltip, tooltipText, container, event, selectableObjects }) {
     while (hoveredObject.parent && !selectableObjects.includes(hoveredObject)) {
