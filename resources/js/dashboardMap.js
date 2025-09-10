@@ -72,7 +72,7 @@ function initThreeJS() {
     const houseModelLoader = new GLTFLoader();
 
     // load the scene GLB (the one with Empty objects)
-     const url = `/models/basic/housespawn.glb?ts=${Date.now()}`;
+    const url = `/models/basic/housespawn.glb?ts=${Date.now()}`;
     houseLoader.load(url, (gltf) => {
         const sceneModel = gltf.scene;
         housesGroup.add(sceneModel);
