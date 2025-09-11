@@ -38,7 +38,7 @@ export function initRaycaster({ container, camera, renderer, housesGroup, select
 
             // handle block highlighting
             if (hoveredObject.name.startsWith("block_")) {
-
+                
                 if (selectedBlock && selectedBlock !== hoveredObject) {
                     resetBlock(selectedBlock);
                 }

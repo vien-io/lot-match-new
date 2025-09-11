@@ -61,11 +61,7 @@ export function loadHouses(scene) {
         const emptyName = "block_11_selector"; 
         const blockEmpty = sceneModel.getObjectByName(emptyName);
 
-        if (blockEmpty) {
-            console.log(`Empty "${emptyName}" found! Position:`, blockEmpty.position);
-        } else {
-            console.log(`Empty "${emptyName}" NOT found in sceneModel!`);
-        }
+  
 
 
 
@@ -73,6 +69,11 @@ export function loadHouses(scene) {
         const markerData = [
             { emptyName: 'block_11_selector', color: 0xff0000, blockId: 11 },
             { emptyName: 'block_12_selector', color: 0x00ff00, blockId: 12 },
+            { emptyName: 'block_13_selector', color: 0x0000ff, blockId: 13 },
+            { emptyName: 'block_14_selector', color: 0xffff00, blockId: 14 },
+            { emptyName: 'block_15_selector', color: 0xff00ff, blockId: 15 },
+            { emptyName: 'block_16_selector', color: 0x00ffff, blockId: 16 },
+            { emptyName: 'block_17_selector', color: 0xffffff, blockId: 17 }
         ];
 
         addBlockMarkers(sceneModel, scene, markerData, selectableObjects);
