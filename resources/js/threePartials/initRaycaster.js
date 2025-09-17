@@ -31,7 +31,6 @@ export function initRaycaster({ container, camera, renderer, housesGroup, select
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObjects(selectableObjects, true);
 
-        // intersects.forEach(i => console.log("Raycast hit:", i.object.name));
 
         if (intersects.length > 0) {
             let hoveredObject = intersects[0].object;
@@ -41,11 +40,21 @@ export function initRaycaster({ container, camera, renderer, housesGroup, select
                 
                 if (selectedBlock && selectedBlock !== hoveredObject) {
                     resetBlock(selectedBlock);
+                    selectedBlock = null;
                 }
 
-                ({ selectedBlock } = handleBlockHover({
-                    hoveredObject, selectedBlock, housesGroup, tooltip, tooltipText, container, event
-                }));
+                if (selectedBlock !== hoveredObject) {
+                    ({ selectedBlock } = handleBlockHover({
+                    hoveredObject, 
+                    selectedBlock, 
+                    housesGroup, 
+                    tooltip, 
+                    tooltipText, 
+                    container, 
+                    event
+                    }));
+                }
+
                 return;
             } else {
                 // reset block if switching to house
