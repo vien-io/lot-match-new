@@ -3,6 +3,7 @@ import initThreeJS from './three';
 import '../css/homepage.css';
 import { renderBlockRatingsChart, renderRatingDistributionChart, renderTopRatedLotsChart, renderTopRatedLotsCards } from './charts/blockRatingsChart';
 import Alpine from 'alpinejs';
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 
 

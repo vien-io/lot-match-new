@@ -51,7 +51,6 @@ export function initClickHandler({ camera, housesGroup, showLotDetails, showBloc
 
         if (intersects.length > 0) {
             let selectedObject = intersects[0].object;
-            console.log("Selected Object:", selectedObject.userData);
 
             // traverse upward until group with lotId or blockId
             while (selectedObject && !selectedObject.userData.blockId && selectedObject.parent) {

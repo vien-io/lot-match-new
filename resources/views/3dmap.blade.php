@@ -79,5 +79,5 @@
 @endsection
 
 @section('scripts')
-    @vite(['resources/js/3dmap.js'])
+    {{-- @vite(['resources/js/3dmap.js']) --}}
 @endsection

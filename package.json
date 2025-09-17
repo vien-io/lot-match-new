@@ -36,6 +36,7 @@
     },
     "homepage": "https://github.com/vien-io/lot-match#readme",
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^7.0.1",
         "alpinejs": "^3.14.9",
         "bootstrap": "^5.3.3",
         "chart.js": "^4.4.9",

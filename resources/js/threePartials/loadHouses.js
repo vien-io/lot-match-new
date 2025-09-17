@@ -67,13 +67,24 @@ export function loadHouses(scene) {
 
         // block markers
         const markerData = [
-            { emptyName: 'block_11_selector', color: 0xff0000, blockId: 11 },
-            { emptyName: 'block_12_selector', color: 0x00ff00, blockId: 12 },
-            { emptyName: 'block_13_selector', color: 0x0000ff, blockId: 13 },
-            { emptyName: 'block_14_selector', color: 0xffff00, blockId: 14 },
-            { emptyName: 'block_15_selector', color: 0xff00ff, blockId: 15 },
-            { emptyName: 'block_16_selector', color: 0x00ffff, blockId: 16 },
-            { emptyName: 'block_17_selector', color: 0xffffff, blockId: 17 }
+            { emptyName: 'block_1_selector',  color: 0xff5733, blockId: 1 },
+            { emptyName: 'block_2_selector',  color: 0x33ff57, blockId: 2 },
+            { emptyName: 'block_3_selector',  color: 0x3357ff, blockId: 3 },
+            { emptyName: 'block_4_selector',  color: 0xff33a8, blockId: 4 },
+            { emptyName: 'block_5_selector',  color: 0xffd633, blockId: 5 },
+            { emptyName: 'block_6_selector',  color: 0x33fff2, blockId: 6 },
+            { emptyName: 'block_7_selector',  color: 0xa833ff, blockId: 7 },
+            { emptyName: 'block_8_selector',  color: 0x009688, blockId: 8 },
+
+            { emptyName: 'block_11_selector', color: 0x8d6e63, blockId: 11 },
+            { emptyName: 'block_12_selector', color: 0xcddc39, blockId: 12 },
+            { emptyName: 'block_13_selector', color: 0x03a9f4, blockId: 13 },
+            { emptyName: 'block_14_selector', color: 0xe91e63, blockId: 14 },
+            { emptyName: 'block_15_selector', color: 0x9c27b0, blockId: 15 },
+            { emptyName: 'block_16_selector', color: 0x4caf50, blockId: 16 },
+            { emptyName: 'block_17_selector', color: 0xff9800, blockId: 17 }
+
+
         ];
 
         addBlockMarkers(sceneModel, scene, markerData, selectableObjects);

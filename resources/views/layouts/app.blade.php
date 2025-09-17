@@ -14,10 +14,10 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Font Awesome -->
-    <link
+    {{-- <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+    /> --}}
 
     {{-- logo --}}
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
