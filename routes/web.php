@@ -70,7 +70,7 @@ Route::get('/blocks', [BlockController::class, 'getBlocks']);
 Route::get('/lots/{blockId}', [LotController::class, 'getLots']);
 
 // for fetching lot and block details
-Route::get('/lot/{id}', [LotController::class, 'show']);
+Route::get('/block/{blockId}/lot/{lotNumber}', [LotController::class, 'show']);
 Route::get('/block/{id}', [BlockController::class, 'show']);
 
 

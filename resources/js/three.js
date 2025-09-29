@@ -34,6 +34,7 @@ function initThreeJS() {
     initRaycaster({ container, camera, renderer, housesGroup, selectableObjects });
     initClickHandler({
         camera,
+        renderer,
         housesGroup,
         showLotDetails,
         showBlockDetails,

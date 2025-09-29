@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export function initClickHandler({ camera, housesGroup, showLotDetails, showBlockDetails, fetchForecast }) {
+export function initClickHandler({ camera, renderer, housesGroup, showLotDetails, showBlockDetails, fetchForecast }) {
     let modalOpen = false;
     let isDragging = false;
     let mouseDownPosition = { x: 0, y: 0 };
@@ -43,8 +43,9 @@ export function initClickHandler({ camera, housesGroup, showLotDetails, showBloc
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
 
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObjects(housesGroup.children, true);
@@ -52,16 +53,25 @@ export function initClickHandler({ camera, housesGroup, showLotDetails, showBloc
         if (intersects.length > 0) {
             let selectedObject = intersects[0].object;
 
+            console.log("clicked on: ", selectedObject.name, selectedObject.userData);
+
             // traverse upward until group with lotId or blockId
-            while (selectedObject && !selectedObject.userData.blockId && selectedObject.parent) {
+            while (selectedObject &&
+                !selectedObject.userData.lotId && 
+                !selectedObject.userData.blockId && 
+                selectedObject.parent
+            ) {
                 selectedObject = selectedObject.parent;
             }
+
+            console.log("after climb: ", selectedObject.name, selectedObject.userData);
 
             if (selectedObject.userData.lotId) {
                 const lotId = selectedObject.userData.lotId;
                 console.log(`Clicked lot: ${lotId}`);
+                console.log('block is', selectedObject.userData.blockId);
 
-                fetch(`/lot/${lotId}`)
+                fetch(`/block/${selectedObject.userData.blockId}/lot/${selectedObject.userData.lotId}`)
                     .then(res => res.json())
                     .then(data => {
                         if (data.error) {
@@ -89,7 +99,7 @@ export function initClickHandler({ camera, housesGroup, showLotDetails, showBloc
                     .catch(err => console.error("Error fetching block:", err));
 
             } else {
-                console.log("Clicked on non-block object!");
+                console.log("Clicked on non-block object!", selectedObject);
             }
         } else {
             console.log("Clicked empty space.");

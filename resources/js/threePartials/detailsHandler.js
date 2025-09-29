@@ -1,3 +1,5 @@
+import { renderReviewSection } from "./reviewHandler";
+
 let modalOpen = false;
 
 export function showLotDetails(lot) {

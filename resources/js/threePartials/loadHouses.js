@@ -27,7 +27,6 @@ export function loadHouses(scene) {
 
         sceneModel.traverse((child) => {
             if (child.name.startsWith("lot")) { 
-                /* spawnPoints.push(child.position.clone()); */
 
                 // extract lot id and block id from obj name
                 const parts = child.name.split("_"); 
@@ -71,7 +70,7 @@ export function loadHouses(scene) {
             { emptyName: 'block_2_selector',  color: 0x33ff57, blockId: 2 },
             { emptyName: 'block_3_selector',  color: 0x3357ff, blockId: 3 },
             { emptyName: 'block_4_selector',  color: 0xff33a8, blockId: 4 },
-            { emptyName: 'block_5_selector',  color: 0xffd633, blockId: 5 },
+            // { emptyName: 'block_5_selector',  color: 0xffd633, blockId: 5 },
             { emptyName: 'block_6_selector',  color: 0x33fff2, blockId: 6 },
             { emptyName: 'block_7_selector',  color: 0xa833ff, blockId: 7 },
             { emptyName: 'block_8_selector',  color: 0x009688, blockId: 8 },
@@ -133,6 +132,8 @@ export function loadHouses(scene) {
             // assign id 
             lod.userData.lotId = lotId;
             lod.userData.blockId = blockId;
+
+           
 
             lod.frustumCulled = true;
 
