@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export function initClickHandler({ camera, renderer, housesGroup, showLotDetails, showBlockDetails, fetchForecast }) {
+export function initClickHandler({ camera, renderer, housesGroup, selectableObjects,  showLotDetails, showBlockDetails, fetchForecast }) {
     let modalOpen = false;
     let isDragging = false;
     let mouseDownPosition = { x: 0, y: 0 };
@@ -48,7 +48,18 @@ export function initClickHandler({ camera, renderer, housesGroup, showLotDetails
         mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
         raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObjects(housesGroup.children, true);
+        const intersects = raycaster.intersectObjects(
+            [...housesGroup.children, ...selectableObjects], 
+            true
+        );
+
+        console.log("Raycaster hits:", intersects.map(hit => ({
+            name: hit.object.name,
+            type: hit.object.userData?.type,
+            lotId: hit.object.userData?.lotId,
+            blockId: hit.object.userData?.blockId,
+            distance: hit.distance
+        })));
 
         if (intersects.length > 0) {
             let selectedObject = intersects[0].object;
@@ -66,7 +77,7 @@ export function initClickHandler({ camera, renderer, housesGroup, showLotDetails
 
             console.log("after climb: ", selectedObject.name, selectedObject.userData);
 
-            if (selectedObject.userData.lotId) {
+            if (selectedObject.userData.type === "lot") {
                 const lotId = selectedObject.userData.lotId;
                 console.log(`Clicked lot: ${lotId}`);
                 console.log('block is', selectedObject.userData.blockId);
@@ -82,7 +93,7 @@ export function initClickHandler({ camera, renderer, housesGroup, showLotDetails
                     })
                     .catch(err => console.error("Error fetching lot:", err));
 
-            } else if (selectedObject.userData.blockId) {
+            } else if (selectedObject.userData.type === "block") {
                 const blockId = selectedObject.userData.blockId;
                 console.log(`Clicked block: ${blockId}`);
 

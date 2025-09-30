@@ -31,11 +31,13 @@ function initThreeJS() {
 
     const { housesGroup, selectableObjects } = loadHouses(scene);
 
+
     initRaycaster({ container, camera, renderer, housesGroup, selectableObjects });
     initClickHandler({
         camera,
         renderer,
         housesGroup,
+        selectableObjects,
         showLotDetails,
         showBlockDetails,
         fetchForecast

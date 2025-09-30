@@ -130,8 +130,11 @@ export function loadHouses(scene) {
             lod.rotation.copy(rotation);
 
             // assign id 
-            lod.userData.lotId = lotId;
-            lod.userData.blockId = blockId;
+            lod.userData = {
+                type: "lot",
+                lotId: lotId,
+                blockId: blockId
+            };
 
            
 

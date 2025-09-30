@@ -35,7 +35,7 @@ export function renderReviewSection(block) {
                         year: 'numeric', month: 'long', day: 'numeric',
                         hour: 'numeric', minute: '2-digit', hour12: true
                     })}</small><br>
-                    ${review.user_id === Auth.userId ? `
+                    ${window.App && review.user_id === window.App.userId ? `
                         <button class="edit-review">Edit</button>
                         <button class="delete-review">Delete</button>
                     ` : ''}

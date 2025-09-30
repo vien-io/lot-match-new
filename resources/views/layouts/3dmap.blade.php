@@ -221,5 +221,12 @@
             </main>
         </div>
     </div>
+
+
+    <script>
+        window.App = {
+            userId: {{ Auth::check() ? Auth::id() : 'null' }}
+        };
+    </script>
 </body>
 </html>
