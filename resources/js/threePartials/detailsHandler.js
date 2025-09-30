@@ -1,4 +1,5 @@
 import { renderReviewSection } from "./reviewHandler";
+import { loadBlockSummary } from "../blockSummary";
 
 let modalOpen = false;
 
@@ -35,14 +36,14 @@ export function showLotDetails(lot) {
 
     closeButton.onclick = () => {
         modal.classList.remove("show");
-        stop3DModel();
+        // stop3DModel();
         modalOpen = false;
     };
 
     window.onclick = (event) => {
         if (event.target === modal) {
             modal.classList.remove("show");
-            stop3DModel();
+            // stop3DModel();
             modalOpen = false;
         }
     };
@@ -64,6 +65,40 @@ export function showBlockDetails(block) {
     modalOpen = true;
 
     modal.style.display = "flex";
+
+
+   /*  closeButton.addEventListener("click", (event) => {
+        console.log("close button clicked!");
+        event.stopPropagation();
+        modal.style.display = "none";
+        stop3DModel();
+        modalOpen = false;
+    });
+
+    window.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            console.log("clicked outside modal, slosing...");
+            event.stopPropagation();
+            modal.style.display = "none";
+            stop3DModel();
+            modalOpen = false;
+        }
+    }); */
+
+    closeButton.onclick = () => {
+        modal.style.display = "none";
+        // stop3DModel();
+        modalOpen = false;
+        console.log("Close button clicked!");
+    };
+
+    window.onclick = (event) => {
+        if (event.target === modal) {
+            modal.style.display = "none";
+            // stop3DModel();
+            modalOpen = false;
+        }
+    };
 
     setTimeout(() => {
         const midColumn = modal.querySelector(".mid-column");
@@ -95,17 +130,6 @@ export function showBlockDetails(block) {
     renderReviewSection(block);
     loadBlockSummary(block.id);
 
-    closeButton.onclick = () => {
-        modal.style.display = "none";
-        stop3DModel();
-        modalOpen = false;
-    };
+    
 
-    window.onclick = (event) => {
-        if (event.target === modal) {
-            modal.style.display = "none";
-            stop3DModel();
-            modalOpen = false;
-        }
-    };
 }
