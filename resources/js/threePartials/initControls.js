@@ -11,8 +11,8 @@ export function initControls(camera, renderer, container) {
     controls.screenSpacePanning = true;
     controls.panSpeed = 2;
 
-    controls.enableDamping = false;
-    controls.dampingFactor = 1.3;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.1;
 
     container.addEventListener('contextmenu', (e) => e.preventDefault());
     return controls;

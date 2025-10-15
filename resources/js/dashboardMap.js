@@ -39,7 +39,7 @@ function initThreeJS() {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enablePan = false;
     controls.enableRotate = true;
-    controls.enableZoom = true;
+    controls.enableZoom = false;
     controls.mouseButtons.LEFT = THREE.MOUSE.ROTATE;
     controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
     controls.screenSpacePanning = true;
@@ -82,6 +82,11 @@ function initThreeJS() {
     const url = `/models/basic/housemodel.glb?ts=${Date.now()}`;
     houseLoader.load(url, (gltf) => {
         const sceneModel = gltf.scene;
+        const box = new THREE.Box3().setFromObject(sceneModel);
+        const center = box.getCenter(new THREE.Vector3());
+        sceneModel.position.sub(center);
+        const size = box.getSize(new THREE.Vector3());
+        sceneModel.position.y -= size.y / 2 - 4;
         housesGroup.add(sceneModel);
 
 

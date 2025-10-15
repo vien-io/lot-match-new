@@ -31,6 +31,10 @@ function initThreeJS() {
 
     const scene = initScene();
     const renderer = initRenderer(container);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+
     const camera = initCamera(container);
     addResizeHandler(container, camera, renderer);
 
@@ -98,7 +102,7 @@ function initThreeJS() {
     });
 
 
-/*     const stats = new Stats ();
+   /*  const stats = new Stats ();
     document.body.appendChild(stats.dom) */
 
 

@@ -62,46 +62,58 @@ function renderForecast(data) {
 }
 
 function createForecastChart(ctx, ratings) {
-    return new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [
-                {
-                    label: 'Rating Trend + Forecast',
-                    data: ratings,
-                    parsing: { xAxisKey: 'x', yAxisKey: 'y' },
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'transparent',
-                    tension: 0.3,
-                    pointBackgroundColor: (ctx) => {
-                        const index = ctx.dataIndex;
-                        return index === ratings.length - 1
-                            ? 'rgba(255, 99, 132, 1)'
-                            : 'rgba(75, 192, 192, 1)';
-                    },
-                    pointRadius: (ctx) => ctx.dataIndex === ratings.length - 1 ? 6 : 0,
-                    pointHoverRadius: (ctx) => ctx.dataIndex === ratings.length - 1 ? 8 : 0,
-                    pointHitRadius: (ctx) => ctx.dataIndex === ratings.length - 1 ? 10 : 5
-                }
-            ]
-        },
-        options: {
-            scales: {
-                x: {
-                    type: 'time',
-                    time: { unit: 'month' },
-                    title: { display: true, text: 'Date' }
-                },
-                y: {
-                    suggestedMin: 1,
-                    suggestedMax: 5,
-                    title: { display: true, text: 'Rating' }
-                }
+    const gradient = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
+        gradient.addColorStop(0, 'hsla(142, 74%, 30%, 1.00)');   
+        gradient.addColorStop(1, 'hsla(86, 96%, 40%, 1.00)');   
+
+        return new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: 'Rating Trend + Forecast',
+                        data: ratings,
+                        parsing: { xAxisKey: 'x', yAxisKey: 'y' },
+                        borderColor: gradient,
+                        backgroundColor: 'transparent',
+                        borderWidth: 2.5,
+                        tension: 0.3,
+                        pointBackgroundColor: (ctx) => {
+                            const index = ctx.dataIndex;
+                            return index === ratings.length - 1
+                                ? 'rgba(255, 255, 255, 1)'
+                                : 'hsl(142, 71%, 45%)'; 
+                        },
+                        pointRadius: (ctx) => ctx.dataIndex === ratings.length - 1 ? 6 : 0,
+                        pointHoverRadius: (ctx) => ctx.dataIndex === ratings.length - 1 ? 8 : 0,
+                        pointHitRadius: (ctx) => ctx.dataIndex === ratings.length - 1 ? 10 : 5
+                    }
+                ]
             },
-            plugins: { legend: { display: false } },
-            responsive: false,
-            maintainAspectRatio: false,
-            layout: { padding: 10 }
-        }
-    });
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: { unit: 'month' },
+                        title: { display: true, text: 'Date' },
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#ccc' }
+                    },
+                    y: {
+                        suggestedMin: 1,
+                        suggestedMax: 5,
+                        title: { display: true, text: 'Rating' },
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#ccc' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                },
+                responsive: false,
+                maintainAspectRatio: false,
+                layout: { padding: 10 }
+            }
+        });
+
 }

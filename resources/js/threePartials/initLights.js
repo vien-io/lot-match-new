@@ -5,15 +5,15 @@ export function initLights(scene) {
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambientLight);
 
-    let light = new THREE.DirectionalLight(0xffffff, 3);
-    light.position.set(20, 10, 20);
+    let light = new THREE.DirectionalLight(0xffffff, 5);
+    light.position.set(10, 10, 30);
     light.target.position.set(0, 0, 0);
     scene.add(light);
     scene.add(light.target);
     
     // fill light
-    const fillLight = new THREE.DirectionalLight(0xADD8E6, 0.3);
-    fillLight.position.set(-20, -10, -20);
+    const fillLight = new THREE.DirectionalLight(0xADD8E6, 2);
+    fillLight.position.set(-10, -10, -30);
     fillLight.target.position.set(0, 0, 0);
     scene.add(fillLight);
     scene.add(fillLight.target);

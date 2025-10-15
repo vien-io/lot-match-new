@@ -5,43 +5,221 @@ export function renderReviewSection(block) {
     const reviews = block.reviews ?? [];
 
     reviewSection.innerHTML = `
-        <h3>Leave a review</h3>
-        <form id="block-review-form">
+        <div class="tw-space-y-6">
+
+    <!-- Leave a Review -->
+    <div class="tw-rounded-2xl tw-border-2 tw-border-transparent 
+                tw-bg-[linear-gradient(#1c1c1c,#1c1c1c)_padding-box,linear-gradient(145deg,transparent_35%,#e81cff,#40c9ff)_border-box]
+                tw-p-6 tw-shadow-[0_0_20px_rgba(0,0,0,0.6)]">
+
+        <h3 class="tw-text-lg tw-font-semibold tw-text-[#22C55E] tw-mb-4">Leave a Review</h3>
+
+        <form id="block-review-form" class="tw-flex tw-flex-col tw-gap-4">
+
             <input type="hidden" name="review_id" id="review-id">
             <input type="hidden" name="block_id" value="${block.id}"> 
-            <textarea id="review-comment" name="comment" rows="3" required placeholder="Type your review here"></textarea>
 
-            <div class="container__items rating-stars">
+            <!-- Comment Field -->
+            <textarea 
+                id="review-comment" 
+                name="comment" 
+                rows="3" 
+                required 
+                placeholder="Type your review here"
+                class="tw-w-full tw-bg-transparent tw-border tw-border-[#414141] tw-rounded-lg tw-p-3
+                       tw-text-white placeholder:tw-opacity-50 focus:tw-outline-none focus:tw-border-[#22C55E]">
+            </textarea>
+
+            <style>
+                /* Star animation styling */
+                .rating-stars input {
+                display: none;
+                }
+
+                .rating-stars label svg {
+                transition: transform 0.25s ease, color 0.25s ease;
+                color: #717171;
+                }
+
+                .rating-stars label:hover svg,
+                .rating-stars label:hover ~ label svg {
+                color: hsl(142, 71%, 45%);
+                transform: scale(1.2) rotate(-5deg);
+                }
+
+                /* when checked (clicked star or all before it) */
+                .rating-stars input:checked ~ label svg {
+                color: hsl(142, 71%, 45%);
+                }
+
+                /* subtle bounce animation on hover */
+                .rating-stars label:hover svg {
+                animation: star-pop 0.3s ease;
+                }
+
+                @keyframes star-pop {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.3) rotate(-10deg); }
+                100% { transform: scale(1.2) rotate(0deg); }
+                }
+            </style>
+
+            <!-- Rating Stars -->
+            <div class="rating-stars tw-flex tw-flex-row-reverse tw-gap-2 tw-justify-end tw-select-none">
             ${[5,4,3,2,1].map(num => `
-                <input type="radio" name="stars" id="st${num}" value="${num}">
-                <label for="st${num}">
-                    <div class="star-stroke"><div class="star-fill"></div></div>
-                    <div class="label-description" data-content="${["Excellent","Good","OK","Bad","Terrible"][5 - num]}"></div>
+                <input 
+                type="radio" 
+                name="stars" 
+                id="st${num}" 
+                value="${num}"
+                class="tw-hidden">
+                <label for="st${num}" class="tw-cursor-pointer tw-relative tw-transition-transform tw-duration-200">
+                <div class="tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-rounded-full
+                            tw-border tw-border-[#414141] tw-bg-[#2a2a2a]
+                            hover:tw-border-[#22C55E] hover:tw-scale-110 tw-transition-transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                        class="tw-w-5 tw-h-5 tw-text-[#717171] tw-transition-colors tw-duration-200">
+                    <path d="M12 17.27L18.18 21 16.54 13.97 
+                            22 9.24l-7.19-.61L12 2 
+                            9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                    </svg>
+                </div>
                 </label>
             `).join('')}
             </div>
 
-            <input type="hidden" name="rating" id="rating-value" required>
-            <button class="review-submit-btn" type="submit">Submit review</button>
-        </form>
 
-        <h3>Reviews</h3>
-        <div id="reviews-container">
-            ${reviews.map(review => `
-                <div class="review" data-review-id="${review.id}">
-                    <strong>${review.user_name}</strong> - ${review.rating}/5<br>
-                    <p>${review.comment}</p>
-                    <small>${new Date(review.created_at).toLocaleString('en-US', {
-                        year: 'numeric', month: 'long', day: 'numeric',
-                        hour: 'numeric', minute: '2-digit', hour12: true
-                    })}</small><br>
-                    ${window.App && review.user_id === window.App.userId ? `
-                        <button class="edit-review">Edit</button>
-                        <button class="delete-review">Delete</button>
-                    ` : ''}
-                </div>
-            `).join('')}
+            <input type="hidden" name="rating" id="rating-value" required>
+
+            <!-- Submit Button -->
+            <button type="submit"
+                class="review-submit-btn tw-w-1/3 tw-bg-[#313131] tw-border tw-border-[#414141]
+                       tw-text-[#bcbcbc] tw-font-semibold tw-rounded-md tw-py-2 tw-transition-all
+                       hover:tw-bg-white hover:tw-text-black active:tw-scale-95">
+                Submit Review
+            </button>
+        </form>
+    </div>
+
+    <style>
+        /* --- Scrollbar Styling --- */
+        #reviews-container {
+        max-height: 300px;
+        overflow-y: auto;
+        padding-right: 5px;
+        gap: 10px;
+        }
+
+        #reviews-container::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+        }
+
+        #reviews-container::-webkit-scrollbar-track {
+        background: hsla(220, 25%, 10%, 0.8);
+        border-radius: 10px;
+        }
+
+        #reviews-container::-webkit-scrollbar-thumb {
+        background: hsl(220, 30%, 20%);
+        border-radius: 10px;
+        border: 2px solid #888888;
+        }
+
+        #reviews-container::-webkit-scrollbar-thumb:hover {
+        background: hsl(221, 61%, 68%);
+        border: 2px solid #ffffff;
+        }
+
+        /* --- Individual Review Styling --- */
+        .review {
+        background-color: hsla(142, 71%, 45%, 0.04);
+        border: 1px solid #333;
+        border-radius: 10px;
+        padding: 10px 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        font-size: 0.95rem;
+        line-height: 1.4;
+        transition: background-color 0.25s ease;
+        }
+
+        .review:hover {
+        background-color: rgba(0, 255, 42, 0.28);
+        }
+
+        .review:not(:last-child) {
+        border-bottom: 1px solid #444;
+        }
+
+        .review .reviewer {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #e0e0e0;
+        }
+
+        .review .rating {
+        font-size: 0.85rem;
+        color: hsla(177, 71%, 45%, 1.00);
+        }
+
+        .review .edit-review,
+        .review .delete-review {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        }
+
+        .review .edit-review:hover,
+        .review .delete-review:hover {
+        background-color: #555;
+        }
+    </style>
+
+
+    <!-- Reviews List -->
+    <div class="tw-rounded-2xl tw-border-2 tw-border-transparent 
+                tw-bg-[linear-gradient(#1c1c1c,#1c1c1c)_padding-box,linear-gradient(145deg,transparent_35%,#e81cff,#40c9ff)_border-box]
+                tw-p-6 tw-shadow-[0_0_20px_rgba(0,0,0,0.6)] tw-w-full">
+
+    <h3 class="tw-text-lg tw-font-semibold tw-text-[hsl(142,71%,45%)] tw-mb-4">
+        Reviews
+    </h3>
+
+    <div id="reviews-container" class="tw-flex tw-flex-col tw-gap-3">
+        ${reviews.map(review => `
+        <div class="review">
+            <div class="tw-flex tw-items-center tw-justify-between">
+            <strong class="reviewer">${review.user_name}</strong>
+            <span class="rating">${review.rating}/5 ★</span>
+            </div>
+
+            <p class="tw-text-[#bcbcbc]">${review.comment}</p>
+
+            <small class="tw-text-[#999]">
+            ${new Date(review.created_at).toLocaleString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric',
+                hour: 'numeric', minute: '2-digit', hour12: true
+            })}
+            </small>
+
+            ${window.App && review.user_id === window.App.userId ? `
+            <div class="tw-flex tw-gap-2 tw-mt-2">
+                <button class="edit-review">Edit</button>
+                <button class="delete-review">Delete</button>
+            </div>
+            ` : ''}
         </div>
+        `).join('')}
+    </div>
+    </div>
+
+</div>
+
     `;
 
     resetReviewForm();
