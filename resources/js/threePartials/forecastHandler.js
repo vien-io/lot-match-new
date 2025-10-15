@@ -1,11 +1,15 @@
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
+import 'chartjs-adapter-date-fns';
+
 let forecastChart = null;
 
 export function fetchForecast(blockId) {
     const isAdmin = document.body.getAttribute('data-is-admin') === '1';
-    if (!isAdmin) {
+/*     if (!isAdmin) {
         console.log("User is not an admin");
         return;
-    }
+    } */
 
     console.log("User is an admin");
 
@@ -21,6 +25,10 @@ export function fetchForecast(blockId) {
 /* ---------- HELPERS ---------- */
 function renderForecast(data) {
     const forecastDiv = document.getElementById('forecasting-data');
+    if (!forecastDiv) {
+        console.log("forecasting container not found");
+        return;
+    }
 
     if (data.forecasted_rating !== null) {
         forecastDiv.innerHTML = `

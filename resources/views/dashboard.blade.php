@@ -54,7 +54,7 @@
 
       {{-- Left: Map Preview --}}
       <div class="lg:tw-col-span-2 tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6 tw-h-[800px]">
-        <h2 class="tw-text-xl tw-font-semibold tw-mb-4 tw-text-gray-800">3D Map Preview</h2>
+        <h2 class="tw-text-xl tw-font-semibold tw-mb-4 tw-text-gray-800">3D Model Preview</h2>
         <div id="dashboard-map-container" 
           class="tw-border tw-border-gray-200 tw-rounded-lg tw-h-[640px] tw-bg-gray-50 tw-overflow-hidden tw-relative">
           <div id="tooltiip">

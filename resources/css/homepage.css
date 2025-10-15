@@ -498,7 +498,7 @@ html, body{
   
 
 /* textarea */
-/* textarea {
+#review-comment{
     width: 100%;
     padding: 1rem;
     background-color: hsl(240, 19%, 21%);
@@ -513,22 +513,22 @@ html, body{
     resize: none;
 }
 
-textarea:focus {
+#review-comment:focus {
     outline: none;
     border-color: hsl(210, 90%, 50%);
     background-color: hsl(240, 19%, 17%);
 }
 
-textarea::placeholder {
+#review-comment::placeholder {
     color: hsla(220, 50%, 60%, 0.4);
     font-style: italic;
 }
 
-textarea:hover {
+#review-comment:hover {
     border-color: hsl(210, 90%, 50%);
     background-color: hsl(240, 19%, 17%);
 }
- */
+
 
 
 /* button for submitting review */

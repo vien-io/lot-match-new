@@ -1,6 +1,7 @@
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 import 'chartjs-adapter-date-fns';
+import Stats from 'three/examples/jsm/libs/stats.module.js';
 
 // gsap for cam animation
 import gsap from "gsap";
@@ -29,25 +30,38 @@ function initThreeJS() {
     initLights(scene);
     initHelpers(scene);
 
-    const { housesGroup, selectableObjects } = loadHouses(scene);
+    const { housesGroup, selectableObjects, instanceMetadata } = loadHouses(scene);
 
-
-    initRaycaster({ container, camera, renderer, housesGroup, selectableObjects });
+    initRaycaster({ 
+        container, 
+        camera, 
+        renderer, 
+        housesGroup, 
+        selectableObjects, 
+        instanceMetadata
+    });
     initClickHandler({
         camera,
         renderer,
         housesGroup,
         selectableObjects,
+        instanceMetadata,
         showLotDetails,
         showBlockDetails,
         fetchForecast
     });
+
+
+/*     const stats = new Stats ();
+    document.body.appendChild(stats.dom) */
+
 
     // animation loop
     function animate() {
         requestAnimationFrame(animate);
         controls.update();
         renderer.render(scene, camera);
+        stats.update();
     }
     animate();
 }

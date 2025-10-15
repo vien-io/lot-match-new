@@ -10,7 +10,7 @@
     </div>
 
     {{-- Right Sidebar --}}
-    <div id="side-panel" class="tw-w-64 tw-bg-white tw-rounded-lg tw-shadow-md tw-p-4 tw-flex-shrink-0 tw-sticky tw-top-16">
+    <div id="side-panel" class="tw-w-64 tw-bg-white tw-rounded-lg tw-shadow-md tw-p-4 tw-flex-shrink-0 tw-sticky tw-top-16 tw-hidden">
         <h4 class="tw-font-semibold tw-mb-2">Select a Block</h4>
         <ul id="block-list" class="tw-space-y-2"></ul>
     </div>
@@ -55,13 +55,15 @@
                 </div>
                 <div class="bottom-row tw-mt-4">
                     <h3>Forecasting Data</h3>
-                    <div id="block-summary"></div>
-                    @if(auth()->check() && auth()->user()->is_admin)
+                    <div id="block-summary"
+                        class="tw-max-h-48 tw-overflow-y-auto">
+                    </div>
+                    {{-- @if(auth()->check() && auth()->user()->is_admin) --}}
                     <div id="forecasting-data" class="tw-mt-2">
                         <p><strong>Forecasted Rating:</strong> <span id="forecast-value"></span></p>
                         <canvas id="forecastChart" width="400" height="200"></canvas>
                     </div>
-                    @endif
+                    {{-- @endif --}}
                 </div>
             </div>
             <div class="right-column tw-flex-1">

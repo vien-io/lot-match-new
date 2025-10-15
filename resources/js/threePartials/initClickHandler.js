@@ -1,6 +1,15 @@
 import * as THREE from 'three';
 
-export function initClickHandler({ camera, renderer, housesGroup, selectableObjects,  showLotDetails, showBlockDetails, fetchForecast }) {
+export function initClickHandler({ 
+    camera, 
+    renderer, 
+    housesGroup, 
+    selectableObjects,  
+    instanceMetadata,
+    showLotDetails, 
+    showBlockDetails, 
+    fetchForecast 
+}) {
     let modalOpen = false;
     let isDragging = false;
     let mouseDownPosition = { x: 0, y: 0 };
@@ -53,18 +62,32 @@ export function initClickHandler({ camera, renderer, housesGroup, selectableObje
             true
         );
 
-        console.log("Raycaster hits:", intersects.map(hit => ({
+ /*        console.log("Raycaster hits:", intersects.map(hit => ({
             name: hit.object.name,
             type: hit.object.userData?.type,
             lotId: hit.object.userData?.lotId,
             blockId: hit.object.userData?.blockId,
             distance: hit.distance
-        })));
+        }))); */
 
         if (intersects.length > 0) {
             let selectedObject = intersects[0].object;
 
-            console.log("clicked on: ", selectedObject.name, selectedObject.userData);
+             // 💡 Detect InstancedMesh clicks
+            if (selectedObject.isInstancedMesh && intersects[0].instanceId !== undefined) {
+                const instanceId = intersects[0].instanceId;
+                const meta = instanceMetadata[instanceId]; // imported from loadHouses()
+                if (meta) {
+                    console.log(`Clicked lot ${meta.lotId} (block ${meta.blockId})`);
+                    fetch(`/block/${meta.blockId}/lot/${meta.lotId}`)
+                        .then(res => res.json())
+                        .then(showLotDetails)
+                        .catch(console.error);
+                }
+                return;
+            }
+
+            // console.log("clicked on: ", selectedObject.name, selectedObject.userData);
 
             // traverse upward until group with lotId or blockId
             while (selectedObject &&
@@ -75,13 +98,13 @@ export function initClickHandler({ camera, renderer, housesGroup, selectableObje
                 selectedObject = selectedObject.parent;
             }
 
-            console.log("after climb: ", selectedObject.name, selectedObject.userData);
+            // console.log("after climb: ", selectedObject.name, selectedObject.userData);
 
             if (selectedObject.userData.type === "lot") {
                 const lotId = selectedObject.userData.lotId;
-                console.log(`Clicked lot: ${lotId}`);
+                /* console.log(`Clicked lot: ${lotId}`);
                 console.log('block is', selectedObject.userData.blockId);
-
+ */
                 fetch(`/block/${selectedObject.userData.blockId}/lot/${selectedObject.userData.lotId}`)
                     .then(res => res.json())
                     .then(data => {

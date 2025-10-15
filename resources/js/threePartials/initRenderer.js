@@ -5,9 +5,11 @@ export function initRenderer(container) {
     const height = container.clientHeight;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
+/*     renderer.setPixelRatio(window.devicePixelRatio > 1 ? 1.5 : 1);
+    renderer.outputEncoding = THREE.LinearEncoding; */
     renderer.setSize(width, height);
     container.appendChild(renderer.domElement);
-    // renderer.shadowMap.enabled = false; // pang alis ng shadows to optimize
+    renderer.shadowMap.enabled = false; 
 
     return renderer;
 }

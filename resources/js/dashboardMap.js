@@ -16,10 +16,13 @@ function initThreeJS() {
     scene.background = new THREE.Color(0xFFFFFF);
 
     // camera
-    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
-    camera.position.set(0, 90, 0);
+    const camera = new THREE.PerspectiveCamera(80, width / height, 0.1, 1000);
+    camera.position.set(5, 3, 7);
     camera.lookAt(0, 0, 0);
     window.threeCamera = camera;
+
+
+ 
 
     // renderer
     const renderer = new THREE.WebGLRenderer();
@@ -28,19 +31,23 @@ function initThreeJS() {
     container.appendChild(renderer.domElement);
 
     // helper
-    const axesHelper = new THREE.AxesHelper(10);
+ /*    const axesHelper = new THREE.AxesHelper(10);
     const gridHelper = new THREE.GridHelper(90, 35, 0xEEEEEE, 0xEEEEEE);
     scene.add(axesHelper, gridHelper);
-
+ */
     // controls
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enablePan = true;
+    controls.enablePan = false;
     controls.enableRotate = true;
-    controls.enableZoom = false;
-    controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
+    controls.enableZoom = true;
+    controls.mouseButtons.LEFT = THREE.MOUSE.ROTATE;
     controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
     controls.screenSpacePanning = true;
     controls.panSpeed = 2;
+    controls.enableDamping = true;    
+    controls.dampingFactor = 0.05;    
+    controls.autoRotate = true;      
+    controls.autoRotateSpeed = 1.0; 
     controls.update();
 
     // lightings
@@ -72,7 +79,7 @@ function initThreeJS() {
     const houseModelLoader = new GLTFLoader();
 
     // load the scene GLB (the one with Empty objects)
-    const url = `/models/basic/housespawn.glb?ts=${Date.now()}`;
+    const url = `/models/basic/housemodel.glb?ts=${Date.now()}`;
     houseLoader.load(url, (gltf) => {
         const sceneModel = gltf.scene;
         housesGroup.add(sceneModel);
@@ -493,12 +500,21 @@ function initThreeJS() {
 
 
     // animation loop
-    function animate() {
+ /*    function animate() {
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
     }
     animate();
+ */
 
+       function animate() {
+        requestAnimationFrame(animate);
+         
+        controls.update()   
+
+        renderer.render(scene, camera);
+    }
+    animate();
 
     // handle window resize
     window.addEventListener('resize', () => { 

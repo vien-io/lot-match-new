@@ -1,29 +1,31 @@
 import * as THREE from 'three';
 import { resetBlock } from './blockMarkers';
 
-export function initRaycaster({ container, camera, renderer, housesGroup, selectableObjects }) {
+/**
+ * Raycaster for lots (InstancedMesh) and blocks (regular Mesh)
+ */
+export function initRaycaster({ container, camera, renderer, housesGroup, selectableObjects, instanceMetadata }) {
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
-    let selectedHouse = null;
-    let selectedBlock = null;
+
+    let hoveredInstanceId = null;
+    let hoveredBlock = null;
 
     const tooltip = document.getElementById('tooltip');
     const tooltipText = document.getElementById('tooltip-text');
 
-    window.addEventListener("mousemove", (event) => {
-        // prevent hover when mouse is over side panel
-        const leftPanel = document.getElementById("side-panel"); 
+    window.addEventListener('mousemove', (event) => {
+        // Prevent hover when mouse is over side panel
+        const leftPanel = document.getElementById('side-panel'); 
         const panelRect = leftPanel.getBoundingClientRect();
         if (
             event.clientX >= panelRect.left &&
             event.clientX <= panelRect.right &&
             event.clientY >= panelRect.top &&
             event.clientY <= panelRect.bottom
-        ) {
-            return;
-        }
+        ) return;
 
-        // update normalized mouse coords
+        // Normalized mouse coordinates
         const rect = renderer.domElement.getBoundingClientRect();
         mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
         mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
@@ -31,193 +33,94 @@ export function initRaycaster({ container, camera, renderer, housesGroup, select
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObjects(selectableObjects, true);
 
-
         if (intersects.length > 0) {
-            let hoveredObject = intersects[0].object;
+            const obj = intersects[0].object;
 
-            // handle block highlighting
-            if (hoveredObject.name.startsWith("block_")) {
-                
-                if (selectedBlock && selectedBlock !== hoveredObject) {
-                    resetBlock(selectedBlock);
-                    selectedBlock = null;
+            // --- Handle blocks (regular meshes) ---
+            if (obj.userData.type === 'block') {
+                if (hoveredBlock && hoveredBlock !== obj) {
+                    resetBlock(hoveredBlock);
                 }
 
-                if (selectedBlock !== hoveredObject) {
-                    ({ selectedBlock } = handleBlockHover({
-                    hoveredObject, 
-                    selectedBlock, 
-                    housesGroup, 
-                    tooltip, 
-                    tooltipText, 
-                    container, 
-                    event
-                    }));
+                if (hoveredBlock !== obj) {
+                    hoveredBlock = obj;
+                    // animate block highlight via gsap inside resetBlock / addBlockMarkers
+                    obj.userData.highlightTween?.play?.();
                 }
 
+                // tooltip
+                tooltipText.textContent = `Block: ${obj.userData.blockId}`;
+                tooltip.style.display = 'block';
+                const containerRect = container.getBoundingClientRect();
+                tooltip.style.left = `${event.clientX - containerRect.left + 10}px`;
+                tooltip.style.top = `${event.clientY - containerRect.top + 10}px`;
+
+                // reset hoveredInstanceId for lots
+                hoveredInstanceId = null;
                 return;
-            } else {
-                // reset block if switching to house
-                if (selectedBlock) {
-                    resetBlock(selectedBlock);
-                    // resetEmissive(selectedBlock);
-                    selectedBlock = null;
-                }
             }
 
-            // handle house highlighting
-            ({ selectedHouse } = handleHouseHover({
-                hoveredObject, selectedHouse, housesGroup, tooltip, tooltipText, container, event, selectableObjects
-            }));
+            // --- Handle lots (InstancedMesh) ---
+            if (obj.isInstancedMesh) {
+                const instanceId = intersects[0].instanceId;
+
+                if (hoveredInstanceId !== null && hoveredInstanceId !== instanceId) {
+                    resetInstanceColor(obj, hoveredInstanceId);
+                }
+
+                hoveredInstanceId = instanceId;
+                highlightInstance(obj, instanceId);
+
+                const metadata = instanceMetadata[instanceId];
+                if (metadata) {
+                    tooltipText.textContent = `Lot: ${metadata.lotId}, Block: ${metadata.blockId}`;
+                    tooltip.style.display = 'block';
+                    const containerRect = container.getBoundingClientRect();
+                    tooltip.style.left = `${event.clientX - containerRect.left + 10}px`;
+                    tooltip.style.top = `${event.clientY - containerRect.top + 10}px`;
+                }
+
+                // reset hoveredBlock
+                hoveredBlock = null;
+            }
 
         } else {
-            // reset everything when nothing hovered
-            if (selectedBlock) {
-                resetBlock(selectedBlock);
-                // resetEmissive(selectedBlock);
-                selectedBlock = null;
+            // Nothing hovered → reset all
+            if (hoveredBlock) {
+                resetBlock(hoveredBlock);
+                hoveredBlock = null;
             }
-            if (selectedHouse) {
-                resetEmissive(selectedHouse);
-                selectedHouse = null;
+            if (hoveredInstanceId !== null) {
+                const mesh = selectableObjects.find(obj => obj.isInstancedMesh);
+                if (mesh) resetInstanceColors(mesh);
+                hoveredInstanceId = null;
             }
-            resetLots(housesGroup);
             tooltip.style.display = 'none';
         }
     });
 }
 
-/* ---------- HELPERS ---------- */
-function resetEmissive(object) {
-    object.traverse(child => {
-        if (child.isMesh && child.material) {
-            if (Array.isArray(child.material)) {
-                child.material.forEach(mat => {
-                    mat.emissive.set(0x000000);
-                    mat.emissiveIntensity = 0;
-                });
-            } else {
-                child.material.emissive.set(0x000000);
-                child.material.emissiveIntensity = 0;
-            }
-        }
-    });
+/* ------------------ Helpers ------------------ */
+
+// Highlight a single instance
+function highlightInstance(instancedMesh, instanceId, color = 0xffff00) {
+    const c = new THREE.Color(color);
+    instancedMesh.setColorAt(instanceId, c);
+    instancedMesh.instanceColor.needsUpdate = true;
 }
 
-function resetLots(housesGroup) {
-    housesGroup.traverse(lot => {
-        if (lot.userData && lot.userData.blockId) resetEmissive(lot);
-    });
+// Reset a single instance color to white
+function resetInstanceColor(instancedMesh, instanceId) {
+    const white = new THREE.Color(1, 1, 1);
+    instancedMesh.setColorAt(instanceId, white);
+    instancedMesh.instanceColor.needsUpdate = true;
 }
 
-function handleBlockHover({
-    hoveredObject,
-    selectedBlock,
-    housesGroup,
-    tooltip,
-    tooltipText,
-    container,
-    event
-}) {
-    
-    if (selectedBlock && selectedBlock !== hoveredObject) {
-        
-        if (selectedBlock.userData.highlightTween) selectedBlock.userData.highlightTween.pause();
-        selectedBlock.scale.set(10, 10, 1);
-
-        
-        const prevBlockId = selectedBlock.name.split("_")[1];
-        housesGroup.traverse(lot => {
-            if (lot.userData && lot.userData.blockId === prevBlockId) {
-                resetEmissive(lot);
-            }
-        });
+// Reset all instances
+function resetInstanceColors(instancedMesh) {
+    const white = new THREE.Color(1, 1, 1);
+    for (let i = 0; i < instancedMesh.count; i++) {
+        instancedMesh.setColorAt(i, white);
     }
-
-    selectedBlock = hoveredObject;
-
-    const blockId = hoveredObject.name.split("_")[1];
-
-    
-    if (hoveredObject.userData.highlightTween) hoveredObject.userData.highlightTween.play();
-
-    
-    housesGroup.traverse(lot => {
-        if (lot.userData && lot.userData.blockId === blockId) {
-            highlightObject(lot, 0xffff00); // yellow glow
-        } else if (lot.userData && lot.userData.blockId) {
-            resetEmissive(lot);
-        }
-    });
-
-   
-    tooltipText.textContent = `Block: ${blockId}`;
-    tooltip.style.display = 'block';
-    const containerRect = container.getBoundingClientRect();
-    tooltip.style.left = `${event.clientX - containerRect.left + 10}px`;
-    tooltip.style.top = `${event.clientY - containerRect.top + 10}px`;
-
-    return { selectedBlock };
+    instancedMesh.instanceColor.needsUpdate = true;
 }
-
-
-function handleHouseHover({ hoveredObject, selectedHouse, housesGroup, tooltip, tooltipText, container, event, selectableObjects }) {
-    while (hoveredObject.parent && !selectableObjects.includes(hoveredObject)) {
-        hoveredObject = hoveredObject.parent;
-    }
-
-    if (hoveredObject !== selectedHouse) {
-        if (selectedHouse) resetEmissive(selectedHouse);
-        selectedHouse = hoveredObject;
-        highlightObject(selectedHouse, 0xffff00); // yellow glow
-    }
-
-    // ensure we get lot root with userData
-    while (hoveredObject && !hoveredObject.userData.lotId && hoveredObject.parent) {
-        hoveredObject = hoveredObject.parent;
-    }
-
-    if (hoveredObject.userData.lotId) {
-        resetLots(housesGroup);
-        highlightObject(hoveredObject, 0xffff00);
-
-        // tooltip
-        const lotId = hoveredObject.userData.lotId;
-        const blockId = hoveredObject.userData.blockId;
-        tooltipText.textContent = `Lot: ${lotId}, Block: ${blockId}`;
-        tooltip.style.display = 'block';
-
-        const containerRect = container.getBoundingClientRect();
-        tooltip.style.left = `${event.clientX - containerRect.left + 10}px`;
-        tooltip.style.top = `${event.clientY - containerRect.top + 10}px`;
-    }
-
-    return { selectedHouse };
-}
-
-function highlightObject(object, color) {
-    object.traverse(child => {
-        if (child.isMesh && child.material) {
-            if (Array.isArray(child.material)) {
-                child.material.forEach(mat => {
-                    mat.emissive.set(color);
-                    mat.emissiveIntensity = 1;
-                });
-            } else {
-                child.material.emissive.set(color);
-                child.material.emissiveIntensity = 1;
-            }
-        }
-    });
-}
-
-function highlightLotsByBlock(housesGroup, blockId) {
-    housesGroup.traverse(lot => {
-        if (lot.userData && lot.userData.blockId === blockId) {
-            highlightObject(lot, 0xffff00); // yellow for lots
-        } else if (lot.userData && lot.userData.blockId) {
-            resetEmissive(lot);
-        }
-    });
-}
-
