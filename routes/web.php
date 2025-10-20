@@ -138,9 +138,16 @@ Route::prefix('usermanagement')->name('usermanagement.')->group(function () {
 
 
 
-// reviews
+// submitting reviews
 Route::middleware('auth')->post('/block-reviews', [ReviewController::class, 'store'])
      ->name('block.reviews.store');
+// edit reviews
+Route::middleware('auth')->post('/block-reviews/{review}', [ReviewController::class, 'update'])
+    ->name('block.reviews.update');
+// delete reviews
+Route::middleware('auth')->delete('/block-reviews/{review}', [ReviewController::class, 'destroy'])
+->name('block.reviews.destroy');
+
 
 Route::get('/blocks/{blockId}/reviews', [ReviewController::class, 'blockReviews']);
 Route::get('/blocks/all/reviews', [ReviewController::class, 'blockReviews']);

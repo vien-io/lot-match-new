@@ -192,7 +192,7 @@ export function renderReviewSection(block) {
 
     <div id="reviews-container" class="tw-flex tw-flex-col tw-gap-3">
         ${reviews.map(review => `
-        <div class="review">
+        <div class="review" data-review-id="${review.id}">
             <div class="tw-flex tw-items-center tw-justify-between">
             <strong class="reviewer">${review.user_name}</strong>
             <span class="rating">${review.rating}/5 ★</span>
@@ -267,7 +267,7 @@ function bindFormHandler(block) {
 
             if (isEditing && reviewId) {
                 url = `/block-reviews/${reviewId}`;
-                formData.append('_method', 'PUT');
+                formData.append('_method', 'POST');
             }
 
             const res = await fetch(url, {
@@ -317,7 +317,13 @@ function bindEditButtons(block) {
     document.querySelectorAll('.edit-review').forEach(btn => {
         btn.addEventListener('click', function () {
             const reviewId = this.closest('.review').dataset.reviewId;
-            const review = block.reviews.find(r => r.id == reviewId);
+
+            // convert to string for comparison
+            const review = block.reviews.find(r => String(r.id) === reviewId);
+
+            if (!review) {
+                console.warn('Review not found for id:', reviewId);
+            }
 
             document.getElementById('review-comment').value = review.comment;
             document.getElementById('rating-value').value = review.rating;
