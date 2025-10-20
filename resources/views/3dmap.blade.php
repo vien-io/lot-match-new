@@ -72,11 +72,16 @@
                 
                 <!-- Top Row -->
                 <div class="top-row tw-flex tw-gap-4">
+
+
                     <div class="mid-column gradient-border tw-flex-1 tw-p-4
                         tw-transition-transform tw-duration-300 hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(255,255,255,0.05)]
                         hover:tw-bg-[#84ffb1]/30">
                         <div id="block-3d-container" class="tw-relative tw-flex tw-items-center tw-items-center tw-justify-center tw-overflow-visible tw-z-[9999] tw-isolate"></div>
                     </div>
+
+
+                    
                     <div class="left-column gradient-border tw-flex-1 tw-p-4
                     tw-transition-transform tw-duration-300 hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(255,255,255,0.05)] hover:tw-bg-[#84ffb1]/30">
                         <div id="block-details"></div>

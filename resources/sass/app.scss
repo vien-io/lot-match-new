@@ -950,6 +950,10 @@ html, body{
   border-radius: 16px;
 }
 
-
-
+/* example if you want a class toggle */
+.mid-column-content.hovered {
+    transform: translateY(-0.25rem); /* equivalent to tw--translate-y-1 */
+    box-shadow: 0 4px 20px rgba(255,255,255,0.05);
+    background-color: rgba(132, 255, 177, 0.3);
+}
 

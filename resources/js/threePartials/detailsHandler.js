@@ -115,7 +115,7 @@ export function showBlockDetails(block) {
                 modelContainer.innerHTML = "";
                 modelContainer.style.width = "150px";
                 modelContainer.style.height = "150px";
-                modelContainer.style.pointerEvents = "none";
+                // modelContainer.style.pointerEvents = "none";
 
 
                 if (block.modelUrl) {
