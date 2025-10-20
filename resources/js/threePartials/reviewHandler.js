@@ -95,7 +95,7 @@ export function renderReviewSection(block) {
             <button type="submit"
                 class="review-submit-btn tw-w-1/3 tw-bg-[#313131] tw-border tw-border-[#414141]
                        tw-text-[#bcbcbc] tw-font-semibold tw-rounded-md tw-py-2 tw-transition-all
-                       hover:tw-bg-white hover:tw-text-black active:tw-scale-95">
+                       hover:tw-bg-[#22C55E] hover:tw-text-black active:tw-scale-95">
                 Submit Review
             </button>
         </form>
@@ -104,7 +104,7 @@ export function renderReviewSection(block) {
     <style>
         /* --- Scrollbar Styling --- */
         #reviews-container {
-        max-height: 300px;
+        max-height: 350px;
         overflow-y: auto;
         padding-right: 5px;
         gap: 10px;
@@ -144,7 +144,7 @@ export function renderReviewSection(block) {
         }
 
         .review:hover {
-        background-color: rgba(0, 255, 42, 0.28);
+        border-color: rgba(0, 255, 42, 0.8);
         }
 
         .review:not(:last-child) {
@@ -184,7 +184,7 @@ export function renderReviewSection(block) {
     <!-- Reviews List -->
     <div class="tw-rounded-2xl tw-border-2 tw-border-transparent 
                 tw-bg-[linear-gradient(#1c1c1c,#1c1c1c)_padding-box,linear-gradient(145deg,transparent_35%,#e81cff,#40c9ff)_border-box]
-                tw-p-6 tw-shadow-[0_0_20px_rgba(0,0,0,0.6)] tw-w-full">
+                tw-px-6 tw-pb-6 tw-shadow-[0_0_20px_rgba(0,0,0,0.6)] tw-w-full tw-h-[250]">
 
     <h3 class="tw-text-lg tw-font-semibold tw-text-[hsl(142,71%,45%)] tw-mb-4">
         Reviews

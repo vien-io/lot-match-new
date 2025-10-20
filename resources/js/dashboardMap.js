@@ -59,8 +59,8 @@ function initThreeJS() {
     light.target.position.set(0, 0, 0);
     scene.add(light);
     scene.add(light.target);
-    const lightHelper = new THREE.DirectionalLightHelper(light, 2);
-    scene.add(lightHelper);
+   /*  const lightHelper = new THREE.DirectionalLightHelper(light, 2);
+    scene.add(lightHelper); */
 
 
 
@@ -85,9 +85,17 @@ function initThreeJS() {
         const box = new THREE.Box3().setFromObject(sceneModel);
         const center = box.getCenter(new THREE.Vector3());
         sceneModel.position.sub(center);
+
         const size = box.getSize(new THREE.Vector3());
+
+       
         sceneModel.position.y -= size.y / 2 - 4;
         housesGroup.add(sceneModel);
+
+        box.setFromObject(sceneModel);
+        const boxHelper = new THREE.Box3Helper(box, 0x00ff00);
+        boxHelper.visible = false;
+        scene.add(boxHelper);
 
 
         // find all empties

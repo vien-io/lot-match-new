@@ -52,7 +52,16 @@
         <!-- Header -->
         <div class="topTab tw-flex tw-justify-between tw-items-center">
             <h2 class="tw-text-xl tw-font-semibold tw-text-[#ffffff]">Block Details</h2>
-            <span class="close-btn block-close tw-text-2xl tw-cursor-pointer tw-text-[#22C55E] hover:tw-scale-110 tw-transition-transform">&times;</span>
+            <span class="close-btn block-close 
+                tw-text-2xl tw-cursor-pointer tw-text-[#22C55E]
+                [text-shadow:0_0_8px_#22C55E]
+                hover:[text-shadow:0_0_18px_#22C55E]
+                hover:tw-text-[#84ffb1]
+                hover:tw-scale-150
+                tw-inline-block tw-transition-transform tw-duration-300 tw-ease-out">
+                &times;
+            </span>
+
         </div>
 
         <!-- Content -->
@@ -63,16 +72,20 @@
                 
                 <!-- Top Row -->
                 <div class="top-row tw-flex tw-gap-4">
-                    <div class="mid-column gradient-border tw-flex-1 tw-p-4">
-                        <div id="block-3d-container"></div>
+                    <div class="mid-column gradient-border tw-flex-1 tw-p-4
+                        tw-transition-transform tw-duration-300 hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(255,255,255,0.05)]
+                        hover:tw-bg-[#84ffb1]/30">
+                        <div id="block-3d-container" class="tw-relative tw-flex tw-items-center tw-items-center tw-justify-center tw-overflow-visible tw-z-[9999] tw-isolate"></div>
                     </div>
-                    <div class="left-column gradient-border tw-flex-1 tw-p-4">
+                    <div class="left-column gradient-border tw-flex-1 tw-p-4
+                    tw-transition-transform tw-duration-300 hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(255,255,255,0.05)] hover:tw-bg-[#84ffb1]/30">
                         <div id="block-details"></div>
                     </div>
                 </div>
 
                 <!-- Bottom Row -->
-                <div class="bottom-row gradient-border tw-rounded-xl tw-border tw-border-[#414141] tw-bg-[#1c1c1c] tw-p-4">
+                <div class="bottom-row gradient-border tw-rounded-xl tw-border tw-border-[#414141] tw-bg-[#1c1c1c] tw-p-4
+                tw-transition-transform tw-duration-300 hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(255,255,255,0.05)] hover:tw-bg-[#84ffb1]/30">
                     <h3 class="tw-text-[#717171] tw-font-semibold">Forecasting Data</h3>
                     <div id="block-summary" class="tw-max-h-48 tw-overflow-y-auto tw-mt-2"></div>
 
@@ -84,7 +97,8 @@
             </div>
 
             <!-- Right Column -->
-            <div class="right-column gradient-border tw-flex-1 tw-rounded-xl tw-border tw-border-[#414141] tw-bg-[#1c1c1c] tw-p-4 tw-overflow-y-auto">
+            <div class="right-column gradient-border tw-flex-1 tw-rounded-xl tw-border tw-border-[#414141] tw-bg-[#1c1c1c] tw-p-4 tw-overflow-y-auto
+            tw-transition-transform tw-duration-300 hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(255,255,255,0.05)] hover:tw-bg-[#84ffb1]/30">
                 <div id="block-review-section"></div>
                 <div class="reviews"></div>
             </div>

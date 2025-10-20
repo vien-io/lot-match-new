@@ -1,7 +1,8 @@
 import { renderReviewSection } from "./reviewHandler";
 import { loadBlockSummary } from "../blockSummary";
+import { init3DModel, stop3DModel } from "./init3dModel";
 
-let modalOpen = false;
+export let modalOpen = false;
 
 export function showLotDetails(lot) {
     console.log("Lot data received:", lot);
@@ -16,6 +17,10 @@ export function showLotDetails(lot) {
     }
 
     modalOpen = true;
+
+    modal.style.display = "flex";
+    const tooltip = document.getElementById("tooltip");
+    if (tooltip) tooltip.style.display = "none";
 
     detailsPanel.innerHTML = `
         <h3>Lot ID: ${lot.id}</h3>
@@ -65,9 +70,11 @@ export function showBlockDetails(block) {
     modalOpen = true;
 
     modal.style.display = "flex";
+    const tooltip = document.getElementById("tooltip");
+    if (tooltip) tooltip.style.display = "none";
 
 
-   /*  closeButton.addEventListener("click", (event) => {
+/*     closeButton.addEventListener("click", (event) => {
         console.log("close button clicked!");
         event.stopPropagation();
         modal.style.display = "none";
@@ -106,8 +113,10 @@ export function showBlockDetails(block) {
             const modelContainer = midColumn.querySelector("#block-3d-container");
             if (modelContainer) {
                 modelContainer.innerHTML = "";
-                modelContainer.style.width = "100%";
+                modelContainer.style.width = "150px";
                 modelContainer.style.height = "150px";
+                modelContainer.style.pointerEvents = "none";
+
 
                 if (block.modelUrl) {
                     init3DModel(modelContainer, block.modelUrl);
@@ -123,7 +132,6 @@ export function showBlockDetails(block) {
         blockDetails.innerHTML = `
             <p><strong>Block Name:</strong> ${block.name ?? 'N/A'}</p>
             <p><strong>Total Lots:</strong> ${block.lots?.length ?? 0}</p>
-            <p><strong>Description:</strong> ${block.description ?? 'No description provided.'}</p>
         `;
     }
 

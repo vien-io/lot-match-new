@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { modalOpen } from './detailsHandler';
 
 export function initClickHandler({ 
     camera, 
@@ -10,7 +11,6 @@ export function initClickHandler({
     showBlockDetails, 
     fetchForecast 
 }) {
-    let modalOpen = false;
     let isDragging = false;
     let mouseDownPosition = { x: 0, y: 0 };
     const dragThreshold = 5;
@@ -73,7 +73,7 @@ export function initClickHandler({
         if (intersects.length > 0) {
             let selectedObject = intersects[0].object;
 
-             // 💡 Detect InstancedMesh clicks
+             // detect InstancedMesh clicks
             if (selectedObject.isInstancedMesh && intersects[0].instanceId !== undefined) {
                 const instanceId = intersects[0].instanceId;
                 const meta = instanceMetadata[instanceId]; // imported from loadHouses()
