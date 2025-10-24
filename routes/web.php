@@ -166,3 +166,7 @@ Route::get('/test-web', function () {
     return 'web route is working';
 });
 Route::get('/tools/backfill-sentiment', [\App\Http\Controllers\ToolsController::class, 'backfillSentiment']);
+
+
+// add image modal
+Route::post('/lots/add-image', [LotController::class, 'addImage'])->name('lots.addImage');

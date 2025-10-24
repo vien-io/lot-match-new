@@ -120,22 +120,22 @@ class ReviewController extends Controller
         // unify
         $finalReview = $existingReview ?? $review;
 
-        // dispatch AI summary job
-     /*    if ($request->comment && isset($finalReview)) {
-            DB::afterCommit(function () use ($finalReview, $request) {
-            $chain = [
-                (new GenerateBlockSummaryJob($request->block_id))
-                    ->delay(now()->addSeconds(2))
-            ];
+                    // dispatch AI summary job
+                /*    if ($request->comment && isset($finalReview)) {
+                        DB::afterCommit(function () use ($finalReview, $request) {
+                        $chain = [
+                            (new GenerateBlockSummaryJob($request->block_id))
+                                ->delay(now()->addSeconds(2))
+                        ];
 
-            dispatch((new AnalyzeSentimentJob($finalReview->id, $request->comment))
-                ->delay(now()->addSeconds(5))
-                ->chain($chain));
-            });
-        }
+                        dispatch((new AnalyzeSentimentJob($finalReview->id, $request->comment))
+                            ->delay(now()->addSeconds(5))
+                            ->chain($chain));
+                        });
+                    }
 
 
- */
+            */
 
         if ($request->comment && isset($finalReview)) {
             DB::afterCommit(function () use ($finalReview, $request) {

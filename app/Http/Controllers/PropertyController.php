@@ -112,4 +112,20 @@ class PropertyController extends Controller
         return redirect()->route('properties.index')
                         ->with('success', 'Property deleted successfully!');
     }
+
+
+
+    public function addImage(Request $request) {
+        $request->validate([
+            'lot_id' => 'required|exists:lots,id',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
+        ]);
+
+        $lot = Lot::find($request->lot_id);
+        $path = $request->file('image')->store('uploads/lots', 'public');
+
+        $lot->interiorImages()->create(['image_path' => 'storage/' . $path]);
+
+        return response()->json(['success' => true, 'path' => 'storage/' . $path]);
+    }
 }

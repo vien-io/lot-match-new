@@ -219,7 +219,7 @@
       
       {{-- header --}}
       <div class="tw-flex tw-justify-between tw-items-center tw-border-b tw-border-gray-200 tw-pb-3">
-          <h2 class="tw-text-xl tw-font-bold tw-text-[#1f2937]">Interior View</h2>
+          <h2 class="tw-text-xl tw-font-bold tw-text-[#1f2937]">Lot Images</h2>
           <button onclick="closeInteriorModal()" 
                   class="tw-text-gray-500 hover:tw-text-[#22c55e] tw-text-2xl tw-transition-colors">&#10005;</button>
       </div>

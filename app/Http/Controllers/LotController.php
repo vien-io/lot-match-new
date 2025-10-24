@@ -57,5 +57,21 @@ class LotController extends Controller
         ]);
     }
 
+    public function addImage(Request $request)
+    {
+        $request->validate([
+            'lot_id' => 'required|exists:lots,id',
+            'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:4096',
+        ]);
+        
+        $lot = Lot::findOrFail($request->lot_id);
+
+        // store uploaded image in storage/app/public/lot_images
+        $path = $request->file('image')->store('lot_images', 'public');
+
+
+        return response()->json(['message' => 'Image uploaded successfuly', 'path' => $path]);
+    }
+
 
 }

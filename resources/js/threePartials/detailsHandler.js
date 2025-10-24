@@ -6,6 +6,8 @@ export let modalOpen = false;
 
 export function showLotDetails(lot) {
     console.log("showLotDetails called with:", lot);
+    window.currentLotId = lot.id; 
+
 
     const modal = document.getElementById("lot-modal");
     const closeButton = modal?.querySelector(".lot-close");

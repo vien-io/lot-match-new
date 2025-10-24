@@ -13,14 +13,10 @@ class Lot extends Model
 
 
     protected $fillable = [
-        'name', 
-        'description', 
-        'size', 
-        'price', 
-        'block_id',
-        'lot_area',
-        'floor_area',
-    ]; 
+        'block_id', 'name', 'description', 'size', 'price', 'lot_area', 'floor_area',
+        'status', 'orientation', 'sunlight', 'view', 'flood_risk'
+    ];
+
     
  
     public function block()
