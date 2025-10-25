@@ -17,6 +17,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\UserManagementController;
+use App\Http\Controllers\LotImageController;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -152,6 +153,9 @@ Route::middleware('auth')->delete('/block-reviews/{review}', [ReviewController::
 Route::get('/blocks/{blockId}/reviews', [ReviewController::class, 'blockReviews']);
 Route::get('/blocks/all/reviews', [ReviewController::class, 'blockReviews']);
 
+// for dynamic display on modal 
+Route::get('/blocks/{blockId}/lots/{lotNumber}', [LotController::class, 'showLot'])->name('lots.show');
+
 
 
 // forecasting
@@ -170,3 +174,6 @@ Route::get('/tools/backfill-sentiment', [\App\Http\Controllers\ToolsController::
 
 // add image modal
 Route::post('/lots/add-image', [LotController::class, 'addImage'])->name('lots.addImage');
+
+// images
+Route::get('/lots/{lotId}/images', [LotImageController::class, 'index']);

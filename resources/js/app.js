@@ -1,14 +1,12 @@
 import './bootstrap';
-import initThreeJS from './three';
-// import '../css/homepage.css';
 import { renderBlockRatingsChart, renderRatingDistributionChart, renderTopRatedLotsChart, renderTopRatedLotsCards } from './charts/blockRatingsChart';
 import Alpine from 'alpinejs';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 
-
-
-// search placeholder cycle
+// ====================
+// SEARCH PLACEHOLDER CYCLE
+// ====================
 window.searchPlaceholderCycle = function() {
     return {
         current: 0,
@@ -29,39 +27,41 @@ window.searchPlaceholderCycle = function() {
                 this.current = (this.current + 1) % this.placeholders.length;
             }, 5000); 
         }
-      }
     }
+};
 
-// alpine
+
+// ====================
+// ALPINE.JS
+// ====================
 window.Alpine = Alpine;
 Alpine.start();
 
 
+// ====================
+// BUTTON PRESS ANIMATION
+// ====================
 document.addEventListener("DOMContentLoaded", function () {
-    let buttons = document.querySelectorAll(".btn-primary");
-
-    buttons.forEach(button => {
-        button.addEventListener("mousedown", function () {
-            button.style.transform = "scale(0.9)";
-        });
-
-        button.addEventListener("mouseup", function () {
-            button.style.transform = "scale(1)";
-        });
-
-        button.addEventListener("mouseleave", function () {
-            button.style.transform = "scale(1)";
-        });
+    document.querySelectorAll(".btn-primary").forEach(button => {
+        button.addEventListener("mousedown", () => button.style.transform = "scale(0.9)");
+        button.addEventListener("mouseup", () => button.style.transform = "scale(1)");
+        button.addEventListener("mouseleave", () => button.style.transform = "scale(1)");
     });
 });
 
-// check if 3dmap is called
-document.addEventListener('DOMContentLoaded', () => {
+
+// ====================
+// CONDITIONAL 3D MAP INITIALIZATION
+// ====================
+document.addEventListener('DOMContentLoaded', async () => {
     if (window.location.pathname === "/3dmap") {
+        // Dynamically import ONLY when user visits /3dmap
+        const { default: initThreeJS } = await import('./three');
         initThreeJS();
 
         // Fetch and populate block list dynamically
         const blockList = document.getElementById("block-list");
+        if (!blockList) return;
 
         fetch('/blocks')
             .then(response => response.json())
@@ -88,32 +88,31 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
-// toggle panel
+// ====================
+// TOGGLE SIDE PANEL
+// ====================
 document.addEventListener("DOMContentLoaded", function () {
     const toggleBtn = document.getElementById('toggle-panel');
+    if (!toggleBtn) return;
 
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', function () {
-            let panel = document.getElementById('side-panel');
-            const currentTransform = window.getComputedStyle(panel).transform;
+    toggleBtn.addEventListener('click', function () {
+        let panel = document.getElementById('side-panel');
+        if (!panel) return;
 
-            if (currentTransform === 'matrix(1, 0, 0, 1, 0, 0)') {
-                panel.style.transform = 'translateX(-100%)';
-            } else {
-                panel.style.transform = 'translateX(0)';
-            }
-        });
-    }
+        const currentTransform = window.getComputedStyle(panel).transform;
+        panel.style.transform = (currentTransform === 'matrix(1, 0, 0, 1, 0, 0)')
+            ? 'translateX(-100%)'
+            : 'translateX(0)';
+    });
 });
 
 
-
-
+// ====================
+// FETCH LOTS HELPER
+// ====================
 function fetchLots(blockId, blockItem) {
     console.log(`Fetching lots for block ID: ${blockId}`);
 
-    // Hide lots from other blocks
     document.querySelectorAll(".lots-container").forEach(container => {
         if (container.parentElement !== blockItem) {
             container.style.display = "none";
@@ -121,38 +120,25 @@ function fetchLots(blockId, blockItem) {
     });
 
     let lotsContainer = blockItem.querySelector(".lots-container");
-
     if (!lotsContainer) {
         lotsContainer = document.createElement("ul");
         lotsContainer.classList.add("lots-container");
         blockItem.appendChild(lotsContainer);
     }
 
-    // Toggle visibility of the clicked block's lots
-    if (lotsContainer.style.display === "block") {
-        lotsContainer.style.display = "none";
-        return;
-    } else {
-        lotsContainer.style.display = "block";
-    }
-
-    // Show loading state
+    lotsContainer.style.display = lotsContainer.style.display === "block" ? "none" : "block";
     lotsContainer.innerHTML = "<li>Loading lots...</li>";
 
     fetch(`/lots/${blockId}`)
         .then(response => response.json())
         .then(lots => {
-            console.log("Lots received:", lots);
-
             lotsContainer.innerHTML = ""; 
-
             if (lots.length === 0) {
                 lotsContainer.innerHTML = "<li>No lots available</li>";
                 return;
             }
 
             lots.forEach(lot => {
-                console.log(`Processing lot: ${JSON.stringify(lot)}`);
                 const lotItem = document.createElement("li");
                 lotItem.textContent = `${lot.name}`;
                 lotsContainer.appendChild(lotItem);
@@ -165,39 +151,33 @@ function fetchLots(blockId, blockItem) {
 }
 
 
-// profile
+// ====================
+// PROFILE DROPDOWN
+// ====================
 document.addEventListener("DOMContentLoaded", function () {
     const profileIcon = document.getElementById("profile-icon");
     const profileDropdown = document.getElementById("profile-dropdown");
 
-    if (profileIcon && profileDropdown) {
-        profileIcon.addEventListener("click", function () {
-            profileDropdown.style.display = profileDropdown.style.display === "block" ? "none" : "block";
-        });
+    if (!profileIcon || !profileDropdown) return;
 
-        document.addEventListener("click", function (event) {
-            if (!profileIcon.contains(event.target) && !profileDropdown.contains(event.target)) {
-                profileDropdown.style.display = "none";
-            }
-        });
-    }
+    profileIcon.addEventListener("click", function () {
+        profileDropdown.style.display = profileDropdown.style.display === "block" ? "none" : "block";
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!profileIcon.contains(event.target) && !profileDropdown.contains(event.target)) {
+            profileDropdown.style.display = "none";
+        }
+    });
 });
 
 
-
-
-
+// ====================
+// CHART INITIALIZATION
+// ====================
 document.addEventListener('DOMContentLoaded', () => {
     renderBlockRatingsChart();
     renderRatingDistributionChart();
     renderTopRatedLotsChart();
     renderTopRatedLotsCards();
 });
-
-
-
-
-
-
-
-

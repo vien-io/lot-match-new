@@ -4,14 +4,28 @@ import { init3DModel, stop3DModel } from "./init3dModel";
 
 export let modalOpen = false;
 
-export function showLotDetails(lot) {
+export async function showLotDetails(lot) {
     console.log("showLotDetails called with:", lot);
     window.currentLotId = lot.id; 
-
 
     const modal = document.getElementById("lot-modal");
     const closeButton = modal?.querySelector(".lot-close");
     const detailsPanel = document.getElementById("lot-details");
+
+    // populate lot attributes dynamically
+    document.getElementById("lot-size").textContent = lot.size + " sqm";
+    document.getElementById("lot-floor-area").textContent = lot.floor_area ? lot.floor_area + " sqm" : "N/A";
+    document.getElementById("lot-orientation").textContent = lot.orientation || "N/A";
+    document.getElementById("lot-elevation").textContent = lot.elevation || "N/A";
+    document.getElementById("lot-sunlight").textContent = lot.sunlight || "N/A";
+    document.getElementById("lot-view").textContent = lot.view || "N/A";
+    document.getElementById("lot-proximity").textContent = lot.proximity || "N/A";
+    document.getElementById("lot-flood-risk").textContent = lot.flood_risk || "N/A";
+
+    if (window.currentLotId !== lot.id) {
+        await loadLotImages(lot.id);
+        window.currentLotId = lot.id;
+    }
 
     if (!modal || !closeButton || !detailsPanel) {
         console.error("Lot modal, close button, or details panel not found!");
@@ -26,11 +40,15 @@ export function showLotDetails(lot) {
 
     detailsPanel.innerHTML = `
         <p><strong>Name:</strong> ${lot.name ?? 'N/A'}</p>
-        <p><strong>Size:</strong> ${lot.size ?? 'N/A'} sqm</p>
-        <p><strong>Status:</strong> ${lot.status ?? 'N/A'}</p>
+        <p>
+        <strong>Status:</strong> 
+        <span class="${lot.status === 'sold' ? 'tw-text-red-500' : 'tw-text-green-500'}">
+            ${lot.status ?? 'N/A'}
+        </span>
+        </p>
         <p><strong>Price:</strong> ₱${lot.price ?? 'N/A'}</p>
         <p><strong>Block Number:</strong> ${lot.block_id ?? 'N/A'}</p>
-        <h3>Lot ID: ${lot.id}</h3>
+        <h5 class="tw-text-sm">Lot ID: ${lot.id}</h5>
     `;
 
     closeButton.onclick = () => {

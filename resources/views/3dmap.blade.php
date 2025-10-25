@@ -61,14 +61,14 @@
                         <h3 class="tw-text-[#717171] tw-font-semibold tw-mb-2">Lot Attributes</h3>
                         <table class="tw-w-full tw-text-sm tw-border-collapse">
                             <tbody>
-                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Lot size</td><td class="tw-py-1">250 sqm</td></tr>
-                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Floor area</td><td class="tw-py-1">120 sqm</td></tr>
-                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Orientation</td><td class="tw-py-1">East-facing</td></tr>
-                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Elevation</td><td class="tw-py-1">Slightly elevated</td></tr>
-                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Sunlight</td><td class="tw-py-1">Morning sun exposure</td></tr>
-                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">View</td><td class="tw-py-1">Near park, blocked by neighboring houses</td></tr>
-                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Proximity</td><td class="tw-py-1">200m to main road, 50m to school</td></tr>
-                                <tr><td class="tw-py-1 tw-pr-4 tw-font-semibold">Flood risk</td><td class="tw-py-1">Low</td></tr>
+                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibol">Lot size</td><td class="tw-py-1" id="lot-size"></td></tr>
+                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Floor area</td><td class="tw-py-1" id="lot-floor-area"></td></tr>
+                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Orientation</td><td class="tw-py-1" id="lot-orientation"></td></tr>
+                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Elevation</td><td class="tw-py-1" id="lot-elevation"></td></tr>
+                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Sunlight</td><td class="tw-py-1" id="lot-sunlight"></td></tr>
+                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">View</td><td class="tw-py-1" id="lot-view"></td></tr>
+                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Proximity</td><td class="tw-py-1" id="lot-proximity"></td></tr>
+                                <tr><td class="tw-py-1 tw-pr-4 tw-font-semibold">Flood risk</td><td class="tw-py-1" id="lot-flood-risk"></td></tr>
                             </tbody>
                         </table>
                     </div>

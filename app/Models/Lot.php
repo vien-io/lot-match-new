@@ -30,5 +30,9 @@ class Lot extends Model
     public function interiorImages() {
         return $this->hasMany(InteriorImage::class);
     }
+    public function images()
+    {
+        return $this->hasMany(LotImage::class);
+    }
     
 }
