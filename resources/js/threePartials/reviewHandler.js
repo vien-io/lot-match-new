@@ -240,8 +240,36 @@ function bindRatingLogic() {
 function bindFormHandler(block) {
     const reviewForm = document.getElementById('block-review-form');
     const ratingInput = document.getElementById('rating-value');
+    const aiPopup = document.getElementById("ai-status");
+    const aiText = document.getElementById("ai-status-text");
+    const aiEmoji = document.getElementById("ai-status-emoji");
 
     if (!reviewForm) return;
+
+    function showAiPopup(message = "AI summarizing and forecasting...", emoji = "🤖", duration = 4000) {
+        if (!aiPopup) return;
+
+        aiText.textContent = message;
+        aiEmoji.textContent = emoji;
+
+        aiPopup.classList.remove("tw-hidden", "tw-opacity-0", "tw-translate-x-8");
+        aiPopup.classList.add("tw-opacity-100", "tw-translate-x-0");
+
+        setTimeout(() => {
+            aiPopup.classList.remove("tw-opacity-100", "tw-translate-x-0");
+            aiPopup.classList.add("tw-opacity-0", "tw-translate-x-8");
+            setTimeout(() => aiPopup.classList.add("tw-hidden"), 500);
+        }, duration);
+    }
+
+    function hideAiPopup(delay = 0) {
+        if (!aiPopup) return;
+        setTimeout(() => {
+            aiPopup.classList.remove("tw-opacity-100", "tw-translate-x-0");
+            aiPopup.classList.add("tw-opacity-0", "tw-translate-x-8");
+            setTimeout(() => aiPopup.classList.add("tw-hidden"), 500);
+        }, delay);
+    }
 
     reviewForm.addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -250,7 +278,7 @@ function bindFormHandler(block) {
         const rating = ratingInput.value;
 
         if (!rating) {
-            alert('select a star rating before submitting!');
+            alert('Select a star rating before submitting!');
             return;
         }
 
@@ -271,7 +299,7 @@ function bindFormHandler(block) {
             }
 
             const res = await fetch(url, {
-                method: method,
+                method,
                 body: formData,
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -288,29 +316,68 @@ function bindFormHandler(block) {
             const data = await res.json();
 
             if (res.ok) {
+                const blockId = data.block?.id || data.review?.block_id;
+
                 if (data.block) {
                     renderReviewSection(data.block);
-                    fetchForecast(data.block.id);
-                } else if (data.review) {
-                    const blockId = data.review.block_id;
+                } else if (blockId) {
                     try {
                         const fetchRes = await fetch(`/block/${blockId}`);
                         const updatedBlock = await fetchRes.json();
                         renderReviewSection(updatedBlock);
-                        fetchForecast(blockId);
                     } catch {
-                        alert('review updated but failed to fetch block');
+                        alert('Review updated but failed to fetch block');
                     }
                 }
+
                 reviewForm.removeAttribute('data-editing');
+
+                // wait for ai completion
+                showAiPopup("AI summarizing and forecasting your review...", "🤖", 8000);
+
+                if (!blockId) {
+                    console.warn("No block ID found — skipping forecast polling.");
+                    return;
+                }
+                
+                const done = await pollForecastStatus(blockId, 10, 2000);
+
+                if (done) {
+                    showAiPopup("AI analysis complete — summary updated.", "✨", 4000);
+                    fetchForecast(blockId);
+                } else {
+                    showAiPopup("AI is still processing — results will appear soon.", "⏳", 4000)
+                }
+
             } else {
-                alert('error: ' + data.message);
+                alert('Error: ' + data.message);
+                hideAiPopup(1000);
             }
         } catch (err) {
-            console.error('err submitting review:', err);
-            alert('something went wrong');
+            console.error('Error submitting review:', err);
+            alert('Something went wrong.');
+            hideAiPopup(1000);
         }
     });
+}
+
+async function pollForecastStatus(blockId, maxAttempts = 10, delay = 2000) {
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        try {
+            const res = await fetch(`/api/forecast/status/${blockId}`);
+            if (res.ok) {
+                const data = await res.json();
+                // console.log(`Attempt ${attempt + 1}: status =`, data.status); 
+                if (data.status === 'done') return true;
+            } else {
+                console.log(`Attempt ${attempt + 1}: HTTP error`, res.status);
+            }
+        } catch (err) {
+            console.error(`Attempt ${attempt + 1}: fetch error`, err);
+        }
+        await new Promise(r => setTimeout(r, delay));
+    }
+    return false; 
 }
 
 function bindEditButtons(block) {

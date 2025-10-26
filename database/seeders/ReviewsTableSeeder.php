@@ -14,60 +14,74 @@ class ReviewsTableSeeder extends Seeder
         DB::table('reviews')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        $users = DB::table('users')->select('id', 'name')->get();
-
-        $blocks = range(1, 37);
+        $blocks = range(1, 37); 
+        $sentiments = ['positive', 'negative'];
 
         $positiveComments = [
-            'Beautiful and peaceful area, perfect for families.',
-            'Love the environment — very calm and relaxing.',
-            'Well-maintained surroundings and friendly neighbors.',
-            'Good access to main roads and amenities.',
-            'The place feels safe and welcoming.',
-            'Great community — highly recommended!',
-            'Spacious lots and fresh air.',
-            'Good sunlight and nice elevation.',
-            'Affordable yet premium-looking area.',
-            'Would love to build a home here someday.'
+            'Absolutely loved it! Worth every penny.',
+            'Fantastic experience — would definitely come back!',
+            'Peaceful environment and great amenities.',
+            'Everything exceeded my expectations.',
+            'A hidden gem! Perfect for families.',
+            'Highly recommended — top-notch service.',
+            'Superb location and very relaxing vibe.',
+            'Modern and clean facilities, loved it!',
+            'Beautiful place, staff were very accommodating.',
+            'Comfortable and well-maintained surroundings.',
+            'Perfect spot for a weekend getaway.',
+            'Truly a five-star experience!',
+            'Amazing atmosphere and attention to detail.',
+            'Great investment potential in this area.',
+            'Loved the greenery and peaceful environment.',
+            'Smooth process and friendly staff.',
+            'Excellent community and amenities.',
+            'Had an unforgettable stay!',
+            'Spacious and beautifully designed units.',
+            'Everything went perfectly — highly satisfied!'
         ];
 
         $negativeComments = [
-            'Too noisy at certain hours.',
-            'Floods during heavy rain.',
-            'Needs better road maintenance.',
-            'Far from main access points.',
-            'Security could be improved.',
-            'Water pressure is inconsistent.',
-            'Poor waste management around the area.',
-            'Feels too crowded for comfort.',
-            'Limited nearby stores or services.',
-            'Dusty during dry season.'
+            'Disappointed — not as advertised.',
+            'Poor service and unfriendly staff.',
+            'Had several issues with cleanliness.',
+            'Definitely not worth the price.',
+            'Would not recommend — waste of money.',
+            'Very noisy and uncomfortable stay.',
+            'Bad experience overall, needs improvement.',
+            'Too crowded and poorly maintained.',
+            'Customer support was unhelpful.',
+            'Construction nearby ruined the experience.',
+            'Looks nice in photos but reality is different.',
+            'Felt unsafe in the area.',
+            'Overpriced for what it offers.',
+            'Terrible maintenance, leaking ceilings.',
+            'Wouldn’t come back again.',
+            'Slow response from management.',
+            'The rooms were dirty and smelled bad.',
+            'Facilities were outdated and broken.',
+            'Staff ignored our requests multiple times.',
+            'Completely regret choosing this place.'
         ];
 
         $now = Carbon::now();
 
-        // 100 reviews across 37 blocks
-        for ($i = 1; $i <= 100; $i++) {
-            $user = $users->random();
+        for ($i = 1; $i <= 200; $i++) {
             $blockId = $blocks[array_rand($blocks)];
-
-            $sentiment = rand(0, 1) ? 'positive' : 'negative';
+            $sentiment = $sentiments[array_rand($sentiments)];
 
             if ($sentiment === 'positive') {
                 $rating = rand(4, 5);
-                $baseComment = $positiveComments[array_rand($positiveComments)];
+                $comment = $positiveComments[array_rand($positiveComments)];
             } else {
                 $rating = rand(1, 2);
-                $baseComment = $negativeComments[array_rand($negativeComments)];
+                $comment = $negativeComments[array_rand($negativeComments)];
             }
 
-            $comment = $baseComment;
-
             DB::table('reviews')->insert([
-                'user_id' => $user->id,
+                'user_id' => rand(1, 50),
                 'block_id' => $blockId,
                 'rating' => $rating,
-                'user_name' => $user->name,
+                'user_name' => 'User' . rand(1, 50),
                 'comment' => $comment,
                 'sentiment' => $sentiment,
                 'created_at' => $now->copy()->subDays(rand(0, 365)),

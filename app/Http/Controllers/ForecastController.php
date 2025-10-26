@@ -215,33 +215,19 @@ class ForecastController extends Controller
         
     }
 
-    /* {
-        // get block
-        $block = Block::findOrFail($blockId);
+    public function status($blockId)
+    {
+        $block = Block::find($blockId);
 
-        // get latest ai summary and forecast data from db (adjust columns to match your schema)
-        $latestForecast = DB::table('forecasts')
-            ->where('block_id', $blockId)
-            ->latest('created_at')
-            ->first();
+        if (!$block) {
+            return response()->json(['status' => 'not_found'], 404);
+        }
 
-        // get sentiment trend (grouped by date)
-        $sentimentTrend = Review::where('block_id', $blockId)
-            ->selectRaw('DATE(created_at) as date, AVG(sentiment_score) as score')
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get();
+        $isDone = !empty($block->ai_summary)
+            || !empty($block->forecasted_rating)
+            || !empty($block->sentiment_data);
 
-        // return json in format frontend expects
-        return response()->json([
-            'summary' => $latestForecast->summary ?? null,
-            'detailed_report' => $latestForecast->detailed_report ?? null,
-            'forecast' => $latestForecast->forecast ?? null,
-            'sentiment_trend' => $sentimentTrend,
-        ]);
-    } */
-
-
-
+        return response()->json(['status' => $isDone ? 'done' : 'processing']);
+    }
     
 }

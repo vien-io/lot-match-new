@@ -165,6 +165,7 @@ Route::get('/forecast/sentiment-trend/{blockId}', [ForecastController::class, 'g
 
 
 
+
 // testing
 Route::get('/test-web', function () {
     return 'web route is working';
