@@ -303,7 +303,10 @@
                 <!-- Bottom Row -->
                 <div class="bottom-row gradient-border tw-rounded-xl tw-border tw-border-[#414141] tw-bg-[#1c1c1c] tw-p-4
                 tw-transition-transform tw-duration-300 hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(255,255,255,0.05)] hover:tw-bg-[#84ffb1]/30">
-                    <h3 class="tw-text-[#717171] tw-font-semibold">Forecasting Data</h3>
+                    <h3 class="tw-text-[#717171] tw-font-semibold">
+                        Forecasting Data
+                        <span id="forecast-timestamp" class="tw-ml-2 tw-text-sm tw-text-green-400"></span>
+                    </h3>
                     <div id="block-summary" class="tw-max-h-48 tw-overflow-y-auto tw-mt-2"></div>
 
                     <div id="forecasting-data" class="tw-mt-4">

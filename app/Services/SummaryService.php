@@ -85,7 +85,7 @@ class SummaryService
 
         // gpt 3.5 turbo
         $openAiKey = config('services.openai.api_key');
-        $aiEnabled = env('AI_SUMMARY_ENABLED', true);
+        $aiEnabled = env('AI_SUMMARY_ENABLED', false);
         if ($openAiKey && $aiEnabled) {
             try {
                 $response = Http::withToken($openAiKey)

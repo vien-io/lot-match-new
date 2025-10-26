@@ -26,6 +26,7 @@ class UserManagementController extends Controller
         
         try {
             $validated = $request->validate([
+                'username' => 'required|string|max:255',
                 'name'     => 'required|string|max:255',
                 'email'    => 'required|email|unique:users',
                 'password' => 'required|string|min:6', 
@@ -71,11 +72,12 @@ class UserManagementController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
+            'username' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'email' => "required|email|unique:users,email,{$user->id}",
         ]);
 
-        $user->update($request->only('name', 'email'));
+        $user->update($request->only('username', 'name', 'email'));
 
         return redirect()->route('usermanagement.index')->with('success', 'User updated successfully.');
     }

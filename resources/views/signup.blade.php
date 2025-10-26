@@ -16,9 +16,15 @@
 
             <form method="POST" action="{{ route('signup') }}">
                 @csrf
-                <!-- Name -->
+                <!-- Username -->
                 <div class="tw-mb-4 tw-relative">
-                    <input type="text" name="name" placeholder="Your Name"
+                    <input type="text" name="username" placeholder="Your Username"
+                           value="{{ old('username') }}"
+                           class="tw-w-full tw-pl-4 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-purple-500">
+                </div>
+                <!-- Full Name -->
+                <div class="tw-mb-4 tw-relative">
+                    <input type="text" name="name" placeholder="Your Full Name"
                            value="{{ old('name') }}"
                            class="tw-w-full tw-pl-4 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-purple-500">
                 </div>

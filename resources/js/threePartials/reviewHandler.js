@@ -1,3 +1,4 @@
+import { loadBlockSummary } from '../blockSummary';
 import { fetchForecast } from './forecastHandler';
 
 export function renderReviewSection(block) {
@@ -367,8 +368,15 @@ async function pollForecastStatus(blockId, maxAttempts = 10, delay = 2000) {
             const res = await fetch(`/api/forecast/status/${blockId}`);
             if (res.ok) {
                 const data = await res.json();
-                // console.log(`Attempt ${attempt + 1}: status =`, data.status); 
-                if (data.status === 'done') return true;
+                console.log(`Attempt ${attempt + 1}: status =`, data.status); 
+                
+                if (data.status === 'done') {
+                    console.log(`✅ Forecast job for block ${blockId} completed on attempt ${attempt + 1}`);
+                    // Update the summary div immediately
+                    loadBlockSummary(blockId);
+                    updateForecastTimestamp();
+                    return true;
+                }
             } else {
                 console.log(`Attempt ${attempt + 1}: HTTP error`, res.status);
             }
@@ -377,8 +385,50 @@ async function pollForecastStatus(blockId, maxAttempts = 10, delay = 2000) {
         }
         await new Promise(r => setTimeout(r, delay));
     }
+    console.warn(`⚠️ Polling ended for block ${blockId}, forecast still not done after ${maxAttempts} attempts`);
     return false; 
 }
+
+function updateForecastTimestamp() {
+    const timestampEl = document.getElementById('forecast-timestamp');
+    if (!timestampEl) return;
+
+    const now = new Date();
+    timestampEl.dataset.updatedAt = now.getTime(); 
+
+    const updateText = () => {
+        const updatedAt = parseInt(timestampEl.dataset.updatedAt);
+        if (!updatedAt) return;
+
+        const diffMs = Date.now() - updatedAt;
+        const diffSec = Math.floor(diffMs / 1000);
+        let display = '';
+
+        if (diffSec < 60) {
+            display = `Updated ${diffSec}s ago`;
+            timestampEl.style.color = ''; 
+        } else if (diffSec < 3600) {
+            display = `${Math.floor(diffSec / 60)}m ago`;
+            timestampEl.style.color = diffSec >= 300 ? 'gray' : ''; 
+        } else if (diffSec < 7200) { 
+            display = `${Math.floor(diffSec / 3600)}h ago`;
+            timestampEl.style.color = 'gray';
+        } else {
+            display = ''; 
+        }
+
+        timestampEl.textContent = display;
+    };
+
+    updateText();
+    const interval = setInterval(() => {
+        updateText();
+        if (!timestampEl.textContent) clearInterval(interval);
+    }, 10000);
+}
+
+
+
 
 function bindEditButtons(block) {
     document.querySelectorAll('.edit-review').forEach(btn => {

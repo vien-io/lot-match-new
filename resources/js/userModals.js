@@ -1,7 +1,8 @@
-window.openEditUserModal = function (id, name, email) {
+window.openEditUserModal = function (id, username, name, email) {
     const modal = document.getElementById('editUserModal');
     const form = document.getElementById('editUserForm');
-    document.getElementById('editUserName').value = name;
+    document.getElementById('editUserName').value = username;
+    document.getElementById('editName').value = name;
     document.getElementById('editUserEmail').value = email;
 
     // dynamically set action URL

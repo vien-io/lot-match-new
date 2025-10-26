@@ -6,8 +6,12 @@
       @csrf
       @method('PUT')
       <div class="tw-mb-3">
-        <label class="tw-block tw-font-medium">Name</label>
-        <input type="text" id="editUserName" name="name" class="tw-w-full tw-border tw-rounded tw-p-2" required>
+        <label class="tw-block tw-font-medium">Username</label>
+        <input type="text" id="editUserName" name="username" class="tw-w-full tw-border tw-rounded tw-p-2" required>
+      </div>
+      <div class="tw-mb-3">
+        <label class="tw-block tw-font-medium">Full Name</label>
+        <input type="text" id="editName" name="name" class="tw-w-full tw-border tw-rounded tw-p-2" required>
       </div>
       <div class="tw-mb-3">
         <label class="tw-block tw-font-medium">Email</label>

@@ -10,7 +10,7 @@ class AuthController extends Controller
     public function signin(Request $request)
     {
         $credentials = $request->validate([
-            'name' => 'required',
+            'username' => 'required',
             'password' => 'required'
         ]);
 

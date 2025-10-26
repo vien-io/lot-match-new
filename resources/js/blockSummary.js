@@ -1,4 +1,5 @@
 export function loadBlockSummary(blockId) {
+    console.log("lBS called", blockId);
     fetch(`api/forecast/db/${blockId}`)
     .then(res => {
         if (!res.ok) {
@@ -7,6 +8,7 @@ export function loadBlockSummary(blockId) {
         return res.json();
     })
     .then(data => {
+        console.log("Fetched: ", data);
         const summaryDiv = document.getElementById('block-summary');
         summaryDiv.textContent = data.summary || "no summary available"; 
     })
