@@ -1,12 +1,14 @@
 import { renderReviewSection } from "./reviewHandler";
 import { loadBlockSummary } from "../blockSummary";
 import { init3DModel, stop3DModel } from "./init3dModel";
+import { loadLotImages } from "../modals/addImageModal";
 
 export let modalOpen = false;
 
 export async function showLotDetails(lot) {
     console.log("showLotDetails called with:", lot);
     window.currentLotId = lot.id; 
+    console.log("Opening modal for lot: ", currentLotId);
 
     const modal = document.getElementById("lot-modal");
     const closeButton = modal?.querySelector(".lot-close");
@@ -22,10 +24,8 @@ export async function showLotDetails(lot) {
     document.getElementById("lot-proximity").textContent = lot.proximity || "N/A";
     document.getElementById("lot-flood-risk").textContent = lot.flood_risk || "N/A";
 
-    if (window.currentLotId !== lot.id) {
-        await loadLotImages(lot.id);
-        window.currentLotId = lot.id;
-    }
+    await loadLotImages(lot.id);
+    window.currentLotId = lot.id;
 
     if (!modal || !closeButton || !detailsPanel) {
         console.error("Lot modal, close button, or details panel not found!");
