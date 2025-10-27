@@ -3,6 +3,8 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js';
 
 export function initControls(camera, renderer, container) {
     const controls = new OrbitControls(camera, renderer.domElement);
+    controls.minPolarAngle = 0;
+    controls.maxPolarAngle = Math.PI / 2.05;
     controls.enablePan = true;
     controls.enableRotate = true;
     controls.enableZoom = true;

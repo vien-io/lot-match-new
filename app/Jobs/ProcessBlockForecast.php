@@ -43,22 +43,13 @@ class ProcessBlockForecast implements ShouldQueue
         $detailedReport = $this->summaryService->generateDetailedForecastReport($this->blockId, $summary, $forecastedRating, $sentiments);
 
 
-   /*      \Log::info("ProcessBlockForecast results", [
-        'block_id' => $this->blockId,
-        'forecastedRating' => $forecastedRating,
-        'sentiments' => $sentiments,
-        'summary' => $summary,
-        'detailedReport' => $detailedReport,
-        ]);
- */
-
-        
         // Save to blocks table
         $block->update([
             'ai_summary' => $summary,
             'full_forecast_report' => $detailedReport,
             'forecasted_rating' => $forecastedRating,
             'sentiment_data' => json_encode($sentiments),
+            'forecast_updated_at' => now(),
         ]);
     }
 }

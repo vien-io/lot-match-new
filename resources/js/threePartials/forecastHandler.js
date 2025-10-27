@@ -1,6 +1,7 @@
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 import 'chartjs-adapter-date-fns';
+import { updateForecastTimestamp } from './reviewHandler';
 
 let forecastChart = null;
 
@@ -13,14 +14,27 @@ export function fetchForecast(blockId) {
 
     console.log("User is an admin");
 
-    fetch(`/forecast/block/${blockId}`)
+    /* fetch(`/forecast/data/${blockId}`)
         .then(response => response.json())
-        .then(data => renderForecast(data))
+        .then(data => {
+            renderForecast(data)
+            updateForecastTimestamp(data.forecast_updated_at);
+        })
         .catch(error => {
             console.error('Error fetching forecast:', error);
             document.getElementById('forecasting-data').innerHTML = `<p>Error loading forecast.</p>`;
-        });
+        }); */
+
+    fetch(`/forecast/block/${blockId}`)
+    .then(response => response.json())
+    .then(data => renderForecast(data))
+    .catch(error => {
+        console.error('Error fetching forecast:', error);
+        document.getElementById('forecasting-data').innerHTML = `<p>Error loading forecast.</p>`;
+    });
 }
+
+
 
 /* ---------- HELPERS ---------- */
 function renderForecast(data) {

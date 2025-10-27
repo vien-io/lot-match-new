@@ -25,11 +25,14 @@ import { initRaycaster } from './threePartials/initRaycaster';
 import { initClickHandler } from './threePartials/initClickHandler';
 import { fetchForecast } from './threePartials/forecastHandler';
 import { showLotDetails, showBlockDetails } from './threePartials/detailsHandler';
+import { initSky } from './threePartials/initSky';
 
 function initThreeJS() {
     const container = document.getElementById('threejs-container');
 
     const scene = initScene();
+    const sky = initSky(scene);
+
     const renderer = initRenderer(container);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;

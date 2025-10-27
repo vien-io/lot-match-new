@@ -203,6 +203,7 @@ class ForecastController extends Controller
                 'detailed_report' => null,
                 'forecast' => null,
                 'sentiment' => [],
+                'forecast_updated_at' => null,
             ]);
         }
 
@@ -211,6 +212,7 @@ class ForecastController extends Controller
             'detailed_report' => $block->full_forecast_report,
             'forecast' => $block->forecasted_rating,
             'sentiment' => json_decode($block->sentiment_data, true) ?? [],
+            'forecast_updated_at' => $block->forecast_updated_at,
         ]);
         
     }

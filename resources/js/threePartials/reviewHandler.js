@@ -1,6 +1,7 @@
 import { loadBlockSummary } from '../blockSummary';
 import { fetchForecast } from './forecastHandler';
 
+
 export function renderReviewSection(block) {
     const reviewSection = document.getElementById('block-review-section');
     const reviews = block.reviews ?? [];
@@ -372,9 +373,8 @@ async function pollForecastStatus(blockId, maxAttempts = 10, delay = 2000) {
                 
                 if (data.status === 'done') {
                     console.log(`✅ Forecast job for block ${blockId} completed on attempt ${attempt + 1}`);
-                    // Update the summary div immediately
                     loadBlockSummary(blockId);
-                    updateForecastTimestamp();
+                    updateForecastTimestamp(data.forecast_updated_at);
                     return true;
                 }
             } else {
@@ -389,12 +389,22 @@ async function pollForecastStatus(blockId, maxAttempts = 10, delay = 2000) {
     return false; 
 }
 
-function updateForecastTimestamp() {
+let forecastTimestampInterval = null;
+
+export function updateForecastTimestamp(forecastUpdatedAt = null) {
     const timestampEl = document.getElementById('forecast-timestamp');
     if (!timestampEl) return;
 
-    const now = new Date();
-    timestampEl.dataset.updatedAt = now.getTime(); 
+    if (forecastUpdatedAt) {
+        timestampEl.dataset.updatedAt = new Date(forecastUpdatedAt).getTime();
+    } else if (!timestampEl.dataset.updatedAt) {
+        timestampEl.dataset.updated = Date.now();
+    }
+
+    if (forecastTimestampInterval) {
+        clearInterval(forecastTimestampInterval);
+        forecastTimestampInterval = null;
+    }
 
     const updateText = () => {
         const updatedAt = parseInt(timestampEl.dataset.updatedAt);
@@ -421,12 +431,22 @@ function updateForecastTimestamp() {
     };
 
     updateText();
-    const interval = setInterval(() => {
+    forecastTimestampInterval = setInterval(() => {
         updateText();
-        if (!timestampEl.textContent) clearInterval(interval);
+        if (!timestampEl.textContent) {
+            clearInterval(forecastTimestampInterval);
+            forecastTimestampInterval = null;
+        } 
     }, 10000);
 }
 
+if (document.readyState === "loading") {
+    window.addEventListener("DOMContentLoaded", () => {
+        updateForecastTimestamp();
+    });
+} else {
+    updateForecastTimestamp();
+}
 
 
 
