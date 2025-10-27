@@ -1,6 +1,7 @@
 import { updateForecastTimestamp } from "./threePartials/reviewHandler";
 
 export function loadBlockSummary(blockId) {
+    console.log("loadBlockSynnay");
     fetch(`api/forecast/db/${blockId}`)
     .then(res => {
         if (!res.ok) {
@@ -11,7 +12,8 @@ export function loadBlockSummary(blockId) {
     .then(data => {
         // console.log("Fetched: ", data);
         const summaryDiv = document.getElementById('block-summary');
-        summaryDiv.textContent = data.summary || "no summary available"; 
+        summaryDiv.textContent = data.summary || "no summary available";
+        console.log("asdasdasdasda");
 
         if (data.forecast_updated_at) {
             updateForecastTimestamp(data.forecast_updated_at);

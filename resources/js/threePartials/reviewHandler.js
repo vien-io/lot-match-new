@@ -297,7 +297,7 @@ function bindFormHandler(block) {
 
             if (isEditing && reviewId) {
                 url = `/block-reviews/${reviewId}`;
-                formData.append('_method', 'POST');
+                formData.append('_method', 'PUT');
             }
 
             const res = await fetch(url, {

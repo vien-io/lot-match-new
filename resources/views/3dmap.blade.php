@@ -303,6 +303,18 @@
                 <!-- Bottom Row -->
                 <div class="bottom-row gradient-border tw-rounded-xl tw-border tw-border-[#414141] tw-bg-[#1c1c1c] tw-p-4
                 tw-transition-transform tw-duration-300 hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(255,255,255,0.05)] hover:tw-bg-[#84ffb1]/30">
+                <div class="topTab tw-flex tw-justify-between tw-items-center">
+                <h2 class="tw-text-xl tw-font-semibold tw-text-[#ffffff]">Block Details</h2>
+                <div class="tw-flex tw-gap-2 tw-items-center">
+                    <!-- Smaller gray button with black text on hover -->
+                    <button id="view-full-report-btn" 
+                        class="tw-bg-gray-600 hover:tw-bg-[#22C55E] tw-text-white hover:tw-text-black tw-font-semibold tw-px-2 tw-py-1 tw-text-xs tw-rounded-md tw-transition-colors tw-duration-200">
+                        View Full Forecast Report
+                    </button>
+                </div>
+            </div>
+
+
                     <h3 class="tw-text-[#717171] tw-font-semibold">
                         Forecasting Data
                         <span id="forecast-timestamp" class="tw-ml-2 tw-text-sm tw-text-green-400"></span>
@@ -325,6 +337,27 @@
         </div>
     </div>
 </div>
+
+
+
+<!-- Full Forecast Report Modal -->
+<div id="full-report-modal" 
+     class="tw-fixed tw-inset-0 tw-flex tw-items-center tw-justify-center tw-bg-black/50 tw-z-50 tw-hidden tw-animate-[modal-pop_0.25s_ease-out]">
+    <div class="tw-bg-[#1c1c1c] tw-p-6 tw-rounded-2xl tw-max-w-3xl tw-w-11/12 tw-max-h-[80vh] tw-overflow-y-auto
+                tw-border-2 tw-border-transparent
+                tw-bg-[linear-gradient(#212121,#212121)_padding-box,linear-gradient(145deg,transparent_35%,#e81cff,#40c9ff)_border-box]
+                tw-shadow-[0_0_20px_rgba(0,0,0,0.6)] tw-text-white tw-flex tw-flex-col tw-gap-4">
+
+        <div class="tw-flex tw-justify-between tw-items-center">
+            <h3 class="tw-text-lg tw-font-semibold">Full Forecast Report</h3>
+            <button id="close-full-report" 
+                class="tw-text-2xl tw-text-[#22C55E] hover:tw-text-[#84ffb1] tw-cursor-pointer tw-transition-colors tw-duration-200">&times;</button>
+        </div>
+
+        <div id="full-report-content" class="tw-text-sm tw-whitespace-pre-wrap tw-mt-2"></div>
+    </div>
+</div>
+
 
 
 {{-- Tooltip --}}

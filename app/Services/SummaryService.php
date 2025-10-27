@@ -73,19 +73,16 @@ class SummaryService
 
         $textToSummarize = implode(' ', $reviews);
         Log::info('Combined comments for summarization:', ['text' => $textToSummarize]);
-
         Log::info('Length of summary input (chars): ' . strlen($textToSummarize));
-
-       
         
         $input = Str::words($textToSummarize, 150);
-        // Log::info('The main string to summarize: ', ['text' => $input]);
+        Log::info('The main string to summarize: ', ['text' => $input]);
 
       
 
         // gpt 3.5 turbo
         $openAiKey = config('services.openai.api_key');
-        $aiEnabled = env('AI_SUMMARY_ENABLED', false);
+        $aiEnabled = env('AI_SUMMARY_ENABLED', true);
         if ($openAiKey && $aiEnabled) {
             try {
                 $response = Http::withToken($openAiKey)

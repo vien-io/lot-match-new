@@ -84,6 +84,8 @@ class ReviewController extends Controller
 
 
     public function store(Request $request) {
+        Log::info("ReviewController store is called");
+
         $request->validate([
             'block_id' => 'required|exists:blocks,id',  
             'rating' => 'required|integer|min:1|max:5',
@@ -124,7 +126,8 @@ class ReviewController extends Controller
         if ($request->comment && isset($finalReview)) {
             DB::afterCommit(function () use ($finalReview, $request) {
                 $chain = [
-                    (new GenerateBlockSummaryJob($request->block_id))->delay(now()->addSeconds(2)),
+                    // (new GenerateBlockSummaryJob($request->block_id))->delay(now()->addSeconds(2)),
+                    // temporarily removed GenerateBlockSummaryJob because its redundant (two calls)
                     (new \App\Jobs\ProcessBlockForecast($request->block_id, app(\App\Services\SummaryService::class)))->delay(now()->addSeconds(3))
                 ];
 
@@ -135,11 +138,6 @@ class ReviewController extends Controller
                 );
             });
         }
-
-        
-        
-
-       
 
         // fetch block with its reviews and related user info
         $block = Block::with('reviews.user')->find($request->block_id);
@@ -187,7 +185,7 @@ class ReviewController extends Controller
         $review->update($request->only('rating', 'comment'));
 
         // analyze and update sentiment
-        if ($request->comment) {
+        /* if ($request->comment) {
             $sentiment = $this->analyzeSentimentViaHuggingFace($request->comment);
 
             Log::info('Sentiment Result (update method):', [
@@ -197,6 +195,22 @@ class ReviewController extends Controller
 
             $review->sentiment = strtolower($sentiment);
             $review->save();
+        } */
+        if ($request->comment) {
+            DB::afterCommit(function () use ($review, $request) {
+                $chain = [
+                    (new \App\Jobs\ProcessBlockForecast(
+                        $review->block_id,
+                        app(\App\Services\SummaryService::class)
+                    ))->delay(now()->addSeconds(3))
+                ];
+
+                dispatch(
+                    (new AnalyzeSentimentJob($review->id, $request->comment))
+                        ->delay(now()->addSeconds(5))
+                        ->chain($chain)
+                );
+            });
         }
         $block = \App\Models\Block::with('reviews.user')->find($review->block_id);
         if (!$block) {
@@ -208,6 +222,7 @@ class ReviewController extends Controller
         return response()->json([
             'message' => 'Review updated successfully!',
             'block' => $block,
+            'review' => $review,
         ]);
     }
 

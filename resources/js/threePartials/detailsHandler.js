@@ -78,6 +78,7 @@ export async function showLotDetails(lot) {
 
 
 export function showBlockDetails(block) {
+    window.currentBlockId = block.id;
     console.log("showBlockDetails called with:", block);
 
     const modal = document.getElementById("block-modal");
@@ -140,3 +141,38 @@ export function showBlockDetails(block) {
     renderReviewSection(block);
     loadBlockSummary(block.id);
 }
+
+
+const viewFullReportBtn = document.getElementById('view-full-report-btn');
+viewFullReportBtn.addEventListener('click', async () => {
+    const blockId = window.currentBlockId;
+
+    if (!blockId) return alert("Block ID not set!");
+
+    try {
+        const res = await fetch(`api/forecast/db/${blockId}`);
+        if (!res.ok) throw new Error('Failed to fetch report');
+        const data = await res.json();
+
+        const modal = document.getElementById('full-report-modal');
+        const contentDiv = document.getElementById('full-report-content');
+
+        contentDiv.textContent = data.detailed_report || "No report available";
+        modal.classList.remove('tw-hidden');
+    } catch (err) {
+        console.error(err);
+        alert('Unable to load full report.');
+    }
+});
+
+// Close button
+document.getElementById('close-full-report').addEventListener('click', () => {
+    document.getElementById('full-report-modal').classList.add('tw-hidden');
+});
+
+// Close on outside click
+document.getElementById('full-report-modal').addEventListener('click', (event) => {
+    if (event.target.id === 'full-report-modal') {
+        event.currentTarget.classList.add('tw-hidden');
+    }
+});

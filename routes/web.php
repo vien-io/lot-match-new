@@ -143,7 +143,7 @@ Route::prefix('usermanagement')->name('usermanagement.')->group(function () {
 Route::middleware('auth')->post('/block-reviews', [ReviewController::class, 'store'])
      ->name('block.reviews.store');
 // edit reviews
-Route::middleware('auth')->post('/block-reviews/{review}', [ReviewController::class, 'update'])
+Route::middleware('auth')->put('/block-reviews/{review}', [ReviewController::class, 'update'])
     ->name('block.reviews.update');
 // delete reviews
 Route::middleware('auth')->delete('/block-reviews/{review}', [ReviewController::class, 'destroy'])

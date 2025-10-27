@@ -195,6 +195,7 @@ class ForecastController extends Controller
 
     public function getForecastDataFromDb($blockId)
     {
+        Log::info("getForecastDataFromDB is called");
         $block = Block::find($blockId);
 
         if(!$block) {
