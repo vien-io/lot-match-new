@@ -151,7 +151,7 @@
                     </a>
 
                     {{-- search bar --}}
-                    <div class="tw-relative tw-flex-grow tw-mx-4" x-data="searchPlaceholderCycle()">
+                    {{-- <div class="tw-relative tw-flex-grow tw-mx-4" x-data="searchPlaceholderCycle()">
                         <span class="tw-absolute tw-left-3 tw-top-1/2 tw-transform tw--translate-y-1/2 tw-text-gray-400">
                             <i class="fas fa-magnifying-glass"></i>
                         </span>
@@ -160,7 +160,7 @@
                             :placeholder="placeholders[current]"
                             class="tw-w-full tw-pl-10 tw-pr-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-green-400 focus:tw-outline-none"
                         />
-                    </div>
+                    </div> --}}
 
                     {{-- Right Actions --}}
                     <div class="tw-flex tw-items-center tw-gap-4">
