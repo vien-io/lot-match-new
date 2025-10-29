@@ -25,6 +25,7 @@ import { initRaycaster } from './threePartials/initRaycaster';
 import { initClickHandler } from './threePartials/initClickHandler';
 import { fetchForecast } from './threePartials/forecastHandler';
 import { showLotDetails, showBlockDetails } from './threePartials/detailsHandler';
+import { initSky } from './threePartials/initSky';
 
 function initThreeJS() {
     const container = document.getElementById('threejs-container');
@@ -41,6 +42,8 @@ function initThreeJS() {
     const controls = initControls(camera, renderer, container);
     initLights(scene);
     initHelpers(scene);
+
+    const sky = initSky(scene);
 
     const { housesGroup, selectableObjects, instanceMetadata } = loadHouses(scene);
 
