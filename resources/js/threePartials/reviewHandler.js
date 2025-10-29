@@ -7,7 +7,7 @@ export function renderReviewSection(block) {
     const reviews = block.reviews ?? [];
 
     reviewSection.innerHTML = `
-        <div class="tw-space-y-6">
+    <div class="tw-space-y-6">
 
     <!-- Leave a Review -->
     <div class="tw-rounded-2xl tw-border-2 tw-border-transparent 

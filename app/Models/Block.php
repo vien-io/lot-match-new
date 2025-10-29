@@ -18,6 +18,7 @@ class Block extends Model
         'forecasted_rating',
         'sentiment_data',
         'forecast_updated_at',
+        'forecast_status',
     ]; 
     
     // Block has many lots

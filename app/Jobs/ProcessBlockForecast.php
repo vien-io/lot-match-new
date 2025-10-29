@@ -28,6 +28,9 @@ class ProcessBlockForecast implements ShouldQueue
         $block = Block::find($this->blockId);
         if (!$block) return;
 
+        \Log::info("[ProcessBlockForecast] Started for Block ID: {$this->blockId}");
+        $block->update(['forecast_status' => 'processing']);
+
         // Exponential Moving Average
         $forecastedRating = app()->make(\App\Http\Controllers\ForecastController::class)
                                 ->calculateForecast($this->blockId);
@@ -50,6 +53,9 @@ class ProcessBlockForecast implements ShouldQueue
             'forecasted_rating' => $forecastedRating,
             'sentiment_data' => json_encode($sentiments),
             'forecast_updated_at' => now(),
+            'forecast_status' => 'done',
         ]);
+        \Log::info('[DEBUG] Forecast status after job:', ['status' => $block->forecast_status]);
+        \Log::info("[ProcessBlockForecast] Completed for Block ID: {$this->blockId}");
     }
 }

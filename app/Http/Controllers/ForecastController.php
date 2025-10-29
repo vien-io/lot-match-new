@@ -226,11 +226,14 @@ class ForecastController extends Controller
             return response()->json(['status' => 'not_found'], 404);
         }
 
-        $isDone = !empty($block->ai_summary)
+        /* $isDone = !empty($block->ai_summary)
             || !empty($block->forecasted_rating)
-            || !empty($block->sentiment_data);
+            || !empty($block->sentiment_data); */
 
-        return response()->json(['status' => $isDone ? 'done' : 'processing']);
+        return response()->json([
+            'status' => $block->forecast_status,
+            'forecast_updated_at' => $block->forecast_updated_at,
+        ]);
     }
     
 }
