@@ -84,7 +84,6 @@ class ReviewController extends Controller
 
 
     public function store(Request $request) {
-        Log::info("ReviewController store is called");
 
         $request->validate([
             'block_id' => 'required|exists:blocks,id',  
@@ -122,8 +121,10 @@ class ReviewController extends Controller
         // unify
         $finalReview = $existingReview ?? $review;
 
-
         if ($request->comment && isset($finalReview)) {
+            $block = Block::find($request->block_id);
+            $block->update(['forecast_status' => 'processing']);
+
             DB::afterCommit(function () use ($finalReview, $request) {
                 $chain = [
                     // (new GenerateBlockSummaryJob($request->block_id))->delay(now()->addSeconds(2)),
