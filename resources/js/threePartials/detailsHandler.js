@@ -144,25 +144,62 @@ export function showBlockDetails(block) {
 
 
 const viewFullReportBtn = document.getElementById('view-full-report-btn');
+
 viewFullReportBtn.addEventListener('click', async () => {
     const blockId = window.currentBlockId;
-
     if (!blockId) return alert("Block ID not set!");
 
     try {
         const res = await fetch(`api/forecast/db/${blockId}`);
         if (!res.ok) throw new Error('Failed to fetch report');
+
         const data = await res.json();
+
+        // Parse the detailed_report JSON string
+        let report = null;
+        if (data.detailed_report) {
+            try {
+                report = JSON.parse(data.detailed_report);
+            } catch (err) {
+                console.error('Failed to parse detailed_report:', err, data.detailed_report);
+            }
+        }
+
+        if (!report) return alert('No detailed report available');
 
         const modal = document.getElementById('full-report-modal');
         const contentDiv = document.getElementById('full-report-content');
 
-        contentDiv.textContent = data.detailed_report || "No report available";
+        const html = `
+            <h2 class="tw-text-lg tw-font-bold tw-text-[#FACC15] tw-mt-4">Executive Summary</h2>
+            <p class="tw-mt-2 tw-text-gray-200">${report.executive_summary}</p>
+
+            <h2 class="tw-text-lg tw-font-bold tw-text-[#3B82F6] tw-mt-6">Sentiment Trend Analysis</h2>
+            <p class="tw-mt-2 tw-text-gray-200">${report.sentiment_analysis}</p>
+
+            <h2 class="tw-text-lg tw-font-bold tw-text-[#10B981] tw-mt-6">Monthly Sentiment Data</h2>
+            <ul class="tw-list-disc tw-pl-5 tw-mt-2">
+                ${report.monthly_sentiment.map(m => `<li class="tw-text-gray-200"><span class="tw-font-medium">${m.month}</span>: <span class="tw-text-green-400">${m.positive} positive</span>, <span class="tw-text-red-400">${m.negative} negative</span></li>`).join('')}
+            </ul>
+
+            <h2 class="tw-text-lg tw-font-bold tw-text-[#F97316] tw-mt-6">Forecast Details</h2>
+            <p class="tw-mt-2 tw-text-gray-200">${report.forecast_details}</p>
+
+            <h2 class="tw-text-lg tw-font-bold tw-text-[#8B5CF6] tw-mt-6">Recommendations</h2>
+            <ul class="tw-list-disc tw-pl-5 tw-mt-2">
+                ${report.recommendations.map(r => `<li class="tw-text-gray-200">${r}</li>`).join('')}
+            </ul>
+        `;
+
+
+        contentDiv.innerHTML = html;
         modal.classList.remove('tw-hidden');
+
     } catch (err) {
-        console.error(err);
+        console.error('Error loading report:', err);
         alert('Unable to load full report.');
     }
+
 });
 
 // Close button

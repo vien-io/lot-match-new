@@ -354,7 +354,7 @@
                 class="tw-text-2xl tw-text-[#22C55E] hover:tw-text-[#84ffb1] tw-cursor-pointer tw-transition-colors tw-duration-200">&times;</button>
         </div>
 
-        <div id="full-report-content" class="tw-text-sm tw-whitespace-pre-wrap tw-mt-2"></div>
+        <div id="full-report-content" class="tw-mt-2"></div>
     </div>
 </div>
 

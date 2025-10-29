@@ -125,14 +125,19 @@ class SummaryService
         })->implode('; ');
 
         $prompt = <<<PROMPT
-        Reformat the following neighborhood forecast into a professional, structured data analytics report.
-        Include:
-        1. Executive Summary
-        2. Sentiment Trend Analysis
-        3. Forecast Details
-        4. Recommendations
+        Produce a detailed, professional, multi-paragraph report for each section, using examples and full sentences. Expand on context, analysis, and recommendations.
+        The "executive_summary' and 'recommendations' fields should be at least 3–5 full paragraphs.
 
-        Keep the meaning and forecast values exactly the same
+        Reformat the following neighborhood forecast into a professional, structured JSON report.
+
+        Include these fields:
+        - executive_summary (string)
+        - sentiment_analysis (string)
+        - monthly_sentiment (array of objects with month, positive, negative)
+        - forecast_details (string)
+        - recommendations (array of strings)
+
+        Keep the meaning and forecast values exactly the same. Output only valid JSON.
 
         Forecast paragraph:
         {$summary}
@@ -159,7 +164,7 @@ class SummaryService
                             ['role' => 'user', 'content' => $prompt]
                         ],
                         'temperature' => 0.7,
-                        'max_tokens' => 600,
+                        'max_tokens' => 1500,
                     ]);
 
                     if ($response->successful()){
