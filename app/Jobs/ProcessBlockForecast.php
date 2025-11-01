@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Block;
 use App\Services\SummaryService;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -29,7 +30,7 @@ class ProcessBlockForecast implements ShouldQueue
         if (!$block) return;
 
         $block->update(['forecast_status' => 'processing']);
-        \Log::info('[debug] The status of forecast data before processing AIs is:', ['status' => $block->forecast_status]);
+        Log::info('[debug] The status of forecast data before processing AIs is:', ['status' => $block->forecast_status]);
 
         // Exponential Moving Average
         $forecastedRating = app()->make(\App\Http\Controllers\ForecastController::class)
@@ -55,6 +56,6 @@ class ProcessBlockForecast implements ShouldQueue
             'forecast_updated_at' => now(),
             'forecast_status' => 'done',
         ]);
-        \Log::info("[ProcessBlockForecast] Completed for Block ID: {$this->blockId}");
+        Log::info("[ProcessBlockForecast] Completed for Block ID: {$this->blockId}");
     }
 }

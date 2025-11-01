@@ -48,7 +48,6 @@ export async function showLotDetails(lot) {
         </p>
         <p><strong>Price:</strong> ₱${lot.price ?? 'N/A'}</p>
         <p><strong>Block Number:</strong> ${lot.block_id ?? 'N/A'}</p>
-        <h5 class="tw-text-sm">Lot ID: ${lot.id}</h5>
     `;
 
     closeButton.onclick = () => {
@@ -170,26 +169,46 @@ viewFullReportBtn.addEventListener('click', async () => {
         const modal = document.getElementById('full-report-modal');
         const contentDiv = document.getElementById('full-report-content');
 
-        const html = `
-            <h2 class="tw-text-lg tw-font-bold tw-text-[#FACC15] tw-mt-4">Executive Summary</h2>
-            <p class="tw-mt-2 tw-text-gray-200">${report.executive_summary}</p>
+       const html = `
+    <div class="tw-group tw-p-3 tw-rounded-xl tw-transition-colors tw-duration-300 hover:tw-bg-[#1f1f1f]">
+        <h2 class="tw-text-lg tw-font-bold tw-text-white group-hover:tw-text-[#FACC15] tw-mt-4">Executive Summary</h2>
+        <p class="tw-mt-2 tw-text-gray-200">${report.executive_summary}</p>
+    </div>
 
-            <h2 class="tw-text-lg tw-font-bold tw-text-[#3B82F6] tw-mt-6">Sentiment Trend Analysis</h2>
-            <p class="tw-mt-2 tw-text-gray-200">${report.sentiment_analysis}</p>
+    <div class="tw-group tw-p-3 tw-rounded-xl tw-transition-colors tw-duration-300 hover:tw-bg-[#1f1f1f]">
+        <h2 class="tw-text-lg tw-font-bold tw-text-white group-hover:tw-text-[#3B82F6] tw-mt-6">Sentiment Trend Analysis</h2>
+        <p class="tw-mt-2 tw-text-gray-200">${report.sentiment_analysis}</p>
+    </div>
 
-            <h2 class="tw-text-lg tw-font-bold tw-text-[#10B981] tw-mt-6">Monthly Sentiment Data</h2>
-            <ul class="tw-list-disc tw-pl-5 tw-mt-2">
-                ${report.monthly_sentiment.map(m => `<li class="tw-text-gray-200"><span class="tw-font-medium">${m.month}</span>: <span class="tw-text-green-400">${m.positive} positive</span>, <span class="tw-text-red-400">${m.negative} negative</span></li>`).join('')}
-            </ul>
+    <div class="tw-group tw-p-3 tw-rounded-xl tw-transition-colors tw-duration-300 hover:tw-bg-[#1f1f1f]">
+        <h2 class="tw-text-lg tw-font-bold tw-text-white group-hover:tw-text-[#10B981] tw-mt-6">
+            Monthly Sentiment Data
+        </h2>
+        <ul class="tw-list-disc tw-pl-5 tw-mt-2">
+            ${report.monthly_sentiment.map(m => `
+                <li class="tw-text-gray-200">
+                    <span class="tw-font-medium">${m.month}</span>:
+                    <span class="tw-text-gray-400 group-hover:tw-text-green-400">${m.positive} positive</span>,
+                    <span class="tw-text-gray-400 group-hover:tw-text-red-400">${m.negative} negative</span>
+                </li>
+            `).join('')}
+        </ul>
+    </div>
 
-            <h2 class="tw-text-lg tw-font-bold tw-text-[#F97316] tw-mt-6">Forecast Details</h2>
-            <p class="tw-mt-2 tw-text-gray-200">${report.forecast_details}</p>
 
-            <h2 class="tw-text-lg tw-font-bold tw-text-[#8B5CF6] tw-mt-6">Recommendations</h2>
-            <ul class="tw-list-disc tw-pl-5 tw-mt-2">
-                ${report.recommendations.map(r => `<li class="tw-text-gray-200">${r}</li>`).join('')}
-            </ul>
-        `;
+    <div class="tw-group tw-p-3 tw-rounded-xl tw-transition-colors tw-duration-300 hover:tw-bg-[#1f1f1f]">
+        <h2 class="tw-text-lg tw-font-bold tw-text-white group-hover:tw-text-[#F97316] tw-mt-6">Forecast Details</h2>
+        <p class="tw-mt-2 tw-text-gray-200">${report.forecast_details}</p>
+    </div>
+
+    <div class="tw-group tw-p-3 tw-rounded-xl tw-transition-colors tw-duration-300 hover:tw-bg-[#1f1f1f]">
+        <h2 class="tw-text-lg tw-font-bold tw-text-white group-hover:tw-text-[#8B5CF6] tw-mt-6">Recommendations</h2>
+        <ul class="tw-list-disc tw-pl-5 tw-mt-2">
+            ${report.recommendations.map(r => `<li class="tw-text-gray-200">${r}</li>`).join('')}
+        </ul>
+    </div>
+`;
+
 
 
         contentDiv.innerHTML = html;

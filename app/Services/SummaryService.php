@@ -126,7 +126,7 @@ class SummaryService
 
         $prompt = <<<PROMPT
         Produce a detailed, professional, multi-paragraph report for each section, using examples and full sentences. Expand on context, analysis, and recommendations.
-        The "executive_summary' and 'recommendations' fields should be at least 3–5 full paragraphs.
+        The "executive_summary' and 'recommendations' fields should be at least 3–5 full paragraphs, while the forecast_details should be at lest 5-8 full paragraphs of deep analysis and prediction focusing on what property trends are likely based on the summary.
 
         Reformat the following neighborhood forecast into a professional, structured JSON report.
 

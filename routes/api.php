@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ForecastController;
+use App\Http\Controllers\LotController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReviewController;
@@ -38,4 +39,5 @@ Route::get('/forecast/db/{blockId}', [ForecastController::class, 'getForecastDat
     Route::get('/forecast/status/{block}', [ForecastController::class, 'status']);
 
     
-    
+// api endpoint for gpt lot summary
+Route::get('/lot-summary/{lotId}', [LotController::class, 'generateSummary']);

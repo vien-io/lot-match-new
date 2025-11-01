@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Lot;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LotController extends Controller
 {
@@ -53,7 +54,7 @@ class LotController extends Controller
 
     public function addImage(Request $request)
     {
-        \Log::info('addImage called', [
+        Log::info('addImage called', [
         'lot_id' => $request->lot_id,
         'has_file' => $request->hasFile('image'),
         'file_name' => $request->file('image')?->getClientOriginalName()
@@ -74,7 +75,7 @@ class LotController extends Controller
             'path' => $path,
         ]);
 
-        \Log::info('LotImage created', ['id' => $image->id, 'path' => $image->path]);
+        Log::info('LotImage created', ['id' => $image->id, 'path' => $image->path]);
 
         return response()->json([
             'message' => 'Image uploaded successfuly', 
@@ -82,6 +83,12 @@ class LotController extends Controller
         ]);
     }
 
+    public function generateSummary($lotId)
+    {
+        $lot = Lot::findOrFail($lotId);
+        
+
+    }
 
 
 }
