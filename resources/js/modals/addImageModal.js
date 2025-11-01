@@ -52,6 +52,10 @@ const imgEl = document.getElementById('lot-image');
 
 const prevBtn = document.getElementById('prev-image-btn');
 const nextBtn = document.getElementById('next-image-btn');
+const fullscreenModal = document.getElementById('lot-image-modal');
+const fullscreenImage = document.getElementById('lot-image-full');
+const fullscreenPrev = document.getElementById('fullscreen-prev-btn');
+const fullscreenNext = document.getElementById('fullscreen-next-btn');
 
 // Attach navigation handlers once
 if (prevBtn && nextBtn && imgEl) {
@@ -88,4 +92,37 @@ export async function loadLotImages(lotId) {
         imgEl.alt = 'No images available';
         console.log("No images to display for this lot");
     }
+}
+
+// open fullscreen on click of main image
+if (imgEl && fullscreenModal) {
+    imgEl.addEventListener('click', () => {
+        if (!imgEl.src) return;
+        fullscreenImage.src = imgEl.src;
+        fullscreenModal.classList.remove('tw-hidden');
+    });
+}
+
+// close fullscreen on background click
+if (fullscreenModal) {
+    fullscreenModal.addEventListener('click', (e) => {
+        if (e.target === fullscreenModal) {
+            fullscreenModal.classList.add('tw-hidden');
+        }
+    });
+}
+
+// fullscreen image navigation
+if (fullscreenPrev && fullscreenNext && fullscreenImage) {
+    fullscreenPrev.onclick = () => {
+        if (currentImages.length === 0) return;
+        currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+        fullscreenImage.src = currentImages[currentImageIndex];
+    };
+
+    fullscreenNext.onclick = () => {
+        if (currentImages.length === 0) return;
+        currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+        fullscreenImage.src = currentImages[currentImageIndex];
+    };
 }

@@ -61,14 +61,34 @@
                         <h3 class="tw-text-[#717171] tw-font-semibold tw-mb-2">Lot Attributes</h3>
                         <table class="tw-w-full tw-text-sm tw-border-collapse">
                             <tbody>
-                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibol">Lot size</td><td class="tw-py-1" id="lot-size"></td></tr>
-                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Floor area</td><td class="tw-py-1" id="lot-floor-area"></td></tr>
-                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Orientation</td><td class="tw-py-1" id="lot-orientation"></td></tr>
-                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Elevation</td><td class="tw-py-1" id="lot-elevation"></td></tr>
-                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Sunlight</td><td class="tw-py-1" id="lot-sunlight"></td></tr>
-                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">View</td><td class="tw-py-1" id="lot-view"></td></tr>
-                                <tr class="tw-border-b tw-border-[#414141]"><td class="tw-py-1 tw-pr-4 tw-font-semibold">Proximity</td><td class="tw-py-1" id="lot-proximity"></td></tr>
-                                <tr><td class="tw-py-1 tw-pr-4 tw-font-semibold">Flood risk</td><td class="tw-py-1" id="lot-flood-risk"></td></tr>
+                                <tr class="tw-border-b tw-border-[#414141]">
+                                    <td class="tw-py-1 tw-pr-4 tw-font-semibold">Price</td>
+                                    <td class="tw-py-1" id="lot-price"></td>
+                                </tr>
+                                <tr class="tw-border-b tw-border-[#414141]">
+                                    <td class="tw-py-1 tw-pr-4 tw-font-semibold">Status</td>
+                                    <td class="tw-py-1" id="lot-status"></td>
+                                </tr>
+                                <tr class="tw-border-b tw-border-[#414141]">
+                                    <td class="tw-py-1 tw-pr-4 tw-font-semibold">Lot Area</td>
+                                    <td class="tw-py-1" id="lot-lot-area"></td>
+                                </tr>
+                                <tr class="tw-border-b tw-border-[#414141]">
+                                    <td class="tw-py-1 tw-pr-4 tw-font-semibold">Floor Area</td>
+                                    <td class="tw-py-1" id="lot-floor-area"></td>
+                                </tr>
+                                <tr class="tw-border-b tw-border-[#414141]">
+                                    <td class="tw-py-1 tw-pr-4 tw-font-semibold">Orientation</td>
+                                    <td class="tw-py-1" id="lot-orientation"></td>
+                                </tr>
+                                <tr class="tw-border-b tw-border-[#414141]">
+                                    <td class="tw-py-1 tw-pr-4 tw-font-semibold">Sunlight</td>
+                                    <td class="tw-py-1" id="lot-sunlight"></td>
+                                </tr>
+                                <tr>
+                                    <td class="tw-py-1 tw-pr-4 tw-font-semibold">Flood Risk</td>
+                                    <td class="tw-py-1" id="lot-flood-risk"></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -111,19 +131,19 @@
       
 
 
-            <!-- Image Navigation -->
+           <!-- Image Navigation -->
             <div class="tw-flex tw-justify-center tw-items-center tw-gap-4">
 
                 <!-- Previous Button -->
                 <div
                     id="prev-image-btn"
-                    class="tw-group tw-flex tw-items-center tw-justify-center tw-w-8 tw-h-8 tw-rounded-lg tw-border tw-border-black tw-cursor-pointer
-                        tw-transition-all tw-duration-300 tw-ease-in-out
-                        hover:tw-bg-[#22C55E]/40 hover:tw-scale-110 hover:tw-shadow-[0_4px_12px_rgba(34,197,94,0.5)]
-                        active:tw-scale-90 active:tw-shadow-[0_2px_6px_rgba(34,197,94,0.4)]"
+                    class="tw-group tw-flex tw-items-center tw-justify-center tw-w-8 tw-h-8 tw-rounded-lg tw-border tw-border-[#22C55E] tw-cursor-pointer
+                        tw-transition-all tw-duration-150 tw-ease-out
+                        hover:tw-bg-[#22C55E] hover:tw-scale-105 hover:tw-shadow-[0_0_10px_rgba(34,197,94,0.6)]
+                        active:tw-scale-90 active:tw-shadow-[0_0_6px_rgba(34,197,94,0.4)]"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="#22C55E"
-                        class="tw-w-4 tw-h-4 tw-transition-all tw-duration-300 tw-ease-in-out group-hover:tw-fill-white group-hover:tw-scale-110">
+                        class="tw-w-4 tw-h-4 tw-transition-all tw-duration-150 tw-ease-out group-hover:tw-fill-white">
                         <path fill-rule="evenodd"
                             d="M10.854 1.646a.5.5 0 0 1 0 .708L5.207 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
                     </svg>
@@ -132,23 +152,53 @@
                 <!-- Next Button -->
                 <div
                     id="next-image-btn"
-                    class="tw-group tw-flex tw-items-center tw-justify-center tw-w-8 tw-h-8 tw-rounded-lg tw-border tw-border-black tw-cursor-pointer
-                        tw-transition-all tw-duration-300 tw-ease-in-out
-                        hover:tw-bg-[#22C55E]/40 hover:tw-scale-110 hover:tw-shadow-[0_4px_12px_rgba(34,197,94,0.5)]
-                        active:tw-scale-90 active:tw-shadow-[0_2px_6px_rgba(34,197,94,0.4)]"
+                    class="tw-group tw-flex tw-items-center tw-justify-center tw-w-8 tw-h-8 tw-rounded-lg tw-border tw-border-[#22C55E] tw-cursor-pointer
+                        tw-transition-all tw-duration-150 tw-ease-out
+                        hover:tw-bg-[#22C55E] hover:tw-scale-105 hover:tw-shadow-[0_0_10px_rgba(34,197,94,0.6)]
+                        active:tw-scale-90 active:tw-shadow-[0_0_6px_rgba(34,197,94,0.4)]"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="#22C55E"
-                        class="tw-w-4 tw-h-4 tw-transition-all tw-duration-300 tw-ease-in-out group-hover:tw-fill-white group-hover:tw-scale-110">
+                        class="tw-w-4 tw-h-4 tw-transition-all tw-duration-150 tw-ease-out group-hover:tw-fill-white">
                         <path fill-rule="evenodd"
                             d="M5.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 5.646 3.354a.5.5 0 0 1 0-.708z" />
                     </svg>
                 </div>
             </div>
+
         </div>
     </div>
+
     <!-- Fullscreen Modal -->
-    <div id="lot-image-modal" class="tw-fixed tw-inset-0 tw-bg-black/80 tw-flex tw-items-center tw-justify-center tw-z-50 tw-hidden">
-        <img id="lot-image-full" src="" alt="Full Lot Image" class="tw-max-h-[90vh] tw-max-w-[90vw] tw-rounded-xl tw-object-contain">
+    <div id="lot-image-modal" 
+        class="tw-fixed tw-inset-0 tw-bg-black/80 tw-flex tw-items-center tw-justify-center tw-z-50 tw-hidden">
+
+        <!-- Prev Button -->
+        <button id="fullscreen-prev-btn"
+            class="tw-absolute tw-left-8 tw-text-white tw-bg-[#22C55E]/20 hover:tw-bg-[#22C55E]/50 
+                tw-p-3 tw-rounded-full tw-transition-all tw-duration-150 tw-ease-out
+                hover:tw-scale-110 active:tw-scale-95 tw-shadow-[0_0_10px_rgba(34,197,94,0.5)]">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                class="tw-w-6 tw-h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+
+        <!-- Main Image -->
+        <img id="lot-image-full" 
+            src="" 
+            alt="Full Lot Image" 
+            class="tw-max-h-[90vh] tw-max-w-[90vw] tw-rounded-xl tw-object-contain">
+
+        <!-- Next Button -->
+        <button id="fullscreen-next-btn"
+            class="tw-absolute tw-right-8 tw-text-white tw-bg-[#22C55E]/20 hover:tw-bg-[#22C55E]/50 
+                tw-p-3 tw-rounded-full tw-transition-all tw-duration-150 tw-ease-out
+                hover:tw-scale-110 active:tw-scale-95 tw-shadow-[0_0_10px_rgba(34,197,94,0.5)]">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                class="tw-w-6 tw-h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
     </div>
 
     <!-- Add Lot Image Modal -->

@@ -15,13 +15,31 @@ export async function showLotDetails(lot) {
     const detailsPanel = document.getElementById("lot-details");
 
     // populate lot attributes dynamically
-    document.getElementById("lot-size").textContent = lot.size + " sqm";
+    const priceEl = document.getElementById("lot-price");
+
+    if (!lot.price) {
+        priceEl.textContent = "N/A";
+    } else if (lot.status?.toLowerCase() === "sold") {
+        priceEl.textContent = "—";
+    } else {
+        priceEl.textContent = `₱${parseFloat(lot.price).toLocaleString()}`;
+    }
+
+    const statusEl = document.getElementById("lot-status");
+
+    if (lot.status) {
+        statusEl.innerHTML = `
+            <span class="${lot.status.toLowerCase() === 'sold' ? 'tw-text-red-500' : 'tw-text-green-500'}">
+                ${lot.status.charAt(0).toUpperCase() + lot.status.slice(1)}
+            </span>
+        `;
+    } else {
+        statusEl.textContent = 'N/A';
+    }
+    document.getElementById("lot-lot-area").textContent = lot.lot_area + " sqm";
     document.getElementById("lot-floor-area").textContent = lot.floor_area ? lot.floor_area + " sqm" : "N/A";
     document.getElementById("lot-orientation").textContent = lot.orientation || "N/A";
-    document.getElementById("lot-elevation").textContent = lot.elevation || "N/A";
     document.getElementById("lot-sunlight").textContent = lot.sunlight || "N/A";
-    document.getElementById("lot-view").textContent = lot.view || "N/A";
-    document.getElementById("lot-proximity").textContent = lot.proximity || "N/A";
     document.getElementById("lot-flood-risk").textContent = lot.flood_risk || "N/A";
 
     await loadLotImages(lot.id);
@@ -40,13 +58,6 @@ export async function showLotDetails(lot) {
 
     detailsPanel.innerHTML = `
         <p><strong>Name:</strong> ${lot.name ?? 'N/A'}</p>
-        <p>
-        <strong>Status:</strong> 
-        <span class="${lot.status === 'sold' ? 'tw-text-red-500' : 'tw-text-green-500'}">
-            ${lot.status ?? 'N/A'}
-        </span>
-        </p>
-        <p><strong>Price:</strong> ₱${lot.price ?? 'N/A'}</p>
         <p><strong>Block Number:</strong> ${lot.block_id ?? 'N/A'}</p>
     `;
 
