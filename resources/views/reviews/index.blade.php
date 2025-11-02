@@ -54,25 +54,25 @@
     </div>
 
     {{-- Reviews --}}
-    <div id="reviewsContainer" class="tw-space-y-4">
+    <div id="reviewsContainer" class="tw-grid tw-grid-cols-2 tw-gap-4">
         @foreach ($reviews as $review)
-        <div class="tw-flex tw-gap-3">
-            <img src="{{ $review->user->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode($review->user->name ?? 'Deleted Iser') . '&background=34d399&color=fff&rounded=true' }}" 
-                class="tw-w-10 tw-h-10 tw-rounded-full" alt="user">
-            <div>
-                <h3 class="tw-font-semibold tw-text-sm tw-text-[#1f2937]">
-                    {{ $review->user->name ?? 'Deleted User'}} &rarr; {{ $review->block->name ?? 'Unknown Block' }}
-                </h3>
-                <div class="tw-flex tw-text-yellow-400 tw-text-xs">
-                    {!! str_repeat('★', $review->rating) !!}{!! str_repeat('☆', 5 - $review->rating) !!}
+            <div class="tw-flex tw-gap-3 tw-bg-gray-50 tw-rounded-xl tw-p-3">
+                <img src="{{ $review->user->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode($review->user->name ?? 'Deleted User') . '&background=34d399&color=fff&rounded=true' }}" 
+                    class="tw-w-10 tw-h-10 tw-rounded-full" alt="user">
+                <div>
+                    <h3 class="tw-font-semibold tw-text-sm tw-text-[#1f2937]">
+                        {{ $review->user->name ?? 'Deleted User'}} → {{ $review->block->name ?? 'Unknown Block' }}
+                    </h3>
+                    <div class="tw-flex tw-text-yellow-400 tw-text-xs">
+                        {!! str_repeat('★', $review->rating) !!}{!! str_repeat('☆', 5 - $review->rating) !!}
+                    </div>
+                    <p class="tw-text-xs tw-text-gray-500 tw-mt-1">{{ $review->comment ?? 'No comment' }}</p>
+                    <span class="tw-text-gray-400 tw-text-xs">{{ $review->created_at->format('n/j/Y, g:i A') }}</span>
                 </div>
-                <p class="tw-text-xs tw-text-gray-500 tw-mt-1">{{ $review->comment ?? 'No comment' }}</p>
-                <span class="tw-text-gray-400 tw-text-xs">{{ $review->created_at->format('n/j/Y, g:i A') }}</span>
             </div>
-        </div>
         @endforeach
-
     </div>
+
 
   </div>
 
