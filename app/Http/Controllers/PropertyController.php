@@ -12,9 +12,22 @@ use Illuminate\Support\Facades\Log;
 class PropertyController extends Controller
 {
     // show list of properties
-    public function index()
+    public function index(Request $request)
     {
-        $properties = Lot::with('images')->latest()->paginate(12);
+        $query = Lot::with(['images', 'block'])->latest();
+
+        // search filter (matches block name, lot name, or status)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhere('status', 'like', "%{$search}%")
+                ->orWhereHas('block', fn($b) => $b->where('name', 'like', "%{$search}%"));
+            });
+        }
+
+        // fetch filtered + paginated properties
+        $properties = $query->paginate(12);
         $blocks = Block::all();
 
         return view('properties.index', compact('properties', 'blocks'));

@@ -14,15 +14,19 @@
         <!-- Toolbar -->
         <div class="tw-flex tw-justify-between tw-items-center tw-p-4 tw-border-b">
             <div class="tw-flex tw-gap-2">
-                <!-- Filter -->
-                <div class="tw-flex tw-items-center tw-border tw-rounded-lg tw-px-3 tw-py-1 tw-bg-gray-50">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="tw-w-4 tw-h-4 tw-text-gray-400 tw-mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <input placeholder="Filter properties by..." class="tw-bg-transparent tw-outline-none tw-text-sm" />
-                </div>
-                <button class="tw-px-3 tw-py-1 tw-text-sm tw-border tw-rounded-lg tw-hover:tw-bg-gray-100">Block</button>
-                <button class="tw-px-3 tw-py-1 tw-text-sm tw-border tw-rounded-lg tw-hover:tw-bg-gray-100">Lot</button>
+               <!-- Filter -->
+                <form method="GET" action="{{ route('properties.index') }}" class="tw-flex tw-items-center tw-border tw-rounded-lg tw-px-3 tw-py-1 tw-bg-gray-50">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="tw-w-4 tw-h-4 tw-text-gray-400 tw-mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <input
+                      type="text"
+                      name="search"
+                      value="{{ request('search') }}"
+                      placeholder="Search by block, lot, or status..."
+                      class="tw-bg-transparent tw-outline-none tw-text-sm tw-w-full tw-min-w-[200px]"
+                  />
+              </form>
             </div>
 
             <div class="tw-flex tw-gap-2">
