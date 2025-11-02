@@ -27,12 +27,10 @@ class Lot extends Model
     public function reviews() {
         return $this->hasMany(Review::class, 'block_id', 'block_id');
     }
-    public function interiorImages() {
-        return $this->hasMany(InteriorImage::class);
-    }
+
     public function images()
     {
-        return $this->hasMany(LotImage::class);
+        return $this->hasMany(LotImage::class, 'lot_id');
     }
     
 }

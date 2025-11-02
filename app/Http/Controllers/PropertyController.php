@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Block;
 use App\Models\Lot;
+use Illuminate\Support\Facades\Storage;
+use App\Models\LotImage;
+use Illuminate\Support\Facades\Log;
 
 class PropertyController extends Controller
 {
     // show list of properties
     public function index()
     {
-        $properties = Lot::with('interiorImages')->latest()->paginate(12);
+        $properties = Lot::with('images')->latest()->paginate(12);
         $blocks = Block::all();
 
         return view('properties.index', compact('properties', 'blocks'));
@@ -25,7 +28,12 @@ class PropertyController extends Controller
             'lot_numbers' => 'required|string',
             'lot_area'  => 'required|numeric',
             'floor_area' => 'required|numeric',
-            'interior_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120',
+            'price' => 'required|numeric',
+            'status' => 'required|in:available,sold',
+            'orientation' => 'nullable|string',
+            'sunlight' => 'nullable|string',
+            'flood_risk' => 'nullable|string',
+            'lot_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $numbers = array_map('trim', explode(',', $request->lot_numbers));
@@ -36,16 +44,21 @@ class PropertyController extends Controller
                 'name'      => 'Lot ' . $num,
                 'lot_area'  => $request->lot_area,
                 'floor_area' => $request->floor_area ?? 1,
-                'size'       => $request->lot_area ?? 1, 
-                'price'     => 0,
+                'price' => $request->price,
+                'status' => $request->status,
+                'orientation' => $request->orientation,
+                'sunlight' => $request->sunlight,
+                'flood_risk' => $request->flood_risk,
                 'description' => '',
             ]);
 
-            // handle interior images
-            if($request->hasFile('interior_images')) {
-                foreach($request->file('interior_images') as $file) {
-                    $path = $file->store('uploads/interiors', 'public');
-                    $lot->interiorImages()->create(['image_path' => 'storage/' . $path]);
+            // handle lot images
+            if($request->hasFile('lot_images')) {
+                foreach($request->file('lot_images') as $file) {
+                    $path = $file->store('lot_images', 'public');
+                    $lot->images()->create([
+                        'path' => 'storage/' . $path,
+                    ]);
                 }
             }
         }
@@ -62,7 +75,12 @@ class PropertyController extends Controller
             'lot_numbers' => 'required|string',
             'lot_area'    => 'required|numeric',
             'floor_area'  => 'required|numeric',
-            'interior_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'price' => 'required|numeric',
+            'status' => 'required|in:available,sold',
+            'orientation' => 'required|string',
+            'sunlight' => 'required|string',
+            'flood_risk' => 'required|string',
+            'lot_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $numbers = array_map('trim', explode(',', $request->lot_numbers));
@@ -71,30 +89,34 @@ class PropertyController extends Controller
 
         // Update property fields
         $property->update([
-            'block_id'   => $request->block_id,
-            'name'       => 'Lot ' . $lotNumber,
-            'lot_area'   => $request->lot_area,
-            'floor_area' => $request->floor_area,
-            'size'       => $request->lot_area,
+            'block_id'    => $request->block_id,
+            'name'        => 'Lot ' . $lotNumber,
+            'lot_area'    => $request->lot_area,
+            'floor_area'  => $request->floor_area,
+            'price'       => $request->price,
+            'status'      => $request->status,
+            'orientation' => $request->orientation,
+            'sunlight'    => $request->sunlight,
+            'flood_risk'  => $request->flood_risk,
         ]);
 
         // Delete selected interior images (DB + physical file)
         if ($request->has('delete_images')) {
-            $images = \App\Models\InteriorImage::whereIn('id', $request->delete_images)->get();
+            $images = LotImage::whereIn('id', $request->delete_images)->get();
             foreach ($images as $img) {
                 // Delete physical file
-                \Storage::disk('public')->delete(str_replace('storage/', '', $img->image_path));
+                Storage::disk('public')->delete(str_replace('storage/', '', $img->path));
                 // Delete DB record
                 $img->delete();
             }
         }
 
         // Handle new uploads
-        if ($request->hasFile('interior_images')) {
-            foreach ($request->file('interior_images') as $file) {
-                $path = $file->store('uploads/interiors', 'public');
-                $property->interiorImages()->create([
-                    'image_path' => 'storage/' . $path
+        if ($request->hasFile('lot_images')) {
+            foreach ($request->file('lot_images') as $file) {
+                $path = $file->store('lot_images', 'public');
+                $property->images()->create([
+                    'path' => 'storage/' . $path,
                 ]);
             }
         }
@@ -107,10 +129,23 @@ class PropertyController extends Controller
     public function destroy($id)
     {
         $property = Lot::findOrFail($id);
+
+        // Delete all related image files from storage
+        foreach ($property->images as $image) {
+            $path = str_replace('storage/', '', $image->path);
+
+            // dd($path);
+
+            if (Storage::exists('public/' . $path)) {
+                Storage::delete('public/' . $path);
+            }
+        }
+
+        $property->images()->delete();
         $property->delete();
 
         return redirect()->route('properties.index')
-                        ->with('success', 'Property deleted successfully!');
+                        ->with('success', 'Property and its images deleted successfully!');
     }
 
 

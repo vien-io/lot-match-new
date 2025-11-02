@@ -1,12 +1,16 @@
 // edit modal
-
-window.openEditModal = function(id, name, lotArea, floorArea, blockId, images = []) {
+window.openEditModal = function(id, name, lotArea, floorArea, blockId, price, status, orientation, sunlight, floodRisk, images = []) {
     document.getElementById('editPropertyId').value = id;
     let lotNumber = name.replace(/Lot\s*/i, '');
     document.getElementById('editLotNumbers').value = lotNumber;
     document.getElementById('editLotArea').value = lotArea;
     document.getElementById('editFloorArea').value = floorArea;
+    document.getElementById('editPrice').value = price;
+    document.getElementById('editStatus').value = status;
+    document.getElementById('editOrientation').value = orientation;
     document.getElementById('editBlockId').value = blockId;
+    document.getElementById('editSunlight').value = sunlight;
+    document.getElementById('editFloodRisk').value = floodRisk;
     document.getElementById('editPropertyForm').action = '/properties/' + id;
 
     // populate existing images
@@ -42,26 +46,27 @@ window.closeEditModal = function() {
 }
 
 
-// interior modal
+// lot images modal
     let currentPropertyId = null;
     let currentImageIndex = 0;
     let currentImages = [];
 
-    window.openInteriorGallery = function(propertyId, images) {
+    window.openLotImageGallery = function(propertyId, images) {
+        console.log("Images received:", images);
         currentImages = images || [];
         currentPropertyId = propertyId;
         currentImageIndex = 0;
-        showInteriorImage();
-        document.getElementById('interiorModal').classList.remove('tw-hidden');
+        showLotImage();
+        document.getElementById('lotImageModal').classList.remove('tw-hidden');
     }
 
-    window.closeInteriorModal = function() {
-        document.getElementById('interiorModal').classList.add('tw-hidden');
+    window.closeLotImageModal = function() {
+        document.getElementById('lotImageModal').classList.add('tw-hidden');
     }
 
-    window.showInteriorImage = function() {
-      const imgEl = document.getElementById('interiorImage');
-      const fallback = document.getElementById('interiorFallback');
+    window.showLotImage = function() {
+      const imgEl = document.getElementById('lotImage');
+      const fallback = document.getElementById('lotImageFallback');
 
       if (currentImages.length > 0) {
           imgEl.src = currentImages[currentImageIndex];
@@ -74,14 +79,14 @@ window.closeEditModal = function() {
       }
     }
 
-    window.prevInteriorImage = function() {
+    window.prevLotImage = function() {
         if (!currentImages.length) return;
         currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
-        showInteriorImage();
+        showLotImage();
     }
 
-    window.nextInteriorImage = function() {
+    window.nextLotImage = function() {
         if (!currentImages) return;
         currentImageIndex = (currentImageIndex + 1) % currentImages.length;
-        showInteriorImage();
+        showLotImage();
     }

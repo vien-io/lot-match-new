@@ -49,7 +49,7 @@ Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
 Route::get('/properties', [PropertyController::class, 'index'])->name('properties');
 
 // dashboard stuff
-Route::resource('properties', PropertyController::class);
+// Route::resource('properties', PropertyController::class);
 Route::get('/map', [MapController::class, 'index'])->name('map');
 Route::resource('reviews', ReviewController::class);
 
@@ -113,9 +113,10 @@ Route::get('/analytics/block-ratings', [AnalyticsController::class, 'dashboard']
 
 // left nav buttons
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
-Route::resource('properties', PropertyController::class);
-Route::put('/properties/{id}', [PropertyController::class, 'update'])->name('properties.update');
+
+// property modals
 Route::resource('properties', PropertyController::class)->except(['show', 'create', 'edit']);
+
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
 Route::get('/forecast', [ForecastController::class, 'forecastPage'])->name('forecast');
 Route::get('/forecast/data/{blockId}', [ForecastController::class, 'getForecastData']);
