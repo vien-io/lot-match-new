@@ -132,12 +132,10 @@ class PropertyController extends Controller
 
         // Delete all related image files from storage
         foreach ($property->images as $image) {
-            $path = str_replace('storage/', '', $image->path);
+            $path = str_replace('storage/', '', $image->path); 
 
-            // dd($path);
-
-            if (Storage::exists('public/' . $path)) {
-                Storage::delete('public/' . $path);
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
             }
         }
 
