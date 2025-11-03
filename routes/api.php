@@ -41,3 +41,6 @@ Route::get('/forecast/db/{blockId}', [ForecastController::class, 'getForecastDat
     
 // api endpoint for gpt lot summary
 Route::get('/lot-summary/{lotId}', [LotController::class, 'generateSummary']);
+
+// check for lot status
+Route::get('/lots/statuses', [LotController::class, 'statuses']);

@@ -13,7 +13,6 @@ export function loadBlockSummary(blockId) {
         // console.log("Fetched: ", data);
         const summaryDiv = document.getElementById('block-summary');
         summaryDiv.textContent = data.summary || "no summary available";
-        console.log("asdasdasdasda");
 
         if (data.forecast_updated_at) {
             updateForecastTimestamp(data.forecast_updated_at);

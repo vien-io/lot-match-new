@@ -24,6 +24,7 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    
 </head>
 <body class="tw-bg-gray-50">
     <div id="app" class="tw-flex">
@@ -161,11 +162,14 @@
                         <span class="tw-absolute tw-left-3 tw-top-1/2 tw-transform tw--translate-y-1/2 tw-text-gray-400">
                             <i class="fas fa-magnifying-glass"></i>
                         </span>
-                        <input 
-                            type="search" 
-                            :placeholder="placeholders[current]"
-                            class="tw-w-full tw-pl-10 tw-pr-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-green-400 focus:tw-outline-none"
-                        />
+                        <form action="{{ route('search') }}" method="GET">
+                            <input 
+                                type="search" 
+                                name="q"
+                                :placeholder="placeholders[current]"
+                                class="tw-w-full tw-pl-10 tw-pr-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-green-400 focus:tw-outline-none"
+                            />
+                        </form>
                     </div> --}}
 
                     {{-- Right Actions --}}
@@ -193,6 +197,18 @@
 
                                 {{-- username --}}
                                 <span>{{ Auth::user()->name }}</span>
+
+                                {{-- role tag --}}
+                                @if(Auth::user()->role === 'admin')
+                                    <span class="tw-bg-blue-500 tw-text-white tw-text-xs tw-px-2 tw-py-0.5 tw-rounded-full">
+                                        Admin
+                                    </span>
+                                @elseif(Auth::user()->role === 'owner')
+                                    <span class="tw-bg-green-500 tw-text-white tw-text-xs tw-px-2 tw-py-0.5 tw-rounded-full">
+                                        Owner
+                                    </span>
+                                @endif
+
                                 <svg
                                     :class="{'tw-rotate-180': !open}" 
                                     class="tw-w-4 tw-h-4 tw-transition-transform tw-duration-300" 

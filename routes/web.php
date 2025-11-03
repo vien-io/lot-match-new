@@ -23,6 +23,7 @@ use App\Http\Controllers\{
     DashboardController,
     MapController,
     OwnerVerificationController,
+    SearchController,
     UserManagementController
 };
 use App\Http\Middleware\CheckRole;
@@ -68,6 +69,10 @@ Route::get('/block/{blockId}/lot/{lotNumber}', [LotController::class, 'show']);
 Route::get('/blocks/{blockId}/lots/{lotNumber}', [LotController::class, 'showLot'])->name('lots.show');
 
 
+// Search Bar
+Route::get('/search', [SearchController::class, 'index'])->name('search');
+Route::get('blocks/{blockId}/lots/{lotNumber}', [LotController::class, 'show'])->name('lots.show');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -111,6 +116,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
     Route::get('/blocks/{blockId}/reviews', [ReviewController::class, 'blockReviews']);
     Route::get('/blocks/all/reviews', [ReviewController::class, 'blockReviews']);
+    Route::get('/block/{block}/with-reviews-lots', [BlockController::class, 'getBlockWithReviewsAndLots']);
 
     // ------------------------
     // 3D Map

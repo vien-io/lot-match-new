@@ -3,6 +3,15 @@ import { renderBlockRatingsChart, renderRatingDistributionChart, renderTopRatedL
 import Alpine from 'alpinejs';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("Current user role:", window.App?.role);
+
+    if (!window.App) return; // safety
+
+    renderReviewSection(currentBlock);
+});
+
+
 
 // ====================
 // SEARCH PLACEHOLDER CYCLE

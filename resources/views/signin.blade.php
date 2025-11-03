@@ -62,10 +62,10 @@
 
                 <!-- Remember + Forgot -->
                 <div class="tw-flex tw-items-center tw-justify-between tw-mb-6 tw-text-sm">
-                    <label class="tw-flex tw-items-center">
+                    {{-- <label class="tw-flex tw-items-center">
                         <input type="checkbox" class="tw-mr-2 tw-rounded tw-border-gray-300 tw-text-green-600 focus:tw-ring-green-500">
                         Remember me
-                    </label>
+                    </label> --}}
                     <a href="{{ route('password.request') }}" class="tw-text-green-500 hover:tw-underline">Forgot password?</a>
                 </div>
 

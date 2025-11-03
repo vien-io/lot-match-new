@@ -3,6 +3,8 @@
 @section('title', '3D Map - LotMatch')
 
 @section('content')
+
+
 <div class="tw-flex tw-h-[calc(100vh - 64px)]">
     {{-- 3D Container --}}
     <div id="threejs-container" 
@@ -423,6 +425,22 @@
 @endsection
 
 @section('scripts')
+<script>
+    @auth
+        window.App = {
+            userId: {{ auth()->id() }},
+            role: "{{ auth()->user()->role }}"
+        };
+    @else
+        window.App = {
+            userId: null,
+            role: null
+        };
+    @endauth
+</script>
+
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
     {{-- @vite(['resources/js/3dmap.js']) --}}
     @vite([
         'resources/js/modals/imageModal.js',

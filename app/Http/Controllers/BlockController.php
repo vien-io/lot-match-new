@@ -28,6 +28,7 @@ class BlockController extends Controller
                 'id' => $review->id,
                 'user_id' => $review->user_id,
                 'user_name' => $review->user->name ?? 'Unknown',
+                'role' => $review->user->role ?? null, 
                 'rating' => $review->rating,
                 'comment' => $review->comment,
                 'created_at' => $review->created_at->toDateTimeString(),
@@ -45,6 +46,7 @@ class BlockController extends Controller
                 'size' => $lot->size,
                 'price' => $lot->price,
                 'block_id' => $lot->block_id,
+                'owner_id' => $lot->owner_id, 
                 'modelUrl' => $lot->model_url ? asset('models/' . $lot->model_url) : null,
             ];
         });
@@ -59,8 +61,46 @@ class BlockController extends Controller
             'existingReview' => $existingReview,
         ]);
     }
+
     public function showForecast(Block $block)
     {
         return view('block-forecast', ['block' => $block]);
     }
+
+    public function getBlockWithReviewsAndLots(Block $block)
+    {
+        $block->load(['lots', 'reviews.user']); 
+
+        $reviews = $block->reviews->map(function ($review) {
+            return [
+                'id' => $review->id,
+                'user_id' => $review->user_id,
+                'user_name' => $review->user->name ?? 'Unknown',
+                'role' => $review->user->role ?? 'buyer',
+                'rating' => $review->rating,
+                'comment' => $review->comment,
+                'created_at' => $review->created_at->toDateTimeString(),
+            ];
+        });
+
+        $lots = $block->lots->map(function ($lot) {
+            return [
+                'id' => $lot->id,
+                'name' => $lot->name,
+                'owner_id' => $lot->owner_id, 
+            ];
+        });
+
+        return response()->json([
+            'id' => $block->id,
+            'name' => $block->name,
+            'modelUrl' => $block->model_url,
+            'lots' => $lots,
+            'reviews' => $reviews,
+        ]);
+    }
+
+
+
+
 }

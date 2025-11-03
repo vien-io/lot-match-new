@@ -3,8 +3,11 @@ import { fetchForecast } from './forecastHandler';
 
 
 export function renderReviewSection(block) {
+    console.log("received: ", block);
+
     const reviewSection = document.getElementById('block-review-section');
     const reviews = block.reviews ?? [];
+    const blockId = block.id;
 
     reviewSection.innerHTML = `
     <div class="tw-space-y-6">
@@ -184,44 +187,71 @@ export function renderReviewSection(block) {
 
 
     <!-- Reviews List -->
-    <div class="tw-rounded-2xl tw-border-2 tw-border-transparent 
-                tw-bg-[linear-gradient(#1c1c1c,#1c1c1c)_padding-box,linear-gradient(145deg,transparent_35%,#e81cff,#40c9ff)_border-box]
-                tw-px-6 tw-pb-6 tw-shadow-[0_0_20px_rgba(0,0,0,0.6)] tw-w-full tw-h-[250]">
+        <div class="tw-rounded-2xl tw-border-2 tw-border-transparent 
+                    tw-bg-[linear-gradient(#1c1c1c,#1c1c1c)_padding-box,linear-gradient(145deg,transparent_35%,#e81cff,#40c9ff)_border-box]
+                    tw-px-6 tw-pb-6 tw-shadow-[0_0_20px_rgba(0,0,0,0.6)] tw-w-full tw-h-[250]">
 
-    <h3 class="tw-text-lg tw-font-semibold tw-text-[hsl(142,71%,45%)] tw-mb-4">
-        Reviews
-    </h3>
+            <h3 class="tw-text-lg tw-font-semibold tw-text-[hsl(142,71%,45%)] tw-mb-4">
+                Reviews
+            </h3>
 
-    <div id="reviews-container" class="tw-flex tw-flex-col tw-gap-3">
-        ${reviews.map(review => `
-        <div class="review" data-review-id="${review.id}">
-            <div class="tw-flex tw-items-center tw-justify-between">
-            <strong class="reviewer">${review.user_name}</strong>
-            <span class="rating">${review.rating}/5 ★</span>
+            <div id="reviews-container" class="tw-flex tw-flex-col tw-gap-3">
+                ${reviews.map(review => {
+                    let ownerTag = '';
+                    const ownsBlock = block.lots.some(lot => lot.owner_id === review.user_id);
+
+                    if (review.role === 'owner' && ownsBlock) {
+                        ownerTag = `<span class="tw-text-green-900 tw-bg-green-200 tw-rounded tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2">Owner on this block</span>`;
+                    } else if (review.role === 'owner') {
+                        ownerTag = `<span class="tw-text-orange-900 tw-bg-orange-200 tw-rounded tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2">Owner from another block</span>`;
+                    }
+
+                    // Show buttons for admin or review owner
+                    const showAdminButtons = window.App?.role === 'admin';
+                    const showOwnerButtons = window.App?.userId === review.user_id;
+                    console.log("Current user role:", window.App?.role);
+
+                    const buttons = (showAdminButtons || showOwnerButtons) ? `
+                        <div class="tw-flex tw-gap-2 tw-mt-2">
+                            <button class="edit-review tw-bg-[#2a2a2a] tw-text-white tw-font-semibold tw-rounded-md tw-px-3 tw-py-1 tw-transition-all hover:tw-bg-[#22C55E] hover:tw-text-black active:tw-scale-95">
+                                Edit
+                            </button>
+                            <button class="delete-review tw-bg-[#2a2a2a] tw-text-white tw-font-semibold tw-rounded-md tw-px-3 tw-py-1 tw-transition-all hover:tw-bg-[#ef4444] hover:tw-text-white active:tw-scale-95">
+                                Delete
+                            </button>
+                        </div>
+                    ` : '';
+
+                    return `
+                        <div class="review tw-bg-[#1c1c1c] tw-border tw-border-[#333] tw-rounded-lg tw-p-3 tw-shadow-sm">
+                            <div class="tw-flex tw-items-center tw-justify-between">
+                                <div class="tw-flex tw-items-center">
+                                    <strong class="reviewer tw-text-white">${review.user_name}</strong>
+                                    ${ownerTag}
+                                </div>
+                                <span class="rating tw-text-[#22C55E]">${review.rating}/5 ★</span>
+                            </div>
+
+                            <p class="tw-text-[#bcbcbc] tw-mt-1">${review.comment}</p>
+
+                            <small class="tw-text-[#999]">
+                                ${new Date(review.created_at).toLocaleString('en-US', {
+                                    year: 'numeric', month: 'long', day: 'numeric',
+                                    hour: 'numeric', minute: '2-digit', hour12: true
+                                })}
+                            </small>
+
+                            ${buttons}
+                        </div>
+                    `;
+                }).join('')}
             </div>
 
-            <p class="tw-text-[#bcbcbc]">${review.comment}</p>
 
-            <small class="tw-text-[#999]">
-            ${new Date(review.created_at).toLocaleString('en-US', {
-                year: 'numeric', month: 'long', day: 'numeric',
-                hour: 'numeric', minute: '2-digit', hour12: true
-            })}
-            </small>
 
-            ${window.App && review.user_id === window.App.userId ? `
-            <div class="tw-flex tw-gap-2 tw-mt-2">
-                <button class="edit-review">Edit</button>
-                <button class="delete-review">Delete</button>
-            </div>
-            ` : ''}
         </div>
-        `).join('')}
-    </div>
-    </div>
 
-</div>
-
+    </div>
     `;
 
     resetReviewForm();
@@ -230,6 +260,7 @@ export function renderReviewSection(block) {
     bindEditButtons(block);
     bindDeleteButtons();
 }
+
 
 function bindRatingLogic() {
     document.querySelectorAll('input[name="stars"]').forEach(radio => {
@@ -363,7 +394,7 @@ function bindFormHandler(block) {
     });
 }
 
-async function pollForecastStatus(blockId, maxAttempts = 10, delay = 2000) {
+async function pollForecastStatus(blockId, maxAttempts = 20, delay = 2000) {
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
         try {
             const res = await fetch(`/api/forecast/status/${blockId}`);
