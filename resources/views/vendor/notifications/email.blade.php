@@ -17,7 +17,7 @@
 </style>
 
 <div class="lotmatch-header">
-    {{-- <img src="{{ url('images/logoLM.png') }}" alt="LotMatch Logo" class="lotmatch-logo"> --}}
+    <img src="{{ url('images/logoLM.png') }}" alt="..." class="lotmatch-logo">
     <div class="lotmatch-title">Welcome to LotMatch!</div>
 </div>
 

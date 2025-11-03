@@ -27,6 +27,7 @@
 </head>
 <body class="tw-bg-gray-50">
     <div id="app" class="tw-flex">
+    
         {{-- Sidebar --}}
         @auth
         <div 
@@ -36,107 +37,112 @@
             class="sidebar tw-bg-white tw-shadow-lg tw-w-20 tw-flex tw-flex-col tw-items-center tw-py-6 tw-sticky tw-top-0 tw-h-screen tw-transition-shadow tw-duration-300 tw-z-50"
         >
 
-        {{-- Logo --}}
-        <div class="tw-mb-3 tw-mt-0">
-            <img src="/images/logoLM.png
-            " alt="LotM" class="tw-w-12 tw-h-12">
-        </div>
+            {{-- Logo --}}
+            <div class="tw-mb-3 tw-mt-0">
+                <img src="/images/logoLM.png" alt="LotM" class="tw-w-12 tw-h-12">
+            </div>
 
-       {{-- divider --}}
-        <div 
-            :class="scrolled 
-                ? 'tw-w-14 tw-opacity-100' 
-                : 'tw-w-0 tw-opacity-0'"
-            class="tw-border-t tw-border-gray-300 tw-mx-auto tw-mb-4 tw-transition-all tw-duration-700 tw-ease-in-out">
-        </div>
+            {{-- Divider --}}
+            <div 
+                :class="scrolled 
+                    ? 'tw-w-14 tw-opacity-100' 
+                    : 'tw-w-0 tw-opacity-0'"
+                class="tw-border-t tw-border-gray-300 tw-mx-auto tw-mb-4 tw-transition-all tw-duration-700 tw-ease-in-out">
+            </div>
 
+            {{-- Dashboard --}}
+            <x-sidebar-icon 
+                href="{{ route('dashboard') }}"
+                icon="fas fa-home"
+                tooltip="Dashboard"
+                :active="request()->routeIs('dashboard') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+            />
 
-        {{-- dashboard --}}
-        <x-sidebar-icon 
-            href="{{ route('dashboard') }}"
-            icon="fas fa-home"
-            tooltip="Dashboard"
-            :active="request()->routeIs('dashboard')
-                ? 'tw-bg-green-500 tw-text-white'
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-        />
+            {{-- 3D Map --}}
+            <x-sidebar-icon 
+                href="{{ route('3dmap') }}"
+                icon="fas fa-map"
+                tooltip="3D Map"
+                :active="request()->routeIs('3dmap') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+            />
 
-        {{-- 3d map --}}
-       <x-sidebar-icon 
-            href="{{ route('3dmap') }}"
-            icon="fas fa-map"
-            tooltip="3d Map"
-            :active="request()->routeIs('3dmap')
-                ? 'tw-bg-green-500 tw-text-white'
-                : 'tw-text-sidebar-gray tw-animate-pulse-to-green hover:tw-animate-none hover:tw-text-sidebar-green hover:tw-bg-green-200 hover:tw-text-green-600'"  
-        />
+            {{-- Reviews & Ratings --}}
+            <x-sidebar-icon 
+                href="{{ route('reviews.index') }}"
+                icon="fas fa-star"
+                tooltip="Reviews & Ratings"
+                :active="request()->routeIs('reviews*') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+            />
 
+            {{-- AI Summary & Forecasting --}}
+            <x-sidebar-icon 
+                href="{{ route('forecast') }}"
+                icon="fas fa-robot"
+                tooltip="AI Summary & Forecasting"
+                :active="request()->routeIs('forecast') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+            />
 
-        {{-- property management --}}
-        <x-sidebar-icon 
-            href="{{ route('properties.index') }}" 
-            icon="fas fa-vihara" 
-            tooltip="Property Management"
-            :active="request()->routeIs('properties.*') 
-                ? 'tw-bg-green-500 tw-text-white' 
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-        />
+            {{-- Role-specific --}}
+            @if(auth()->user()->role === 'admin')
+                {{-- Property Management --}}
+                <x-sidebar-icon 
+                    href="{{ route('properties.index') }}" 
+                    icon="fas fa-vihara" 
+                    tooltip="Property Management"
+                    :active="request()->routeIs('properties.*') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+                />
 
-        {{-- Reviews and Ratings --}}
-        <x-sidebar-icon 
-            href="{{ route('reviews.index') }}" 
-            icon="fas fa-star" 
-            tooltip="Reviews & Ratings"
-            :active="request()->routeIs('reviews*') 
-                ? 'tw-bg-green-500 tw-text-white' 
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'" 
-        />
+                {{-- Data Analytics --}}
+                <x-sidebar-icon 
+                    href="{{ route('analytics.block_ratings') }}" 
+                    icon="fas fa-chart-line" 
+                    tooltip="Data Analytics"
+                    :active="request()->routeIs('analytics.block_ratings') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+                />
 
-        {{-- AI Summary & Forecasting --}}
-        <x-sidebar-icon 
-            href="{{ route('forecast') }}"  
-            icon="fas fa-robot" 
-            tooltip="AI Summary & Forecasting"
-            :active="request()->routeIs('forecast') 
-                ? 'tw-bg-green-500 tw-text-white' 
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-        />
+                {{-- User Management --}}
+                <x-sidebar-icon 
+                    href="{{ route('usermanagement.index') }}"
+                    icon="fas fa-users" 
+                    tooltip="User Management"
+                    :active="request()->routeIs('usermanagement.index') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+                />
 
-        {{-- Data Analytics --}}
-        <x-sidebar-icon 
-            href="{{ route('analytics.block_ratings') }}" 
-            icon="fas fa-chart-line" 
-            tooltip="Data Analytics"
-            :active="request()->routeIs('analytics.block_ratings') 
-                ? 'tw-bg-green-500 tw-text-white' 
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-        />
+                {{-- Owner Verification Requests --}}
+                <x-sidebar-icon
+                    href="{{ route('owner-verification.index') }}"
+                    icon="fas fa-clipboard-list"
+                    tooltip="Owner Requests"
+                    :active="request()->routeIs('owner-verification.index') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+                />
+            @endif
 
-        {{-- User Management --}}
-        <x-sidebar-icon 
-            href="{{ route('usermanagement.index') }}"
-            icon="fas fa-users" 
-            tooltip="User Management"
-            :active="request()->routeIs('usermanagement.index') 
-                ? 'tw-bg-green-500 tw-text-white' 
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-        />
+            @if(auth()->user()->role === 'buyer')
+                {{-- Request Ownership --}}
+                <x-sidebar-icon
+                    href="{{ route('owner-verification.create') }}"
+                    icon="fas fa-file-upload"
+                    tooltip="Request Ownership"
+                    :active="request()->routeIs('owner-verification.create') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+                />
+            @endif
 
-        {{-- Technical Documentation / About --}}
-        <x-sidebar-icon 
-            href="{{ route('about') }}" 
-            icon="fas fa-info-circle" 
-            tooltip="Documentation / About"
-            :active="request()->routeIs('about') 
-                ? 'tw-bg-green-500 tw-text-white' 
-                : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-        />
+            @if(auth()->user()->role === 'owner')
+                {{-- Owners do not manage properties globally, only their assigned ones --}}
+                {{-- We can add owner-specific property management here --}}
+            @endif
 
+            {{-- Documentation / About --}}
+            <x-sidebar-icon 
+                href="{{ route('about') }}"
+                icon="fas fa-info-circle"
+                tooltip="Documentation / About"
+                :active="request()->routeIs('about') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+            />
 
-
-        {{-- more here --}}
         </div>
         @endauth
+
 
         {{-- Main content --}}
         <div class="tw-flex-1 tw-flex tw-flex-col">

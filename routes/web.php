@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use App\Http\Controllers\{
     AnalyticsController,
     Auth\ForgotPasswordController,
@@ -20,8 +22,10 @@ use App\Http\Controllers\{
     ReviewController,
     DashboardController,
     MapController,
+    OwnerVerificationController,
     UserManagementController
 };
+use App\Http\Middleware\CheckRole;
 
 // Enable auth routes with email verification
 Auth::routes(['verify' => true]);
@@ -34,11 +38,12 @@ Auth::routes(['verify' => true]);
 Route::view('/', 'welcome');
 
 // Authentication
-Route::get('/signin', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/signin', [AuthController::class, 'signin'])->name('signin');
+Route::get('/signin', [LoginController::class, 'showLoginForm'])->name('signin');
+Route::post('/signin', [AuthController::class, 'signin'])->name('signin.submit');
 
-Route::get('/signup', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/signup', [RegisterController::class, 'register'])->name('signup');
+Route::get('/signup', [RegisterController::class, 'showRegistrationForm'])->name('signup');
+Route::post('/signup', [RegisterController::class, 'register'])->name('signup.submit');
+
 
 // Password reset
 Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])
@@ -62,6 +67,8 @@ Route::get('/block/{id}', [BlockController::class, 'show']);
 Route::get('/block/{blockId}/lot/{lotNumber}', [LotController::class, 'show']);
 Route::get('/blocks/{blockId}/lots/{lotNumber}', [LotController::class, 'showLot'])->name('lots.show');
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Authenticated and Verified Routes
@@ -71,22 +78,33 @@ Route::get('/blocks/{blockId}/lots/{lotNumber}', [LotController::class, 'showLot
 | Unverified users will be redirected to /email/verify.
 |
 */
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    // ------------------------
     // Dashboard
+    // ------------------------
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-    // Property management
-    Route::resource('properties', PropertyController::class)->except(['show', 'create', 'edit']);
+    // ------------------------
+    // Property Management
+    // ------------------------
+    Route::resource('properties', PropertyController::class)
+        ->except(['show', 'create', 'edit']);
 
-    // Analytics and forecasting
-    Route::get('/analytics/block-ratings', [AnalyticsController::class, 'dashboard'])->name('analytics.block_ratings');
+    // ------------------------
+    // Analytics & Forecasting
+    // ------------------------
+    Route::get('/analytics/block-ratings', [AnalyticsController::class, 'dashboard'])
+        ->name('analytics.block_ratings');
     Route::get('/forecast', [ForecastController::class, 'forecastPage'])->name('forecast');
     Route::get('/forecast/data/{blockId}', [ForecastController::class, 'getForecastData']);
     Route::get('/forecast/block/{block_id}', [ForecastController::class, 'forecastBlockRating']);
     Route::get('/forecast/sentiment-trend/{blockId}', [ForecastController::class, 'getBlockSentimentTrends']);
 
-    // Reviews (only logged-in verified users can manage reviews)
+    // ------------------------
+    // Reviews (all logged-in verified users)
+    // ------------------------
     Route::post('/block-reviews', [ReviewController::class, 'store'])->name('block.reviews.store');
     Route::put('/block-reviews/{review}', [ReviewController::class, 'update'])->name('block.reviews.update');
     Route::delete('/block-reviews/{review}', [ReviewController::class, 'destroy'])->name('block.reviews.destroy');
@@ -94,23 +112,49 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/blocks/{blockId}/reviews', [ReviewController::class, 'blockReviews']);
     Route::get('/blocks/all/reviews', [ReviewController::class, 'blockReviews']);
 
-    // 3D map page (protected so only verified users interact with analytics)
+    // ------------------------
+    // 3D Map
+    // ------------------------
     Route::get('/map', [MapController::class, 'index'])->name('map');
 
-    // Lot images
+    // ------------------------
+    // Lot Images
+    // ------------------------
     Route::post('/lots/add-image', [LotController::class, 'addImage'])->name('lots.addImage');
     Route::get('/lots/{lotId}/images', [LotImageController::class, 'index']);
 
-    // User management (admin area)
-    Route::prefix('usermanagement')->name('usermanagement.')->group(function () {
-        Route::get('/users', [UserManagementController::class, 'index'])->name('index');
-        Route::get('/users/create', [UserManagementController::class, 'create'])->name('create');
-        Route::post('/users', [UserManagementController::class, 'store'])->name('store');
-        Route::get('/users/{user}/edit', [UserManagementController::class, 'edit'])->name('edit');
-        Route::put('/users/{user}', [UserManagementController::class, 'update'])->name('update');
-        Route::delete('/users/{user}', [UserManagementController::class, 'destroy'])->name('destroy');
+    // ------------------------
+    // Buyer Routes (Owner Verification Requests)
+    // ------------------------
+    Route::middleware(['role:buyer'])->prefix('owner-verification')->name('owner-verification.')->group(function () {
+        Route::get('/request', [OwnerVerificationController::class, 'create'])->name('create');
+        Route::post('/request', [OwnerVerificationController::class, 'store'])->name('store');
+    });
+
+    // ------------------------
+    // Admin Routes
+    // ------------------------
+    Route::middleware(['role:admin'])->group(function () {
+
+        // User Management
+        Route::prefix('usermanagement')->name('usermanagement.')->group(function () {
+            Route::get('/users', [UserManagementController::class, 'index'])->name('index');
+            Route::get('/users/create', [UserManagementController::class, 'create'])->name('create');
+            Route::post('/users', [UserManagementController::class, 'store'])->name('store');
+            Route::get('/users/{user}/edit', [UserManagementController::class, 'edit'])->name('edit');
+            Route::put('/users/{user}', [UserManagementController::class, 'update'])->name('update');
+            Route::delete('/users/{user}', [UserManagementController::class, 'destroy'])->name('destroy');
+        });
+
+        // Owner Verification Requests
+        Route::prefix('owner-verification')->name('owner-verification.')->group(function () {
+            Route::get('/requests', [OwnerVerificationController::class, 'index'])->name('index');
+            Route::post('/approve/{id}', [OwnerVerificationController::class, 'approve'])->name('approve');
+            Route::post('/reject/{id}', [OwnerVerificationController::class, 'reject'])->name('reject');
+        });
     });
 });
+
 
 /*
 |--------------------------------------------------------------------------
@@ -124,29 +168,28 @@ Route::get('/tools/backfill-sentiment', [\App\Http\Controllers\ToolsController::
 
 
 
-
-
-
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
-
-// ✅ Custom verification success page
+/*
+|--------------------------------------------------------------------------
+| Email Verification
+|--------------------------------------------------------------------------
+*/
+// verification success page
 Route::get('/email/verified-success', function () {
     return view('auth.verified-success');
 })->name('verification.success');
 
-// ✅ Default verification route (you may already have this)
+// default verification route 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
     return redirect()->route('verification.success');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
-// ✅ Show notice if email isn’t verified yet
+// if email isn’t verified yet
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
-// ✅ Resend link (optional)
+// resend link 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');

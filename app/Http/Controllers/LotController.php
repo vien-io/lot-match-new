@@ -86,9 +86,10 @@ class LotController extends Controller
     public function generateSummary($lotId)
     {
         $lot = Lot::findOrFail($lotId);
-        
 
     }
+
+    
 
 
 }

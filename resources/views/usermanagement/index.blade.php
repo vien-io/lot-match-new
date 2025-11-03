@@ -13,13 +13,13 @@
     <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-overflow-hidden">
         <!-- Toolbar -->
         <div class="tw-flex tw-justify-between tw-items-center tw-p-4 tw-border-b">
-            <!-- Search -->
-            <div class="tw-flex tw-items-center tw-border tw-rounded-lg tw-px-3 tw-py-1 tw-bg-gray-50">
+            <!-- Search Form -->
+            <form method="GET" action="{{ route('usermanagement.index') }}" class="tw-flex tw-items-center tw-border tw-rounded-lg tw-px-3 tw-py-1 tw-bg-gray-50">
                 <svg xmlns="http://www.w3.org/2000/svg" class="tw-w-4 tw-h-4 tw-text-gray-400 tw-mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                <input placeholder="Search users..." class="tw-bg-transparent tw-outline-none tw-text-sm" />
-            </div>
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search users..." class="tw-bg-transparent tw-outline-none tw-text-sm tw-w-full" />
+            </form>
 
             <!-- Toolbar Buttons -->
             <div class="tw-flex tw-gap-2">
@@ -46,6 +46,8 @@
                         <th class="tw-p-2 tw-text-white">Userame</th>
                         <th class="tw-p-2 tw-text-white">Full Name</th>
                         <th class="tw-p-2 tw-text-white">Email</th>
+                        <th class="tw-p-2 tw-text-white">Role</th>
+                        <th class="tw-p-2 tw-text-white">Verification</th>
                         <th class="tw-p-2 tw-text-white">Actions</th>
                     </tr>
                 </thead>
@@ -56,6 +58,42 @@
                             <td class="tw-p-2">{{ $user->username }}</td>
                             <td class="tw-p-2">{{ $user->name }}</td>
                             <td class="tw-p-2">{{ $user->email }}</td>
+
+                            {{-- Role --}}
+                            <td class="tw-p-2">
+                                @if(auth()->user()->role === 'admin')
+                                    <form action="{{ route('usermanagement.update', $user->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+
+                                        <!-- Hidden inputs for required fields -->
+                                        <input type="hidden" name="username" value="{{ $user->username }}">
+                                        <input type="hidden" name="name" value="{{ $user->name }}">
+                                        <input type="hidden" name="email" value="{{ $user->email }}">
+
+                                        <!-- Role dropdown -->
+                                        <select name="role" onchange="this.form.submit()" class="tw-border tw-rounded tw-px-2 tw-py-1 tw-text-sm">
+                                            <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
+                                            <option value="owner" {{ $user->role === 'owner' ? 'selected' : '' }}>Owner</option>
+                                            <option value="buyer" {{ $user->role === 'buyer' ? 'selected' : '' }}>Buyer</option>
+                                        </select>
+                                    </form>
+                                @else
+                                    {{ ucfirst($user->role) }}
+                                @endif
+                            </td>
+
+
+                            {{-- Verification --}}
+                            <td class="tw-p-2">
+                                @if($user->email_verified_at)
+                                    <span class="tw-bg-green-100 tw-text-green-800 tw-px-2 tw-py-1 tw-rounded tw-text-xs">Verified</span>
+                                @else
+                                    <span class="tw-bg-yellow-100 tw-text-yellow-800 tw-px-2 tw-py-1 tw-rounded tw-text-xs">Pending</span>
+                                @endif
+                            </td>
+
+
                             <td class="tw-p-2">
                                 <div class="tw-flex tw-gap-2 tw-items-center">
                                     <!-- Edit Modal Trigger -->

@@ -5,12 +5,24 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class UserManagementController extends Controller
 {
-    public function index()
-    {
-        $users = User::paginate(20);
+    public function index(Request $request)
+{
+        $query = User::query();
+
+        if ($search = $request->input('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('username', 'like', "%{$search}%")
+                ->orWhere('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $users */
+        $users = $query->paginate(20)->withQueryString(); 
+
         return view('usermanagement.index', compact('users'));
     }
 
@@ -75,9 +87,19 @@ class UserManagementController extends Controller
             'username' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'email' => "required|email|unique:users,email,{$user->id}",
+            'role' => 'nullable|in:admin,owner,buyer',
         ]);
 
         $user->update($request->only('username', 'name', 'email'));
+
+        // update role
+        if ($request->filled('role')) {
+            $newRole = $request->role;
+            $user->update([
+                'role' => $newRole,
+                'email_verified_at' => ($newRole === 'owner' || $newRole === 'admin') ? now() : null,
+            ]);
+        }
 
         return redirect()->route('usermanagement.index')->with('success', 'User updated successfully.');
     }
