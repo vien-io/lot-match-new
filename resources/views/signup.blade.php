@@ -48,17 +48,18 @@
                            class="tw-w-full tw-pl-4 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-purple-500">
                 </div>
 
-                <!-- Terms -->
+                <!-- terrms and privacy checkbox -->
                 <div class="tw-flex tw-items-center tw-mb-6 tw-text-sm">
-                    <input type="checkbox" id="agreeTerms" class="tw-mr-2 tw-rounded tw-border-gray-300 tw-text-purple-600 focus:tw-ring-purple-500">
+                    <input type="checkbox" id="agreeTerms" required
+                        class="tw-mr-2 tw-rounded tw-border-gray-300 tw-text-purple-600 focus:tw-ring-purple-500">
                     <label for="agreeTerms" class="tw-text-gray-600">
                         By signing up, you agree to our 
-                        <a href="#" class="tw-text-purple-500 hover:tw-underline">Privacy Policy</a> and 
-                        <a href="#" class="tw-text-purple-500 hover:tw-underline">Terms of Service</a>
+                        <a href="#" class="tw-text-purple-500 hover:tw-underline" data-modal-target="privacyModal">Privacy Policy</a> and 
+                        <a href="#" class="tw-text-purple-500 hover:tw-underline" data-modal-target="termsModal">Terms of Service</a>.
                     </label>
                 </div>
 
-                <!-- Validation Errors -->
+                <!-- validation Errors -->
                 @if ($errors->any())
                     <div class="tw-mb-4 tw-text-red-500 tw-text-sm">
                         @foreach ($errors->all() as $error)
@@ -66,6 +67,54 @@
                         @endforeach
                     </div>
                 @endif
+
+                <div id="privacyModal"
+                    class="tw-hidden tw-fixed tw-inset-0 tw-bg-black/50 tw-flex tw-items-center tw-justify-center tw-z-50">
+                    <div class="tw-bg-white tw-rounded-2xl tw-max-w-2xl tw-w-full tw-p-6 tw-shadow-xl tw-relative">
+                        <button class="tw-absolute tw-top-3 tw-right-4 tw-text-gray-500 hover:tw-text-purple-600"
+                                data-modal-close>✕</button>
+                        <h2 class="tw-text-2xl tw-font-semibold tw-mb-4 tw-text-purple-600">Privacy Policy</h2>
+                        <div class="tw-max-h-[70vh] tw-overflow-y-auto tw-text-gray-700 tw-space-y-3 tw-pr-2">
+                            {{-- 👇 Paste your Privacy Policy content below --}}
+                            @include('legal.privacy')
+                        </div>
+                    </div>
+                </div>
+
+                <div id="termsModal"
+                    class="tw-hidden tw-fixed tw-inset-0 tw-bg-black/50 tw-flex tw-items-center tw-justify-center tw-z-50">
+                    <div class="tw-bg-white tw-rounded-2xl tw-max-w-2xl tw-w-full tw-p-6 tw-shadow-xl tw-relative">
+                        <button class="tw-absolute tw-top-3 tw-right-4 tw-text-gray-500 hover:tw-text-purple-600"
+                                data-modal-close>✕</button>
+                        <h2 class="tw-text-2xl tw-font-semibold tw-mb-4 tw-text-purple-600">Terms of Service</h2>
+                        <div class="tw-max-h-[70vh] tw-overflow-y-auto tw-text-gray-700 tw-space-y-3 tw-pr-2">
+                            {{-- 👇 Paste your Terms of Service content below --}}
+                            @include('legal.terms')
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                document.querySelectorAll('[data-modal-target]').forEach(link => {
+                    link.addEventListener('click', e => {
+                        e.preventDefault();
+                        const modal = document.getElementById(link.dataset.modalTarget);
+                        if (modal) modal.classList.remove('tw-hidden');
+                    });
+                });
+
+                document.querySelectorAll('[data-modal-close]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        btn.closest('div[id$="Modal"]').classList.add('tw-hidden');
+                    });
+                });
+
+                document.querySelectorAll('div[id$="Modal"]').forEach(modal => {
+                    modal.addEventListener('click', e => {
+                        if (e.target === modal) modal.classList.add('tw-hidden');
+                    });
+                });
+                </script>
 
                 <!-- Button -->
                 <button type="submit" id="signupBtn"

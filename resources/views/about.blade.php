@@ -10,25 +10,34 @@
         <section class="tw-mb-6">
             <h2 class="tw-text-2xl tw-font-semibold tw-mb-2">System Overview</h2>
             <p class="tw-text-gray-700">
-                This platform is a comprehensive web-based system for real estate property management, 
-                combining 3D property visualization, user reviews, and forecasted property ratings. 
-                Users can submit ratings and detailed comments for individual lots or blocks, which are 
-                analyzed using AI-based sentiment detection and statistical forecasting techniques. 
-                The system provides administrators with actionable insights and intuitive 3D interfaces 
-                to manage and monitor properties effectively.
+                <strong>LotMatch</strong> is a web-based real estate analytics platform designed to visualize subdivision data in 
+                <strong>3D</strong>, collect <strong>user reviews</strong>, and generate <strong>AI-powered insights</strong> such as sentiment analysis 
+                and forecasted property ratings. It unifies interactive visualization, data analytics, and AI processing 
+                into a seamless environment for researchers, property developers, and managers.
             </p>
+            <ul class="tw-list-disc tw-pl-6 tw-text-gray-700 tw-mt-2">
+                <li>3D property visualization using Three.js</li>
+                <li>AI-driven sentiment analysis on user reviews</li>
+                <li>Exponential Moving Average (EMA) forecasting for property ratings</li>
+                <li>Dynamic charts and summaries via Chart.js</li>
+                <li>Responsive TailwindCSS interface with Laravel Blade templates</li>
+                <li>Asynchronous background processing through Laravel Jobs</li>
+            </ul>
         </section>
 
         <!-- 3D Visualization & Interaction -->
         <section class="tw-mb-6">
             <h2 class="tw-text-2xl tw-font-semibold tw-mb-2">3D Visualization & Interaction</h2>
             <p class="tw-text-gray-700">
-                The front-end leverages Three.js to render interactive 3D scenes of blocks and individual lots. 
-                Users can rotate, pan, and zoom the camera using intuitive controls. 
-                Each property is represented as a Level-of-Detail (LOD) 3D model, ensuring smooth performance 
-                even for complex scenes. Hovering over houses or blocks highlights them, displays tooltips, 
-                and allows selection for detailed views. Additionally, modal popups provide detailed 3D previews 
-                of properties and integrated review sections.
+                The platform leverages <strong>Three.js</strong> to render interactive 3D scenes of blocks and individual lots. 
+                Users can pan, zoom, and rotate the camera with intuitive controls. Each property is represented as a 
+                Level-of-Detail (LOD) 3D model to ensure smooth performance even for large subdivisions.
+                Hovering over houses or blocks highlights them, displays tooltips, and allows selection for detailed views.
+                Modal popups provide detailed 3D previews, AI summaries, user reviews, and forecast data.
+            </p>
+            <p class="tw-text-gray-700 tw-mt-2">
+                Interactive features include real-time highlighting via <strong>raycasting</strong>, 
+                dynamic modal loading for lot/block details, AI forecast overlays, and responsive chart rendering.
             </p>
         </section>
 
@@ -36,26 +45,27 @@
         <section class="tw-mb-6">
             <h2 class="tw-text-2xl tw-font-semibold tw-mb-2">Data Flow</h2>
             <p class="tw-text-gray-700">
-                The system workflow involves several key steps:
+                The system processes and visualizes data through several coordinated steps:
             </p>
             <ul class="tw-list-disc tw-pl-6 tw-text-gray-700">
-                <li>Users submit reviews through interactive front-end forms.</li>
-                <li>ReviewController handles creation, update, and deletion of reviews.</li>
-                <li>AnalyzeSentimentJob evaluates the sentiment of user comments using NLP models from Hugging Face.</li>
-                <li>GenerateBlockSummaryJob aggregates reviews and produces AI-generated summaries for each block.</li>
-                <li>ForecastController calculates Exponential Moving Average (EMA) ratings and generates trend reports for visualization in charts.</li>
+                <li>Users submit reviews and ratings through interactive 3D map modals.</li>
+                <li><strong>ReviewController</strong> handles creation, updating, and deletion of reviews.</li>
+                <li><strong>AnalyzeSentimentJob</strong> classifies user comments using NLP models from Hugging Face.</li>
+                <li><strong>GenerateBlockSummaryJob</strong> aggregates reviews and generates AI-based natural language summaries.</li>
+                <li><strong>ForecastController</strong> computes Exponential Moving Average (EMA) scores and produces trend charts.</li>
+                <li>The front-end dynamically updates 3D modals, summaries, and forecast charts in real time.</li>
             </ul>
         </section>
 
-        <!-- Algorithms -->
+        <!-- Algorithms & Processing -->
         <section class="tw-mb-6">
             <h2 class="tw-text-2xl tw-font-semibold tw-mb-2">Algorithms & Processing</h2>
             <ul class="tw-list-disc tw-pl-6 tw-text-gray-700">
-                <li><strong>Exponential Moving Average (EMA):</strong> Smooths historical ratings to forecast block scores.</li>
-                <li><strong>Sentiment Analysis:</strong> Uses NLP models to classify reviews as positive, negative, or neutral.</li>
-                <li><strong>Data Aggregation:</strong> Chains background jobs to consolidate review data into block summaries and forecasts.</li>
-                <li><strong>Forecast Visualization:</strong> Chart.js displays historical ratings along with forecasted points, highlighting predicted trends for administrators.</li>
-                <li><strong>3D Interaction Logic:</strong> Raycasting detects mouse hover and clicks on houses or blocks, triggering highlights, tooltips, and modal popups.</li>
+                <li><strong>Exponential Moving Average (EMA):</strong> Smooths historical ratings to forecast block performance trends.</li>
+                <li><strong>Sentiment Analysis:</strong> NLP models classify user reviews as positive, neutral, or negative.</li>
+                <li><strong>Data Aggregation:</strong> Background jobs consolidate ratings and sentiments into AI-generated summaries.</li>
+                <li><strong>Forecast Visualization:</strong> Chart.js displays historical and forecasted scores, highlighting predicted trends.</li>
+                <li><strong>3D Interaction Logic:</strong> Raycasting detects hover/click events on properties to trigger visual feedback and modals.</li>
             </ul>
         </section>
 
@@ -63,19 +73,23 @@
         <section class="tw-mb-6">
             <h2 class="tw-text-2xl tw-font-semibold tw-mb-2">System Architecture</h2>
             <p class="tw-text-gray-700">
-                Built on Laravel, the system uses Eloquent models (User, Block, Review) for data persistence. 
-                Blade templates render the front-end with TailwindCSS for responsive styling. 
-                Asynchronous Jobs handle compute-heavy tasks such as sentiment analysis, block summary generation, and EMA forecasting, 
-                keeping the UI responsive and smooth.
+                Built on the <strong>Laravel</strong> framework, the system follows an MVC structure and modular design. 
+                Eloquent models manage data persistence, while Blade templates and TailwindCSS power the responsive interface. 
+                Asynchronous Jobs handle intensive operations like AI sentiment analysis and forecast calculations, 
+                maintaining a responsive user experience.
             </p>
-            <p class="tw-text-gray-700 tw-mt-2">
-                Database tables include:
-            </p>
+            <p class="tw-text-gray-700 tw-mt-2">Core backend components include:</p>
+            <ul class="tw-list-disc tw-pl-6 tw-text-gray-700">
+                <li><strong>Controllers:</strong> ReviewController, ForecastController</li>
+                <li><strong>Jobs:</strong> AnalyzeSentimentJob, GenerateBlockSummaryJob</li>
+                <li><strong>Models:</strong> User, Block, Review, Forecast, Summary</li>
+            </ul>
+            <p class="tw-text-gray-700 tw-mt-2">Database tables include:</p>
             <ul class="tw-list-disc tw-pl-6 tw-text-gray-700">
                 <li><strong>users:</strong> Registered users and administrators.</li>
-                <li><strong>blocks:</strong> Properties or blocks under management.</li>
-                <li><strong>reviews:</strong> User-submitted ratings and comments for blocks or lots.</li>
-                <li><strong>forecasts & summaries:</strong> AI-generated summaries and predicted ratings per block.</li>
+                <li><strong>blocks:</strong> Subdivision blocks under management.</li>
+                <li><strong>reviews:</strong> User-submitted ratings and comments per block or lot.</li>
+                <li><strong>forecasts & summaries:</strong> AI-generated summaries and projected block ratings.</li>
             </ul>
         </section>
 
@@ -83,12 +97,28 @@
         <section class="tw-mb-6">
             <h2 class="tw-text-2xl tw-font-semibold tw-mb-2">Example Review & Forecast Workflow</h2>
             <ul class="tw-list-disc tw-pl-6 tw-text-gray-700">
-                <li>User submits a review with a star rating and optional comment.</li>
-                <li>ReviewController stores the review and triggers background jobs for sentiment analysis.</li>
-                <li>AnalyzeSentimentJob classifies the comment sentiment and stores the result.</li>
-                <li>GenerateBlockSummaryJob consolidates all reviews to produce a natural-language summary for the block.</li>
-                <li>ForecastController calculates the EMA forecast and combines it with sentiment trends for chart visualization.</li>
-                <li>The front-end updates dynamically to reflect new reviews, summaries, and forecast trends in 3D modals and charts.</li>
+                <li>The user submits a review with a star rating and optional comment.</li>
+                <li><strong>ReviewController</strong> stores the review and dispatches background jobs for analysis.</li>
+                <li><strong>AnalyzeSentimentJob</strong> evaluates the review using AI sentiment models.</li>
+                <li><strong>GenerateBlockSummaryJob</strong> updates the block summary with aggregated data.</li>
+                <li><strong>ForecastController</strong> calculates the EMA forecast and integrates it into trend charts.</li>
+                <li>The front-end updates in real time with new reviews, summaries, and forecasted trends displayed in 3D modals and analytics charts.</li>
+            </ul>
+        </section>
+
+        <!-- Design & User Experience -->
+        <section class="tw-mb-6">
+            <h2 class="tw-text-2xl tw-font-semibold tw-mb-2">Design & User Experience</h2>
+            <p class="tw-text-gray-700">
+                The system emphasizes clarity, performance, and immersion. Real-time AI processing ensures feedback loops 
+                between user actions and visual updates. TailwindCSS gradients, shadows, and rounded corners create 
+                a clean, modern dashboard aesthetic.
+            </p>
+            <ul class="tw-list-disc tw-pl-6 tw-text-gray-700 tw-mt-2">
+                <li><strong>Immersive Visualization:</strong> 3D interaction replaces static property lists.</li>
+                <li><strong>AI Feedback Loop:</strong> User reviews immediately influence analytics and forecasts.</li>
+                <li><strong>Scalable Rendering:</strong> Instanced 3D meshes maintain smooth performance on large maps.</li>
+                <li><strong>Responsive Design:</strong> TailwindCSS ensures seamless layout on all devices.</li>
             </ul>
         </section>
 
@@ -96,12 +126,14 @@
         <section>
             <h2 class="tw-text-2xl tw-font-semibold tw-mb-2">Summary</h2>
             <p class="tw-text-gray-700">
-                By integrating real-time 3D visualization, AI-based sentiment analysis, EMA forecasting, 
-                and responsive frontend interactions, this system provides administrators and users with 
-                a comprehensive view of property performance. It combines actionable insights, interactive graphics, 
-                and scalable backend processing to ensure a user-friendly, high-performance experience.
+                By integrating <strong>3D visualization</strong>, <strong>AI sentiment analysis</strong>, 
+                and <strong>forecasting analytics</strong>, LotMatch provides an advanced and responsive system 
+                for real estate performance monitoring. It delivers actionable insights through immersive visualization, 
+                intelligent automation, and scalable architecture—transforming static property data into 
+                a living, interactive, and data-driven experience.
             </p>
         </section>
+
     </div>
 </div>
 @endsection
