@@ -425,19 +425,6 @@
 @endsection
 
 @section('scripts')
-<script>
-    @auth
-        window.App = {
-            userId: {{ auth()->id() }},
-            role: "{{ auth()->user()->role }}"
-        };
-    @else
-        window.App = {
-            userId: null,
-            role: null
-        };
-    @endauth
-</script>
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 

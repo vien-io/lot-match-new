@@ -23,7 +23,15 @@
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
     <!-- Scripts -->
+
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    <script>
+    window.App = {
+        userId: {{ auth()->id() ?? 'null' }},
+        role: "{{ auth()->user()?->role ?? '' }}"
+    };
+    </script>
     
 </head>
 <body class="tw-bg-gray-50">

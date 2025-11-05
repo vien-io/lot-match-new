@@ -32,5 +32,9 @@ class Lot extends Model
     {
         return $this->hasMany(LotImage::class, 'lot_id');
     }
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
     
 }

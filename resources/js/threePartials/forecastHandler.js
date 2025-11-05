@@ -12,7 +12,6 @@ export function fetchForecast(blockId) {
         return;
     } */
 
-    console.log("User is an admin");
 
     /* fetch(`/forecast/data/${blockId}`)
         .then(response => response.json())

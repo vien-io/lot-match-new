@@ -93,7 +93,7 @@ export function loadHouses(scene) {
 
             housesGroup.add(instancedMesh);
             selectableObjects.push(instancedMesh);
-
+``
             console.log(`🏘️  Instanced lots: ${count}`);
             console.log(`🔹  Each lot unique (via metadata array).`);
         });

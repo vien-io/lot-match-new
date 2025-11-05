@@ -198,7 +198,9 @@ export function renderReviewSection(block) {
             <div id="reviews-container" class="tw-flex tw-flex-col tw-gap-3">
                 ${reviews.map(review => {
                     let ownerTag = '';
-                    const ownsBlock = block.lots.some(lot => lot.owner_id === review.user_id);
+                    const ownsBlock = Array.isArray(block?.lots)
+                    ? block.lots.some(lot => lot.owner_id === review.user_id)
+                    : false;
 
                     if (review.role === 'owner' && ownsBlock) {
                         ownerTag = `<span class="tw-text-green-900 tw-bg-green-200 tw-rounded tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2">Owner on this block</span>`;
@@ -223,7 +225,8 @@ export function renderReviewSection(block) {
                     ` : '';
 
                     return `
-                        <div class="review tw-bg-[#1c1c1c] tw-border tw-border-[#333] tw-rounded-lg tw-p-3 tw-shadow-sm">
+                        <div class="review tw-bg-[#1c1c1c] tw-border tw-border-[#333] tw-rounded-lg tw-p-3 tw-shadow-sm"
+                            data-review-id="${review.id}">
                             <div class="tw-flex tw-items-center tw-justify-between">
                                 <div class="tw-flex tw-items-center">
                                     <strong class="reviewer tw-text-white">${review.user_name}</strong>
@@ -373,7 +376,7 @@ function bindFormHandler(block) {
                     return;
                 }
                 
-                const done = await pollForecastStatus(blockId, 10, 2000);
+                const done = await pollForecastStatus(blockId, 20, 2000);
 
                 if (done) {
                     showAiPopup("AI analysis complete — summary updated.", "✨", 4000);
@@ -481,10 +484,40 @@ if (document.readyState === "loading") {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function bindEditButtons(block) {
     document.querySelectorAll('.edit-review').forEach(btn => {
         btn.addEventListener('click', function () {
             const reviewId = this.closest('.review').dataset.reviewId;
+            console.log("clicked on reviewid:", reviewId);
 
             // convert to string for comparison
             const review = block.reviews.find(r => String(r.id) === reviewId);

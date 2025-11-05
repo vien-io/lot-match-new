@@ -30,7 +30,9 @@ class OwnerVerificationController extends Controller
             'user_id' => Auth::id(),
             'lot_id' => $request->lot_id,
             'proof_document' => $path,
+            'status' => 'pending',
         ]);
+
 
         return redirect()->back()->with('success', 'Verification request submitted');
     }
@@ -45,18 +47,17 @@ class OwnerVerificationController extends Controller
     // admin: approve request
     public function approve($id)
     {
-        $request = OwnerVerification::findOrFail($id);
-        $request->update(['status' => 'approved']);
+        $verification = OwnerVerification::with(['user', 'lot'])->findOrFail($id);
 
-        // update user role to owner
-        $request->user->update(['role' => 'owner']);
+        $verification->update(['status' => 'approved']);
+        $verification->user->update(['role' => 'owner']);
 
-        // assign lot owner_id if lot_id present
-        if ($request->lot_id) {
-            $request->lot->update(['owner_id' => $request->user->id]);
+        if ($verification->lot_id) {
+            $verification->lot->owner_id = $verification->user_id;
+            $verification->lot->save();
         }
 
-        return redirect()->back()->with('success', 'Owner request approved.');
+        return redirect()->back()->with('success', 'Owner verification approved and ownership assigned.');
     }
 
     // admin: reject request

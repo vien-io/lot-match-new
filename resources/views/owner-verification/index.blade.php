@@ -31,7 +31,7 @@
                 <tr class="hover:tw-bg-gray-50 tw-border-b">
                     <td class="tw-p-3">{{ $request->id }}</td>
                     <td class="tw-p-3">{{ $request->user->name }} ({{ $request->user->email }})</td>
-                    <td class="tw-p-3">{{ $request->lot->block->name }} - Lot {{ $request->lot->number }}</td>
+                    <td class="tw-p-3">{{ $request->lot->block->name }} - Lot {{ $request->lot->id }}</td>
                     <td class="tw-p-3">
                         <a href="{{ asset('storage/' . $request->proof_document) }}" target="_blank" class="tw-text-blue-600 tw-underline">View Document</a>
                     </td>
