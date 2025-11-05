@@ -12,6 +12,32 @@
 @tailwind utilities;
 
 
+@layer utilities {
+  /* Chrome, Edge, Safari */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #22c55e; 
+    border-radius: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #16a34a; 
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #27ff73; 
+  }
+
+  /* Firefox support */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #22c55e #27ff73;
+  }
+}
+
 
 
 /* Custom Navbar */
@@ -937,11 +963,10 @@ html, body{
   border-radius: 16px;
 }
 
-/* example if you want a class toggle */
 .mid-column-content.hovered {
-    transform: translateY(-0.25rem); /* equivalent to tw--translate-y-1 */
+    transform: translateY(-0.25rem); 
     box-shadow: 0 4px 20px rgba(255,255,255,0.05);
     background-color: rgba(132, 255, 177, 0.3);
 }
 
-    
+

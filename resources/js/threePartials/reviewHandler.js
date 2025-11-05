@@ -113,28 +113,28 @@ export function renderReviewSection(block) {
         overflow-y: auto;
         padding-right: 5px;
         gap: 10px;
+
+        scrollbar-width: thin;
+        scrollbar-color: #22c55e #27ff73;
         }
 
         #reviews-container::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-        }
-
-        #reviews-container::-webkit-scrollbar-track {
-        background: hsla(220, 25%, 10%, 0.8);
-        border-radius: 10px;
+        width: 6px;
         }
 
         #reviews-container::-webkit-scrollbar-thumb {
-        background: hsl(220, 30%, 20%);
-        border-radius: 10px;
-        border: 2px solid #888888;
+        background: #22c55e; /* Green thumb */
+        border-radius: 8px;
         }
 
         #reviews-container::-webkit-scrollbar-thumb:hover {
-        background: hsl(221, 61%, 68%);
-        border: 2px solid #ffffff;
+        background: #16a34a; /* Darker green on hover */
         }
+
+        #reviews-container::-webkit-scrollbar-track {
+        background: #27ff73; /* Light green track */
+        }
+
 
         /* --- Individual Review Styling --- */
         .review {
@@ -185,15 +185,36 @@ export function renderReviewSection(block) {
         }
     </style>
 
-
+   
     <!-- Reviews List -->
-        <div class="tw-rounded-2xl tw-border-2 tw-border-transparent 
-                    tw-bg-[linear-gradient(#1c1c1c,#1c1c1c)_padding-box,linear-gradient(145deg,transparent_35%,#e81cff,#40c9ff)_border-box]
-                    tw-px-6 tw-pb-6 tw-shadow-[0_0_20px_rgba(0,0,0,0.6)] tw-w-full tw-h-[250]">
+    <div class="tw-rounded-2xl tw-border-2 tw-border-transparent 
+                tw-bg-[linear-gradient(#1c1c1c,#1c1c1c)_padding-box,linear-gradient(145deg,transparent_35%,#e81cff,#40c9ff)_border-box]
+                tw-px-6 tw-pb-6 tw-shadow-[0_0_20px_rgba(0,0,0,0.6)] tw-w-full">
 
-            <h3 class="tw-text-lg tw-font-semibold tw-text-[hsl(142,71%,45%)] tw-mb-4">
+        <!-- Title + Toggle Row -->
+        <div class="tw-flex tw-items-center tw-justify-between tw-mb-4 tw-mt-6">
+            <h3 class="tw-text-lg tw-font-semibold tw-text-[hsl(142,71%,45%)]">
                 Reviews
             </h3>
+
+            <div id="owner-toggle-wrapper" class="tw-flex tw-items-center tw-gap-3">
+                <span class="tw-text-sm tw-text-[#a1a1a1]">Show Owner Tags</span>
+
+                <label class="tw-relative tw-inline-flex tw-items-center tw-cursor-pointer group">
+                    <input type="checkbox" id="toggle-owner-tags" class="tw-sr-only peer">
+
+                    <!-- Track -->
+                    <div class="tw-w-11 tw-h-6 tw-bg-[#333] tw-rounded-full tw-transition-all tw-duration-300 peer-checked:tw-bg-[#22C55E]
+                                group-hover:tw-shadow-[0_0_10px_rgba(34,197,94,0.5)] tw-border tw-border-[#444]">
+                    </div>
+
+                    <!-- Knob -->
+                    <div class="tw-absolute tw-left-[3px] tw-top-[3px] tw-w-4 tw-h-4 tw-bg-white tw-rounded-full tw-transition-all tw-duration-300
+                                peer-checked:tw-translate-x-[22px] group-hover:tw-scale-110 tw-shadow-[0_0_6px_rgba(255,255,255,0.5)]">
+                    </div>
+                </label>
+            </div>
+        </div>
 
             <div id="reviews-container" class="tw-flex tw-flex-col tw-gap-3">
                 ${reviews.map(review => {
@@ -203,9 +224,19 @@ export function renderReviewSection(block) {
                     : false;
 
                     if (review.role === 'owner' && ownsBlock) {
-                        ownerTag = `<span class="tw-text-green-900 tw-bg-green-200 tw-rounded tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2">Owner on this block</span>`;
+                        ownerTag = `
+                            <span class="owner-tag tw-inline-block tw-text-green-900 tw-bg-green-200 tw-rounded 
+                                        tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2 tw-transition-all tw-duration-300
+                                        tw-opacity-0 tw-scale-0">
+                                Owner on this block
+                            </span>`;
                     } else if (review.role === 'owner') {
-                        ownerTag = `<span class="tw-text-orange-900 tw-bg-orange-200 tw-rounded tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2">Owner from another block</span>`;
+                        ownerTag = `
+                            <span class="owner-tag tw-inline-block tw-text-orange-900 tw-bg-orange-200 tw-rounded 
+                                        tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2 tw-transition-all tw-duration-300
+                                        tw-opacity-0 tw-scale-0">
+                                Owner from another block
+                            </span>`;
                     }
 
                     // Show buttons for admin or review owner
@@ -249,13 +280,50 @@ export function renderReviewSection(block) {
                     `;
                 }).join('')}
             </div>
-
-
-
         </div>
-
     </div>
     `;
+
+    const hasOwnerTags = reviews.some(r => r.role === 'owner');
+    const toggleWrapper = reviewSection.querySelector('#toggle-owner-tags')?.closest('label');
+
+    if (!hasOwnerTags && toggleWrapper) {
+        toggleWrapper.style.display = 'none';
+    }
+
+    const toggle = reviewSection.querySelector('#toggle-owner-tags');
+    const toggleTrack = toggle?.parentElement.querySelector('div'); 
+    const toggleKnob = toggleTrack?.nextElementSibling || toggleTrack; 
+
+    if (toggle) {
+        toggle.addEventListener('change', () => {
+            const tags = reviewSection.querySelectorAll('.owner-tag');
+            const isOn = toggle.checked;
+
+            tags.forEach(tag => {
+                if (isOn) {
+                    tag.classList.remove('tw-opacity-0', 'tw-scale-0');
+                    tag.classList.add('tw-opacity-100', 'tw-scale-100');
+                } else {
+                    tag.classList.add('tw-opacity-0', 'tw-scale-0');
+                    tag.classList.remove('tw-opacity-100', 'tw-scale-100');
+                }
+            });
+
+            const knob = toggle.parentElement.querySelector('div:nth-child(3)');
+            if (knob) {
+                knob.classList.toggle('tw-translate-x-[22px]', isOn);
+                knob.classList.toggle('tw-scale-110', isOn);
+            }
+
+            const track = toggle.parentElement.querySelector('div:nth-child(2)');
+            if (track) {
+                track.classList.toggle('tw-bg-[#22C55E]', isOn);
+                track.classList.toggle('tw-shadow-[0_0_15px_rgba(34,197,94,0.6)]', isOn);
+            }
+        });
+    }
+
 
     resetReviewForm();
     bindRatingLogic();
@@ -481,35 +549,6 @@ if (document.readyState === "loading") {
 } else {
     updateForecastTimestamp();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

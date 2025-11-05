@@ -370,7 +370,7 @@
                         Forecasting Data
                         <span id="forecast-timestamp" class="tw-ml-2 tw-text-sm tw-text-green-400"></span>
                     </h3>
-                    <div id="block-summary" class="tw-max-h-48 tw-overflow-y-auto tw-mt-2"></div>
+                    <div id="block-summary" class="tw-max-h-48 tw-overflow-y-auto tw-mt-2 custom-scrollbar"></div>
 
                     <div id="forecasting-data" class="tw-mt-4">
                         <p><strong>Forecasted Rating:</strong> <span id="forecast-value"></span></p>
