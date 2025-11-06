@@ -3,7 +3,6 @@ const addImageModal = document.getElementById('addImageModal');
 const lotIdInput = document.getElementById('lot_id_input');
 const addImageForm = document.getElementById('addImageForm');
 
-
 addImageBtn.addEventListener('click', () => {
     // pass current lot ID dynamically
     lotIdInput.value = currentLotId; 
@@ -49,6 +48,7 @@ const selectedImageName = document.getElementById('selectedImageName');
 let currentImageIndex = 0;
 let currentImages = [];
 const imgEl = document.getElementById('lot-image');
+const imgBox = document.getElementById('lot-images-section');
 
 const prevBtn = document.getElementById('prev-image-btn');
 const nextBtn = document.getElementById('next-image-btn');
@@ -94,14 +94,20 @@ export async function loadLotImages(lotId) {
     }
 }
 
-// open fullscreen on click of main image
-if (imgEl && fullscreenModal) {
-    imgEl.addEventListener('click', () => {
-        if (!imgEl.src) return;
+if (imgBox && fullscreenModal) {
+    imgBox.addEventListener('click', () => {
+    if (imgEl.src && imgEl.src !== window.location.href) {
         fullscreenImage.src = imgEl.src;
-        fullscreenModal.classList.remove('tw-hidden');
-    });
+        fullscreenImage.alt = imgEl.alt || "No image available";
+    } else {
+        fullscreenImage.src = "/images/no-image.png"; 
+        fullscreenImage.alt = "No image available";
+    }
+    fullscreenModal.classList.remove('tw-hidden');
+});
+
 }
+
 
 // close fullscreen on background click
 if (fullscreenModal) {

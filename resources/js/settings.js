@@ -1,5 +1,4 @@
 window.settingsModalOpen = false;
-
 document.addEventListener('DOMContentLoaded', () => {
     const settingsModal = document.getElementById('settings-modal');
     const openBtn = document.getElementById('settings-btn');
