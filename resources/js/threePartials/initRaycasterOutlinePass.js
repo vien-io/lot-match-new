@@ -18,7 +18,8 @@ export function initRaycasterOutlinePass({
     renderer,
     selectableObjects,
     instanceMetadata,
-    outlinePass
+    outlinePass,
+    uiState
 }) {
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
@@ -59,7 +60,7 @@ export function initRaycasterOutlinePass({
 
 
     window.addEventListener('mousemove', (event) => {
-        if (window.settingsModalOpen) return;
+        if (window.settingsModalOpen || uiState.isActive) return;
 
         // prevent hover when mous is over side panel
         const leftPanel = document.getElementById('side-panel');

@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { addBlockMarkers } from './blockMarkers.js';
+import { createToggle } from './utils/materialToggle.js';
+
+
 
 export async function loadHouses(scene) {
     const housesGroup = new THREE.Group();
@@ -8,13 +11,13 @@ export async function loadHouses(scene) {
     const instanceMetadata = [];
     const houseLoader = new GLTFLoader();
     const showLotStatusColor = true;
+    const uiState = { isActive: false };
 
     housesGroup.name = 'lotsGroup';
     scene.add(housesGroup);
 
     // --- Lights for standard material ---
-    const ambient = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambient);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
     const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
     dirLight.position.set(10, 20, 10);
     scene.add(dirLight);
@@ -29,34 +32,26 @@ export async function loadHouses(scene) {
             return [];
         }
     }
-
     const lotStatuses = await fetchLotStatuses();
-    const url = `/models/basic/housespawn.glb?ts=${Date.now()}`;
 
+    const url = `/models/basic/housespawn.glb?ts=${Date.now()}`;
     return new Promise((resolve) => {
         houseLoader.load(url, (gltf) => {
             const sceneModel = gltf.scene;
             housesGroup.add(sceneModel);
 
             const spawnObjects = [];
-
-            // --- Gather spawn data ---
             sceneModel.traverse((child) => {
                 if (child.name.startsWith('lot')) {
                     const parts = child.name.split('_');
-                    const lotId = parts[1];
-                    const blockId = parts[3];
-                    const shouldMirror = child.name.endsWith('_r');
-
                     spawnObjects.push({
                         position: child.position.clone(),
                         rotation: child.rotation.clone(),
-                        lotId,
-                        blockId,
-                        shouldMirror,
+                        lotId: parts[1],
+                        blockId: parts[3],
+                        shouldMirror: child.name.endsWith('_r'),
                     });
                 }
-
                 if (child.name.startsWith('block_')) {
                     const blockId = child.name.split('_')[1];
                     child.userData.blockId = blockId;
@@ -87,13 +82,12 @@ export async function loadHouses(scene) {
 
             // --- Load house geometry ---
             const modelLoader = new GLTFLoader();
-
             modelLoader.load('/models/basic/boxie8.glb', (houseGltf) => {
                 const baseModel = houseGltf.scene.children[0];
                 const geometry = baseModel.geometry.clone();
 
                 // --- Materials ---
-                const texturedMaterial = baseModel.material.clone(); 
+                const texturedMaterial = baseModel.material.clone();
                 const basicMaterial = new THREE.MeshBasicMaterial({
                     color: 0xffffff,
                     transparent: true,
@@ -123,7 +117,7 @@ export async function loadHouses(scene) {
                     instanceMetadata[i] = { lotId, blockId };
 
                     const lotData = lotStatuses.find(l => l.id == lotId);
-                    let color = new THREE.Color(0xffffff);
+                    const color = new THREE.Color(0xffffff);
                     if (lotData?.status === 'sold') color.set(0xff0000);
                     else if (lotData?.status === 'available') color.set(0x00ff00);
                     basicInstanceColor.setXYZ(i, color.r, color.g, color.b);
@@ -134,55 +128,10 @@ export async function loadHouses(scene) {
                 housesGroup.add(instancedMesh);
                 selectableObjects.push(instancedMesh);
 
-                const controlsDiv = document.createElement('div');
-                controlsDiv.className = `
-                    tw-fixed tw-top-24 tw-right-8 tw-bg-white/90 tw-px-4 tw-py-2
-                    tw-rounded-xl tw-text-gray-900 tw-font-sans tw-flex tw-items-center tw-gap-2
-                    tw-shadow-[0_0_15px_rgba(0,0,0,0.2)] tw-cursor-pointer tw-select-none
-                    tw-backdrop-blur-sm
-                `;
-                document.body.appendChild(controlsDiv);
+                // --- Material toggle (light + green accent) ---
+                createToggle('Show Available', instancedMesh, texturedMaterial, basicMaterial, basicInstanceColor, uiState);
 
-                const label = document.createElement('span');
-                label.innerText = 'Show Available: OFF';
-                label.className = 'tw-font-semibold';
-                controlsDiv.appendChild(label);
-
-                const toggle = document.createElement('div');
-                toggle.className = `
-                    tw-w-12 tw-h-6 tw-bg-gray-300 tw-rounded-full tw-relative tw-transition-colors tw-duration-300
-                `;
-                controlsDiv.appendChild(toggle);
-
-                const knob = document.createElement('div');
-                knob.className = `
-                    tw-w-5 tw-h-5 tw-bg-white tw-rounded-full tw-absolute tw-top-0.5 tw-left-0.5
-                    tw-transition-all tw-duration-300 tw-shadow-[0_2px_4px_rgba(0,0,0,0.2)]
-                `;
-                toggle.appendChild(knob);
-
-                let isFlat = false;
-                toggle.onclick = () => {
-                    isFlat = !isFlat;
-                    if (isFlat) {
-                        instancedMesh.material = basicMaterial;
-                        instancedMesh.instanceColor = basicInstanceColor;
-                        toggle.classList.replace('tw-bg-gray-300', 'tw-bg-green-400/80');
-                        knob.style.transform = 'translateX(1.5rem)';
-                        label.innerText = 'Show Available: ON';
-                        label.classList.replace('tw-text-gray-900', 'tw-text-green-800');
-                    } else {
-                        instancedMesh.material = texturedMaterial;
-                        instancedMesh.instanceColor = null;
-                        toggle.classList.replace('tw-bg-green-400/80', 'tw-bg-gray-300');
-                        knob.style.transform = 'translateX(0)';
-                        label.innerText = 'Show Available: OFF';
-                        label.classList.replace('tw-text-green-800', 'tw-text-gray-900');
-                    }
-                };
-
-
-                resolve({ housesGroup, selectableObjects, instanceMetadata });
+                resolve({ housesGroup, selectableObjects, instanceMetadata, uiState });
             });
         });
     });

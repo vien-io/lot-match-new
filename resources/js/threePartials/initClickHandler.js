@@ -9,7 +9,8 @@ export function initClickHandler({
     instanceMetadata,
     showLotDetails, 
     showBlockDetails, 
-    fetchForecast 
+    fetchForecast,
+    uiState
 }) {
     let isDragging = false;
     let mouseDownPosition = { x: 0, y: 0 };
@@ -32,7 +33,7 @@ export function initClickHandler({
     });
 
     document.addEventListener("mouseup", (event) => {
-        if (isDragging || modalOpen || window.settingsModalOpen) return;
+        if (isDragging || modalOpen || window.settingsModalOpen || uiState.isActive) return;
 
         // ignore raycasting inside left panel
         const leftPanel = document.getElementById("side-panel");

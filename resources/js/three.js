@@ -42,7 +42,7 @@ export default async function initThreeJS() {
     initSky(scene);
 
     // --- Load houses asynchronously ---
-    const { housesGroup, selectableObjects, instanceMetadata } = await loadHouses(scene);
+    const { housesGroup, selectableObjects, instanceMetadata, uiState } = await loadHouses(scene);
 
     // --- Postprocessing / Outline ---
     const composer = new EffectComposer(renderer);
@@ -68,6 +68,7 @@ export default async function initThreeJS() {
     );
     composer.addPass(fxaaPass);
 
+
     // --- Raycaster & Outline interaction ---
     initRaycasterOutlinePass({
         container,
@@ -77,7 +78,8 @@ export default async function initThreeJS() {
         housesGroup,
         selectableObjects,
         instanceMetadata,
-        outlinePass
+        outlinePass,
+        uiState
     });
 
     // --- Click handler ---
@@ -89,7 +91,8 @@ export default async function initThreeJS() {
         instanceMetadata,
         showLotDetails,
         showBlockDetails,
-        fetchForecast
+        fetchForecast,
+        uiState
     });
 
     // --- Optional stats ---
