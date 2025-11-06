@@ -12,7 +12,7 @@ export async function loadHouses(scene) {
     housesGroup.name = 'lotsGroup';
     scene.add(housesGroup);
 
-    // --- Lights for textured material ---
+    // --- Lights for standard material ---
     const ambient = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambient);
     const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -87,14 +87,13 @@ export async function loadHouses(scene) {
 
             // --- Load house geometry ---
             const modelLoader = new GLTFLoader();
-            const modelUrl = '/models/basic/boxie8.glb';
 
-            modelLoader.load(modelUrl, (houseGltf) => {
+            modelLoader.load('/models/basic/boxie8.glb', (houseGltf) => {
                 const baseModel = houseGltf.scene.children[0];
                 const geometry = baseModel.geometry.clone();
 
                 // --- Materials ---
-                const texturedMaterial = baseModel.material.clone(); // preserves texture
+                const texturedMaterial = baseModel.material.clone(); 
                 const basicMaterial = new THREE.MeshBasicMaterial({
                     color: 0xffffff,
                     transparent: true,
@@ -107,12 +106,10 @@ export async function loadHouses(scene) {
                 instancedMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
                 instancedMesh.userData.type = 'lot';
 
-                // Only set instanceColor for flat basic material
                 const basicInstanceColor = new THREE.InstancedBufferAttribute(
                     new Float32Array(count * 3),
                     3
                 );
-
 
                 const dummy = new THREE.Object3D();
 
@@ -125,7 +122,6 @@ export async function loadHouses(scene) {
 
                     instanceMetadata[i] = { lotId, blockId };
 
-                    // ✅ Only populate basicInstanceColor (for flat material)
                     const lotData = lotStatuses.find(l => l.id == lotId);
                     let color = new THREE.Color(0xffffff);
                     if (lotData?.status === 'sold') color.set(0xff0000);
@@ -133,66 +129,58 @@ export async function loadHouses(scene) {
                     basicInstanceColor.setXYZ(i, color.r, color.g, color.b);
                 });
 
-                // Attach instanceColor for basic material only
                 basicMaterial.instanceColor = basicInstanceColor;
-
-                
 
                 housesGroup.add(instancedMesh);
                 selectableObjects.push(instancedMesh);
 
-                // --- Material toggle controls (mutually exclusive) ---
                 const controlsDiv = document.createElement('div');
-                controlsDiv.style.position = 'absolute';
-                controlsDiv.style.left = '200px';
-                controlsDiv.style.bottom = '10px';
-                controlsDiv.style.background = 'rgba(255,255,255,0.8)';
-                controlsDiv.style.padding = '5px';
-                controlsDiv.style.fontFamily = 'sans-serif';
-                controlsDiv.style.fontSize = '12px';
+                controlsDiv.className = `
+                    tw-fixed tw-top-24 tw-right-8 tw-bg-white/90 tw-px-4 tw-py-2
+                    tw-rounded-xl tw-text-gray-900 tw-font-sans tw-flex tw-items-center tw-gap-2
+                    tw-shadow-[0_0_15px_rgba(0,0,0,0.2)] tw-cursor-pointer tw-select-none
+                    tw-backdrop-blur-sm
+                `;
                 document.body.appendChild(controlsDiv);
 
-                let checkboxes = [];
+                const label = document.createElement('span');
+                label.innerText = 'Show Available: OFF';
+                label.className = 'tw-font-semibold';
+                controlsDiv.appendChild(label);
 
-                const makeMaterialSwitch = (labelText, mesh, material) => {
-                    const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    checkbox.checked = mesh.material === material;
+                const toggle = document.createElement('div');
+                toggle.className = `
+                    tw-w-12 tw-h-6 tw-bg-gray-300 tw-rounded-full tw-relative tw-transition-colors tw-duration-300
+                `;
+                controlsDiv.appendChild(toggle);
 
-                    checkbox.onchange = () => {
-                        if (checkbox.checked) {
-                            mesh.material = material;
+                const knob = document.createElement('div');
+                knob.className = `
+                    tw-w-5 tw-h-5 tw-bg-white tw-rounded-full tw-absolute tw-top-0.5 tw-left-0.5
+                    tw-transition-all tw-duration-300 tw-shadow-[0_2px_4px_rgba(0,0,0,0.2)]
+                `;
+                toggle.appendChild(knob);
 
-                            // --- If switching to textured, remove instanceColor temporarily ---
-                            if (material === texturedMaterial) {
-                                mesh.instanceColor = null;
-                            } else {
-                                mesh.instanceColor = basicInstanceColor;
-                            }
-
-                            // uncheck other checkbox
-                            checkboxes.forEach(cb => {
-                                if (cb !== checkbox) cb.checked = false;
-                            });
-                        } else {
-                            // prevent unchecking both
-                            checkbox.checked = true;
-                        }
-                    };
-
-                    const label = document.createElement('label');
-                    label.innerText = labelText;
-                    label.style.marginRight = '10px';
-
-                    controlsDiv.appendChild(checkbox);
-                    controlsDiv.appendChild(label);
-
-                    checkboxes.push(checkbox);
+                let isFlat = false;
+                toggle.onclick = () => {
+                    isFlat = !isFlat;
+                    if (isFlat) {
+                        instancedMesh.material = basicMaterial;
+                        instancedMesh.instanceColor = basicInstanceColor;
+                        toggle.classList.replace('tw-bg-gray-300', 'tw-bg-green-400/80');
+                        knob.style.transform = 'translateX(1.5rem)';
+                        label.innerText = 'Show Available: ON';
+                        label.classList.replace('tw-text-gray-900', 'tw-text-green-800');
+                    } else {
+                        instancedMesh.material = texturedMaterial;
+                        instancedMesh.instanceColor = null;
+                        toggle.classList.replace('tw-bg-green-400/80', 'tw-bg-gray-300');
+                        knob.style.transform = 'translateX(0)';
+                        label.innerText = 'Show Available: OFF';
+                        label.classList.replace('tw-text-green-800', 'tw-text-gray-900');
+                    }
                 };
 
-
-                makeMaterialSwitch('Textured Material', instancedMesh, texturedMaterial);
-                makeMaterialSwitch('Flat Basic Material', instancedMesh, basicMaterial);
 
                 resolve({ housesGroup, selectableObjects, instanceMetadata });
             });
