@@ -32,7 +32,7 @@ export function initClickHandler({
     });
 
     document.addEventListener("mouseup", (event) => {
-        if (isDragging || modalOpen) return;
+        if (isDragging || modalOpen || window.settingsModalOpen) return;
 
         // ignore raycasting inside left panel
         const leftPanel = document.getElementById("side-panel");
@@ -133,7 +133,7 @@ export function initClickHandler({
                     .catch(err => console.error("Error fetching block:", err));
 
             } else {
-                console.log("Clicked on non-block object!", selectedObject);
+                // console.log("Clicked on non-block object!", selectedObject);
             }
         } else {
             console.log("Clicked empty space.");

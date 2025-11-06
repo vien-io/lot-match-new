@@ -15,6 +15,8 @@ export function initRaycaster({ container, camera, renderer, housesGroup, select
     const tooltipText = document.getElementById('tooltip-text');
 
     window.addEventListener('mousemove', (event) => {
+        console.log(settingsModalOpen);
+
         // Prevent hover when mouse is over side panel
         const leftPanel = document.getElementById('side-panel'); 
         const panelRect = leftPanel.getBoundingClientRect();

@@ -4,7 +4,6 @@ import Alpine from 'alpinejs';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 
-
 // ====================
 // SEARCH PLACEHOLDER CYCLE
 // ====================
@@ -181,4 +180,33 @@ document.addEventListener('DOMContentLoaded', () => {
     renderRatingDistributionChart();
     renderTopRatedLotsChart();
     renderTopRatedLotsCards();
+});
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const settingsModal = document.getElementById('settings-modal');
+    const openBtn = document.getElementById('settings-btn');
+    const closeBtn = document.getElementById('settings-close');
+
+    if (openBtn && settingsModal) {
+        openBtn.addEventListener('click', () => {
+            settingsModal.classList.remove('tw-hidden');
+        });
+    }
+
+    if (closeBtn && settingsModal) {
+        closeBtn.addEventListener('click', () => {
+            settingsModal.classList.add('tw-hidden');
+        });
+    }
+
+    // Optional: click outside modal to close
+    settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) settingsModal.classList.add('tw-hidden');
+    });
 });

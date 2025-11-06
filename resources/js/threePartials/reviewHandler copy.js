@@ -5,9 +5,6 @@ import { fetchForecast } from './forecastHandler';
 export function renderReviewSection(block) {
     console.log("received: ", block);
 
-    const showOwnerTags = window.showOwnerTags ?? false;
-    console.log("Current global setting showOwnerTags:", showOwnerTags);
-
     const reviewSection = document.getElementById('block-review-section');
     const reviews = block.reviews ?? [];
     const blockId = block.id;
@@ -194,11 +191,30 @@ export function renderReviewSection(block) {
                 tw-bg-[linear-gradient(#1c1c1c,#1c1c1c)_padding-box,linear-gradient(145deg,transparent_35%,#e81cff,#40c9ff)_border-box]
                 tw-px-6 tw-pb-6 tw-shadow-[0_0_20px_rgba(0,0,0,0.6)] tw-w-full">
 
-        <!-- Title  -->
-        
+        <!-- Title + Toggle Row -->
+        <div class="tw-flex tw-items-center tw-justify-between tw-mb-4 tw-mt-6">
             <h3 class="tw-text-lg tw-font-semibold tw-text-[hsl(142,71%,45%)]">
                 Reviews
             </h3>
+
+            <div id="owner-toggle-wrapper" class="tw-flex tw-items-center tw-gap-3">
+                <span class="tw-text-sm tw-text-[#a1a1a1]">Show Owner Tags</span>
+
+                <label class="tw-relative tw-inline-flex tw-items-center tw-cursor-pointer group">
+                    <input type="checkbox" id="toggle-owner-tags" class="tw-sr-only peer">
+
+                    <!-- Track -->
+                    <div class="tw-w-11 tw-h-6 tw-bg-[#333] tw-rounded-full tw-transition-all tw-duration-300 peer-checked:tw-bg-[#22C55E]
+                                group-hover:tw-shadow-[0_0_10px_rgba(34,197,94,0.5)] tw-border tw-border-[#444]">
+                    </div>
+
+                    <!-- Knob -->
+                    <div class="tw-absolute tw-left-[3px] tw-top-[3px] tw-w-4 tw-h-4 tw-bg-white tw-rounded-full tw-transition-all tw-duration-300
+                                peer-checked:tw-translate-x-[22px] group-hover:tw-scale-110 tw-shadow-[0_0_6px_rgba(255,255,255,0.5)]">
+                    </div>
+                </label>
+            </div>
+        </div>
 
             <div id="reviews-container" class="tw-flex tw-flex-col tw-gap-3">
                 ${reviews.map(review => {
@@ -208,50 +224,36 @@ export function renderReviewSection(block) {
                     : false;
 
                     if (review.role === 'owner' && ownsBlock) {
-                        ownerTag = `<span class="owner-tag tw-inline-block tw-text-green-900 tw-bg-green-200 tw-rounded 
-                                            tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2"
-                                            style="opacity: ${window.showOwnerTags ? 1 : 0}; transform: scale(${window.showOwnerTags ? 1 : 0});">
-                            Owner on this block
-                        </span>`;
+                        ownerTag = `
+                            <span class="owner-tag tw-inline-block tw-text-green-900 tw-bg-green-200 tw-rounded 
+                                        tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2 tw-transition-all tw-duration-150 tw-ease-out
+                                        tw-opacity-0 tw-scale-0">
+                                Owner on this block
+                            </span>`;
                     } else if (review.role === 'owner') {
-                        ownerTag = `<span class="owner-tag tw-inline-block tw-text-orange-900 tw-bg-orange-200 tw-rounded 
-                                            tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2"
-                                            style="opacity: ${window.showOwnerTags ? 1 : 0}; transform: scale(${window.showOwnerTags ? 1 : 0});">
-                            Owner from another block
-                        </span>`;
+                        ownerTag = `
+                            <span class="owner-tag tw-inline-block tw-text-orange-900 tw-bg-orange-200 tw-rounded 
+                                        tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2 tw-transition-all tw-duration-150 tw-ease-out
+                                        tw-opacity-0 tw-scale-0">
+                                Owner from another block
+                            </span>`;
                     }
-                    // console.log("Rendering owner tag for review", review.id, "showOwnerTags =", window.showOwnerTags);
 
                     // Show buttons for admin or review owner
                     const showAdminButtons = window.App?.role === 'admin';
                     const showOwnerButtons = window.App?.userId === review.user_id;
-                    // console.log("Current user role:", window.App?.role);
+                    console.log("Current user role:", window.App?.role);
 
-                    let buttons = '';
-
-                    if (showOwnerButtons) {
-                        // Reviewer sees both Edit + Delete
-                        buttons = `
-                            <div class="tw-flex tw-gap-2 tw-mt-2">
-                                <button class="edit-review tw-bg-[#2a2a2a] tw-text-white tw-font-semibold tw-rounded-md tw-px-3 tw-py-1 tw-transition-all hover:tw-bg-[#22C55E] hover:tw-text-black active:tw-scale-95">
-                                    Edit
-                                </button>
-                                <button class="delete-review tw-bg-[#2a2a2a] tw-text-white tw-font-semibold tw-rounded-md tw-px-3 tw-py-1 tw-transition-all hover:tw-bg-[#ef4444] hover:tw-text-white active:tw-scale-95">
-                                    Delete
-                                </button>
-                            </div>
-                        `;
-                    } else if (showAdminButtons) {
-                        // Admin sees only Delete
-                        buttons = `
-                            <div class="tw-flex tw-gap-2 tw-mt-2">
-                                <button class="delete-review tw-bg-[#2a2a2a] tw-text-white tw-font-semibold tw-rounded-md tw-px-3 tw-py-1 tw-transition-all hover:tw-bg-[#ef4444] hover:tw-text-white active:tw-scale-95">
-                                    Delete
-                                </button>
-                            </div>
-                        `;
-                    }
-                    
+                    const buttons = (showAdminButtons || showOwnerButtons) ? `
+                        <div class="tw-flex tw-gap-2 tw-mt-2">
+                            <button class="edit-review tw-bg-[#2a2a2a] tw-text-white tw-font-semibold tw-rounded-md tw-px-3 tw-py-1 tw-transition-all hover:tw-bg-[#22C55E] hover:tw-text-black active:tw-scale-95">
+                                Edit
+                            </button>
+                            <button class="delete-review tw-bg-[#2a2a2a] tw-text-white tw-font-semibold tw-rounded-md tw-px-3 tw-py-1 tw-transition-all hover:tw-bg-[#ef4444] hover:tw-text-white active:tw-scale-95">
+                                Delete
+                            </button>
+                        </div>
+                    ` : '';
 
                     return `
                         <div class="review tw-bg-[#1c1c1c] tw-border tw-border-[#333] tw-rounded-lg tw-p-3 tw-shadow-sm"
@@ -281,6 +283,48 @@ export function renderReviewSection(block) {
         </div>
     </div>
     `;
+
+    const hasOwnerTags = reviews.some(r => r.role === 'owner');
+    const toggleWrapper = reviewSection.querySelector('#owner-toggle-wrapper');
+
+    if (!hasOwnerTags && toggleWrapper) {
+        toggleWrapper.style.display = 'none';
+    }
+
+    const toggle = reviewSection.querySelector('#toggle-owner-tags');
+    const toggleTrack = toggle?.parentElement.querySelector('div'); 
+    const toggleKnob = toggleTrack?.nextElementSibling || toggleTrack; 
+
+    if (toggle) {
+        toggle.addEventListener('change', () => {
+            const tags = reviewSection.querySelectorAll('.owner-tag');
+            const isOn = toggle.checked;
+
+            tags.forEach(tag => {
+                tag.style.transition = 'transform 150ms cubic-bezier(0.4, 0, 0.2, 1), opacity 150ms ease-out';
+                if (isOn) {
+                    tag.classList.remove('tw-opacity-0', 'tw-scale-0');
+                    tag.classList.add('tw-opacity-100', 'tw-scale-100');
+                } else {
+                    tag.classList.add('tw-opacity-0', 'tw-scale-0');
+                    tag.classList.remove('tw-opacity-100', 'tw-scale-100');
+                }
+            });
+
+            const knob = toggle.parentElement.querySelector('div:nth-child(3)');
+            if (knob) {
+                knob.classList.toggle('tw-translate-x-[22px]', isOn);
+                knob.classList.toggle('tw-scale-110', isOn);
+            }
+
+            const track = toggle.parentElement.querySelector('div:nth-child(2)');
+            if (track) {
+                track.classList.toggle('tw-bg-[#22C55E]', isOn);
+                track.classList.toggle('tw-shadow-[0_0_15px_rgba(34,197,94,0.6)]', isOn);
+            }
+        });
+    }
+
 
     resetReviewForm();
     bindRatingLogic();

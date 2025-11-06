@@ -24,7 +24,8 @@ use App\Http\Controllers\{
     MapController,
     OwnerVerificationController,
     SearchController,
-    UserManagementController
+    UserManagementController,
+    UserSettingsController
 };
 use App\Http\Middleware\CheckRole;
 
@@ -117,6 +118,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/blocks/{blockId}/reviews', [ReviewController::class, 'blockReviews']);
     Route::get('/blocks/all/reviews', [ReviewController::class, 'blockReviews']);
     Route::get('/block/{block}/with-reviews-lots', [BlockController::class, 'getBlockWithReviewsAndLots']);
+
+    // ------------------------
+    // User Settings
+    // ------------------------
+    Route::get('/user/settings', [UserSettingsController::class, 'get'])->name('user.settings.get');
+    Route::post('/user/settings', [UserSettingsController::class, 'update'])->name('user.settings.update');
 
     // ------------------------
     // 3D Map

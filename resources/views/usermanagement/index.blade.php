@@ -43,7 +43,7 @@
                 <thead class="tw-bg-emerald-800 tw-text-left">
                     <tr>
                         <th class="tw-p-2 tw-text-white">ID</th>
-                        <th class="tw-p-2 tw-text-white">Userame</th>
+                        <th class="tw-p-2 tw-text-white">Username</th>
                         <th class="tw-p-2 tw-text-white">Full Name</th>
                         <th class="tw-p-2 tw-text-white">Email</th>
                         <th class="tw-p-2 tw-text-white">Role</th>

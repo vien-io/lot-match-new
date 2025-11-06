@@ -59,6 +59,8 @@ export function initRaycasterOutlinePass({
 
 
     window.addEventListener('mousemove', (event) => {
+        if (window.settingsModalOpen) return;
+
         // prevent hover when mous is over side panel
         const leftPanel = document.getElementById('side-panel');
         const panelRect = leftPanel.getBoundingClientRect();

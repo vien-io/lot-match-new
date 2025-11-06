@@ -13,25 +13,29 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-    <!-- Font Awesome -->
-    {{-- <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    /> --}}
-
     {{-- logo --}}
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
     <!-- Scripts -->
-
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-
     <script>
-    window.App = {
-        userId: {{ auth()->id() ?? 'null' }},
-        role: "{{ auth()->user()?->role ?? '' }}"
-    };
+    document.addEventListener('DOMContentLoaded', () => {
+        window.App = {
+            userId: {{ auth()->id() ?? 'null' }},
+            role: "{{ auth()->user() ? auth()->user()->role : '' }}"
+        };
+        console.log('window.App:', window.App);
+    });
     </script>
+
+
+    @vite([
+        'resources/sass/app.scss', 
+        'resources/js/app.js',
+        'resources/js/settings.js'
+    ])
+
+
+
     
 </head>
 <body class="tw-bg-gray-50">
@@ -231,7 +235,8 @@
                                     class="tw-block tw-px-4 tw-py-2 tw-text-gray-700 hover:tw-bg-green-100">
                                     Profile
                                 </a>
-                                <a href="#" 
+                                <a href="javascript:void(0);"
+                                    id="settings-btn" 
                                     class="tw-block tw-px-4 tw-py-2 tw-text-gray-700 hover:tw-bg-green-100">
                                     Settings
                                 </a>
@@ -254,5 +259,34 @@
             </main>
         </div>
     </div>
+
+
+    <!-- Settings Modal -->
+    <div id="settings-modal"
+        class="modal tw-fixed tw-inset-0 tw-flex tw-items-center tw-justify-center tw-bg-black/30 tw-z-50 tw-hidden tw-animate-[modal-pop_0.25s_ease-out]">
+
+        <div class="modal-content tw-w-11/12 tw-max-w-lg tw-p-6 tw-relative tw-rounded-2xl tw-bg-white tw-text-gray-900 tw-shadow-lg">
+
+            <div class="tw-flex tw-justify-between tw-items-center tw-mb-4">
+                <h2 class="tw-text-xl tw-font-semibold">Settings</h2>
+                <span id="settings-close" class="tw-text-2xl tw-cursor-pointer tw-text-green-600">&times;</span>
+            </div>
+
+            <div class="tw-flex tw-items-center tw-gap-2">
+                <label class="tw-flex tw-items-center tw-gap-2 tw-cursor-pointer">
+                    <input type="checkbox" id="toggle-owner-tags-global" class="tw-form-checkbox tw-text-green-600">
+                    Show Owner Tags
+                </label>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script>
+        window.App = {
+            userId: {{ Auth::check() ? Auth::id() : 'null' }}
+        };
+    </script>
 </body>
 </html>

@@ -227,18 +227,20 @@ class ReviewController extends Controller
         ]);
     }
 
-    public function destroy($id) {
-        $review = Review::findOrFail($id);
+public function destroy($id)
+{
+    $review = Review::findOrFail($id);
+    $user = Auth::user();
 
-        // make sure review belongs to the authenticated user
-        if ($review->user_id != Auth::id()) {
-            return response()->json(['message' => 'You can only delete your own reviews.'], 403);
-        }
-
-        $review->delete();
-
-        return response()->json(['message' => 'Review deleted successfully!']);
+    // allow deletion if user is the review owner OR an admin
+    if ($review->user_id !== $user->id && $user->role !== 'admin') {
+        return response()->json(['message' => 'Unauthorized.'], 403);
     }
+
+    $review->delete();
+
+    return response()->json(['message' => 'Review deleted successfully!']);
+}
 
 // this part needs review, mightve been useless now
     private function analyzeSentimentViaHuggingFace($text)
