@@ -1,7 +1,6 @@
 window.settingsModalOpen = false;
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("here");
     const settingsModal = document.getElementById('settings-modal');
     const openBtn = document.getElementById('settings-btn');
     const closeBtn = document.getElementById('settings-close');

@@ -275,7 +275,7 @@
             <div class="tw-flex tw-items-center tw-gap-2">
                 <label class="tw-flex tw-items-center tw-gap-2 tw-cursor-pointer">
                     <input type="checkbox" id="toggle-owner-tags-global" class="tw-form-checkbox tw-text-green-600">
-                    Show Owner Tags
+                    Show Owner Tags on Reviews
                 </label>
             </div>
 

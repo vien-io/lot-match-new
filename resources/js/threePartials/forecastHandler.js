@@ -1,7 +1,7 @@
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 import 'chartjs-adapter-date-fns';
-import { updateForecastTimestamp } from './reviewHandler';
+import { updateForecastTimestamp } from './reviews/forecast.js';
 
 let forecastChart = null;
 

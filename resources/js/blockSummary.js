@@ -1,4 +1,4 @@
-import { updateForecastTimestamp } from "./threePartials/reviewHandler";
+import { updateForecastTimestamp } from "./threePartials/reviews/forecast.js";
 
 export function loadBlockSummary(blockId) {
     console.log("loadBlockSynnay");
