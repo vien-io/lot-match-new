@@ -10,7 +10,6 @@ export async function loadHouses(scene) {
     const selectableObjects = [];
     const instanceMetadata = [];
     const houseLoader = new GLTFLoader();
-    const showLotStatusColor = true;
     const uiState = { isActive: false };
 
     housesGroup.name = 'lotsGroup';
@@ -128,7 +127,6 @@ export async function loadHouses(scene) {
                 housesGroup.add(instancedMesh);
                 selectableObjects.push(instancedMesh);
 
-                // --- Material toggle (light + green accent) ---
                 createToggle('Show Available', instancedMesh, texturedMaterial, basicMaterial, basicInstanceColor, uiState);
 
                 resolve({ housesGroup, selectableObjects, instanceMetadata, uiState });
