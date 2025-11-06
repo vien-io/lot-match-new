@@ -65,7 +65,7 @@ async function onBlockChange(blockId) {
     const data = await res.json();
 
     // Fill text sections
-    summaryDiv.textContent   = data.summary || 'No summary available.';
+    summaryDiv.textContent   = data.summary || 'No summary available.'; // might getting override, seems unimportannt
     narrativeDiv.textContent = data.detailed_report || 'No full forecast narrative available.';
     forecastDiv.textContent  = data.forecast !== null ? `${data.forecast} / 5` : '--';
     renderStars(starsDiv, data.forecast);

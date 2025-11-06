@@ -334,7 +334,7 @@
             <div class="left-outer-column tw-flex-1 tw-space-y-6">
                 
                 <!-- Top Row -->
-                <div class="top-row tw-flex tw-gap-4">
+                <div class="top-row tw-flex tw-gap-4 tw-items-end">
 
 
                     <div class="mid-column gradient-border tw-flex-1 tw-p-4
@@ -345,17 +345,19 @@
 
 
                     
-                    <div class="left-column gradient-border tw-flex-1 tw-p-4
-                    tw-transition-transform tw-duration-300 hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(255,255,255,0.05)] hover:tw-bg-[#84ffb1]/30">
-                        <div id="block-details"></div>
-                    </div>
+                    <div class="left-column gradient-border tw-p-4 tw-w-[230px]
+                            tw-transition-transform tw-duration-300 hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(255,255,255,0.05)] hover:tw-bg-[#84ffb1]/30">
+                    <h2 class="tw-text-l tw-font-semibold tw-text-[#ffffff] tw-border-b tw-border-white/20 tw-pb-2 tw-mb-2">Block Attributes</h2>
+                    <div id="block-details"></div>
+                </div>
+
                 </div>
 
                 <!-- Bottom Row -->
                 <div class="bottom-row gradient-border tw-rounded-xl tw-border tw-border-[#414141] tw-bg-[#1c1c1c] tw-p-4
                 tw-transition-transform tw-duration-300 hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(255,255,255,0.05)] hover:tw-bg-[#84ffb1]/30">
                 <div class="topTab tw-flex tw-justify-between tw-items-center">
-                <h2 class="tw-text-xl tw-font-semibold tw-text-[#ffffff]">Block Details</h2>
+                <h2 class="tw-text-xl tw-font-semibold tw-text-[#ffffff]">Block Summary</h2>
                 <div class="tw-flex tw-gap-2 tw-items-center">
                     <!-- Smaller gray button with black text on hover -->
                     <button id="view-full-report-btn" 

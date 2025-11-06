@@ -142,9 +142,44 @@ export function showBlockDetails(block) {
 
     const blockDetails = document.getElementById("block-details");
     if (blockDetails) {
+        const lots = block.lots ?? [];
+        const reviews = block.reviews ?? [];
+
+        const totalLotArea = lots.reduce((sum, lot) => sum + parseFloat(lot.lot_area || 0), 0);
+        const availableLots = lots.filter(lot => lot.status === 'available').length;
+        const soldLots = lots.filter(lot => lot.status === 'sold').length;
+        const totalReviews = reviews.length;
+
         blockDetails.innerHTML = `
-            <p><strong>Block Name:</strong> ${block.name ?? 'N/A'}</p>
-            <p><strong>Total Lots:</strong> ${block.lots?.length ?? 0}</p>
+            <div class="tw-flex tw-flex-col tw-gap-1 tw-text-sm">
+                <div class="tw-flex tw-justify-between">
+                    <span>Block Number:</span>
+                    <span class="tw-text-right tw-text-[#a1a1a1]">${block.id ?? 'N/A'}</span>
+                </div>
+                <div class="tw-flex tw-justify-between">
+                    <span>Total Lots:</span>
+                    <span class="tw-text-right tw-text-[#a1a1a1]">${lots.length}</span>
+                </div>
+                <div class="tw-flex tw-justify-between">
+                    <span>Total Lot Area:</span>
+                    <span class="tw-text-right tw-text-[#a1a1a1]">
+                        ${totalLotArea.toFixed(2)} <span class="tw-text-[0.55rem]">sqm</span>
+                    </span>
+
+                </div>
+                <div class="tw-flex tw-justify-between">
+                    <span>Available Lots:</span>
+                    <span class="tw-text-right tw-text-[#22C55E]">${availableLots}</span>
+                </div>
+                <div class="tw-flex tw-justify-between">
+                    <span>Sold Lots:</span>
+                    <span class="tw-text-right tw-text-[#ef4444]">${soldLots}</span>
+                </div>
+                <div class="tw-flex tw-justify-between">
+                    <span>Total Reviews:</span>
+                    <span class="tw-text-right tw-text-[#a1a1a1]">${totalReviews}</span>
+                </div>
+            </div>
         `;
     }
 
@@ -175,7 +210,7 @@ viewFullReportBtn.addEventListener('click', async () => {
             }
         }
 
-        if (!report) return alert('No detailed report available');
+        if (!report) return alert('No detailed report available. Try submitting a review to trigger report generation!');
 
         const modal = document.getElementById('full-report-modal');
         const contentDiv = document.getElementById('full-report-content');

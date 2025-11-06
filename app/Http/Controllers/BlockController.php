@@ -42,11 +42,11 @@ class BlockController extends Controller
             return [
                 'id' => $lot->id,
                 'name' => $lot->name,
-                'description' => $lot->description,
-                'size' => $lot->size,
+                'lot_area' => $lot->lot_area,
                 'price' => $lot->price,
                 'block_id' => $lot->block_id,
                 'owner_id' => $lot->owner_id, 
+                'status' => $lot->status,
                 'modelUrl' => $lot->model_url ? asset('models/' . $lot->model_url) : null,
             ];
         });
@@ -54,7 +54,6 @@ class BlockController extends Controller
         return response()->json([
             'id' => $block->id,
             'name' => $block->name,
-            'description' => $block->description,
             'modelUrl' => $block->model_url ? asset('models/' . $block->model_url) : null,
             'lots' => $lots,
             'reviews' => $reviews,

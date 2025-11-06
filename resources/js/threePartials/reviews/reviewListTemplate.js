@@ -10,7 +10,9 @@ export function reviewListTemplate(block) {
         <h3 class="tw-text-lg tw-font-semibold tw-text-[hsl(142,71%,45%)] tw-mt-4 tw-mb-4">Reviews</h3>
 
         <div id="reviews-container" class="tw-flex tw-flex-col tw-gap-3">
-            ${reviews.map(review => {
+            ${reviews.length === 0
+                ? `<p class="tw-text-[#ccc] tw-text-center tw-py-4">There are no reviews yet on this block. Be the first one!</p>`
+                : reviews.map(review => {
                 let ownerTag = '';
                 const ownsBlock = Array.isArray(block?.lots)
                     ? block.lots.some(lot => lot.owner_id === review.user_id)
@@ -77,7 +79,8 @@ export function reviewListTemplate(block) {
 
                 </div>
                 `;
-            }).join('')}
+            }).join('')
+            }
         </div>
     </div>
     `;

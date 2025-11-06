@@ -32,6 +32,7 @@ export function init3DModel(container, modelUrl) {
     const controls = new OrbitControls(camera, renderer.domElement);
 
     controls.enableRotate = true;
+    controls.enablePan = false;
     controls.enableDamping = true;
     controls.enableZoom = false;
     controls.dampingFactor = 0.05;
@@ -83,7 +84,7 @@ export function init3DModel(container, modelUrl) {
         scene.add(model);
         animate();
 
-        function setOriginalMaterial() {
+/*         function setOriginalMaterial() {
             model.traverse((child) => {
                 if (child.isMesh && child.material) {
                     child.material.wireframe = false;
@@ -103,10 +104,10 @@ export function init3DModel(container, modelUrl) {
             boxHelper.visible = true;
         }
 
-        setOriginalMaterial();
+        setOriginalMaterial(); */
 
         // hover event
-        renderer.domElement.addEventListener('mousemove', (e) => {
+        /* renderer.domElement.addEventListener('mousemove', (e) => {
             const rect = renderer.domElement.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -122,7 +123,7 @@ export function init3DModel(container, modelUrl) {
             } else {
                 setOriginalMaterial();
             }
-        });
+        }); */
 
 /*         const midColumn = document.querySelector('.mid-column');
         const hoverTrigger = document.getElementById('hover-trigger');

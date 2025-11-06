@@ -17,7 +17,7 @@ export function reviewFormTemplate(block) {
                 required 
                 placeholder="Type your review here"
                 class="tw-w-full tw-bg-transparent tw-border tw-border-[#414141] tw-rounded-lg tw-p-3
-                       tw-text-white placeholder:tw-opacity-50 focus:tw-outline-none focus:tw-border-[#22C55E]">
+                       tw-text-white placeholder:tw-opacity-50 focus:tw-outline-none focus:tw-border-[#22C55E] tw-resize-none">
             </textarea>
 
             <div class="rating-stars tw-flex tw-flex-row-reverse tw-gap-2 tw-justify-end tw-select-none">

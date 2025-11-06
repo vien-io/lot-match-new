@@ -11,7 +11,8 @@ export function loadBlockSummary(blockId) {
     .then(data => {
         // console.log("Fetched: ", data);
         const summaryDiv = document.getElementById('block-summary');
-        summaryDiv.textContent = data.summary || "no summary available";
+        summaryDiv.textContent = data.summary || "Oops! Looks like there's no summary yet. Try to trigger the AI by submitting a review! 😄";
+
 
         if (data.forecast_updated_at) {
             updateForecastTimestamp(data.forecast_updated_at);
