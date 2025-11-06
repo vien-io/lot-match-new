@@ -87,7 +87,7 @@
     color: hsla(177, 71%, 45%, 1.00);
 }
 
-.review .edit-review,
+/* .review .edit-review,
 .review .delete-review {
     background-color: #333;
     color: #fff;
@@ -103,3 +103,4 @@
 .review .delete-review:hover {
     background-color: #555;
 }
+ */

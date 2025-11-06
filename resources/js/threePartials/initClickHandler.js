@@ -118,7 +118,7 @@ export function initClickHandler({
 
             } else if (selectedObject.userData.type === "block") {
                 const blockId = selectedObject.userData.blockId;
-                console.log(`Clicked block: ${blockId}`);
+                // console.log(`Clicked block: ${blockId}`);
 
                 fetch(`/block/${blockId}`)
                     .then(res => res.json())

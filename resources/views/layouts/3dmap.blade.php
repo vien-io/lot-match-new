@@ -18,6 +18,14 @@
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
     <!-- Scripts -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        window.App = {
+            userId: {{ auth()->id() ?? 'null' }},
+            role: "{{ auth()->user() ? auth()->user()->role : '' }}"
+        };
+    });
+    </script>
     @vite([
         'resources/sass/app.scss', 
         'resources/js/app.js',
@@ -268,11 +276,5 @@
 
         </div>
     </div>
-
-    <script>
-        window.App = {
-            userId: {{ Auth::check() ? Auth::id() : 'null' }}
-        };
-    </script>
 </body>
 </html>

@@ -59,7 +59,7 @@ function renderForecast(data) {
         const nextDate = new Date(lastDate);
         nextDate.setDate(lastDate.getDate() + 30);
         ratings.push({ x: nextDate, y: data.forecasted_rating });
-        console.log('Forecasted point:', ratings[ratings.length - 1]);
+        // console.log('Forecasted point:', ratings[ratings.length - 1]);
 
         // destroy old chart if exists
         if (forecastChart && typeof forecastChart.destroy === 'function') {

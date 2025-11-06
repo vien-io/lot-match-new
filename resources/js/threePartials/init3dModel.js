@@ -5,7 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js';
 let model, animationFrameId;
 
 export function init3DModel(container, modelUrl) {
-    console.log("Initializing 3d model....");
+    // console.log("Initializing 3d model....");
 
     // clear container first
     while (container.firstChild) container.removeChild(container.firstChild);
@@ -26,7 +26,7 @@ export function init3DModel(container, modelUrl) {
     renderer.domElement.style.clipPath = 'inset(50px 50px 50px 50px)';
     renderer.domElement.style.position = 'absolute';
     container.appendChild(renderer.domElement);
-    console.log("Container: ", container);
+    // console.log("Container: ", container);
 
     // controller
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -124,7 +124,7 @@ export function init3DModel(container, modelUrl) {
             }
         });
 
-        const midColumn = document.querySelector('.mid-column');
+/*         const midColumn = document.querySelector('.mid-column');
         const hoverTrigger = document.getElementById('hover-trigger');
 
         hoverTrigger.addEventListener('mouseenter', () => {
@@ -134,7 +134,7 @@ export function init3DModel(container, modelUrl) {
         hoverTrigger.addEventListener('mouseleave', () => {
             midColumn.classList.remove('hover:tw--translate-y-1', 'hover:tw-shadow-[0_4px_20px_rgba(255,255,255,0.05)]', 'hover:tw-bg-[#84ffb1]/30');
         });
-
+ */
 
 
         },

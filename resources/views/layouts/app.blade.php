@@ -16,17 +16,6 @@
     {{-- logo --}}
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
-    <!-- Scripts -->
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        window.App = {
-            userId: {{ auth()->id() ?? 'null' }},
-            role: "{{ auth()->user() ? auth()->user()->role : '' }}"
-        };
-        console.log('window.App:', window.App);
-    });
-    </script>
-
 
     @vite([
         'resources/sass/app.scss', 
