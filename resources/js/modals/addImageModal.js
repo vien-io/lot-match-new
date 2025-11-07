@@ -90,7 +90,7 @@ export async function loadLotImages(lotId) {
     } else {
         imgEl.src = '';
         imgEl.alt = 'No images available';
-        console.log("No images to display for this lot");
+        // console.log("No images to display for this lot");
     }
 }
 

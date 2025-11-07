@@ -115,13 +115,12 @@
             </div>
 
             <!-- Bottom Section: Lot Summary -->
-            <div class="bottom-section tw-w-3/4 tw-mx-auto gradient-border tw-p-4 tw-rounded-xl tw-flex tw-flex-col tw-justify-center">
+            <div class="bottom-section tw-w-3/4 tw-mx-auto gradient-border tw-p-4 tw-rounded-2xl tw-flex tw-flex-col tw-justify-center tw-transition-transform tw-duration-300 hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(132,255,177,0.2)] hover:tw-bg-[#84ffb1]/10 tw-backdrop-blur-sm tw-border tw-border-[#84ffb1]/20 tw-mt-6">
                 <div id="lot-summary-container" class="tw-relative tw-flex tw-flex-col tw-gap-2 tw-items-start tw-justify-center tw-w-full">
                     <h3 class="tw-text-xl tw-font-semibold tw-mb-2">Lot Summary</h3>
                     <p class="tw-text-sm tw-text-gray-300" id="lot-summary-text">
-                        *AI-generated summary placeholder*
+                        *AI-generated summary is empty for now*
                     </p>
-                    <p class="tw-text-sm tw-text-gray-400 tw-italic">*AI-generated summary placeholder*</p>
                 </div>
             </div>
         </div>

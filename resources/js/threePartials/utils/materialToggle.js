@@ -30,6 +30,26 @@ export function createToggle(labelText, mesh, texturedMaterial, basicMaterial, b
     `;
     toggle.appendChild(knob);
 
+    // --- Legend element ---
+    const legendDiv = document.createElement('div');
+    legendDiv.className = `
+        tw-fixed tw-top-20 tw-left-28 tw-bg-white/80 tw-px-4 tw-py-2
+        tw-rounded-xl tw-shadow-[0_0_10px_rgba(0,0,0,0.15)] tw-font-sans tw-text-sm
+        tw-flex tw-gap-4 tw-items-center tw-backdrop-blur-sm tw-z-50
+    `;
+    legendDiv.style.display = 'none'; 
+    legendDiv.innerHTML = `
+        <div class="tw-flex tw-items-center tw-gap-1">
+            <div class="tw-w-4 tw-h-4 tw-bg-green-400/80 tw-rounded-sm"></div>
+            <span>Available</span>
+        </div>
+        <div class="tw-flex tw-items-center tw-gap-1">
+            <div class="tw-w-4 tw-h-4 tw-bg-red-400/80 tw-rounded-sm"></div>
+            <span>Sold</span>
+        </div>
+    `;
+    document.body.appendChild(legendDiv);
+
     // --- Knob toggle logic ---
     let isOn = false;
     function toggleKnob() {
@@ -41,6 +61,7 @@ export function createToggle(labelText, mesh, texturedMaterial, basicMaterial, b
             knob.style.transform = 'translateX(1.5rem)';
             label.innerText = `${labelText}: ON`;
             label.classList.replace('tw-text-gray-900', 'tw-text-green-800');
+            legendDiv.style.display = 'flex'; 
         } else {
             mesh.material = texturedMaterial;
             mesh.instanceColor = null;
@@ -48,10 +69,11 @@ export function createToggle(labelText, mesh, texturedMaterial, basicMaterial, b
             knob.style.transform = 'translateX(0)';
             label.innerText = `${labelText}: OFF`;
             label.classList.replace('tw-text-green-800', 'tw-text-gray-900');
+            legendDiv.style.display = 'none';
         }
     }
 
     toggle.onclick = toggleKnob;
 
-    return { controlsDiv, toggle, knob, toggleKnob };
+    return { controlsDiv, toggle, knob, toggleKnob, legendDiv };
 }

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { modalOpen } from './detailsHandler';
+import { loadLotSummary } from './lot-summary.js';
 
 export function initClickHandler({ 
     camera, 
@@ -63,13 +64,6 @@ export function initClickHandler({
             true
         );
 
- /*        console.log("Raycaster hits:", intersects.map(hit => ({
-            name: hit.object.name,
-            type: hit.object.userData?.type,
-            lotId: hit.object.userData?.lotId,
-            blockId: hit.object.userData?.blockId,
-            distance: hit.distance
-        }))); */
 
         if (intersects.length > 0) {
             let selectedObject = intersects[0].object;
@@ -77,12 +71,17 @@ export function initClickHandler({
              // detect InstancedMesh clicks
             if (selectedObject.isInstancedMesh && intersects[0].instanceId !== undefined) {
                 const instanceId = intersects[0].instanceId;
-                const meta = instanceMetadata[instanceId]; // imported from loadHouses()
+                const meta = instanceMetadata[instanceId]; 
+                console.log(meta.id);
+
                 if (meta) {
-                    /* console.log(`Clicked lot ${meta.lotId} (block ${meta.blockId})`); */
+                    console.log(`Clicked lot ${meta.lotId} (block ${meta.blockId})`);
                     fetch(`/block/${meta.blockId}/lot/${meta.lotId}`)
                         .then(res => res.json())
-                        .then(showLotDetails)
+                        .then(data => {
+                            showLotDetails(data);
+                            loadLotSummary(meta.id);
+                        })
                         .catch(console.error);
                 }
                 return;
@@ -99,13 +98,13 @@ export function initClickHandler({
                 selectedObject = selectedObject.parent;
             }
 
-            // console.log("after climb: ", selectedObject.name, selectedObject.userData);
-
             if (selectedObject.userData.type === "lot") {
                 const lotId = selectedObject.userData.lotId;
-                /* console.log(`Clicked lot: ${lotId}`);
+                console.log(`Clicked lot: ${lotId}`);
                 console.log('block is', selectedObject.userData.blockId);
- */
+               
+
+
                 fetch(`/block/${selectedObject.userData.blockId}/lot/${selectedObject.userData.lotId}`)
                     .then(res => res.json())
                     .then(data => {
@@ -134,7 +133,7 @@ export function initClickHandler({
                     .catch(err => console.error("Error fetching block:", err));
 
             } else {
-                // console.log("Clicked on non-block object!", selectedObject);
+                console.log("Clicked on non-block object!", selectedObject);
             }
         } else {
             console.log("Clicked empty space.");

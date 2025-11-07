@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Lot;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Services\AiSummaryService;
 
 class LotController extends Controller
 {
@@ -83,15 +84,17 @@ class LotController extends Controller
         ]);
     }
 
-    public function generateSummary($lotId)
+    public function getLotSummary($lotId, AiSummaryService $aiService)
     {
         $lot = Lot::findOrFail($lotId);
-
+        $summary = $aiService->getLotSummary($lot);
+        return response()->json(['summary' => $summary]);
     }
 
-    public function statuses() {
+    public function statuses() 
+    {
             return response()->json(Lot::select('id', 'name', 'block_id', 'status')->get());
-        }
+    }
     
 
 

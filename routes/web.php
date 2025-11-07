@@ -74,6 +74,9 @@ Route::get('/blocks/{blockId}/lots/{lotNumber}', [LotController::class, 'showLot
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('blocks/{blockId}/lots/{lotNumber}', [LotController::class, 'show'])->name('lots.show');
 
+// Utilities
+Route::get('/lot/{lot}/summary', [LotController::class, 'getLotSummary']);
+
 
 /*
 |--------------------------------------------------------------------------

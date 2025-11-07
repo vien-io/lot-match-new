@@ -1,5 +1,5 @@
 <?php
-
+// might not have been used, might be deletable
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;

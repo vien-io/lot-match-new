@@ -33,7 +33,7 @@ export async function loadHouses(scene) {
         }
     }
     const lotStatuses = await fetchLotStatuses();
-    console.log(lotStatuses.map(l => ({ id: l.id, block: l.block_id, status: l.status })));
+    /* console.log(lotStatuses.map(l => ({ id: l.id, block: l.block_id, status: l.status }))); */
 
 
 
@@ -111,16 +111,16 @@ export async function loadHouses(scene) {
                 const dummy = new THREE.Object3D();
 
 
-                const spawnBlocks = [...new Set(spawnObjects.map(o => o.blockId))];
-                console.log("Blocks in spawnObjects:", spawnBlocks); 
+                /* const spawnBlocks = [...new Set(spawnObjects.map(o => o.blockId))];
+                console.log("Blocks in spawnObjects:", spawnBlocks);  */
 
                 // --- LOG LOTS ON BLOCK 1 ---
                 const blk = 10;
                 const blockLots = lotStatuses.filter(lot => lot.block_id === blk);
-                console.log(`Lots in Block ${blk}:`, blockLots.map(l => ({
+                /* console.log(`Lots in Block ${blk}:`, blockLots.map(l => ({
                     name: l.name,
                     status: l.status
-                })));
+                }))); */
 
                 spawnObjects.forEach(({ position, rotation, lotId, blockId, shouldMirror }, i) => {
                     dummy.position.copy(position);
@@ -128,8 +128,6 @@ export async function loadHouses(scene) {
                     dummy.scale.set(shouldMirror ? -0.7 : 0.7, 0.7, 0.7);
                     dummy.updateMatrix();
                     instancedMesh.setMatrixAt(i, dummy.matrix);
-
-                    instanceMetadata[i] = { lotId, blockId };
 
                     const lotData = lotStatuses.find(
                         l => l.block_id === Number(blockId) && l.name === `Lot ${lotId}`
@@ -140,13 +138,15 @@ export async function loadHouses(scene) {
                         return;
                     }
 
+                    instanceMetadata[i] = { id: lotData.id, lotId, blockId };
+
                     const color = new THREE.Color(0xffffff);
                     if (lotData.status === 'sold') color.set(0xff0000);
                     else if (lotData.status === 'available') color.set(0x00ff00);
 
-                    if (Number(blockId) === 1) {
+                    /* if (Number(blockId) === 1) {
                         console.log(`Spawn #${i}: lotId=${lotId}, block=${blockId}, status=${lotData.status}, color=${color.getHexString()}`);
-                    }
+                    } */
 
                     basicInstanceColor.setXYZ(i, color.r, color.g, color.b);
                 });
