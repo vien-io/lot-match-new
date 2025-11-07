@@ -96,15 +96,16 @@ export default async function initThreeJS() {
     });
 
     // --- Optional stats ---
-    // const stats = new Stats();
-    // document.body.appendChild(stats.dom);
+    const statsOn = false;
+    const stats = new Stats();
+    if (statsOn) document.body.appendChild(stats.dom);
 
     // --- Animate ---
     function animate() {
         requestAnimationFrame(animate);
         controls.update();
         composer.render();
-        // stats.update();
+        if (statsOn) stats.update();
     }
     animate();
 }

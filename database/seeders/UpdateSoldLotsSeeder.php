@@ -4,42 +4,101 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Str;
 
 class UpdateSoldLotsSeeder extends Seeder
 {
-    public function run()
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
     {
-        $filePath = database_path('seeders/data/sold_lots.xlsx');
-        $rows = Excel::toArray([], $filePath)[0];
+        DB::table('lots')->update(['status' => 'available']);
+        $this->command->info("🔄 All lots reset to AVAILABLE.");
+        
+        $soldLots = [
+            1 => [1, 2, 3, 6, 7, 8, 9, 10, 11, 12],
+            2 => [1, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 28, 29, 30],
+            3 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+            4 => [2, 4, 5, 6, 8, 9, 10, 11, 12, 13],
+            5 => [1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17],
+            6 => [2, 3, 4, 6, 7, 8, 11, 12, 14, 15],
+            7 => [1, 2, 3, 4, 5, 7, 8, 9, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38],
+            8 => [1, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 17, 18, 19, 20],
+            9 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 34, 35, 36, 37, 38, 39, 40, 41, 42, 47, 48, 49, 50, 55, 56, 59, 60, 63, 64, 65, 66],
+            10 => [1, 2, 3, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 36, 37, 38, 39],
+            11 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 42, 43, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58],
+            12 => [0, 2, 3, 4, 7, 8, 9, 10, 12, 13, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 38, 39, 40, 41, 43, 45, 46, 47, 48, 49, 50, 52, 53, 54, 55, 56, 57, 58, 59, 61, 62, 64, 65, 66, 67, 69, 70, 71, 72, 73, 74, 2014],
+            13 => [1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+            14 => [1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+            15 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+            16 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            17 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            18 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+            19 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            20 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+            21 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            22 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            23 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            24 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            25 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            26 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            27 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+            28 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            29 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+            30 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            31 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            32 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            33 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            34 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            35 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            36 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            37 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        ];
 
-        foreach (array_slice($rows, 1) as $row) {
-            $block = trim($row[0]);
-            $lot = trim($row[1]);
+        $updated = 0;
+        $notFound = 0;
 
-            if (!$block || !$lot) {
+        foreach ($soldLots as $blockNumber => $lotNumbers) {
+            // Try to find the block (supports both "Block 1" and "1")
+            $block = DB::table('blocks')
+                ->where(function ($q) use ($blockNumber) {
+                    $q->where('name', $blockNumber)
+                      ->orWhere('name', 'Block ' . $blockNumber);
+                })
+                ->first();
+
+            if (!$block) {
+                $this->command->warn("⚠️ No block found for Block {$blockNumber}");
                 continue;
             }
 
-            preg_match_all('/\d+/', $lot, $matches);
-            $lotNumbers = $matches[0] ?? [$lot];
-
-            foreach ($lotNumbers as $lotNum) {
-                $updated = DB::table('lots')
-                    ->where('block_id', $block)
-                    ->where(function ($query) use ($lotNum) {
-                        $query->where('name', $lotNum)
-                              ->orWhere('name', 'LIKE', "%$lotNum%");
+            foreach ($lotNumbers as $lotNumber) {
+                // Try to find the lot within the block (supports "Lot 1" and "1")
+                $lot = DB::table('lots')
+                    ->where('block_id', $block->id)
+                    ->where(function ($q) use ($lotNumber) {
+                        $q->where('name', $lotNumber)
+                          ->orWhere('name', 'Lot ' . $lotNumber);
                     })
-                    ->update(['status' => 'sold']);
+                    ->first();
 
-                if ($updated) {
-                    echo "✅ Updated Block {$block} Lot {$lotNum} to SOLD\n";
+                if ($lot) {
+                    DB::table('lots')
+                        ->where('id', $lot->id)
+                        ->update(['status' => 'sold']);
+
+                    $this->command->info("✅ Block {$blockNumber} Lot {$lotNumber} marked SOLD");
+                    $updated++;
                 } else {
-                    echo "⚠️ No match found for Block {$block} Lot {$lotNum}\n";
+                    $this->command->warn("⚠️ No match found for Block {$blockNumber} Lot {$lotNumber}");
+                    $notFound++;
                 }
             }
         }
+
+        $this->command->line('');
+        $this->command->info("Summary:");
+        $this->command->info("✅ Updated: {$updated}");
+        $this->command->warn("⚠️ Not Found: {$notFound}");
     }
 }
