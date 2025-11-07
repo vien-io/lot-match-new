@@ -90,7 +90,7 @@ class LotController extends Controller
     }
 
     public function statuses() {
-            return response()->json(Lot::select('id', 'status')->get());
+            return response()->json(Lot::select('id', 'name', 'block_id', 'status')->get());
         }
     
 

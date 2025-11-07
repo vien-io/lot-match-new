@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { addBlockMarkers } from './blockMarkers.js';
 import { createToggle } from './utils/materialToggle.js';
+import { ConstNode } from 'three/webgpu';
 
 
 
@@ -32,6 +33,9 @@ export async function loadHouses(scene) {
         }
     }
     const lotStatuses = await fetchLotStatuses();
+    console.log(lotStatuses.map(l => ({ id: l.id, block: l.block_id, status: l.status })));
+
+
 
     const url = `/models/basic/housespawn.glb?ts=${Date.now()}`;
     return new Promise((resolve) => {
@@ -106,6 +110,18 @@ export async function loadHouses(scene) {
 
                 const dummy = new THREE.Object3D();
 
+
+                const spawnBlocks = [...new Set(spawnObjects.map(o => o.blockId))];
+                console.log("Blocks in spawnObjects:", spawnBlocks); 
+
+                // --- LOG LOTS ON BLOCK 1 ---
+                const blk = 10;
+                const blockLots = lotStatuses.filter(lot => lot.block_id === blk);
+                console.log(`Lots in Block ${blk}:`, blockLots.map(l => ({
+                    name: l.name,
+                    status: l.status
+                })));
+
                 spawnObjects.forEach(({ position, rotation, lotId, blockId, shouldMirror }, i) => {
                     dummy.position.copy(position);
                     dummy.rotation.copy(rotation);
@@ -115,10 +131,23 @@ export async function loadHouses(scene) {
 
                     instanceMetadata[i] = { lotId, blockId };
 
-                    const lotData = lotStatuses.find(l => l.id == lotId);
+                    const lotData = lotStatuses.find(
+                        l => l.block_id === Number(blockId) && l.name === `Lot ${lotId}`
+                    );
+
+                    if (!lotData) {
+                        console.warn(`Lot not found: block=${blockId}, lot=${lotId}`);
+                        return;
+                    }
+
                     const color = new THREE.Color(0xffffff);
-                    if (lotData?.status === 'sold') color.set(0xff0000);
-                    else if (lotData?.status === 'available') color.set(0x00ff00);
+                    if (lotData.status === 'sold') color.set(0xff0000);
+                    else if (lotData.status === 'available') color.set(0x00ff00);
+
+                    if (Number(blockId) === 1) {
+                        console.log(`Spawn #${i}: lotId=${lotId}, block=${blockId}, status=${lotData.status}, color=${color.getHexString()}`);
+                    }
+
                     basicInstanceColor.setXYZ(i, color.r, color.g, color.b);
                 });
 

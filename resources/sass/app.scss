@@ -970,3 +970,26 @@ html, body{
 }
 
 
+/* red gradient border for sold bottom section */
+.gradient-border-red {
+  background:
+    linear-gradient(#001400, #1c1c1c) padding-box,
+    linear-gradient(
+      135deg,
+      rgba(248,113,113,0) 0%,   /* transparent start */
+      rgba(248,113,113,0.2) 70%, /* semi-transparent middle */
+      rgba(248,113,113,0.8) 100% /* bright red end */
+    ) border-box;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+/* hover effect */
+.gradient-border-red:hover {
+  transform: translateY(-0.25rem); 
+  box-shadow: 0 4px 20px rgba(255, 0, 0, 0.2);
+  background-color: rgba(132, 255, 177, 0.3);
+}
+
+

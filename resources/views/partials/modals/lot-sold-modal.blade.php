@@ -28,7 +28,7 @@
             <div class="top-section tw-flex tw-gap-6">
 
                 <!-- Lot Details -->
-                <div class="left-column gradient-border tw-flex-1 tw-p-4 tw-rounded-xl
+                <div class="left-column gradient-border-red tw-flex-1 tw-p-4 tw-rounded-xl
                     tw-transition-transform tw-duration-300 hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(255,255,255,0.05)] hover:tw-bg-[#f87171]/20">
 
                     <div id="lot-details-sold"></div>
@@ -44,7 +44,7 @@
                                 </tr>
                                 <tr class="tw-border-b tw-border-[#414141]">
                                     <td class="tw-py-1 tw-pr-4 tw-font-semibold">Status</td>
-                                    <td class="tw-py-1 text-red-500 font-semibold">SOLD</td>
+                                    <td class="tw-py-1 tw-text-red-500 tw-font-semibold">SOLD</td>
                                 </tr>
                                 <tr class="tw-border-b tw-border-[#414141]">
                                     <td class="tw-py-1 tw-pr-4 tw-font-semibold">Lot Area</td>
@@ -67,7 +67,9 @@
             </div>
 
             <!-- Bottom Section: Sold Notice -->
-            <div class="bottom-section tw-w-3/4 tw-mx-auto gradient-border tw-p-4 tw-rounded-xl tw-flex tw-flex-col tw-items-center tw-justify-center">
+            <div class="bottom-section gradient-border-red tw-w-3/4 tw-mx-auto tw-p-4 tw-rounded-xl tw-flex tw-flex-col tw-items-center tw-justify-center
+                        tw-transition-transform tw-duration-300 tw-ease-out
+                        hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(255,0,0,0.2)]">
                 <h3 class="tw-text-2xl tw-font-bold tw-text-red-500 tw-mb-2">This lot has been sold</h3>
                 <p class="tw-text-sm tw-text-gray-300 tw-text-center">
                     Thank you for your interest. Please explore other available lots.

@@ -85,5 +85,5 @@
         To exercise these rights, contact us at:
     </p>
 
-    <p class="tw-font-medium tw-text-purple-600">📧 comania22-0532@cca.edu.ph</p>
+    <p class="tw-font-medium tw-text-purple-600">📧 lotmatchapp@gmail.com</p>
 </div>

@@ -6,7 +6,7 @@ import { loadLotImages } from "../modals/addImageModal";
 export let modalOpen = false;
 
 export async function showLotDetails(lot) {
-    console.log("showLotDetails called with:", lot);
+    // console.log("showLotDetails called with:", lot);
     window.currentLotId = lot.id; 
 
     // Determine which modal to show
@@ -14,7 +14,7 @@ export async function showLotDetails(lot) {
     const modalId = isSold ? "lot-sold-modal" : "lot-modal";
     const modal = document.getElementById(modalId);
 
-    console.log("Lot:", lot.id, isSold);
+    console.log(lot.name, "Block:", lot.block_id, "Status:", lot.status);
 
     if (!modal) {
         console.error(`Modal ${modalId} not found!`);
@@ -26,7 +26,7 @@ export async function showLotDetails(lot) {
 
     // Populate lot attributes
     if (isSold) {
-        document.getElementById("lot-price-sold").textContent = lot.price ? `₱${parseFloat(lot.price).toLocaleString()}` : "—";
+        document.getElementById("lot-price-sold").textContent = "----";
         document.getElementById("lot-lot-area-sold").textContent = lot.lot_area + " sqm";
         document.getElementById("lot-floor-area-sold").textContent = lot.floor_area ? lot.floor_area + " sqm" : "N/A";
         document.getElementById("lot-orientation-sold").textContent = lot.orientation || "N/A";
@@ -89,7 +89,7 @@ export async function showLotDetails(lot) {
         if (event.target === modal) {
             modal.style.display = "none";
             modalOpen = false;
-            console.log(`${modalId} closed via outside click`);
+            // console.log(`${modalId} closed via outside click`);
         }
     };
 }

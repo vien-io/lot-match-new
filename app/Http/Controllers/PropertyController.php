@@ -62,7 +62,6 @@ class PropertyController extends Controller
                 'orientation' => $request->orientation,
                 'sunlight' => $request->sunlight,
                 'flood_risk' => $request->flood_risk,
-                'description' => '',
             ]);
 
             // handle lot images

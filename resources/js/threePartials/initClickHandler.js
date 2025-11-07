@@ -79,7 +79,7 @@ export function initClickHandler({
                 const instanceId = intersects[0].instanceId;
                 const meta = instanceMetadata[instanceId]; // imported from loadHouses()
                 if (meta) {
-                    console.log(`Clicked lot ${meta.lotId} (block ${meta.blockId})`);
+                    /* console.log(`Clicked lot ${meta.lotId} (block ${meta.blockId})`); */
                     fetch(`/block/${meta.blockId}/lot/${meta.lotId}`)
                         .then(res => res.json())
                         .then(showLotDetails)
