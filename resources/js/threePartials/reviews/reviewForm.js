@@ -19,7 +19,9 @@ export function bindFormHandler(block) {
 
     if (!reviewForm) return;
 
-    function showAiPopup(message = "AI summarizing and forecasting...", emoji = "🤖", duration = 4000) {
+    let mainPopupTimer = null;
+
+    function showAiPopup(message = "AI summarizing and forecasting...", emoji = "🤖", duration = 4000, isMain = false) {
         if (!aiPopup) return;
 
         aiText.textContent = message;
@@ -28,12 +30,30 @@ export function bindFormHandler(block) {
         aiPopup.classList.remove("tw-hidden", "tw-opacity-0", "tw-translate-x-8");
         aiPopup.classList.add("tw-opacity-100", "tw-translate-x-0");
 
+        // If this is the main popup, start a unique timer
+        if (isMain) {
+            clearTimeout(mainPopupTimer); // clear previous main timer if any
+            mainPopupTimer = setTimeout(() => {
+                aiPopup.classList.remove("tw-opacity-100", "tw-translate-x-0");
+                aiPopup.classList.add("tw-opacity-0", "tw-translate-x-8");
+                setTimeout(() => {
+                    if (!aiPopup.classList.contains("tw-hidden")) {
+                        aiPopup.classList.add("tw-hidden");
+                        addNotification("AI is still processing your request. Please wait a moment…");
+                    }
+                }, 500);
+            }, duration);
+            return;
+        }
+
+        // Otherwise, regular popup behavior (no dismiss notification)
         setTimeout(() => {
             aiPopup.classList.remove("tw-opacity-100", "tw-translate-x-0");
             aiPopup.classList.add("tw-opacity-0", "tw-translate-x-8");
             setTimeout(() => aiPopup.classList.add("tw-hidden"), 500);
         }, duration);
     }
+
 
     reviewForm.addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -94,7 +114,7 @@ export function bindFormHandler(block) {
                 }
 
                 reviewForm.removeAttribute('data-editing');
-                showAiPopup("AI summarizing and forecasting your review...", "🤖", 8000);
+                showAiPopup("AI summarizing and forecasting your review...", "🤖", 8000, true);
 
                 if (!blockId) return;
 

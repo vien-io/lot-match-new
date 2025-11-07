@@ -133,7 +133,7 @@ export function initClickHandler({
                     .catch(err => console.error("Error fetching block:", err));
 
             } else {
-                console.log("Clicked on non-block object!", selectedObject);
+                // console.log("Clicked on non-block object!", selectedObject);
             }
         } else {
             console.log("Clicked empty space.");

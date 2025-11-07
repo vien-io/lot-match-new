@@ -149,6 +149,19 @@ function fetchLots(blockId, blockItem) {
             lotsContainer.innerHTML = "<li>Error loading lots</li>";
         });
 }
+// ====================
+// NOTIFICATION
+// ====================
+
+window.addNotification = function (message) {
+    const event = new CustomEvent('new-notification', {
+        detail: {
+            message,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }
+    });
+    window.dispatchEvent(event);
+};
 
 
 // ====================
@@ -181,11 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTopRatedLotsChart();
     renderTopRatedLotsCards();
 });
-
-
-
-
-
 
 
 document.addEventListener('DOMContentLoaded', () => {

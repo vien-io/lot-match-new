@@ -18,6 +18,7 @@ export async function pollForecastStatus(blockId, maxAttempts = 20, delay = 2000
                     console.log(`✅ Forecast job for block ${blockId} completed on attempt ${attempt + 1}`);
                     loadBlockSummary(blockId);
                     updateForecastTimestamp(data.forecast_updated_at);
+                    addNotification(`Forecast for Block ${blockId} completed successfully.`);
                     return true;
                 }
             } else {
