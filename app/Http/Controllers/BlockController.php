@@ -10,7 +10,7 @@ class BlockController extends Controller
 {
     public function getBlocks()
     {
-        $blocks = Block::all();  // or use pagination if needed
+        $blocks = Block::all();  
         return response()->json($blocks);
     }
     public function show($id)

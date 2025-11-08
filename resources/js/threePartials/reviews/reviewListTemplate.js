@@ -1,7 +1,11 @@
 // templates/reviewListTemplate.js
 export function reviewListTemplate(block) {
+    console.log(block);
+
     const reviews = block.reviews ?? [];
     const showOwnerTags = window.showOwnerTags ?? false;
+
+    console.log(reviews);
 
     return `
     <div class="tw-rounded-2xl tw-border-2 tw-border-transparent 

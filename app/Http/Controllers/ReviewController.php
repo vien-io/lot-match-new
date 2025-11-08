@@ -91,44 +91,41 @@ class ReviewController extends Controller
             'comment' => 'nullable|string',
         ]);
 
-        // check if user has already submitted review for the block
+        $block = Block::find($request->block_id);
+
+        if (!$block) {
+            return response()->json([
+                'message' => 'Review updated, but block not found.',
+            ], 404);
+        }
+
         $existingReview = Review::where('user_id', Auth::id())
                                 ->where('block_id', $request->block_id) 
                                 ->first();
 
+        $review = null;
         if ($existingReview) {
-            // update existing review
             $existingReview->update([
                 'rating' => $request->rating,
                 'comment' => $request->comment,
             ]);
-
-
-
         } else {
-            // create new review
             $review = Review::create([
                 'user_id' => Auth::id(),
-                'user_name' => Auth::user()->name,
                 'block_id' => $request->block_id,  
                 'rating' => $request->rating,
                 'comment' => $request->comment,
             ]);
-
-            
         }
 
         // unify
         $finalReview = $existingReview ?? $review;
 
         if ($request->comment && isset($finalReview)) {
-            $block = Block::find($request->block_id);
             $block->update(['forecast_status' => 'processing']);
 
             DB::afterCommit(function () use ($finalReview, $request) {
                 $chain = [
-                    // (new GenerateBlockSummaryJob($request->block_id))->delay(now()->addSeconds(2)),
-                    // temporarily removed GenerateBlockSummaryJob because its redundant (two calls)
                     (new \App\Jobs\ProcessBlockForecast($request->block_id, app(\App\Services\SummaryService::class)))->delay(now()->addSeconds(3))
                 ];
 
@@ -140,20 +137,29 @@ class ReviewController extends Controller
             });
         }
 
-        // fetch block with its reviews and related user info
-        $block = Block::with('reviews.user')->find($request->block_id);
+        $block->load('reviews.user');
+
+        $reviewsMapped = $block->reviews->map(function ($review) {
+            return [
+                'id' => $review->id,
+                'user_id' => $review->user_id,
+                'user_name' => $review->user->name ?? 'Unknown', 
+                'role' => $review->user->role ?? 'buyer',
+                'rating' => $review->rating,
+                'comment' => $review->comment,
+                'created_at' => $review->created_at->toDateTimeString(),
+            ];
+        });
+
+        $blockMapped = $block->toArray();
+        $blockMapped['reviews'] = $reviewsMapped;
         
 
-        if (!$block) {
-            return response()->json([
-                'message' => 'Review updated, but block not found.',
-            ], 404);
-        }
 
         $finalReview->load('user', 'block'); 
         return response()->json([
             'message' => 'Review submitted successfully!',
-            'block' => $block,  
+            'block' => $blockMapped,  
             'review' => $finalReview,  
         ]);
     }
@@ -169,7 +175,8 @@ class ReviewController extends Controller
         return response()->json($review); 
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string',
@@ -177,26 +184,15 @@ class ReviewController extends Controller
 
         $review = Review::findOrFail($id);
 
-        // make sure review belongs to authenticated user
+        // ensure review belongs to the authenticated user
         if ($review->user_id != Auth::id()) {
             return response()->json(['message' => 'You can only update your own reviews.'], 403);
         }
 
-        // update review
+        // update review data
         $review->update($request->only('rating', 'comment'));
 
-        // analyze and update sentiment
-        /* if ($request->comment) {
-            $sentiment = $this->analyzeSentimentViaHuggingFace($request->comment);
-
-            Log::info('Sentiment Result (update method):', [
-                'comment' => $request->comment,
-                'sentiment' => $sentiment
-            ]);
-
-            $review->sentiment = strtolower($sentiment);
-            $review->save();
-        } */
+        // re-run forecast and sentiment analysis if comment updated
         if ($request->comment) {
             DB::afterCommit(function () use ($review, $request) {
                 $chain = [
@@ -213,19 +209,40 @@ class ReviewController extends Controller
                 );
             });
         }
+
+        // load block with all reviews + user info
         $block = \App\Models\Block::with('reviews.user')->find($review->block_id);
+
         if (!$block) {
             return response()->json([
                 'message' => 'Review updated, but block not found.',
             ], 404);
         }
 
+        // Map reviews to include user_name and role (same as store)
+        $reviewsMapped = $block->reviews->map(fn($r) => [
+            'id' => $r->id,
+            'user_id' => $r->user_id,
+            'user_name' => $r->user->name ?? 'Unknown',
+            'role' => $r->user->role ?? 'buyer',
+            'rating' => $r->rating,
+            'comment' => $r->comment,
+            'created_at' => $r->created_at->toDateTimeString(),
+        ]);
+
+        $blockMapped = $block->toArray();
+        $blockMapped['reviews'] = $reviewsMapped;
+
+        // ensure review also includes its user relationship
+        $review->load('user');
+
         return response()->json([
             'message' => 'Review updated successfully!',
-            'block' => $block,
+            'block' => $blockMapped,
             'review' => $review,
         ]);
     }
+
 
 public function destroy($id)
 {

@@ -30,9 +30,8 @@ export function bindFormHandler(block) {
         aiPopup.classList.remove("tw-hidden", "tw-opacity-0", "tw-translate-x-8");
         aiPopup.classList.add("tw-opacity-100", "tw-translate-x-0");
 
-        // If this is the main popup, start a unique timer
         if (isMain) {
-            clearTimeout(mainPopupTimer); // clear previous main timer if any
+            clearTimeout(mainPopupTimer); 
             mainPopupTimer = setTimeout(() => {
                 aiPopup.classList.remove("tw-opacity-100", "tw-translate-x-0");
                 aiPopup.classList.add("tw-opacity-0", "tw-translate-x-8");
@@ -46,7 +45,6 @@ export function bindFormHandler(block) {
             return;
         }
 
-        // Otherwise, regular popup behavior (no dismiss notification)
         setTimeout(() => {
             aiPopup.classList.remove("tw-opacity-100", "tw-translate-x-0");
             aiPopup.classList.add("tw-opacity-0", "tw-translate-x-8");

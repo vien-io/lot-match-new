@@ -1,3 +1,6 @@
+// MIGHT NOT BE USED. MIGHT BE DELETABLE
+
+
 import reviewTemplate from './reviewSection.html?raw';
 import { bindFormHandler } from './reviewForm.js';
 import { bindEditButtons, bindDeleteButtons } from './reviewButtons.js';
@@ -44,6 +47,7 @@ function injectStars() {
 // Inject reviews dynamically
 function injectReviews(reviews, block) {
     const container = document.getElementById('reviews-container');
+    console.log("Block here is: ", block);
     if (!container) return;
 
     container.innerHTML = reviews.map(review => {
