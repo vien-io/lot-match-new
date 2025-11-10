@@ -59,48 +59,84 @@
                             <td class="tw-p-2">{{ $user->name }}</td>
                             <td class="tw-p-2">{{ $user->email }}</td>
 
-                            {{-- Role --}}
-                            {{-- Role & Lot Assignment --}}
-<td class="tw-p-2" x-data="{ role: '{{ $user->role }}' }">
-    @if(auth()->user()->role === 'admin')
-        <form action="{{ route('usermanagement.update', $user->id) }}" method="POST" x-ref="form">
-            @csrf
-            @method('PUT')
+                            {{-- Role & Owner Lot Assignment --}}
+                            <td class="tw-p-2"
+                                x-data='userLotForm({{ $user->id }}, @json($user->role), @json($allLots))'>
 
-            <!-- Hidden inputs for required fields -->
-            <input type="hidden" name="username" value="{{ $user->username }}">
-            <input type="hidden" name="name" value="{{ $user->name }}">
-            <input type="hidden" name="email" value="{{ $user->email }}">
+                                
+                                @if(auth()->user()->role === 'admin')
+                                    <form action="{{ route('usermanagement.update', $user->id) }}" method="POST" x-ref="form">
+                                        @csrf
+                                        @method('PUT')
 
-            <!-- Role dropdown -->
-            <select name="role" x-model="role" @change="$refs.form.submit()" class="tw-border tw-rounded tw-px-2 tw-py-1 tw-text-sm">
-                <option value="admin">Admin</option>
-                <option value="owner">Owner</option>
-                <option value="buyer">Buyer</option>
-            </select>
+                                        <!-- Hidden user info -->
+                                        <input type="hidden" name="username" value="{{ $user->username }}">
+                                        <input type="hidden" name="name" value="{{ $user->name }}">
+                                        <input type="hidden" name="email" value="{{ $user->email }}">
 
-            <!-- Lot selection, only visible if role = owner -->
-            <div x-show="role === 'owner'" class="tw-mt-2">
-                <label class="tw-block tw-text-sm tw-mb-1">Assign Lots:</label>
-                <select name="lot_ids[]" multiple @change="$refs.form.submit()" class="tw-border tw-rounded tw-px-2 tw-py-1 tw-text-sm tw-w-full">
-                    @foreach(App\Models\Lot::all() as $lot)
-                        <option value="{{ $lot->id }}" {{ $lot->owner_id === $user->id ? 'selected' : '' }}>
-                            {{ $lot->name }} ({{ $lot->block->name }})
-                        </option>
-                    @endforeach
-                </select>
-                <p class="tw-text-xs tw-text-gray-500 tw-mt-1">Hold Ctrl (Cmd on Mac) to select multiple lots.</p>
-            </div>
+                                        <!-- Role dropdown -->
+                                        <select name="role" x-model="role" class="tw-border tw-rounded tw-px-2 tw-py-1 tw-text-sm">
+                                            <option value="admin" :selected="role === 'admin'">Admin</option>
+                                            <option value="owner" :selected="role === 'owner'">Owner</option>
+                                            <option value="buyer" :selected="role === 'buyer'">Buyer</option>
+                                        </select>
 
-            <!-- Hidden submit button in case JS is disabled -->
-            <button type="submit" class="tw-hidden">Update</button>
-        </form>
-    @else
-        {{ ucfirst($user->role) }}
-    @endif
-</td>
+                                        <!-- Lot assignment (only for owners) -->
+                                        <div x-show="role === 'owner'" class="tw-mt-2">
+                                            <!-- Search field -->
+                                            <div class="tw-mt-2" x-data="">
+                                                <input type="text"
+                                                    x-model="query"
+                                                    @input="filterLots()"
+                                                    placeholder="Search lot/block..."
+                                                    class="tw-w-full tw-border tw-rounded tw-px-2 tw-py-1 tw-text-sm"
+                                                    @click.outside="query=''; filteredLots=[]"
+                                                    @keydown.escape="query=''; filteredLots=[]">
 
+                                                <div x-show="filteredLots.length > 0"
+                                                    class="tw-border tw-rounded tw-bg-white tw-max-h-40 tw-overflow-y-auto tw-mt-1">
+                                                    <template x-for="lot in filteredLots" :key="lot.id">
+                                                        <div class="tw-px-2 tw-py-1 hover:tw-bg-gray-100 tw-cursor-pointer"
+                                                            @click="selectLot(lot)">
+                                                            <span x-text="lot.name + ' (' + lot.block + ')'"></span>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
 
+                                            <!-- Selected lots -->
+                                            <template x-for="(lot, index) in selectedLots" :key="lot.id">
+                                                <div class="tw-flex tw-items-center tw-mb-1">
+                                                    <input type="hidden" name="lot_ids[]" :value="lot.id">
+                                                    <div class="tw-flex-1 tw-px-2 tw-py-1 tw-border tw-rounded tw-bg-gray-100">
+                                                        <span x-text="lot.name + ' (' + lot.block + ')'"></span>
+                                                    </div>
+                                                    <button type="button"
+                                                            class="tw-ml-2 tw-text-red-500 hover:tw-text-red-700"
+                                                            @click="removeLot(index)">✕</button>
+                                                </div>
+                                            </template>
+                                        </div>
+
+                                        <!-- Save & Cancel buttons -->
+                                        <div class="tw-mt-2 tw-flex tw-gap-2" x-show="hasChanges">
+                                            <button type="submit"
+                                                class="tw-bg-blue-500 hover:tw-bg-blue-600 tw-text-white tw-px-3 tw-py-1 tw-rounded tw-text-sm">
+                                                Save
+                                            </button>
+
+                                            <button type="button"
+                                                class="tw-bg-gray-300 hover:tw-bg-gray-400 tw-text-gray-800 tw-px-3 tw-py-1 tw-rounded tw-text-sm"
+                                                @click="resetForm()">
+                                                Cancel
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                @else
+                                    {{ ucfirst($user->role) }}
+                                @endif
+                            </td>
 
                             {{-- Verification --}}
                             <td class="tw-p-2">
@@ -111,7 +147,7 @@
                                 @endif
                             </td>
 
-
+                            {{-- Edit / Delete --}}
                             <td class="tw-p-2">
                                 <div class="tw-flex tw-gap-2 tw-items-center">
                                     <!-- Edit Modal Trigger -->
@@ -140,6 +176,7 @@
                                 </div>
                             </td>
                         </tr>
+
                     @empty
                         <tr>
                             <td colspan="4" class="tw-text-center tw-p-4 tw-text-gray-500">No users found.</td>
@@ -157,9 +194,10 @@
 </div>
 @endsection
 
-{{-- JS for modals --}}
 @section('scripts')
-  @vite('resources/js/userModals.js')
+  @vite([
+    'resources/js/userModals.js',
+  ])
 @endsection
 
 {{-- Include Modals --}}

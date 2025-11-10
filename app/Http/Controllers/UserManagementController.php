@@ -11,7 +11,7 @@ use Illuminate\Validation\ValidationException;
 class UserManagementController extends Controller
 {
     public function index(Request $request)
-{
+    {
         $query = User::query();
 
         if ($search = $request->input('search')) {
@@ -21,10 +21,21 @@ class UserManagementController extends Controller
                 ->orWhere('email', 'like', "%{$search}%");
             });
         }
-        /** @var \Illuminate\Pagination\LengthAwarePaginator $users */
-        $users = $query->paginate(20)->withQueryString(); 
 
-        return view('usermanagement.index', compact('users'));
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $users */
+        $users = $query->paginate(20)->withQueryString();
+
+        // Load all lots with their blocks
+        $allLots = Lot::with('block')->get()->map(function ($l) {
+            return [
+                'id' => $l->id,
+                'name' => $l->name,
+                'block' => $l->block->name,
+                'owner_id' => $l->owner_id,
+            ];
+        });
+
+        return view('usermanagement.index', compact('users', 'allLots'));
     }
 
     public function create()

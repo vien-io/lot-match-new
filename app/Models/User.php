@@ -71,5 +71,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(UserSetting::class);
     }
+    public function lots()
+    {
+        return $this->hasMany(Lot::class, 'owner_id');
+    }
 }
  
