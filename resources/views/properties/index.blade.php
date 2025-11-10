@@ -381,6 +381,7 @@
 </div>
 
 
+
 {{-- lot images modal --}}
 <div id="lotImageModal" class="tw-fixed tw-inset-0 tw-bg-black/40 tw-flex tw-items-center tw-justify-center tw-hidden tw-z-50">
   <div class="tw-bg-[#f5f7fa] tw-rounded-[12px] tw-shadow-lg tw-max-w-3xl tw-w-full tw-p-6 tw-relative">
