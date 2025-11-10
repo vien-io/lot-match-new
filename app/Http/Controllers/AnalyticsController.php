@@ -22,20 +22,20 @@ class AnalyticsController extends Controller
         ->get();
     
 
-        // top 5 highest rated
         $topRatedLots = DB::table('blocks as b')
-        ->join('reviews as r', 'b.id', '=', 'r.block_id') 
-        ->join('lots as l', 'b.id', '=', 'l.block_id')  
-        ->select('l.id', 'l.price', DB::raw('AVG(r.rating) as avg_rating'))
-        ->groupBy('l.id', 'l.price')
-        ->orderByDesc('avg_rating')   
-        ->limit(5)                 
-        ->get();
+            ->join('reviews as r', 'b.id', '=', 'r.block_id') 
+            ->join('lots as l', 'b.id', '=', 'l.block_id')  
+            ->select('l.id', 'l.name', 'l.price', DB::raw('AVG(r.rating) as avg_rating'))
+            ->groupBy('l.id', 'l.name', 'l.price')
+            ->orderByDesc('avg_rating')   
+            ->limit(5)                 
+            ->get();
+
 
             
 
         // recent reviews
-        $recentReviews = Review::with('user')
+        /* $recentReviews = Review::with('user')
             ->orderByDesc('created_at')
             ->take(5)
             ->get()
@@ -47,12 +47,12 @@ class AnalyticsController extends Controller
                     'user_name' => $review->user->name ?? 'Anonymous',
                     'block_id' => $review->block_id,
                 ];
-            });
+            }); */
     
         
         // lot available
         $availableLots = DB::table('lots')->where('status', 'available')->count();
-        $reservedLots = DB::table('lots')->where('status', 'reserved')->count();
+        $soldLots = DB::table('lots')->where('status', 'sold')->count();
     
 
         // rating dist
@@ -76,9 +76,9 @@ class AnalyticsController extends Controller
         return view('analytics', compact(
             'blockRatings', 
             'topRatedLots', 
-            'recentReviews', 
+            // 'recentReviews', 
             'availableLots', 
-            'reservedLots', 
+            'soldLots', 
             'ratingDistribution',
             'totalLots'
         ));

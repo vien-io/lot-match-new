@@ -1,5 +1,4 @@
 // resources/js/components/lotSelector.js
-console.log("lotSelector loaded");
 
 window.lotSelector = function (userId, allLots) {
     return {
