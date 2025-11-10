@@ -1,6 +1,6 @@
 // MIGHT NOT BE USED. MIGHT BE DELETABLE
 
-
+/* 
 import reviewTemplate from './reviewSection.html?raw';
 import { bindFormHandler } from './reviewForm.js';
 import { bindEditButtons, bindDeleteButtons } from './reviewButtons.js';
@@ -87,3 +87,4 @@ function injectReviews(reviews, block) {
         `;
     }).join('');
 }
+ */

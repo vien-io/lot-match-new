@@ -76,19 +76,33 @@
 
         {{-- Recent Reviews --}}
         <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6">
-          <h2 class="tw-text-xl tw-font-semibold tw-mb-4 tw-text-gray-800">Recent Reviews</h2>
-          <ul class="tw-space-y-3 tw-max-h-64 tw-overflow-y-auto">
-            @forelse ($recentReviews as $review)
-              <li class="tw-border-b tw-border-gray-200 tw-pb-2">
-                <p class="tw-font-medium">{{ $review->user_name ?? 'Anonymous' }}</p>
-                <p class="tw-text-gray-700">{{ Str::limit($review->comment, 100) }}</p>
-                <p class="tw-text-sm tw-text-gray-500">Rating: {{ $review->rating ?? 'N/A' }}/5</p>
-              </li>
-            @empty
-              <li class="tw-text-gray-500">No recent reviews.</li>
-            @endforelse
-          </ul>
-        </div>
+        <h2 class="tw-text-xl tw-font-semibold tw-mb-4 tw-text-gray-800">Recent Reviews</h2>
+        <ul class="tw-space-y-4 tw-max-h-64 tw-overflow-y-auto">
+          @forelse ($recentReviews as $review)
+            <li class="tw-bg-white tw-border tw-border-gray-200 tw-rounded-lg tw-p-4 tw-shadow-sm" data-review-id="{{ $review->id }}">
+              <div class="tw-flex tw-items-center tw-justify-between">
+                <div class="tw-flex tw-items-center">
+                  <strong class="tw-text-gray-800">{{ $review->user->name ?? 'Anonymous' }}</strong>
+                  {!! $ownerTag ?? '' !!}
+                </div>
+                <span class="tw-text-yellow-500">{{ $review->rating ?? 'N/A' }}/5 ★</span>
+              </div>
+
+              <p class="tw-text-gray-700 tw-mt-2">{{ Str::limit($review->comment, 200) }}</p>
+
+              <div class="tw-flex tw-items-center tw-justify-between tw-mt-3">
+                <small class="tw-text-gray-500">
+                  {{ \Carbon\Carbon::parse($review->created_at)->format('M d, Y h:i A') }}
+                </small>
+                {!! $buttons ?? '' !!}
+              </div>
+            </li>
+          @empty
+            <li class="tw-text-gray-500">No recent reviews.</li>
+          @endforelse
+        </ul>
+      </div>
+
 
       </div>
     </div>

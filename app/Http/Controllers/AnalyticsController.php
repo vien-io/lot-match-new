@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -34,14 +35,19 @@ class AnalyticsController extends Controller
             
 
         // recent reviews
-        $recentReviews = DB::table('reviews as r')
-        ->join('users as u', 'r.user_id', '=', 'u.id') 
-        ->join('blocks as b', 'r.block_id', '=', 'b.id') 
-        ->join('lots as l', 'b.id', '=', 'l.block_id')    
-        ->select('r.user_id', 'u.name as user_name', 'r.rating', 'l.id as lot_id')
-        ->orderBy('r.created_at', 'desc')
-        ->limit(5)
-        ->get();
+        $recentReviews = Review::with('user')
+            ->orderByDesc('created_at')
+            ->take(5)
+            ->get()
+            ->map(function ($review) {
+                return (object)[
+                    'id' => $review->id,
+                    'rating' => $review->rating,
+                    'comment' => $review->comment,
+                    'user_name' => $review->user->name ?? 'Anonymous',
+                    'block_id' => $review->block_id,
+                ];
+            });
     
         
         // lot available

@@ -80,7 +80,6 @@ export function reviewListTemplate(block) {
                         </small>
                         ${buttons}
                     </div>
-
                 </div>
                 `;
             }).join('')

@@ -117,7 +117,7 @@
         <ul class="tw-space-y-2 tw-max-h-64 tw-overflow-y-auto">
             @foreach($recentReviews as $review)
             <li class="tw-border-b tw-border-gray-200 tw-pb-2">
-                <p class="tw-font-medium">{{ $review->user_name ?? 'Anonymous' }} - Lot #{{ $review->lot_id }}</p>
+                <p class="tw-font-medium">{{ $review->user_name ?? 'Anonymous' }} - Lot #{{ $review->block_id }}</p>
                 <p class="tw-text-sm tw-text-gray-700">Rating: {{ $review->rating }}/5</p>
             </li>
             @endforeach
