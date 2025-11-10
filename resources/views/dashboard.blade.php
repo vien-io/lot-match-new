@@ -75,33 +75,56 @@
         </div>
 
         {{-- Recent Reviews --}}
-        <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6">
-        <h2 class="tw-text-xl tw-font-semibold tw-mb-4 tw-text-gray-800">Recent Reviews</h2>
-        <ul class="tw-space-y-4 tw-max-h-64 tw-overflow-y-auto">
-          @forelse ($recentReviews as $review)
-            <li class="tw-bg-white tw-border tw-border-gray-200 tw-rounded-lg tw-p-4 tw-shadow-sm" data-review-id="{{ $review->id }}">
-              <div class="tw-flex tw-items-center tw-justify-between">
-                <div class="tw-flex tw-items-center">
-                  <strong class="tw-text-gray-800">{{ $review->user->name ?? 'Anonymous' }}</strong>
-                  {!! $ownerTag ?? '' !!}
-                </div>
-                <span class="tw-text-yellow-500">{{ $review->rating ?? 'N/A' }}/5 ★</span>
-              </div>
+        {{-- Recent Reviews --}}
+<div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6">
+  <h2 class="tw-text-xl tw-font-semibold tw-mb-4 tw-text-gray-800">Recent Reviews</h2>
+  <ul class="tw-space-y-4 tw-max-h-64 tw-overflow-y-auto">
+    @forelse ($recentReviews as $review)
+      <li class="tw-bg-white tw-border tw-border-gray-200 tw-rounded-lg tw-p-4 tw-shadow-sm" data-review-id="{{ $review->id }}">
+        <div class="tw-flex tw-items-center tw-justify-between">
+          <div class="tw-flex tw-items-center tw.space-x-2">
+            <strong class="tw-text-gray-800">
+              {{ $review->user->name ?? 'Anonymous' }}
+            </strong>
+            <span class="tw-text-gray-500">→ {{ $review->block->name ?? 'Unknown Block' }}</span>
+            {!! $ownerTag ?? '' !!}
+          </div>
+          <div class="tw-flex tw-space-x-1">
+            @php
+              $rating = $review->rating ?? 0;
+            @endphp
+            @for ($i = 1; $i <= 5; $i++)
+              @if ($i <= $rating)
+                {{-- Filled star --}}
+                <svg class="tw-w-4 tw-h-4 tw-text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.962a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.962c.3.922-.755 1.688-1.54 1.118l-3.37-2.447a1 1 0 00-1.176 0l-3.37 2.447c-.784.57-1.838-.196-1.539-1.118l1.286-3.962a1 1 0 00-.364-1.118L2.064 9.39c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.285-3.962z"/>
+                </svg>
+              @else
+                {{-- Empty star --}}
+                <svg class="tw-w-4 tw-h-4 tw-text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.962a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.962c.3.922-.755 1.688-1.54 1.118l-3.37-2.447a1 1 0 00-1.176 0l-3.37 2.447c-.784.57-1.838-.196-1.539-1.118l1.286-3.962a1 1 0 00-.364-1.118L2.064 9.39c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.285-3.962z"/>
+                </svg>
+              @endif
+            @endfor
+          </div>
+        </div>
 
-              <p class="tw-text-gray-700 tw-mt-2">{{ Str::limit($review->comment, 200) }}</p>
+        <p class="tw-text-gray-700 tw-mt-2">{{ Str::limit($review->comment, 200) }}</p>
 
-              <div class="tw-flex tw-items-center tw-justify-between tw-mt-3">
-                <small class="tw-text-gray-500">
-                  {{ \Carbon\Carbon::parse($review->created_at)->format('M d, Y h:i A') }}
-                </small>
-                {!! $buttons ?? '' !!}
-              </div>
-            </li>
-          @empty
-            <li class="tw-text-gray-500">No recent reviews.</li>
-          @endforelse
-        </ul>
-      </div>
+        <div class="tw-flex tw-items-center tw-justify-between tw-mt-3">
+          <small class="tw-text-gray-500">
+            {{ \Carbon\Carbon::parse($review->created_at)->format('M d, Y h:i A') }}
+          </small>
+          {!! $buttons ?? '' !!}
+        </div>
+      </li>
+    @empty
+      <li class="tw-text-gray-500">No recent reviews.</li>
+    @endforelse
+  </ul>
+</div>
+
+
 
 
       </div>
