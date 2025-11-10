@@ -7,8 +7,8 @@ export function initCamera(container) {
     const camera = new THREE.PerspectiveCamera(
         40,
         width / height,
-        0.1,
-        5000,
+        10,
+        5000
     );
     camera.position.set(0 , 590, 0);
     camera.lookAt(0, 0, 0);

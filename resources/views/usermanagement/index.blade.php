@@ -60,28 +60,46 @@
                             <td class="tw-p-2">{{ $user->email }}</td>
 
                             {{-- Role --}}
-                            <td class="tw-p-2">
-                                @if(auth()->user()->role === 'admin')
-                                    <form action="{{ route('usermanagement.update', $user->id) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
+                            {{-- Role & Lot Assignment --}}
+<td class="tw-p-2" x-data="{ role: '{{ $user->role }}' }">
+    @if(auth()->user()->role === 'admin')
+        <form action="{{ route('usermanagement.update', $user->id) }}" method="POST" x-ref="form">
+            @csrf
+            @method('PUT')
 
-                                        <!-- Hidden inputs for required fields -->
-                                        <input type="hidden" name="username" value="{{ $user->username }}">
-                                        <input type="hidden" name="name" value="{{ $user->name }}">
-                                        <input type="hidden" name="email" value="{{ $user->email }}">
+            <!-- Hidden inputs for required fields -->
+            <input type="hidden" name="username" value="{{ $user->username }}">
+            <input type="hidden" name="name" value="{{ $user->name }}">
+            <input type="hidden" name="email" value="{{ $user->email }}">
 
-                                        <!-- Role dropdown -->
-                                        <select name="role" onchange="this.form.submit()" class="tw-border tw-rounded tw-px-2 tw-py-1 tw-text-sm">
-                                            <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
-                                            <option value="owner" {{ $user->role === 'owner' ? 'selected' : '' }}>Owner</option>
-                                            <option value="buyer" {{ $user->role === 'buyer' ? 'selected' : '' }}>Buyer</option>
-                                        </select>
-                                    </form>
-                                @else
-                                    {{ ucfirst($user->role) }}
-                                @endif
-                            </td>
+            <!-- Role dropdown -->
+            <select name="role" x-model="role" @change="$refs.form.submit()" class="tw-border tw-rounded tw-px-2 tw-py-1 tw-text-sm">
+                <option value="admin">Admin</option>
+                <option value="owner">Owner</option>
+                <option value="buyer">Buyer</option>
+            </select>
+
+            <!-- Lot selection, only visible if role = owner -->
+            <div x-show="role === 'owner'" class="tw-mt-2">
+                <label class="tw-block tw-text-sm tw-mb-1">Assign Lots:</label>
+                <select name="lot_ids[]" multiple @change="$refs.form.submit()" class="tw-border tw-rounded tw-px-2 tw-py-1 tw-text-sm tw-w-full">
+                    @foreach(App\Models\Lot::all() as $lot)
+                        <option value="{{ $lot->id }}" {{ $lot->owner_id === $user->id ? 'selected' : '' }}>
+                            {{ $lot->name }} ({{ $lot->block->name }})
+                        </option>
+                    @endforeach
+                </select>
+                <p class="tw-text-xs tw-text-gray-500 tw-mt-1">Hold Ctrl (Cmd on Mac) to select multiple lots.</p>
+            </div>
+
+            <!-- Hidden submit button in case JS is disabled -->
+            <button type="submit" class="tw-hidden">Update</button>
+        </form>
+    @else
+        {{ ucfirst($user->role) }}
+    @endif
+</td>
+
 
 
                             {{-- Verification --}}

@@ -189,23 +189,20 @@ Route::get('/tools/backfill-sentiment', [\App\Http\Controllers\ToolsController::
 | Email Verification
 |--------------------------------------------------------------------------
 */
-// verification success page
+
 Route::get('/email/verified-success', function () {
     return view('auth.verified-success');
 })->name('verification.success');
 
-// default verification route 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
     return redirect()->route('verification.success');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
-// if email isn’t verified yet
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
-// resend link 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lot;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
@@ -88,6 +89,8 @@ class UserManagementController extends Controller
             'name' => 'required|string|max:255',
             'email' => "required|email|unique:users,email,{$user->id}",
             'role' => 'nullable|in:admin,owner,buyer',
+            'lot_ids' => 'nullable|array',
+            'lot_ids.*' => 'exists:lots,id',
         ]);
 
         $user->update($request->only('username', 'name', 'email'));
@@ -99,6 +102,15 @@ class UserManagementController extends Controller
                 'role' => $newRole,
                 'email_verified_at' => ($newRole === 'owner' || $newRole === 'admin') ? now() : null,
             ]);
+        }
+
+        if ($newRole === 'owner') {
+            Lot::where('owner_id', $user->id)->update(['owner_id' => null]);
+            if ($request->filled('lot_ids')) {
+                Lot::whereIn('id', $request->lot_ids)->update(['owner_id' => $user->id]);
+            }
+        } else {
+            Lot::where('owner_id', $user->id)->update(['owner_id' => null]);
         }
 
         return redirect()->route('usermanagement.index')->with('success', 'User updated successfully.');
