@@ -69,33 +69,36 @@
     </div>
 
     {{-- Lot Availability --}}
-    <div class="tw-bg-white tw-rounded-3xl tw-shadow-md tw-p-6">
-        <h2 class="tw-text-xl tw-font-semibold tw-mb-4">Lot Availability</h2>
+    <div class="tw-flex tw-justify-center">
+        <div class="tw-bg-white tw-rounded-3xl tw-shadow-md tw-p-6 tw-w-[60vw]">
+            <h2 class="tw-text-xl tw-font-semibold tw-mb-4">Lot Availability</h2>
 
-        <div class="tw-mb-4">
-            <div class="tw-flex tw-justify-between tw-text-sm tw-text-gray-600">
-                <span>Available Lots</span>
-                <span>{{ $availableLots }}</span>
-            </div>
-            <div class="tw-w-full tw-bg-gray-200 tw-rounded-full tw-h-3">
-                <div class="tw-bg-green-500 tw-h-3 tw-rounded-full" 
-                    style="width: {{ $totalLots ? ($availableLots / $totalLots) * 100 : 0 }}%">
+            <div class="tw-mb-4">
+                <div class="tw-flex tw-justify-between tw-text-sm tw-text-gray-600">
+                    <span>Available Lots</span>
+                    <span>{{ $availableLots }}</span>
+                </div>
+                <div class="tw-w-full tw-bg-gray-200 tw-rounded-full tw-h-3">
+                    <div class="tw-bg-green-500 tw-h-3 tw-rounded-full" 
+                        style="width: {{ $totalLots ? ($availableLots / $totalLots) * 100 : 0 }}%">
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div>
-            <div class="tw-flex tw-justify-between tw-text-sm tw-text-gray-600">
-                <span>Sold Lots</span>
-                <span>{{ $soldLots }}</span>
-            </div>
-            <div class="tw-w-full tw-bg-gray-200 tw-rounded-full tw-h-3">
-                <div class="tw-bg-red-500 tw-h-3 tw-rounded-full" 
-                    style="width: {{ $totalLots ? ($soldLots / $totalLots) * 100 : 0 }}%">
+            <div>
+                <div class="tw-flex tw-justify-between tw-text-sm tw-text-gray-600">
+                    <span>Sold Lots</span>
+                    <span>{{ $soldLots }}</span>
+                </div>
+                <div class="tw-w-full tw-bg-gray-200 tw-rounded-full tw-h-3">
+                    <div class="tw-bg-red-500 tw-h-3 tw-rounded-full" 
+                        style="width: {{ $totalLots ? ($soldLots / $totalLots) * 100 : 0 }}%">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+ 
 
 {{-- Top Rated Lots Cards --}}
 <div class="tw-flex tw-flex-wrap tw-gap-6 tw-justify-center tw-mt-6">
