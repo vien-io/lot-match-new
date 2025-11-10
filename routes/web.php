@@ -77,6 +77,11 @@ Route::get('blocks/{blockId}/lots/{lotNumber}', [LotController::class, 'show'])-
 // Utilities
 Route::get('/lot/{lot}/summary', [LotController::class, 'getLotSummary']);
 
+// ------------------------
+// Dashboard
+// ------------------------
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -89,11 +94,6 @@ Route::get('/lot/{lot}/summary', [LotController::class, 'getLotSummary']);
 */
 
 Route::middleware(['auth', 'verified'])->group(function () {
-
-    // ------------------------
-    // Dashboard
-    // ------------------------
-    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     // ------------------------
     // Property Management
