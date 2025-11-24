@@ -37,7 +37,10 @@ Auth::routes(['verify' => true]);
 | Public Routes
 |--------------------------------------------------------------------------
 */
-Route::view('/', 'welcome');
+Route::get('/', function () {
+    return redirect()->route('dashboard');
+});
+
 
 // Authentication
 Route::get('/signin', [LoginController::class, 'showLoginForm'])->name('signin');
@@ -57,9 +60,9 @@ Route::get('/contact', [ContactController::class, 'showForm'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submitForm'])->name('contact.submit');
 
 // Public viewing
-Route::get('/homepage', [HomeController::class, 'index'])->name('homepage');
+/* Route::get('/homepage', [HomeController::class, 'index'])->name('homepage');
 Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
-Route::get('/properties', [PropertyController::class, 'index'])->name('properties');
+Route::get('/properties', [PropertyController::class, 'index'])->name('properties'); */
 Route::get('/3dmap', fn() => view('3dmap'))->name('3dmap');
 
 // Public API endpoints for blocks/lots

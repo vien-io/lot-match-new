@@ -142,6 +142,6 @@ export function initClickHandler({
 
     // return toggle functions if needed elsewhere
     return {
-        setModalOpen: (state) => { modalOpen = state; },
+        setModalOpen: (state) => { modalOpen.value = state; },
     };
 }

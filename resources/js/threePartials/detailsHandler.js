@@ -3,7 +3,7 @@ import { loadBlockSummary } from "../blockSummary";
 import { init3DModel, stop3DModel } from "./init3dModel";
 import { loadLotImages } from "../modals/addImageModal";
 
-export let modalOpen = false;
+export const modalOpen = { value: false };
 
 export async function showLotDetails(lot) {
     // console.log("showLotDetails called with:", lot);
