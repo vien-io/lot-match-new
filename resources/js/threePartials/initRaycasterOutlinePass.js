@@ -5,7 +5,6 @@ import { resetBlock } from './blockMarkers';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { modalOpen } from './detailsHandler';
 
-
 /* 
     Raycaster for lots 
     using outlinepass for highlighting

@@ -21,5 +21,4 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-visual-studio-code-bin/.env.local
-visual-studio-code-bin
+.env.local
