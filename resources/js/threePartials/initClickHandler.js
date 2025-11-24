@@ -34,8 +34,7 @@ export function initClickHandler({
     });
 
     document.addEventListener("mouseup", (event) => {
-        if (isDragging || modalOpen || window.settingsModalOpen || uiState.isActive) return;
-
+        if (isDragging || modalOpen.value || window.settingsModalOpen || uiState.isActive) return;
         // ignore raycasting inside left panel
         const leftPanel = document.getElementById("side-panel");
         if (leftPanel) {

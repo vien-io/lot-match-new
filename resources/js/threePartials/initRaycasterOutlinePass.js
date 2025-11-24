@@ -80,7 +80,7 @@ export function initRaycasterOutlinePass({
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObjects(selectableObjects, true);
 
-        if (modalOpen) return;
+        if (modalOpen.value) return;
 
         if (intersects.length > 0) {
             const hit = intersects[0];

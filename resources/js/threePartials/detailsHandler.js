@@ -5,6 +5,10 @@ import { loadLotImages } from "../modals/addImageModal";
 
 export const modalOpen = { value: false };
 
+export function setModalOpen(state) {
+    modalOpen.value = state;
+}
+
 export async function showLotDetails(lot) {
     // console.log("showLotDetails called with:", lot);
     window.currentLotId = lot.id; 
@@ -71,7 +75,7 @@ export async function showLotDetails(lot) {
     }
 
     // Show modal
-    modalOpen = true;
+    setModalOpen(true);
     modal.style.display = "flex";
 
     // Hide tooltip
@@ -81,14 +85,14 @@ export async function showLotDetails(lot) {
     // Close handlers
     closeButton.onclick = () => {
         modal.style.display = "none";
-        modalOpen = false;
+        setModalOpen(false);
         console.log(`${modalId} closed via button`);
     };
 
     window.onclick = (event) => {
         if (event.target === modal) {
             modal.style.display = "none";
-            modalOpen = false;
+            setModalOpen(false);
             // console.log(`${modalId} closed via outside click`);
         }
     };
@@ -107,7 +111,7 @@ export function showBlockDetails(block) {
         console.error("Block modal not found!");
         return;
     }
-    modalOpen = true;
+    setModalOpen(true);
 
     modal.style.display = "flex";
     const tooltip = document.getElementById("tooltip");
@@ -117,7 +121,7 @@ export function showBlockDetails(block) {
     closeButton.onclick = () => {
         modal.style.display = "none";
         // stop3DModel();
-        modalOpen = false;
+        setModalOpen(false);
         console.log("Close button clicked!");
     };
 
@@ -125,7 +129,7 @@ export function showBlockDetails(block) {
         if (event.target === modal) {
             modal.style.display = "none";
             // stop3DModel();
-            modalOpen = false;
+            setModalOpen(false);
         }
     };
 
