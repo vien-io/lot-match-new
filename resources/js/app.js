@@ -6,6 +6,7 @@ import './components/lotSelector.js';
 import './components/userLotForm.js';
 
 
+
 // ====================
 // SEARCH PLACEHOLDER CYCLE
 // ====================
@@ -36,8 +37,11 @@ window.searchPlaceholderCycle = function() {
 // ====================
 // ALPINE.JS
 // ====================
-window.Alpine = Alpine;
-Alpine.start();
+document.addEventListener('DOMContentLoaded', () => {
+    window.Alpine = Alpine;
+    Alpine.start();
+});
+
 
 
 // ====================
@@ -51,13 +55,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-import initThreeJS from './three';
 
 // ====================
 // CONDITIONAL 3D MAP INITIALIZATION
 // ====================
 document.addEventListener('DOMContentLoaded', async () => {
     if (window.location.pathname === "/3dmap") {
+        // Dynamically import ONLY when user visits /3dmap
+        const { default: initThreeJS } = await import('./three');
         initThreeJS();
 
         // Fetch and populate block list dynamically

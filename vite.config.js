@@ -5,8 +5,16 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/sass/app.scss',
                 'resources/js/app.js',
+                'resources/js/dashboardMap.js',
+                'resources/js/settings.js',
+                'resources/js/reviews.js',
+                'resources/js/smoothSticky.js',
+                'resources/js/charts/forecast.js',
+                'resources/js/properties.js',
+                'resources/js/userModals.js',
+                'resources/css/app.css',
+                'resources/sass/app.scss',
             ],
             refresh: true,
         }),
