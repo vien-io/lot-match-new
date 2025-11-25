@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\{
+    ActivityLogController,
     AnalyticsController,
     Auth\ForgotPasswordController,
     Auth\LoginController,
@@ -54,15 +55,15 @@ Route::post('/signup', [RegisterController::class, 'register'])->name('signup.su
 Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])
     ->name('password.request');
 
-// Static pages
+// Static pages (we may not need some of these)
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/contact', [ContactController::class, 'showForm'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submitForm'])->name('contact.submit');
 
 // Public viewing
-/* Route::get('/homepage', [HomeController::class, 'index'])->name('homepage');
-Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
-Route::get('/properties', [PropertyController::class, 'index'])->name('properties'); */
+    /* Route::get('/homepage', [HomeController::class, 'index'])->name('homepage');
+    Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
+    Route::get('/properties', [PropertyController::class, 'index'])->name('properties'); */
 Route::get('/3dmap', fn() => view('3dmap'))->name('3dmap');
 
 // Public API endpoints for blocks/lots
@@ -71,7 +72,6 @@ Route::get('/lots/{blockId}', [LotController::class, 'getLots']);
 Route::get('/block/{id}', [BlockController::class, 'show']);
 Route::get('/block/{blockId}/lot/{lotNumber}', [LotController::class, 'show']);
 Route::get('/blocks/{blockId}/lots/{lotNumber}', [LotController::class, 'showLot'])->name('lots.show');
-
 
 // Search Bar
 Route::get('/search', [SearchController::class, 'index'])->name('search');
@@ -171,6 +171,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/approve/{id}', [OwnerVerificationController::class, 'approve'])->name('approve');
             Route::post('/reject/{id}', [OwnerVerificationController::class, 'reject'])->name('reject');
         });
+
+        // Activity Logs Page
+        Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
     });
 });
 

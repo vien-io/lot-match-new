@@ -106,9 +106,10 @@ class UserManagementController extends Controller
 
         $user->update($request->only('username', 'name', 'email'));
 
+        $newRole = $request->role;
+
         // update role
         if ($request->filled('role')) {
-            $newRole = $request->role;
             $user->update([
                 'role' => $newRole,
                 'email_verified_at' => ($newRole === 'owner' || $newRole === 'admin') ? now() : null,

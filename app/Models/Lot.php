@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +11,7 @@ class Lot extends Model
     use HasFactory;
     
     protected $table = 'lots';
+    use LogsActivity;
 
 
     protected $fillable = [
