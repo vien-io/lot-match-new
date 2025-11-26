@@ -117,6 +117,15 @@
                     tooltip="Owner Requests"
                     :active="request()->routeIs('owner-verification.index') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
                 />
+
+                {{-- Activity Logs --}}
+                <x-sidebar-icon 
+                    href="{{ route('activity-logs.index') }}" 
+                    icon="fas fa-list-alt" 
+                    tooltip="Activity Logs"
+                    :active="request()->routeIs('activity-logs.index') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+                />
+
             @endif
 
             @if(auth()->user()->role === 'buyer')

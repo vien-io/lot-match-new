@@ -27,7 +27,7 @@ class PropertyController extends Controller
         }
 
         // fetch filtered + paginated properties
-        $properties = $query->paginate(12);
+        $properties = $query->paginate(35);
         $blocks = Block::all();
 
         return view('properties.index', compact('properties', 'blocks'));
