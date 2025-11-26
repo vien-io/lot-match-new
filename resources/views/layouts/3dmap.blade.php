@@ -162,7 +162,7 @@
         {{-- right side --}}
         <div class="tw-flex-1 tw-flex tw-flex-col tw-h-screen">
             {{-- Navbar --}}
-            <nav class="tw-bg-white tw-shadow-lg tw-px-6 tw-py-3 tw-h-16 tw-inline-block">
+            <nav class="tw-bg-transparent tw-py-3 tw-h-16 tw-inline-block">
                 <div class="tw-flex tw-justify-end tw-items-center tw-w-auto">
                     {{-- Logo --}}
                     {{-- <a href="{{ route('dashboard') }}" 

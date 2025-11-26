@@ -219,7 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Optional: click outside modal to close
     settingsModal.addEventListener('click', (e) => {
         if (e.target === settingsModal) settingsModal.classList.add('tw-hidden');
     });

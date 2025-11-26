@@ -197,6 +197,7 @@
 @section('scripts')
   @vite([
     'resources/js/userModals.js',
+    'resources/sass/app.scss',
   ])
 @endsection
 

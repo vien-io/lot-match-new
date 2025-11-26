@@ -21,16 +21,7 @@
 @include('partials.side-panel')
 @include('partials.ai-status')
 
-
-
 {{-- Tooltip --}}
 @include('partials.tooltip')
 @endsection
 
-@section('scripts')
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-    @vite([
-        {{-- 'resources/js/modals/imageModal.js', --}}
-        {{-- 'resources/js/modals/addImageModal.js', --}}
-    ])
-@endsection

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div>
+<div class="tw-max-w-[93vw] tw-mx-auto tw-px-4">
     <!-- Header -->
     <h1 class="tw-text-2xl tw-font-bold tw-text-center tw-mb-2">Activity Logs</h1>
     <p class="tw-text-center tw-text-gray-500 tw-mb-6">
@@ -61,10 +61,10 @@
                             <td class="tw-p-2">{{ $log->record_id }}</td>
 
                             <!-- Old Data -->
-                            <td class="tw-p-2">
+                            <td class="tw-p-2 tw-max-w-[15vw]">
                                 @php
                                     $jsonPretty = json_encode(json_decode($log->old_data), JSON_PRETTY_PRINT);
-                                    $truncated = Str::limit($jsonPretty, 100, '...');
+                                    $truncated = Str::limit($jsonPretty, 50, '...');
                                 @endphp
                                 <div 
                                     class="tw-rounded tw-p-1 tw-overflow-hidden expandable"
@@ -84,10 +84,10 @@
                             </td>
 
                             <!-- New Data -->
-                            <td class="tw-p-2">
+                            <td class="tw-p-2 tw-max-w-[15vw]">
                                 @php
                                     $jsonPrettyNew = json_encode(json_decode($log->new_data), JSON_PRETTY_PRINT);
-                                    $truncatedNew = Str::limit($jsonPrettyNew, 100, '...');
+                                    $truncatedNew = Str::limit($jsonPrettyNew, 50, '...');
                                 @endphp
                                 <div 
                                     class="tw-rounded tw-p-1 tw-overflow-hidden expandable-new"

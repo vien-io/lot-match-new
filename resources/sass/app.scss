@@ -935,7 +935,7 @@ html, body{
 #threejs-container canvas {
   width: 100% !important;
   height: 100% !important;
-  display: block;
+//   display: block;
 //   border: 2px solid red;
   pointer-events: auto;
 }
@@ -991,5 +991,4 @@ html, body{
   box-shadow: 0 4px 20px rgba(255, 0, 0, 0.2);
   background-color: rgba(132, 255, 177, 0.3);
 }
-
 

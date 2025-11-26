@@ -1,5 +1,5 @@
 {{-- Add User Modal --}}
-<div id="addUserModal" class="tw-hidden tw-fixed tw-inset-0 tw-bg-black/50 tw-flex tw-items-center tw-justify-center tw-z-50">
+<div id="addUserModal" x-data x-cloak class="tw-hidden tw-fixed tw-inset-0 tw-bg-black/50 tw-flex tw-items-center tw-justify-center tw-z-50">
     <div class="tw-bg-white tw-rounded-2xl tw-shadow-lg tw-w-full sm:tw-w-[400px] tw-p-6">
     <h2 class="tw-text-xl tw-font-bold tw-mb-4">Add User</h2>
     <form method="POST" action="{{ route('usermanagement.store') }}">
