@@ -60,7 +60,7 @@ Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/contact', [ContactController::class, 'showForm'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submitForm'])->name('contact.submit');
 
-// Public viewing
+// Public viewing ---------- WERE GOING TO DELETE THESE PAGES I THINK
     /* Route::get('/homepage', [HomeController::class, 'index'])->name('homepage');
     Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
     Route::get('/properties', [PropertyController::class, 'index'])->name('properties'); */
@@ -130,6 +130,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // ------------------------
     Route::get('/user/settings', [UserSettingsController::class, 'get'])->name('user.settings.get');
     Route::post('/user/settings', [UserSettingsController::class, 'update'])->name('user.settings.update');
+    // ------------------------
+    // User Profile
+    // ------------------------
+    Route::get('/profile', [UserManagementController::class, 'profile'])->name('profile');
+    Route::get('/profile/edit', [UserManagementController::class, 'editProfile'])->name('profile.edit');
+    Route::post('/profile/edit', [UserManagementController::class, 'updateProfile'])->name('profile.update');
 
     // ------------------------
     // 3D Map

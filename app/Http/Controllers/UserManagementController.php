@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lot;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
@@ -128,10 +129,36 @@ class UserManagementController extends Controller
         return redirect()->route('usermanagement.index')->with('success', 'User updated successfully.');
     }
 
-    public function destroy (User $user)
+    public function destroy(User $user)
     {
         $user->delete();
         return redirect()->route('usermanagement.index')->with('success', 'User deleted successfully');
+    }
+
+    public function profile(Request $request)
+    {
+        $user = Auth::user();
+        return view('profile.index', compact('user'));
+    }
+
+    public function editProfile()
+    {
+        $user = Auth::user();
+        return view('profile.edit', compact('user'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
+            'email' => "required|email|unique:users,email,{$user->id}",
+        ]);
+
+        $user->update($request->only('name', 'username', 'email'));
+        return redirect()->route('profile')->with('success', 'Profile updated.');
     }
 
 }
