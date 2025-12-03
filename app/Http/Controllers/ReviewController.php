@@ -81,6 +81,58 @@ class ReviewController extends Controller
 
 
 
+    public function checkToxicity(string $comment): bool
+    {
+        try {
+            $hfResponse = Http::withHeaders([
+                'Authorization' => 'Bearer ' . env('HUGGINGFACE_API_KEY')
+            ])->post('https://api-inference.huggingface.co/models/unitary/toxic-bert', [
+                'json' => ['inputs' => $comment]
+            ]);
+
+            if ($hfResponse->failed()) {
+                Log::error('Hugging Face API request failed', [
+                    'status' => $hfResponse->status(),
+                    'body'   => $hfResponse->body()
+                ]);
+                return false; 
+            }
+
+            $toxicity = $hfResponse->json();
+
+            if (!isset($toxicity[0]) || isset($toxicity['error'])) {
+                Log::warning('Hugging Face API returned unexpected response', [
+                    'response' => $toxicity
+                ]);
+                return false;
+            }
+
+            foreach ($toxicity[0] as $label => $score) {
+                if (in_array($label, ['toxic', 'severe_toxic', 'obscene', 'insult', 'threat']) 
+                    && $score >= 0.5) 
+                {
+                    return true; 
+                }
+            }
+
+            return false; 
+
+        } catch (\Exception $e) {
+            Log::error('Error calling Hugging Face API', [
+                'message' => $e->getMessage()
+            ]);
+            return false; 
+        }
+    }
+
+
+
+    protected $bannedWords = [
+        'ass', 'bastard', 'bitch', 'bollocks', 'bugger', 'crap', 'cunt', 
+        'damn', 'dick', 'dyke', 'fag', 'fuck', 'goddamn', 'hell', 'homo', 
+        'idiot', 'jackass', 'jerk', 'kike', 'loser', 'moron', 'nigger', 
+        'piss', 'prick', 'slut', 'shit', 'twat', 'whore', 'wanker'
+    ];
 
 
     public function store(Request $request) {
@@ -105,6 +157,12 @@ class ReviewController extends Controller
         // BASIC CONTENT FILTERS
         // -----------------------------
         if ($comment) {
+            if ($this->checkToxicity($comment)) {
+                return response()->json([
+                    'message' => 'Comment detected as toxic. Please revise.'
+                ], 422);
+            }
+            
             if (strlen(trim($comment)) < 15) {
                 return response()->json([
                     'message' => 'Comment is too short (minimum 15 characters).'
@@ -127,21 +185,14 @@ class ReviewController extends Controller
                     'message' => 'You have already submitted this exact comment.'
                 ], 422);
             }
-            $bannedWords = [
-                'ass', 'bastard', 'bitch', 'bollocks', 'bugger', 'crap', 'cunt', 
-                'damn', 'dick', 'dyke', 'fag', 'fuck', 'goddamn', 'hell', 'homo', 
-                'idiot', 'jackass', 'jerk', 'kike', 'loser', 'moron', 'nigger', 
-                'piss', 'prick', 'slut', 'shit', 'twat', 'whore', 'wanker'
-            ];
+            
 
-            $bannedPattern = '/(' . implode('|', $bannedWords) . ')/i';
-
-            if (preg_match($bannedPattern, $comment)) {
+            $pattern = '/(' . implode('|', $this->bannedWords) . '|https?:\/\/\S+)/i';
+            if (preg_match($pattern, $comment)) {
                 return response()->json([
-                    'message' => 'Comment contains prohibited content.'
+                    'message' => 'Comment contains prohibited content or links.'
                 ], 422);
             }
-
         }
 
         // -----------------------------
@@ -169,6 +220,9 @@ class ReviewController extends Controller
         // unify
         $finalReview = $existingReview ?? $review;
 
+        // -----------------------------
+        // DISPATCH JOBS
+        // -----------------------------
         if ($request->comment && isset($finalReview)) {
             $block->update(['forecast_status' => 'processing']);
 
