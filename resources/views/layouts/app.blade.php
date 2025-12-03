@@ -244,10 +244,10 @@
                             </button>
 
                             <!-- Notification Dropdown -->
-                            <div x-show="openNotif" @click.away="openNotif = false"
-                                x-transition
-                                class="tw-absolute tw-left-0 tw-mt-2 tw-w-80 tw-bg-white tw-rounded-xl tw-shadow-lg tw-border tw-border-gray-200 tw-z-50 tw-overflow-hidden"
-                            >
+                           <div x-show="openNotif" @click.away="openNotif = false"
+                            x-transition
+                            class="tw-absolute tw-left-0 tw-mt-2 tw-bg-white tw-rounded-xl tw-shadow-lg tw-border tw-border-gray-200 tw-z-50 tw-overflow-hidden tw-min-w-[280px] tw-max-w-xs">
+
                                 <!-- Clear All Button -->
                                 <div class="tw-flex tw-justify-end tw-p-2 tw-border-b tw-border-gray-100">
                                     <button @click="clearAll()" class="tw-text-xs tw-text-gray-500 hover:tw-text-gray-700 tw-transition">Clear All</button>
