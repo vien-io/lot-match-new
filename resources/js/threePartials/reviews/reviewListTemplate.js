@@ -1,12 +1,34 @@
 // templates/reviewListTemplate.js
 export function reviewListTemplate(block) {
-    console.log(block);
-
     const reviews = block.reviews ?? [];
     const showOwnerTags = window.showOwnerTags ?? false;
 
-    console.log(reviews);
+    // --- SORT REVIEWS ---
+    const sortedReviews = reviews.sort((a, b) => {
+        if (a.justCreated && !b.justCreated) return -1;
+        if (!a.justCreated && b.justCreated) return 1;
 
+        const aOwnsBlock = block.lots?.some(lot => lot.owner_id === a.user_id) ?? false;
+        const bOwnsBlock = block.lots?.some(lot => lot.owner_id === b.user_id) ?? false;
+        
+        const getPriority = (review, ownsBlock) => {
+            if (review.role === 'owner' && ownsBlock) return 3;
+            if (review.role === 'owner') return 2;
+            return 1;
+        };
+
+        const priorityDiff = getPriority(b, bOwnsBlock) - getPriority(a, aOwnsBlock);
+        if (priorityDiff !== 0) return priorityDiff;
+
+        return new Date(b.created_at) - new Date(a.created_at);
+    });
+
+
+    /* block.lots.forEach(lot => {
+        console.log(lot.name, 'Owner ID:', lot.owner_id);
+    }); */
+    
+    // --- RENDER REVIEWS ---
     return `
     <div class="tw-rounded-2xl tw-border-2 tw-border-transparent 
                 tw-bg-[linear-gradient(#1c1c1c,#1c1c1c)_padding-box,linear-gradient(145deg,transparent_35%,#e81cff,#40c9ff)_border-box]
@@ -16,11 +38,29 @@ export function reviewListTemplate(block) {
         <div id="reviews-container" class="tw-flex tw-flex-col tw-gap-3">
             ${reviews.length === 0
                 ? `<p class="tw-text-[#ccc] tw-text-center tw-py-4">There are no reviews yet on this block. Be the first one!</p>`
-                : reviews.map(review => {
+                : sortedReviews.map(review => {
                 let ownerTag = '';
                 const ownsBlock = Array.isArray(block?.lots)
                     ? block.lots.some(lot => lot.owner_id === review.user_id)
                     : false;
+
+                    /* console.log(
+                        "block:", block,
+                        "block_lots:", block.lots,
+                        "block_reviews:", block.reviews,
+                        "lot owner id:", block.lots.owner_id,
+                        "review user id:", block.reviews.user_id,
+                    ) */
+                    // console.log(review);
+
+                    /* console.log(
+                        'Rendering review:',
+                        review.user_name,
+                        'role:', review.role,
+                        'user_id:', review.user_id,
+                        'ownsBlock:', ownsBlock,
+                        'justCreated:', review.justCreated
+                    ); */
 
                 if (review.role === 'owner' && ownsBlock) {
                     ownerTag = `<span class="owner-tag tw-inline-block tw-text-green-900 tw-bg-green-200 tw-rounded tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2"
@@ -33,6 +73,8 @@ export function reviewListTemplate(block) {
                         Owner elsewhere
                     </span>`;
                 }
+                // console.log('Rendering review:', review.user_name, 'justCreated:', review.justCreated);
+
 
                 const isAdmin = window.App?.role === 'admin';
                 const isOwner = window.App?.userId === review.user_id;
@@ -60,8 +102,13 @@ export function reviewListTemplate(block) {
                         </div>`;
                 }
 
+                // --- HIGHLIGH FOR NEW REVIEWS ---
+                const highlightClass = review.justCreated
+                ? 'tw-border-l-4 tw-border-yellow-400 tw-bg-[#262626]'
+                : 'tw-bg-[#1c1c1c]';
+
                 return `
-                <div class="review tw-bg-[#1c1c1c] tw-border tw-border-[#333] tw-rounded-lg tw-p-3 tw-shadow-sm"
+                <div class="review tw-border tw-border-[#333] tw-rounded-lg tw-p-3 tw-shadow-sm ${highlightClass}"
                     data-review-id="${review.id}">
                     
                     <div class="tw-flex tw-items-center tw-justify-between">

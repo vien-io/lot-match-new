@@ -105,7 +105,6 @@ export default async function initThreeJS() {
 
     // --- Loading remove ---
     if (loadingScreen) loadingScreen.remove();
-    console.log("removed");
 
     // --- Animate ---
     function animate() {

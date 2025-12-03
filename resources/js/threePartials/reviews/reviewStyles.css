@@ -58,8 +58,8 @@
 
 /* Individual review cards */
 .review {
-    background-color: hsla(142, 71%, 45%, 0.04);
-    border: 1px solid #333;
+/*     background-color: hsla(142, 71%, 45%, 0.04);
+    border: 1px solid #333; */
     border-radius: 10px;
     padding: 10px 15px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -70,10 +70,6 @@
 
 .review:hover {
     border-color: rgba(0, 255, 42, 0.8);
-}
-
-.review:not(:last-child) {
-    border-bottom: 1px solid #444;
 }
 
 .review .reviewer {
@@ -87,20 +83,3 @@
     color: hsla(177, 71%, 45%, 1.00);
 }
 
-/* .review .edit-review,
-.review .delete-review {
-    background-color: #333;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    margin-top: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.review .edit-review:hover,
-.review .delete-review:hover {
-    background-color: #555;
-}
- */

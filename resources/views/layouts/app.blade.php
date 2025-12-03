@@ -200,7 +200,7 @@
                                 openNotif: false, 
                                 notifications: JSON.parse(localStorage.getItem('notifications') || '[]'), 
                                 unreadCount: JSON.parse(localStorage.getItem('unreadCount') || '0'),
-                                maxNotifs: 20,
+                                maxNotifs: 7,
                                 addNotification(notif) {
                                     this.notifications.unshift(notif);
                                     if (this.notifications.length > this.maxNotifs) this.notifications.pop();

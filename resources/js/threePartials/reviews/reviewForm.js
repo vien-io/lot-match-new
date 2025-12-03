@@ -56,6 +56,8 @@ export function bindFormHandler(block) {
     reviewForm.addEventListener('submit', async function (e) {
         e.preventDefault();
 
+        console.log('Block BEFORE submit:', structuredClone(block));
+
         const comment = document.getElementById('review-comment').value;
         const rating = ratingInput.value;
 
@@ -63,6 +65,9 @@ export function bindFormHandler(block) {
             alert('Select a star rating before submitting!');
             return;
         }
+
+        // --- cache original lots for ownsblock omputation
+        const cachedLots = Array.isArray(block.lots) ? block.lots : [];
 
         const formData = new FormData();
         formData.append('block_id', reviewForm.querySelector('[name="block_id"]').value);
@@ -98,18 +103,44 @@ export function bindFormHandler(block) {
             const data = await res.json();
 
             if (res.ok) {
+                // console.log("data:", data);
                 const blockId = data.block?.id || data.review?.block_id;
+                if (!blockId) return;
 
-                if (data.block) renderReviewSection(data.block);
-                else if (blockId) {
+                let blockData;
+
+                // --- use the block returned by backend if available, if not then fetch
+                if (data.block) {
+                    blockData = data.block;
+                }
+                else {
                     try {
                         const fetchRes = await fetch(`/block/${blockId}`);
-                        const updatedBlock = await fetchRes.json();
-                        renderReviewSection(updatedBlock);
+                        blockData = await fetchRes.json();
                     } catch {
                         alert('Review updated but failed to fetch block');
                     }
                 }
+                
+                blockData.lots = Array.isArray(blockData.lots) ? blockData.lots : cachedLots;
+                console.log('block AFTER submit fetch:', structuredClone(blockData));
+
+                // --- mark new review as temporary
+
+                if (data.review) {
+                    const newReview = blockData.reviews.find(r => r.id === data.review.id);
+                    if (newReview) {
+                        newReview.justCreated = true;
+                        newReview.ownsBlock = blockData.lots?.some(lot => lot.owner_id === newReview.user_id) ?? false;
+                        setTimeout(() => {
+                            newReview.justCreated = false;
+                            renderReviewSection(blockData);
+                        }, 5000);
+                    }
+                }
+
+                // render block reviews
+                renderReviewSection(blockData);
 
                 reviewForm.removeAttribute('data-editing');
                 showAiPopup("AI summarizing and forecasting your review...", "🤖", 8000, true);
