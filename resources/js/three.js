@@ -26,6 +26,9 @@ import { initSky } from './threePartials/initSky';
 export default async function initThreeJS() {
     const container = document.getElementById('threejs-container');
 
+    // --- Loading Overlay ----
+    const loadingScreen = document.getElementById('threejs-loading');
+
     // --- Scene / Renderer / Camera ---
     const scene = initScene();
     const renderer = initRenderer(container);
@@ -99,6 +102,10 @@ export default async function initThreeJS() {
     const statsOn = false;
     const stats = new Stats();
     if (statsOn) document.body.appendChild(stats.dom);
+
+    // --- Loading remove ---
+    if (loadingScreen) loadingScreen.remove();
+    console.log("removed");
 
     // --- Animate ---
     function animate() {
