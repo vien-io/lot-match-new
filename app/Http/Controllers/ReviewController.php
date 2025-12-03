@@ -99,6 +99,54 @@ class ReviewController extends Controller
             ], 404);
         }
 
+        $comment = $request->comment;
+
+        // -----------------------------
+        // BASIC CONTENT FILTERS
+        // -----------------------------
+        if ($comment) {
+            if (strlen(trim($comment)) < 15) {
+                return response()->json([
+                    'message' => 'Comment is too short (minimum 15 characters).'
+                ], 422);
+            }
+
+            if (preg_match('/(.)\1{5,}/', $comment)) {
+                return response()->json([
+                    'message' => 'Comment contains repeated characters.'
+                ], 422);
+            }
+
+            $existsIdentical = Review::where('user_id', Auth::id())
+                ->where('block_id', $request->block_id)
+                ->where('comment', $comment)
+                ->exists();
+
+            if ($existsIdentical) {
+                return response()->json([
+                    'message' => 'You have already submitted this exact comment.'
+                ], 422);
+            }
+            $bannedWords = [
+                'ass', 'bastard', 'bitch', 'bollocks', 'bugger', 'crap', 'cunt', 
+                'damn', 'dick', 'dyke', 'fag', 'fuck', 'goddamn', 'hell', 'homo', 
+                'idiot', 'jackass', 'jerk', 'kike', 'loser', 'moron', 'nigger', 
+                'piss', 'prick', 'slut', 'shit', 'twat', 'whore', 'wanker'
+            ];
+
+            $bannedPattern = '/(' . implode('|', $bannedWords) . ')/i';
+
+            if (preg_match($bannedPattern, $comment)) {
+                return response()->json([
+                    'message' => 'Comment contains prohibited content.'
+                ], 422);
+            }
+
+        }
+
+        // -----------------------------
+        // CREATE OR UPDATE REVIEW
+        // -----------------------------
         $existingReview = Review::where('user_id', Auth::id())
                                 ->where('block_id', $request->block_id) 
                                 ->first();

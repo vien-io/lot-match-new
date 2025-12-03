@@ -102,6 +102,15 @@ export function bindFormHandler(block) {
 
             const data = await res.json();
 
+            if (!res.ok) {
+                if (data.message) {
+                    alert(data.message);
+                } else {
+                    alert('Something went wrong!');
+                }
+                return;
+            }
+
             if (res.ok) {
                 // console.log("data:", data);
                 const blockId = data.block?.id || data.review?.block_id;
