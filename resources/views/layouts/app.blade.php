@@ -314,7 +314,7 @@
                             {{-- dropdown menu --}}
                             <div x-show="open" @click.away="open = false" 
                                 class="tw-absolute tw-right-0 tw-mt-2 tw-w-40 tw-bg-white tw-rounded-lg tw-shadow-lg tw-border tw-border-gray-200 tw-z-50">
-                                <a href="#" 
+                                <a href="{{ route('profile') }}" 
                                     class="tw-block tw-px-4 tw-py-2 tw-text-gray-700 hover:tw-bg-green-100">
                                     Profile
                                 </a>
