@@ -85,9 +85,10 @@ class ReviewController extends Controller
     {
         try {
             $hfResponse = Http::withHeaders([
-                'Authorization' => 'Bearer ' . env('HUGGINGFACE_API_KEY')
-            ])->post('https://api-inference.huggingface.co/models/unitary/toxic-bert', [
-                'json' => ['inputs' => $comment]
+                'Authorization' => 'Bearer ' . env('HUGGINGFACE_API_KEY'),
+                'User-Agent' => 'LaravelApp/1.0'
+            ])->post('https://router.huggingface.co/models/unitary/toxic-bert', [
+                'inputs' => $comment
             ]);
 
             if ($hfResponse->failed()) {
@@ -106,6 +107,8 @@ class ReviewController extends Controller
                 ]);
                 return false;
             }
+
+            // dd($hfResponse->json());
 
             foreach ($toxicity[0] as $label => $score) {
                 if (in_array($label, ['toxic', 'severe_toxic', 'obscene', 'insult', 'threat']) 
@@ -157,11 +160,13 @@ class ReviewController extends Controller
         // BASIC CONTENT FILTERS
         // -----------------------------
         if ($comment) {
-            if ($this->checkToxicity($comment)) {
+            /* if ($this->checkToxicity($comment)) {
                 return response()->json([
                     'message' => 'Comment detected as toxic. Please revise.'
                 ], 422);
-            }
+            } else {
+                Log::error('Toxicity Check failed!');
+            } */
             
             if (strlen(trim($comment)) < 15) {
                 return response()->json([

@@ -45,9 +45,10 @@ class AnalyzeSentimentJob implements ShouldQueue
             ])
             ->timeout(90)
             ->retry(3, 5000)
-            ->post('https://api-inference.huggingface.co/models/distilbert/distilbert-base-uncased-finetuned-sst-2-english', [
+            ->post('https://router.huggingface.co/models/distilbert/distilbert-base-uncased-finetuned-sst-2-english', [
                 'inputs' => $this->comment,
             ]);
+
 
             $sentiment = 'neutral';
 
