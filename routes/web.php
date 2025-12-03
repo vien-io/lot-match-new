@@ -11,8 +11,6 @@ use App\Http\Controllers\{
     Auth\LoginController,
     AuthController,
     Auth\RegisterController,
-    HomeController,
-    ExploreController,
     PropertyController,
     PageController,
     ContactController,
@@ -60,10 +58,7 @@ Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/contact', [ContactController::class, 'showForm'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submitForm'])->name('contact.submit');
 
-// Public viewing ---------- WERE GOING TO DELETE THESE PAGES I THINK
-    /* Route::get('/homepage', [HomeController::class, 'index'])->name('homepage');
-    Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
-    Route::get('/properties', [PropertyController::class, 'index'])->name('properties'); */
+// 3d MAP
 Route::get('/3dmap', fn() => view('3dmap'))->name('3dmap');
 
 // Public API endpoints for blocks/lots

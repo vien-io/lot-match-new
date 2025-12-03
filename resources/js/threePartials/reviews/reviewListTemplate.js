@@ -30,7 +30,7 @@ export function reviewListTemplate(block) {
                 } else if (review.role === 'owner') {
                     ownerTag = `<span class="owner-tag tw-inline-block tw-text-orange-900 tw-bg-orange-200 tw-rounded tw-px-1 tw-py-0.5 tw-text-xs tw-ml-2"
                                     style="opacity: ${showOwnerTags ? 1 : 0}; transform: scale(${showOwnerTags ? 1 : 0});">
-                        Owner from another block
+                        Owner elsewhere
                     </span>`;
                 }
 
