@@ -1,3 +1,5 @@
+import { requestRender } from '../../three';
+
 // --- Create toggle helper ---
 export function createToggle(labelText, mesh, texturedMaterial, basicMaterial, basicInstanceColor, uiState) {
     const controlsDiv = document.createElement('div');
@@ -71,6 +73,8 @@ export function createToggle(labelText, mesh, texturedMaterial, basicMaterial, b
             label.classList.replace('tw-text-green-800', 'tw-text-gray-900');
             legendDiv.style.display = 'none';
         }
+
+        requestRender();
     }
 
     toggle.onclick = toggleKnob;
