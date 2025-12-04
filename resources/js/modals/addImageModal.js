@@ -37,14 +37,6 @@ addImageForm.addEventListener('submit', async (e) => {
 const imageInput = document.getElementById('lotImageInput');
 const selectedImageName = document.getElementById('selectedImageName');
 
-/* imageInput.addEventListener('change', ()=> {
-    if (imageInput.files.length > 0) {
-        selectedImageName.textContent = `Selected: ${imageInput.files[0].name}`;
-    } else {
-        selectedImageName.textContent = '';
-    }
-}); */
-
 let currentImageIndex = 0;
 let currentImages = [];
 const imgEl = document.getElementById('lot-image');
@@ -77,7 +69,21 @@ export async function loadLotImages(lotId) {
     const res = await fetch(`/lots/${lotId}/images`);
     if (!res.ok) return;
 
-    const images = await res.json();
+    let images = await res.json();
+
+    if (images.length === 0) {
+        console.log("no images for this lot, loading fallback images!");
+        const fallbackRes = await fetch(`/lots/fallback-images`);
+        if (fallbackRes.ok) {
+            const fallbackImages = await fallbackRes.json();
+            images = fallbackImages;
+            console.log("fallbackres is ok:", images);
+            console.log(fallbackRes.status, fallbackRes.statusText);
+        } else {
+            console.log("fallbackres not ok");
+        }
+    }
+
     currentImages = images.map(img => `/storage/${img.path}`);
     currentImageIndex = 0;
 
@@ -90,7 +96,6 @@ export async function loadLotImages(lotId) {
     } else {
         imgEl.src = '';
         imgEl.alt = 'No images available';
-        // console.log("No images to display for this lot");
     }
 }
 

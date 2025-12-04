@@ -28,6 +28,7 @@ use App\Http\Controllers\{
 };
 use App\Http\Middleware\CheckRole;
 
+
 // Enable auth routes with email verification
 Auth::routes(['verify' => true]);
 
@@ -63,7 +64,7 @@ Route::get('/3dmap', fn() => view('3dmap'))->name('3dmap');
 
 // Public API endpoints for blocks/lots
 Route::get('/blocks', [BlockController::class, 'getBlocks']);
-Route::get('/lots/{blockId}', [LotController::class, 'getLots']);
+Route::get('/lots/{blockId}', [LotController::class, 'getLots'])->where('blockId', '[0-9]+');
 Route::get('/block/{id}', [BlockController::class, 'show']);
 Route::get('/block/{blockId}/lot/{lotNumber}', [LotController::class, 'show']);
 Route::get('/blocks/{blockId}/lots/{lotNumber}', [LotController::class, 'showLot'])->name('lots.show');
@@ -79,6 +80,7 @@ Route::get('/lot/{lot}/summary', [LotController::class, 'getLotSummary']);
 // Dashboard
 // ------------------------
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
 
 
 /*
@@ -142,6 +144,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // ------------------------
     Route::post('/lots/add-image', [LotController::class, 'addImage'])->name('lots.addImage');
     Route::get('/lots/{lotId}/images', [LotImageController::class, 'index']);
+    Route::get('/lots/fallback-images', [LotImageController::class, 'fallback']);
+
+
 
     // ------------------------
     // Buyer Routes (Owner Verification Requests)
