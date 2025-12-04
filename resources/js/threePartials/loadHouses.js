@@ -2,9 +2,8 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { addBlockMarkers } from './blockMarkers.js';
 import { createToggle } from './utils/materialToggle.js';
-import { ConstNode } from 'three/webgpu';
-
-
+import { createQuickGuideButton } from './utils/quickGuideButton.js'; 
+import { initQuickGuideModal } from '../modals/guickGuideModal.js'
 
 export async function loadHouses(scene) {
     const housesGroup = new THREE.Group();
@@ -33,10 +32,6 @@ export async function loadHouses(scene) {
         }
     }
     const lotStatuses = await fetchLotStatuses();
-    /* console.log(lotStatuses.map(l => ({ id: l.id, block: l.block_id, status: l.status }))); */
-
-
-
     const url = `/models/basic/housespawn.glb?ts=${Date.now()}`;
     return new Promise((resolve) => {
         houseLoader.load(url, (gltf) => {
@@ -156,10 +151,18 @@ export async function loadHouses(scene) {
                 housesGroup.add(instancedMesh);
                 selectableObjects.push(instancedMesh);
 
+                initQuickGuideModal();
+
                 createToggle('Show Available', instancedMesh, texturedMaterial, basicMaterial, basicInstanceColor, uiState);
+                createQuickGuideButton(uiState, '/images/guide_logo.png', () => {
+                    const modal = document.getElementById('quickGuideModal');
+                    if (modal) modal.style.display = 'flex';
+                });
+
 
                 resolve({ housesGroup, selectableObjects, instanceMetadata, uiState });
             });
         });
     });
 }
+

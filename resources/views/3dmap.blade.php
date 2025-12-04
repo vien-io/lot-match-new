@@ -38,6 +38,7 @@
 @include('partials.modals.full-report-modal')
 @include('partials.modals.lot-sold-modal')
 @include('partials.modals.lot-image-fullscreen')
+@include('partials.modals.quick-guide-modal')
 @include('partials.ai-status')
 
 {{-- Tooltip --}}

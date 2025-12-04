@@ -21,7 +21,6 @@ export function createToggle(labelText, mesh, texturedMaterial, basicMaterial, b
         tw-w-12 tw-h-6 tw-bg-gray-300 tw-rounded-full tw-relative tw-transition-colors tw-duration-300
     `;
     controlsDiv.appendChild(toggle);
-
     controlsDiv.addEventListener('mouseenter', () => uiState.isActive = true);
     controlsDiv.addEventListener('mouseleave', () => uiState.isActive = false);
 
@@ -73,11 +72,8 @@ export function createToggle(labelText, mesh, texturedMaterial, basicMaterial, b
             label.classList.replace('tw-text-green-800', 'tw-text-gray-900');
             legendDiv.style.display = 'none';
         }
-
         requestRender();
     }
-
     toggle.onclick = toggleKnob;
-
     return { controlsDiv, toggle, knob, toggleKnob, legendDiv };
 }
