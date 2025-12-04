@@ -4,9 +4,9 @@ export function initRenderer(container) {
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-/*     renderer.setPixelRatio(window.devicePixelRatio > 1 ? 1.5 : 1);
-    renderer.outputEncoding = THREE.LinearEncoding; */
+    const renderer = new THREE.WebGLRenderer({ antialias: false });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+
     renderer.setSize(width, height);
     container.appendChild(renderer.domElement);
     renderer.shadowMap.enabled = false; 

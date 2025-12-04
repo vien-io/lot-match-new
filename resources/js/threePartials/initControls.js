@@ -16,6 +16,11 @@ export function initControls(camera, renderer, container) {
     controls.enableDamping = true;
     controls.dampingFactor = 0.1;
 
+    controls.addEventListener("change", () => {
+        import("../three.js").then(m => m.requestRender());
+    });
+
+
     container.addEventListener('contextmenu', (e) => e.preventDefault());
     return controls;
 }

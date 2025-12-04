@@ -23,6 +23,11 @@ import { fetchForecast } from './threePartials/forecastHandler';
 import { showLotDetails, showBlockDetails } from './threePartials/detailsHandler';
 import { initSky } from './threePartials/initSky';
 
+let needsRender = true;
+export function requestRender() {
+    needsRender = true;
+}
+
 export default async function initThreeJS() {
     const container = document.getElementById('threejs-container');
 
@@ -110,8 +115,19 @@ export default async function initThreeJS() {
     function animate() {
         requestAnimationFrame(animate);
         controls.update();
+
+        if (needsRender) {
+            composer.render();
+            needsRender = false;
+        }
+    }
+    animate();
+
+    /* function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
         composer.render();
         if (statsOn) stats.update();
     }
-    animate();
+    animate(); */
 }

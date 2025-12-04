@@ -4,6 +4,8 @@ import { contain } from 'three/src/extras/TextureUtils.js';
 import { resetBlock } from './blockMarkers';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { modalOpen } from './detailsHandler';
+import { requestRender } from "../three.js";
+
 
 /* 
     Raycaster for lots 
@@ -134,6 +136,7 @@ export function initRaycasterOutlinePass({
                 blockHoverDummy.visible = true;
 
                 outlinePass.selectedObjects = [blockHoverDummy];
+                requestRender();
 
                 // tooltip for block
                 tooltipText.textContent = `Block: ${obj.userData.blockId}`;
@@ -164,6 +167,7 @@ export function initRaycasterOutlinePass({
                 lotHoverDummy.visible = true;
 
                 outlinePass.selectedObjects = [lotHoverDummy];
+                requestRender();
 
                 // tooltip for lot
                 tooltipText.textContent = `Lot: ${metadata.lotId}, Block: ${metadata.blockId}`;
@@ -193,5 +197,6 @@ export function initRaycasterOutlinePass({
             blockHoverDummy.visible = false;
             lotHoverDummy.visible = false;
             tooltip.style.display = 'none';
+            requestRender();
     });
 }
