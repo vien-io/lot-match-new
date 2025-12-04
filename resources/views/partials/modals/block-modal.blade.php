@@ -51,15 +51,23 @@
                 <div class="bottom-row gradient-border tw-rounded-xl tw-border tw-border-[#414141] tw-bg-[#1c1c1c] tw-p-4
                     tw-transition-transform tw-duration-300 hover:tw--translate-y-1 hover:tw-shadow-[0_4px_20px_rgba(255,255,255,0.05)] hover:tw-bg-[#84ffb1]/30">
 
-                    <div class="topTab tw-flex tw-justify-between tw-items-center">
+                   <div class="topTab tw-flex tw-justify-between tw-items-center">
                         <h2 class="tw-text-xl tw-font-semibold tw-text-[#ffffff]">Block Summary</h2>
                         <div class="tw-flex tw-gap-2 tw-items-center">
                             <button id="view-full-report-btn" 
                                 class="tw-bg-gray-600 hover:tw-bg-[#22C55E] tw-text-white hover:tw-text-black tw-font-semibold tw-px-2 tw-py-1 tw-text-xs tw-rounded-md tw-transition-colors tw-duration-200">
                                 View Full Forecast Report
                             </button>
+
+                            <div class="tw-relative tw-group tw-cursor-pointer">
+                                <img src="{{ asset('images/gpt_logo.png') }}" alt="ChatGPT Logo" class="tw-w-10 tw-h-10 tw-object-contain">
+                                <div class="tw-absolute tw-right-59 tw-bottom-full tw-mb-2 tw-w-64 tw-bg-gray-100 tw-text-gray-800 tw-text-xs tw-rounded tw-p-2 tw-opacity-0 group-hover:tw-opacity-100 tw-transition-opacity tw-shadow-sm tw-z-1000">
+                                    AI-generated summary by ChatGPT to help with insights.
+                                </div>
+                            </div>
                         </div>
                     </div>
+
 
                     <h3 class="tw-text-[#717171] tw-font-semibold">
                         Forecasting Data

@@ -33,7 +33,26 @@ export function reviewListTemplate(block) {
     <div class="tw-rounded-2xl tw-border-2 tw-border-transparent 
                 tw-bg-[linear-gradient(#1c1c1c,#1c1c1c)_padding-box,linear-gradient(145deg,transparent_35%,#e81cff,#40c9ff)_border-box]
                 tw-px-6 tw-pb-6 tw-shadow-[0_0_20px_rgba(0,0,0,0.6)] tw-w-full">
-        <h3 class="tw-text-lg tw-font-semibold tw-text-[hsl(142,71%,45%)] tw-mt-4 tw-mb-4">Reviews</h3>
+        <div class="tw-flex tw-items-center tw-justify-between tw-mb-4 tw-mt-4">
+            <h3 class="tw-text-lg tw-font-semibold tw-text-[hsl(142,71%,45%)]">Reviews</h3>
+
+            <!-- Notice icon with tooltip -->
+            <div class="tw-relative tw-group tw-cursor-pointer">
+                <!-- Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="tw-w-5 tw-h-5 tw-text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
+                </svg>
+
+                <!-- Tooltip -->
+                <div class="tw-absolute tw-right-0 tw-bottom-full tw-mb-2 tw-w-64 tw-bg-gray-100 tw-text-gray-800 tw-text-xs tw-rounded tw-p-2 tw-opacity-0 group-hover:tw-opacity-100 tw-transition-opacity tw-shadow-sm">
+                    Reviews describe the overall experience within this block, including all houses on both streets.
+                </div>
+
+            </div>
+        </div>
+
+
 
         <div id="reviews-container" class="tw-flex tw-flex-col tw-gap-3">
             ${reviews.length === 0
@@ -43,24 +62,6 @@ export function reviewListTemplate(block) {
                 const ownsBlock = Array.isArray(block?.lots)
                     ? block.lots.some(lot => lot.owner_id === review.user_id)
                     : false;
-
-                    /* console.log(
-                        "block:", block,
-                        "block_lots:", block.lots,
-                        "block_reviews:", block.reviews,
-                        "lot owner id:", block.lots.owner_id,
-                        "review user id:", block.reviews.user_id,
-                    ) */
-                    // console.log(review);
-
-                    /* console.log(
-                        'Rendering review:',
-                        review.user_name,
-                        'role:', review.role,
-                        'user_id:', review.user_id,
-                        'ownsBlock:', ownsBlock,
-                        'justCreated:', review.justCreated
-                    ); */
 
                 if (review.role === 'owner' && ownsBlock) {
                     ownerTag = `<span class="owner-tag tw-inline-block tw-text-green-900 tw-bg-green-200 tw-rounded tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2"
@@ -73,8 +74,6 @@ export function reviewListTemplate(block) {
                         Owner elsewhere
                     </span>`;
                 }
-                // console.log('Rendering review:', review.user_name, 'justCreated:', review.justCreated);
-
 
                 const isAdmin = window.App?.role === 'admin';
                 const isOwner = window.App?.userId === review.user_id;
