@@ -102,7 +102,7 @@ export async function showLotDetails(lot) {
 
 export function showBlockDetails(block) {
     window.currentBlockId = block.id;
-    // console.log("showBlockDetails called with:", block);
+    console.log("showBlockDetails called with:", block);
 
     const modal = document.getElementById("block-modal");
     const closeButton = modal.querySelector(".block-close");
