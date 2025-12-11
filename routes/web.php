@@ -27,6 +27,7 @@ use App\Http\Controllers\{
     UserSettingsController
 };
 use App\Http\Middleware\CheckRole;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 
@@ -60,8 +61,7 @@ Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/contact', [ContactController::class, 'showForm'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submitForm'])->name('contact.submit');
 
-// 3d MAP
-Route::get('/3dmap', fn() => view('3dmap'))->name('3dmap');
+
 
 // Public API endpoints for blocks/lots
 Route::get('/blocks', [BlockController::class, 'getBlocks']);
@@ -77,10 +77,7 @@ Route::get('blocks/{blockId}/lots/{lotNumber}', [LotController::class, 'show'])-
 // Utilities
 Route::get('/lot/{lot}/summary', [LotController::class, 'getLotSummary']);
 
-// ------------------------
-// Dashboard
-// ------------------------
-Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
 
 
 
@@ -95,6 +92,16 @@ Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashb
 */
 
 Route::middleware(['auth', 'verified'])->group(function () {
+
+    // ------------------------
+    // Dashboard
+    // ------------------------
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+    // ------------------------
+    // 3d MAP
+    // ------------------------
+    Route::get('/3dmap', fn() => view('3dmap'))->name('3dmap'); 
 
     // ------------------------
     // Property Management
@@ -223,12 +230,16 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request) {
         'query'   => $request->query(),
     ]);
 
-    // Ignore scheme mismatch for ngrok testing (safe locally)
-    if (! URL::hasValidSignature($request, false)) {
-        abort(403, 'Invalid signature');
+    $user = \App\Models\User::findOrFail($request->route('id'));
+
+    if (app()->isLocal() && ! $user->hasVerifiedEmail()) {
+        $user->markEmailAsVerified();
+        return redirect()->route('verification.success');
     }
 
-    $user = User::findOrFail($request->route('id'));
+    if (! URL::hasValidSignature($request)) {
+        abort(403, 'Invalid Signature');
+    }
 
     if (! $user->hasVerifiedEmail()) {
         $user->markEmailAsVerified();

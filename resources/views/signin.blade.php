@@ -45,7 +45,7 @@
                     <span class="tw-absolute tw-left-3 tw-top-3 tw-text-green-500">
                         <i class="fas fa-user"></i>
                     </span>
-                    <input type="text" name="username" placeholder="Your Name"
+                    <input type="text" name="username" placeholder="Your Username"
                            class="tw-w-full tw-pl-10 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-green-500"
                            required>
                 </div>

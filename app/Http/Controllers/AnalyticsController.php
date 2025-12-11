@@ -14,22 +14,29 @@ class AnalyticsController extends Controller
         $blockRatings = DB::table('blocks as b')
         ->join('reviews as r', 'b.id', '=', 'r.block_id')
         ->select(
+            'b.id',
             'b.name',
             DB::raw('AVG(r.rating) as avg_rating'),
             DB::raw('COUNT(r.id) as total_reviews')
         )
-        ->groupBy('b.name')
+        ->groupBy('b.id', 'b.name')
         ->get();
-    
 
-        $topRatedLots = DB::table('blocks as b')
-            ->join('reviews as r', 'b.id', '=', 'r.block_id') 
-            ->join('lots as l', 'b.id', '=', 'l.block_id')  
-            ->select('l.id', 'l.name', 'l.price', DB::raw('AVG(r.rating) as avg_rating'))
-            ->groupBy('l.id', 'l.name', 'l.price')
-            ->orderByDesc('avg_rating')   
-            ->limit(5)                 
-            ->get();
+
+        $topRatedBlocks = DB::table('blocks as b')
+        ->join('reviews as r', 'b.id', '=', 'r.block_id')
+        ->select(
+            'b.id',
+            'b.name',
+            DB::raw('AVG(r.rating) as avg_rating'),
+            DB::raw('COUNT(r.id) as total_reviews')
+        )
+        ->groupBy('b.id', 'b.name')
+        ->orderByDesc('avg_rating')
+        ->limit(5)
+        ->get();
+        
+
 
         
         // lot available
@@ -57,8 +64,8 @@ class AnalyticsController extends Controller
 
         return view('analytics', compact(
             'blockRatings', 
-            'topRatedLots', 
-            // 'recentReviews', 
+            // 'topRatedLots', 
+            'topRatedBlocks',
             'availableLots', 
             'soldLots', 
             'ratingDistribution',

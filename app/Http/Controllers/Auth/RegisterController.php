@@ -7,7 +7,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -43,7 +43,7 @@ class RegisterController extends Controller
     // handles register submission
     public function register(RegisterRequest $request)
     {
-        User::create([
+        $user = User::create([
             'username' => $request->username,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -52,7 +52,8 @@ class RegisterController extends Controller
             'role' => 'buyer',
         ]);
 
+        Auth::login($user);
         // redirect user to login
-        return redirect()->route('login')->with('success', 'Account created successfully! You may now sign in.');
+        return redirect()->route('dashboard')->with('success', 'Account created successfully! You may now sign in.');
     }
 }

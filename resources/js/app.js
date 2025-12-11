@@ -1,5 +1,5 @@
 import './bootstrap';
-import { renderBlockRatingsChart, renderRatingDistributionChart, renderTopRatedLotsChart, renderTopRatedLotsCards } from './charts/blockRatingsChart';
+import { renderBlockRatingsChart, renderRatingDistributionChart, renderTopRatedBlocksChart, renderTopRatedLotsCards } from './charts/blockRatingsChart';
 import Alpine from 'alpinejs';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import './components/lotSelector.js';
@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener('DOMContentLoaded', () => {
     renderBlockRatingsChart();
     renderRatingDistributionChart();
-    renderTopRatedLotsChart();
+    renderTopRatedBlocksChart();
     renderTopRatedLotsCards();
 });
 

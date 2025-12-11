@@ -1,0 +1,29 @@
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    #printable, #printable * {
+        visibility: visible;
+    }
+
+    #printable {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    .tw-px-3, .tw-py-1, .tw-bg-blue-600, .tw-hover\:tw-bg-blue-700 {
+        display: none;
+    }
+
+    table {
+        font-size: 14pt;
+    }
+
+    #printable th:last-child,
+    #printable td:last-child {
+        display: none;
+    }
+}

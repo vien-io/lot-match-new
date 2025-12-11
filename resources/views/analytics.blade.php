@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    {{-- Row: Rating Distribution & Top Rated Lots --}}
+    {{-- Row: Rating Distribution & Top Rated Blocks --}}
     <div class="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 tw-gap-6">
 
         {{-- Rating Distribution --}}
@@ -30,11 +30,11 @@
             </div>
         </div>
 
-        {{-- Top 5 Rated Lots --}}
+        {{-- Top 5 Rated Blocks --}}
         <div class="tw-bg-white tw-rounded-3xl tw-shadow-md tw-p-6">
-            <h2 class="tw-text-xl tw-font-semibold tw-mb-4">Top 5 Highest Rated Lots</h2>
+            <h2 class="tw-text-xl tw-font-semibold tw-mb-4">Top 5 Highest Rated Blocks</h2>
             <div class="tw-h-64">
-                <canvas id="topRatedLotsChart" class="tw-w-full tw-h-full"></canvas>
+                <canvas id="topRatedBlocksChart" class="tw-w-full tw-h-full"></canvas>
             </div>
         </div>
 
@@ -58,7 +58,7 @@
                         @foreach($blockRatings as $row)
                         <tr class="tw-border-b hover:tw-bg-gray-50">
                             <td class="tw-px-4 tw-py-2">{{ $row->name }}</td>
-                            <td class="tw-px-4 tw-py-2">{{ number_format($row->avg_rating, 1) }}</td>
+                            <td class="tw-px-4 tw-py-2">{{ number_format($row->avg_rating, 2) }}</td>
                             <td class="tw-px-4 tw-py-2">{{ $row->total_reviews }}</td>
                         </tr>
                         @endforeach
@@ -98,56 +98,77 @@
             </div>
         </div>
     </div>
- 
 
-{{-- Top Rated Lots Cards --}}
-<div class="tw-flex tw-flex-wrap tw-gap-6 tw-justify-center tw-mt-6">
-    @foreach($topRatedLots as $lot)
-    <div class="tw-bg-white tw-rounded-2xl tw-shadow-lg tw-p-6 tw-flex-1 tw-max-w-xs tw-transition tw-transform hover:tw-scale-105 hover:tw-shadow-2xl">
-        <h3 class="tw-font-semibold tw-text-lg tw-mb-2">{{ $lot->name }}</h3>
-        <p class="tw-text-gray-500 tw-mb-2">Price: ₱{{ number_format($lot->price, 0) }}</p>
-        <div class="tw-flex tw-items-center tw-gap-2">
-            <div class="tw-text-yellow-400">
-                {!! str_repeat('★', round($lot->avg_rating)) !!}
-                {!! str_repeat('☆', 5 - round($lot->avg_rating)) !!}
+
+   {{-- Top Rated Blocks --}}
+    <div class="tw-rounded-3xl tw-py-10 tw-border tw-border-gray-200 tw-mt-6">
+
+        {{-- Title --}}
+        <h2 class="tw-text-2xl tw-font-bold tw-text-gray-800 tw-text-center tw-mb-6">
+            Top Rated Blocks
+        </h2>
+
+        {{-- Cards Container --}}
+        <div class="tw-flex tw-flex-wrap tw-gap-6 tw-justify-center">
+
+            @foreach($topRatedBlocks as $block)
+            <div class="tw-bg-gray-50 tw-rounded-2xl tw-shadow hover:tw-shadow-lg tw-p-6 tw-w-64 tw-transition tw-transform hover:tw-scale-105">
+
+                {{-- Block Name --}}
+                <h3 class="tw-font-semibold tw-text-lg tw-mb-2 tw-text-gray-800 tw-text-center">
+                    {{ $block->name }}
+                </h3>
+
+                {{-- Star Rating --}}
+                <div class="tw-flex tw-items-center tw-gap-2 tw-mb-3 tw-justify-center">
+                    <div class="tw-text-yellow-400 tw-flex tw-gap-0.5 tw-text-xl">
+                        {!! str_repeat('★', round($block->avg_rating)) !!}
+                        {!! str_repeat('☆', 5 - round($block->avg_rating)) !!}
+                    </div>
+                    <span class="tw-text-gray-600 tw-text-sm">
+                        {{ number_format($block->avg_rating, 1) }}
+                    </span>
+                </div>
+
+                {{-- Review Count --}}
+                <p class="tw-text-gray-500 tw-text-sm tw-text-center">
+                    {{ $block->total_reviews }} review{{ $block->total_reviews == 1 ? '' : 's' }}
+                </p>
+
             </div>
-            <span class="tw-text-gray-600 tw-text-sm">({{ number_format($lot->avg_rating, 1) }})</span>
+            @endforeach
+
         </div>
     </div>
-    @endforeach
-</div>
 
 
-    {{-- Row: Recent Reviews --}}
-    {{-- <div class="tw-bg-white tw-rounded-3xl tw-shadow-md tw-p-6">
-        <h2 class="tw-text-xl tw-font-semibold tw-mb-4">Recent Reviews</h2>
-        <ul class="tw-space-y-2 tw-max-h-64 tw-overflow-y-auto">
-            @foreach($recentReviews as $review)
-            <li class="tw-border-b tw-border-gray-200 tw-pb-2">
-                <p class="tw-font-medium">{{ $review->user_name ?? 'Anonymous' }} - Lot #{{ $review->block_id }}</p>
-                <p class="tw-text-sm tw-text-gray-700">Rating: {{ $review->rating }}/5</p>
-            </li>
-            @endforeach
-        </ul>
-    </div> --}}
+ 
+
+    
+
+
+
+
 
     {{-- Hidden Data for Charts --}}
     <div id="ratings-data"
+        data-block-ids='@json($blockRatings->pluck("id"))'
         data-block-labels='@json($blockRatings->pluck("name"))'
         data-block-ratings='@json($blockRatings->pluck("avg_rating"))'
         data-rating-labels='@json($ratingDistribution->pluck("rating"))'
         data-rating-counts='@json($ratingDistribution->pluck("count"))'
         data-block-reviews='@json($blockRatings->pluck("total_reviews"))'>
     </div>
-    <div id="top-rated-data"
+    {{-- <div id="top-rated-data"
         data-lot-names='@json($topRatedLots->pluck("name"))'
         data-ratings='@json($topRatedLots->pluck("avg_rating"))'>
+    </div> --}}
+    <div id="top-rated-blocks-data"
+        data-block-names='@json($topRatedBlocks->pluck("name"))'
+        data-block-rate='@json($topRatedBlocks->pluck("avg_rating"))'>
     </div>
 
 
 </div>
 @endsection
 
-@section('scripts')
-    {{-- @vite('resources/js/charts/analytics.js') --}}
-@endsection

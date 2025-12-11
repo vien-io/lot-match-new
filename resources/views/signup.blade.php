@@ -86,11 +86,11 @@
                            <button type="button" id="togglePasswordConfirm"
                                     class="tw-absolute tw-right-3 tw-top-1/2 tw--translate-y-1/2 tw-text-gray-500 
                                         hover:tw-text-[#9b30ff] hover:tw-drop-shadow-[0_0_8px_#9b30ff]">
-                                <svg id="eyeOpened" xmlns="http://www.w3.org/2000/svg" class="tw-h-5 tw-w-5 tw-hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <svg id="eyeOpenedConf" xmlns="http://www.w3.org/2000/svg" class="tw-h-5 tw-w-5 tw-hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
-                                <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" class="tw-h-5 tw-w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <svg id="eyeClosedConf" xmlns="http://www.w3.org/2000/svg" class="tw-h-5 tw-w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/>
                                     <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2 2l20 20"/>

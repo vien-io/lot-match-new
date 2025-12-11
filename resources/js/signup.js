@@ -24,6 +24,8 @@ const password = document.getElementById('password');
 const passwordConf = document.getElementById('password_confirmation');
 const eyeOpen = document.getElementById('eyeOpened');
 const eyeClosed = document.getElementById('eyeClosed');
+const eyeOpenConf = document.getElementById('eyeOpenedConf');
+const eyeClosedConf = document.getElementById('eyeClosedConf');
 const strengthWrapper = document.getElementById('passwordStrengthWrapper');
 const strengthBar = document.getElementById('passwordStrengthBar');
 const strengthText = document.getElementById('passwordStrengthText');
@@ -45,11 +47,11 @@ togglePasswordConfirm.addEventListener('click', () => {
     const type = passwordConf.type === 'password' ? 'text' : 'password';
     passwordConf.type = type;
     if (type === 'text') {
-        eyeOpen.classList.remove('tw-hidden');
-        eyeClosed.classList.add('tw-hidden')
+        eyeOpenConf.classList.remove('tw-hidden');
+        eyeClosedConf.classList.add('tw-hidden')
     } else {
-        eyeOpen.classList.add('tw-hidden')
-        eyeClosed.classList.remove('tw-hidden')
+        eyeOpenConf.classList.add('tw-hidden')
+        eyeClosedConf.classList.remove('tw-hidden')
     }
 });
 

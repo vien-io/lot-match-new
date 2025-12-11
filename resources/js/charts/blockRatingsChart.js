@@ -9,6 +9,7 @@ export function renderBlockRatingsChart(callback) {
     const dataEl = document.getElementById('ratings-data');
     if (!dataEl) return;
 
+    const blockIds = JSON.parse(dataEl.dataset.blockIds);
     const labels = JSON.parse(dataEl.dataset.blockLabels);
     const ratings = JSON.parse(dataEl.dataset.blockRatings);
     const reviews = JSON.parse(dataEl.dataset.blockReviews);
@@ -18,21 +19,26 @@ export function renderBlockRatingsChart(callback) {
 
     ratingsChartInstance?.destroy();
 
-    // Sort blocks numerically
-    const combined = labels.map((label, i) => ({ block: label, rating: ratings[i], review: reviews[i] }));
-    combined.sort((a, b) => parseInt(a.block) - parseInt(b.block));
+    const combined = blockIds.map((id, i) => ({ 
+        id: id,
+        name: labels[i], 
+        rating: ratings[i], 
+        review: reviews[i] 
+    }));
 
-    const sortedLabels = combined.map(c => c.block);
+    combined.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+
+    const sortedIds = combined.map(c => c.id);
     const sortedRatings = combined.map(c => c.rating);
     const sortedReviews = combined.map(c => c.review);
 
     const delays = {};
-    sortedLabels.forEach((b, i) => { delays[b] = i * 300; });
+    sortedIds.forEach((b, i) => { delays[b] = i * 300; });
 
     ratingsChartInstance = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: sortedLabels,
+            labels: sortedIds,
             datasets: [
                 { label: 'Average Rating', data: sortedRatings, yAxisID: 'y', backgroundColor: 'rgba(75, 192, 192, 0.6)', borderColor: 'rgba(75, 192, 192, 1)', borderWidth: 1 },
                 { label: 'Number of Reviews', data: sortedReviews, yAxisID: 'y1', backgroundColor: 'rgba(255, 159, 64, 0.6)', borderColor: 'rgba(255, 159, 64, 1)', borderWidth: 1 }
@@ -41,11 +47,31 @@ export function renderBlockRatingsChart(callback) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            const index = context[0].dataIndex;
+                            return `Block ${sortedIds[index]}`;
+                        }
+                    }
+                }
+            },
             animation: {
                 delay: (ctx) => ctx.type === 'data' && ctx.mode === 'default' ? delays[ctx.chart.data.labels[ctx.dataIndex]] || 0 : 0,
-                onComplete: () => { if (callback) callback(); }  // call next chart
+                onComplete: () => { if (callback) callback(); }  
             },
             scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Blocks',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    }
+                },
                 y: { beginAtZero: true, min: 0, max: 5, title: { display: true, text: 'Average Rating' } },
                 y1: { beginAtZero: true, position: 'right', title: { display: true, text: 'Number of Reviews' }, grid: { drawOnChartArea: false } }
             }
@@ -54,7 +80,7 @@ export function renderBlockRatingsChart(callback) {
 }
 
 // ---------------- Top Rated Lots Chart ----------------
-export function renderTopRatedLotsChart(callback) {
+/* export function renderTopRatedLotsChart(callback) {
     const dataEl = document.getElementById('top-rated-data');
     if (!dataEl) return;
 
@@ -105,7 +131,82 @@ export function renderTopRatedLotsChart(callback) {
             }
         }
     });
+} */
+
+
+// ---------------- Top Rated Blocks Chart ----------------
+export function renderTopRatedBlocksChart(callback) {
+    const dataEl = document.getElementById('top-rated-blocks-data');
+    if (!dataEl) return;
+
+    const blockNames = JSON.parse(dataEl.dataset.blockNames);
+    // console.log(dataEl.dataset.rate);
+    const ratings = JSON.parse(dataEl.dataset.blockRate);
+
+    const ctx = document.getElementById('topRatedBlocksChart')?.getContext('2d');
+    if (!ctx) return;
+
+    topRatedChartInstance?.destroy();
+
+    const combined = blockNames.map((name, i) => ({
+        name,
+        rating: ratings[i]
+    })).sort((a, b) => b.rating - a.rating);
+
+    const sortedNames = combined.map(c => c.name);
+    const sortedRatings = combined.map(c => c.rating);
+
+    const delays = {};
+    sortedNames.forEach((name, i) => { delays[name] = i * 300; });
+
+    topRatedChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: sortedNames,
+            datasets: [{
+                label: 'Average Rating',
+                data: sortedRatings,
+                backgroundColor: sortedRatings.map((r, i) =>
+                    i === 0 ? 'rgba(255,99,99,0.6)' : 'rgba(255,99,132,0.6)'
+                ),
+                borderColor: sortedRatings.map((r, i) =>
+                    i === 0 ? 'rgb(222,71,71)' : 'rgba(255,99,132,1)'
+                ),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+                delay: (ctx) => (
+                    ctx.type === 'data' &&
+                    ctx.mode === 'default'
+                ) ? delays[ctx.chart.data.labels[ctx.dataIndex]] || 0 : 0,
+                onComplete: () => { if (callback) callback(); }
+            },
+            plugins: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: 'Top 5 Highest Rated Blocks'
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 5,
+                    title: { display: true, text: 'Average Rating' }
+                },
+                y: {
+                    title: { display: true, text: 'Block Name' }
+                }
+            }
+        }
+    });
 }
+
 
 // ---------------- Rating Distribution Chart ----------------
 export function renderRatingDistributionChart() {
@@ -148,13 +249,13 @@ export function renderRatingDistributionChart() {
 }
 
 // ---------------- Initialize in Sequence ----------------
-document.addEventListener('DOMContentLoaded', () => {
+/* document.addEventListener('DOMContentLoaded', () => {
     renderBlockRatingsChart(() => {
         renderTopRatedLotsChart(() => {
             renderRatingDistributionChart();  
         });
     });
-});
+}); */
 
 
 

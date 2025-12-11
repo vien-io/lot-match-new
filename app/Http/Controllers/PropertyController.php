@@ -41,7 +41,7 @@ class PropertyController extends Controller
             'lot_numbers' => 'required|string',
             'lot_area'  => 'required|numeric',
             'floor_area' => 'required|numeric',
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|min:1|max:999999999999999.99',
             'status' => 'required|in:available,sold',
             'orientation' => 'nullable|string',
             'sunlight' => 'nullable|string',

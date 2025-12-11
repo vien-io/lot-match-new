@@ -29,7 +29,7 @@
         {{-- Total Lots (Green) --}}
         <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6 tw-text-center
                     tw-border tw-border-transparent tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-lg hover:tw-border-green-400">
-          <div class="tw-text-4xl tw-font-semibold tw-text-green-500">{{ $totalLots }}</div>
+          <div class="tw-text-4xl tw-font-semibold tw-text-green-500">{{ number_format($totalLots) }}</div>
           <div class="tw-text-gray-500 tw-mt-2">Total Lots</div>
         </div>
 

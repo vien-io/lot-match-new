@@ -90,3 +90,27 @@ window.closeEditModal = function() {
         currentImageIndex = (currentImageIndex + 1) % currentImages.length;
         showLotImage();
     }
+
+
+    const priceInput = document.getElementById('price');
+    const editPriceInput = document.getElementById('editPrice');
+    const editPriceError = document.getElementById('editPriceError');
+    const priceError = document.getElementById('priceError');
+
+    priceInput.addEventListener('input', () => {
+        const value = parseFloat(priceInput.value);
+        if (value > 999999999999999.99) {
+            priceError.textContent = "Price is too high!";
+        } else {
+            priceError.textContent = "";
+        }
+    });
+
+    editPriceInput.addEventListener('input', () => {
+        const value = parseFloat(editPriceInput.value);
+        if (value > 999999999999999.99) {
+            editPriceError.textContent = "Price is too high!";
+        } else {
+            editPriceError.textContent = "";
+        }
+    });
