@@ -46,14 +46,42 @@
 
                 <!-- Password -->
                 <div class="tw-mb-4 tw-relative">
-                    <input type="password" name="password" placeholder="Password"
+                    <input type="password" name="password" id="password" placeholder="Password"
                            class="tw-w-full tw-pl-4 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-purple-500">
+                           <button type="button" id="togglePassword"
+                                    class="tw-absolute tw-right-3 tw-top-1/2 tw--translate-y-1/2 tw-text-gray-500 
+                                        hover:tw-text-[#9b30ff] hover:tw-drop-shadow-[0_0_8px_#9b30ff]">
+                                <svg id="eyeOpened" xmlns="http://www.w3.org/2000/svg" class="tw-h-5 tw-w-5 tw-hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" class="tw-h-5 tw-w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/>
+                                    <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2 2l20 20"/>
+                                </svg>
+                            </button>
+                           <div id="passwordStrength" class="tw-mt-1 tw-text-sm"></div>
                 </div>
 
                 <!-- Confirm Password -->
                 <div class="tw-mb-4 tw-relative">
-                    <input type="password" name="password_confirmation" placeholder="Confirm Password"
+                    <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirm Password"
                            class="tw-w-full tw-pl-4 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-purple-500">
+                           <button type="button" id="togglePasswordConfirm"
+                                    class="tw-absolute tw-right-3 tw-top-1/2 tw--translate-y-1/2 tw-text-gray-500 
+                                        hover:tw-text-[#9b30ff] hover:tw-drop-shadow-[0_0_8px_#9b30ff]">
+                                <svg id="eyeOpened" xmlns="http://www.w3.org/2000/svg" class="tw-h-5 tw-w-5 tw-hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" class="tw-h-5 tw-w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/>
+                                    <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2 2l20 20"/>
+                                </svg>
+                            </button>
+
                 </div>
 
                 <!-- terrms and privacy checkbox -->
@@ -83,7 +111,6 @@
                                 data-modal-close>✕</button>
                         <h2 class="tw-text-2xl tw-font-semibold tw-mb-4 tw-text-purple-600">Privacy Policy</h2>
                         <div class="tw-max-h-[70vh] tw-overflow-y-auto tw-text-gray-700 tw-space-y-3 tw-pr-2">
-                            {{-- 👇 Paste your Privacy Policy content below --}}
                             @include('legal.privacy')
                         </div>
                     </div>
@@ -96,33 +123,10 @@
                                 data-modal-close>✕</button>
                         <h2 class="tw-text-2xl tw-font-semibold tw-mb-4 tw-text-purple-600">Terms of Service</h2>
                         <div class="tw-max-h-[70vh] tw-overflow-y-auto tw-text-gray-700 tw-space-y-3 tw-pr-2">
-                            {{-- 👇 Paste your Terms of Service content below --}}
                             @include('legal.terms')
                         </div>
                     </div>
                 </div>
-
-                <script>
-                document.querySelectorAll('[data-modal-target]').forEach(link => {
-                    link.addEventListener('click', e => {
-                        e.preventDefault();
-                        const modal = document.getElementById(link.dataset.modalTarget);
-                        if (modal) modal.classList.remove('tw-hidden');
-                    });
-                });
-
-                document.querySelectorAll('[data-modal-close]').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        btn.closest('div[id$="Modal"]').classList.add('tw-hidden');
-                    });
-                });
-
-                document.querySelectorAll('div[id$="Modal"]').forEach(modal => {
-                    modal.addEventListener('click', e => {
-                        if (e.target === modal) modal.classList.add('tw-hidden');
-                    });
-                });
-                </script>
 
                 <!-- Button -->
                 <button type="submit" id="signupBtn"
@@ -147,6 +151,6 @@
             </p>
         </div>
     </div>
-
+    @vite('resources/js/signup.js')
 </body>
 </html>
