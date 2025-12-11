@@ -27,7 +27,8 @@ use App\Http\Controllers\{
     UserSettingsController
 };
 use App\Http\Middleware\CheckRole;
-
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 
 // Enable auth routes with email verification
 Auth::routes(['verify' => true]);
@@ -206,18 +207,46 @@ Route::get('/email/verified-success', function () {
     return view('auth.verified-success');
 })->name('verification.success');
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+/* Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
     return redirect()->route('verification.success');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+})->middleware(['auth', 'signed'])->name('verification.verify'); */
 
+
+Route::get('/email/verify/{id}/{hash}', function (Request $request) {
+
+    // Log for debugging
+    Log::info('Verify URL hit', [
+        'fullUrl' => $request->fullUrl(),
+        'scheme'  => $request->getScheme(),
+        'host'    => $request->getHost(),
+        'query'   => $request->query(),
+    ]);
+
+    // Ignore scheme mismatch for ngrok testing (safe locally)
+    if (! URL::hasValidSignature($request, false)) {
+        abort(403, 'Invalid signature');
+    }
+
+    $user = User::findOrFail($request->route('id'));
+
+    if (! $user->hasVerifiedEmail()) {
+        $user->markEmailAsVerified();
+    }
+
+    return redirect()->route('verification.success');
+})->name('verification.verify');
+
+
+
+// Notice page
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
+// Resend verification email
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-
 

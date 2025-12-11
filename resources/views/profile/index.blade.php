@@ -15,8 +15,16 @@
             <div class="tw-bg-gray-50 tw-rounded-xl tw-p-4 tw-flex tw-items-center tw-gap-3">
                 <span class="tw-text-gray-600"><i class="fas fa-user"></i></span>
                 <div>
-                    <p class="tw-text-xs tw-text-gray-500">Full Name</p>
-                    <p class="tw-font-semibold">{{ $user->name }}</p>
+                    <p class="tw-text-xs tw-text-gray-500">First Name</p>
+                    <p class="tw-font-semibold">{{ $user->first_name }}</p>
+                </div>
+            </div>
+
+            <div class="tw-bg-gray-50 tw-rounded-xl tw-p-4 tw-flex tw-items-center tw-gap-3">
+                <span class="tw-text-gray-600"><i class="fas fa-user"></i></span>
+                <div>
+                    <p class="tw-text-xs tw-text-gray-500">Last Name</p>
+                    <p class="tw-font-semibold">{{ $user->last_name }}</p>
                 </div>
             </div>
 

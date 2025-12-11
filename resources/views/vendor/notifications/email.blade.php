@@ -25,7 +25,7 @@
 
 # Verify Your Email Address
 
-Hi {{ $user->name ?? 'there' }},
+Hi {{ trim($user->first_name . ' ' . $user->last_name) ?: 'there' }},
 
 Thanks for joining **LotMatch** — making real estate exploration effortless. 
 Please verify your email to activate your account and start exploring.

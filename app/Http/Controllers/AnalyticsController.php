@@ -31,24 +31,6 @@ class AnalyticsController extends Controller
             ->limit(5)                 
             ->get();
 
-
-            
-
-        // recent reviews
-        /* $recentReviews = Review::with('user')
-            ->orderByDesc('created_at')
-            ->take(5)
-            ->get()
-            ->map(function ($review) {
-                return (object)[
-                    'id' => $review->id,
-                    'rating' => $review->rating,
-                    'comment' => $review->comment,
-                    'user_name' => $review->user->name ?? 'Anonymous',
-                    'block_id' => $review->block_id,
-                ];
-            }); */
-    
         
         // lot available
         $availableLots = DB::table('lots')->where('status', 'available')->count();

@@ -21,13 +21,15 @@ class BlockController extends Controller
         if (!$block) {
             return response()->json(['error' => 'Block not found'], 404);
         }
-    
+
         // structure reviews
         $reviews = $block->reviews->map(function ($review) {
+            $user = $review->user;
+            $full_name = $user ? trim($user->first_name . ' ' . $user->last_name) : 'Unknown';
             return [
                 'id' => $review->id,
                 'user_id' => $review->user_id,
-                'user_name' => $review->user->name ?? 'Unknown',
+                'user_name' => $full_name,
                 'role' => $review->user->role ?? null, 
                 'rating' => $review->rating,
                 'comment' => $review->comment,

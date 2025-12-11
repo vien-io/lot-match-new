@@ -1,3 +1,4 @@
+{{-- MIGHT BE UNUSED --}}
 @extends('layouts.app')
 
 @section('title', 'User Management')
@@ -29,7 +30,9 @@
             <tbody class="tw-bg-white tw-divide-y tw-divide-gray-200">
                 @foreach($users as $user)
                 <tr>
-                    <td class="tw-px-6 tw-py-4 tw-whitespace-nowrap">{{ $user->name }}</td>
+                    {{-- <td class="tw-px-6 tw-py-4 tw-whitespace-nowrap">{{ $user->name }}</td> --}}
+                    <td class="tw-px-6 tw-py-4 tw-whitespace-nowrap">{{ $user->first_name }}</td>
+                    <td class="tw-px-6 tw-py-4 tw-whitespace-nowrap">{{ $user->last_name }}</td>
                     <td class="tw-px-6 tw-py-4 tw-whitespace-nowrap">{{ $user->email }}</td>
                     <td class="tw-px-6 tw-py-4 tw-whitespace-nowrap">
                         <span class="tw-bg-blue-100 tw-text-blue-800 tw-px-2 tw-py-1 tw-rounded-full tw-text-xs">{{ $user->role }}</span>

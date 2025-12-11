@@ -13,6 +13,7 @@ export default defineConfig({
                 'resources/js/charts/forecast.js',
                 'resources/js/properties.js',
                 'resources/js/userModals.js',
+                'resources/js/activity_logs/activityLogs.js',
                 'resources/css/app.css',
                 'resources/sass/app.scss',
             ],

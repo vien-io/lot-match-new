@@ -9,8 +9,12 @@
             <input type="text" name="username" class="tw-w-full tw-border tw-rounded tw-p-2" required>
         </div>
         <div class="tw-mb-3">
-            <label class="tw-block tw-font-medium">Full Name</label>
-            <input type="text" name="name" class="tw-w-full tw-border tw-rounded tw-p-2" required>
+            <label class="tw-block tw-font-medium">First Name</label>
+            <input type="text" name="first_name" class="tw-w-full tw-border tw-rounded tw-p-2" required>
+        </div>
+        <div class="tw-mb-3">
+            <label class="tw-block tw-font-medium">Last Name</label>
+            <input type="text" name="last_name" class="tw-w-full tw-border tw-rounded tw-p-2" required>
         </div>
         <div class="tw-mb-3">
             <label class="tw-block tw-font-medium">Email</label>

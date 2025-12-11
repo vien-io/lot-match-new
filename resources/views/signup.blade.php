@@ -22,10 +22,18 @@
                            value="{{ old('username') }}"
                            class="tw-w-full tw-pl-4 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-purple-500">
                 </div>
-                <!-- Full Name -->
+                
+                <!-- First Name -->
                 <div class="tw-mb-4 tw-relative">
-                    <input type="text" name="name" placeholder="Your Full Name"
-                           value="{{ old('name') }}"
+                    <input type="text" name="first_name" placeholder="Your First Name"
+                           value="{{ old('first_name') }}"
+                           class="tw-w-full tw-pl-4 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-purple-500">
+                </div>
+                
+                <!-- Last Name -->
+                <div class="tw-mb-4 tw-relative">
+                    <input type="text" name="last_name" placeholder="Your Last Name"
+                           value="{{ old('last_name') }}"
                            class="tw-w-full tw-pl-4 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-purple-500">
                 </div>
 

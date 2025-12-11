@@ -31,15 +31,26 @@
         <form action="{{ route('profile.update') }}" method="POST" class="tw-space-y-4">
             @csrf
 
-            {{-- Name --}}
+            {{-- First Name --}}
             <div class="tw-relative">
                 <span class="tw-absolute tw-left-3 tw-top-3 tw-text-gray-400">
                     <i class="fas fa-user"></i>
                 </span>
                 <input type="text"
                        name="name"
-                       value="{{ old('name', $user->name) }}"
-                       placeholder="Full Name"
+                       value="{{ old('name', $user->first_name) }}"
+                       placeholder="First Name"
+                       class="tw-w-full tw-pl-10 tw-px-3 tw-py-2 tw-rounded-full tw-border tw-bg-gray-100 focus:tw-ring-2 focus:tw-ring-green-500 focus:tw-border-green-500">
+            </div>
+            {{-- Last Name --}}
+            <div class="tw-relative">
+                <span class="tw-absolute tw-left-3 tw-top-3 tw-text-gray-400">
+                    <i class="fas fa-user"></i>
+                </span>
+                <input type="text"
+                       name="name"
+                       value="{{ old('name', $user->last_name) }}"
+                       placeholder="Last Name"
                        class="tw-w-full tw-pl-10 tw-px-3 tw-py-2 tw-rounded-full tw-border tw-bg-gray-100 focus:tw-ring-2 focus:tw-ring-green-500 focus:tw-border-green-500">
             </div>
 

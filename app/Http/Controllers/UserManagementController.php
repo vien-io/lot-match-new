@@ -18,7 +18,8 @@ class UserManagementController extends Controller
         if ($search = $request->input('search')) {
             $query->where(function($q) use ($search) {
                 $q->where('username', 'like', "%{$search}%")
-                ->orWhere('name', 'like', "%{$search}%")
+                ->orWhere('first_name', 'like', "%{$search}%")
+                ->orWhere('last_name', 'like', "%{$search}%")
                 ->orWhere('email', 'like', "%{$search}%");
             });
         }
@@ -52,7 +53,8 @@ class UserManagementController extends Controller
         try {
             $validated = $request->validate([
                 'username' => 'required|string|max:255',
-                'name'     => 'required|string|max:255',
+                'first_name'     => 'required|string|max:255',
+                'last_name'     => 'required|string|max:255',
                 'email'    => 'required|email|unique:users',
                 'password' => 'required|string|min:6', 
             ]);
@@ -98,14 +100,15 @@ class UserManagementController extends Controller
     {
         $request->validate([
             'username' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => "required|email|unique:users,email,{$user->id}",
             'role' => 'nullable|in:admin,owner,buyer',
             'lot_ids' => 'nullable|array',
             'lot_ids.*' => 'exists:lots,id',
         ]);
 
-        $user->update($request->only('username', 'name', 'email'));
+        $user->update($request->only('username', 'first_name', 'last_name', 'email'));
 
         $newRole = $request->role;
 

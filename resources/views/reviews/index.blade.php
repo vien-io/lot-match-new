@@ -59,11 +59,11 @@
         <div id="reviewsContainer" class="tw-grid tw-grid-cols-2 tw-gap-4 tw-max-h-[400px] tw-overflow-y-auto tw-pr-2 tw-scrollbar-thin tw-scrollbar-thumb-[#22c55e] tw-scrollbar-track-gray-200 tw-scrollbar-thumb-rounded-full tw-scrollbar-track-rounded-full">
             @foreach ($reviews as $review)
                 <div class="tw-flex tw-gap-3 tw-bg-gray-50 tw-rounded-xl tw-p-3">
-                    <img src="{{ $review->user->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode($review->user->name ?? 'Deleted User') . '&background=34d399&color=fff&rounded=true' }}" 
+                    <img src="{{ $review->user->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode($review->user->first_name . ' ' . $review->user->last_name ?? 'Deleted User') . '&background=34d399&color=fff&rounded=true' }}" 
                         class="tw-w-10 tw-h-10 tw-rounded-full" alt="user">
                     <div>
                         <h3 class="tw-font-semibold tw-text-sm tw-text-[#1f2937]">
-                            {{ $review->user->name ?? 'Deleted User'}} → {{ $review->block->name ?? 'Unknown Block' }}
+                            {{ $review->user->first_name . ' ' . $review->user->last_name ?? 'Deleted User'}} → {{ $review->block->name ?? 'Unknown Block' }}
                         </h3>
                         <div class="tw-flex tw-text-yellow-400 tw-text-xs">
                             {!! str_repeat('★', $review->rating) !!}{!! str_repeat('☆', 5 - $review->rating) !!}

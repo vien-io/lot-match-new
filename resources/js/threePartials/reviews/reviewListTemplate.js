@@ -3,6 +3,8 @@ export function reviewListTemplate(block) {
     const reviews = block.reviews ?? [];
     const showOwnerTags = window.showOwnerTags ?? false;
 
+    console.log(reviews);
+
     // --- SORT REVIEWS ---
     const sortedReviews = reviews.sort((a, b) => {
         if (a.justCreated && !b.justCreated) return -1;

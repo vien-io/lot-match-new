@@ -10,8 +10,9 @@ class Kernel extends HttpKernel
      * Global HTTP middleware.
      */
     protected $middleware = [
+        \App\Http\Middleware\ForceHttpsNgrok::class,
+        \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\TrustHosts::class,
-        \Illuminate\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,

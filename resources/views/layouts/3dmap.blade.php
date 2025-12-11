@@ -295,12 +295,12 @@
                                 class="tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-1 tw-rounded-lg tw-text-gray-700 hover:tw-bg-green-100 hover:tw-text-green-500 tw-transition-colors">
 
                                 {{-- user avatar --}}
-                                <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&background=34d399&color=fff&rounded=true' }}" 
+                                <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->first_name . ' ' . Auth::user()->last_name) . '&background=34d399&color=fff&rounded=true' }}" 
                                     alt="User Avatar"
                                     class="tw-w-8 tw-h-8 tw-rounded-full tw-object-cover">
 
                                 {{-- username --}}
-                                <span>{{ Auth::user()->name }}</span>
+                                <span>{{ Auth::user()->first_name . " " . Auth::user()->last_name }}</span>
 
                                 {{-- role tag --}}
                                 @if(Auth::user()->role === 'admin')

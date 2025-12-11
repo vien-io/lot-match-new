@@ -12,7 +12,7 @@
 
         {{-- Welcome Section --}}
         <div class="tw-mb-8">
-          <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800">Welcome, {{ auth()->user()->name ?? 'Researcher' }}!</h1>
+          <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800">Welcome, {{ auth()->user()->first_name . ' ' . auth()->user()->last_name ?? 'Dear Visitor' }}!</h1>
           <p class="tw-text-gray-600">Here is the overview of Sameera Subdivision.</p>
         </div>
 
@@ -84,7 +84,7 @@
                     <div class="tw-flex tw-items-center tw-justify-between">
                       <div class="tw-flex tw-items-center tw.space-x-2">
                         <strong class="tw-text-gray-800">
-                          {{ $review->user->name ?? 'Anonymous' }}
+                          {{ $review->user->first_name . ' ' . $review->user->last_name ?? 'Anonymous' }}
                         </strong>
                         <span class="tw-text-gray-500">→ {{ $review->block->name ?? 'Unknown Block' }}</span>
                         {!! $ownerTag ?? '' !!}

@@ -44,7 +44,9 @@
                     <tr>
                         <th class="tw-p-2 tw-text-white">ID</th>
                         <th class="tw-p-2 tw-text-white">Username</th>
-                        <th class="tw-p-2 tw-text-white">Full Name</th>
+                        {{-- <th class="tw-p-2 tw-text-white">Full Name</th> --}}
+                        <th class="tw-p-2 tw-text-white">First Name</th>
+                        <th class="tw-p-2 tw-text-white">Last Name</th>
                         <th class="tw-p-2 tw-text-white">Email</th>
                         <th class="tw-p-2 tw-text-white">Role</th>
                         <th class="tw-p-2 tw-text-white">Verification</th>
@@ -56,7 +58,9 @@
                         <tr class="tw-border-b hover:tw-bg-[#d1fae5] tw-transition-colors">
                             <td class="tw-p-2">{{ $user->id }}</td>
                             <td class="tw-p-2">{{ $user->username }}</td>
-                            <td class="tw-p-2">{{ $user->name }}</td>
+                            {{-- <td class="tw-p-2">{{ $user->name }}</td> --}}
+                            <td class="tw-p-2">{{ $user->first_name }}</td>
+                            <td class="tw-p-2">{{ $user->last_name }}</td>
                             <td class="tw-p-2">{{ $user->email }}</td>
 
                             {{-- Role & Owner Lot Assignment --}}
@@ -71,7 +75,9 @@
 
                                         <!-- Hidden user info -->
                                         <input type="hidden" name="username" value="{{ $user->username }}">
-                                        <input type="hidden" name="name" value="{{ $user->name }}">
+                                        {{-- <input type="hidden" name="name" value="{{ $user->name }}"> --}}
+                                        <input type="hidden" name="name" value="{{ $user->fist_name }}">
+                                        <input type="hidden" name="name" value="{{ $user->last_name }}">
                                         <input type="hidden" name="email" value="{{ $user->email }}">
 
                                         <!-- Role dropdown -->
@@ -152,7 +158,7 @@
                                 <div class="tw-flex tw-gap-2 tw-items-center">
                                     <!-- Edit Modal Trigger -->
                                     <button type="button"
-                                        onclick="openEditUserModal('{{ $user->id }}', '{{ $user->username }}', '{{ $user->name }}', '{{ $user->email }}')"
+                                        onclick="openEditUserModal('{{ $user->id }}', '{{ $user->username }}', '{{ $user->first_name }}', '{{ $user->last_name }}', '{{ $user->email }}')"
                                         class="tw-p-2 tw-rounded tw-hover:tw-bg-blue-100 tw-text-blue-600">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="tw-w-5 tw-h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M4 20h4.768l10.536-10.536a2 2 0 00-2.828-2.828L4 17.172V20z" />
