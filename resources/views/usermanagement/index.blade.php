@@ -44,7 +44,6 @@
                     <tr>
                         <th class="tw-p-2 tw-text-white">ID</th>
                         <th class="tw-p-2 tw-text-white">Username</th>
-                        {{-- <th class="tw-p-2 tw-text-white">Full Name</th> --}}
                         <th class="tw-p-2 tw-text-white">First Name</th>
                         <th class="tw-p-2 tw-text-white">Last Name</th>
                         <th class="tw-p-2 tw-text-white">Email</th>
@@ -58,7 +57,6 @@
                         <tr class="tw-border-b hover:tw-bg-[#d1fae5] tw-transition-colors">
                             <td class="tw-p-2">{{ $user->id }}</td>
                             <td class="tw-p-2">{{ $user->username }}</td>
-                            {{-- <td class="tw-p-2">{{ $user->name }}</td> --}}
                             <td class="tw-p-2">{{ $user->first_name }}</td>
                             <td class="tw-p-2">{{ $user->last_name }}</td>
                             <td class="tw-p-2">{{ $user->email }}</td>
@@ -75,9 +73,8 @@
 
                                         <!-- Hidden user info -->
                                         <input type="hidden" name="username" value="{{ $user->username }}">
-                                        {{-- <input type="hidden" name="name" value="{{ $user->name }}"> --}}
-                                        <input type="hidden" name="name" value="{{ $user->fist_name }}">
-                                        <input type="hidden" name="name" value="{{ $user->last_name }}">
+                                        <input type="hidden" name="first_name" value="{{ $user->first_name }}">
+                                        <input type="hidden" name="last_name" value="{{ $user->last_name }}">
                                         <input type="hidden" name="email" value="{{ $user->email }}">
 
                                         <!-- Role dropdown -->
