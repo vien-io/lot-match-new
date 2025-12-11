@@ -14,6 +14,16 @@
             <h2 class="tw-text-2xl tw-font-bold tw-mb-2">Create Account</h2>
             <p class="tw-text-gray-500 tw-mb-6">Fill in the details to sign up</p>
 
+
+            <!-- validation Errors -->
+            @if ($errors->any())
+                <div class="tw-bg-red-100 tw-text-red-600 tw-p-2 tw-rounded tw-mb-4 tw-text-sm">
+                    @foreach ($errors->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
+
             <form method="POST" action="{{ route('signup') }}">
                 @csrf
                 <!-- Username -->
@@ -45,10 +55,11 @@
                 </div>
 
                 <!-- Password -->
-                <div class="tw-mb-4 tw-relative">
-                    <input type="password" name="password" id="password" placeholder="Password"
-                           class="tw-w-full tw-pl-4 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-purple-500">
-                           <button type="button" id="togglePassword"
+                <div class="tw-mb-4">
+                    <div class="tw-relative tw-flex tw-items-center">
+                        <input type="password" name="password" id="password" placeholder="Password"
+                            class="tw-w-full tw-pl-4 tw-pr-3 tw-py-2 tw-rounded-full tw-bg-gray-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-purple-500">
+                            <button type="button" id="togglePassword"
                                     class="tw-absolute tw-right-3 tw-top-1/2 tw--translate-y-1/2 tw-text-gray-500 
                                         hover:tw-text-[#9b30ff] hover:tw-drop-shadow-[0_0_8px_#9b30ff]">
                                 <svg id="eyeOpened" xmlns="http://www.w3.org/2000/svg" class="tw-h-5 tw-w-5 tw-hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -61,7 +72,11 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2 2l20 20"/>
                                 </svg>
                             </button>
-                           <div id="passwordStrength" class="tw-mt-1 tw-text-sm"></div>
+                    </div>
+                    <div id="passwordStrengthWrapper" class="tw-mt-2 tw-relative tw-h-2 tw-w-full tw-rounded-full tw-overflow-hidden tw-hidden">
+                        <div id="passwordStrengthBar" class="tw-h-2 tw-rounded-full tw-w-0 tw-transition-all tw-duration-300"></div>
+                    </div>
+                    <div id="passwordStrengthText" class="tw-text-sm tw-mt-1 tw-text-gray-600 tw-hidden"></div>
                 </div>
 
                 <!-- Confirm Password -->
@@ -81,7 +96,6 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2 2l20 20"/>
                                 </svg>
                             </button>
-
                 </div>
 
                 <!-- terrms and privacy checkbox -->
@@ -94,15 +108,6 @@
                         <a href="#" class="tw-text-purple-500 hover:tw-underline" data-modal-target="termsModal">Terms of Service</a>.
                     </label>
                 </div>
-
-                <!-- validation Errors -->
-                @if ($errors->any())
-                    <div class="tw-mb-4 tw-text-red-500 tw-text-sm">
-                        @foreach ($errors->all() as $error)
-                            <p>{{ $error }}</p>
-                        @endforeach
-                    </div>
-                @endif
 
                 <div id="privacyModal"
                     class="tw-hidden tw-fixed tw-inset-0 tw-bg-black/50 tw-flex tw-items-center tw-justify-center tw-z-50">

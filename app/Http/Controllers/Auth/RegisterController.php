@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -40,17 +41,8 @@ class RegisterController extends Controller
    
 
     // handles register submission
-    public function register(Request $request){
-        // validate req
-        $request->validate([
-            'username' => 'required|string|max:255',
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        // create user
+    public function register(RegisterRequest $request)
+    {
         User::create([
             'username' => $request->username,
             'first_name' => $request->first_name,
