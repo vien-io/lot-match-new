@@ -163,5 +163,6 @@ class UserManagementController extends Controller
         $user->update($request->only('name', 'username', 'email'));
         return redirect()->route('profile')->with('success', 'Profile updated.');
     }
+    
 
 }
