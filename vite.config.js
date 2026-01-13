@@ -14,6 +14,7 @@ export default defineConfig({
                 'resources/js/properties.js',
                 'resources/js/userModals.js',
                 'resources/js/activity_logs/activityLogs.js',
+                'resources/js/signup.js',
                 'resources/css/app.css',
                 'resources/sass/app.scss',
             ],
