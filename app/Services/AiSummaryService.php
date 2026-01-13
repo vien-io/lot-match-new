@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class AiSummaryService
 {
-    protected string $apiKey;
+    protected ?string $apiKey;
     protected bool $enabled;
 
     public function __construct()
