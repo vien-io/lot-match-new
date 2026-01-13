@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
     zip \
     npm \
     nodejs \
-    && docker-php-ext-install pdo_mysql zip
+    libpq-dev \
+    && docker-php-ext-install pdo_mysql pdo_pgsql zip
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
@@ -38,4 +39,6 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 EXPOSE 10000
 
 # Use entrypoint to dynamically use Render PORT
-CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+CMD ["/entrypoint.sh"]
