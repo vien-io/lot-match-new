@@ -30,6 +30,21 @@
             <p class="text-green-600 font-semibold mt-4">{{ session('message') }}</p>
         @endif
 
+        {{-- Direct link for render demo --}}
+        @if (!empty($directLink))
+            <p class="mt-4 text-blue-600 text-sm font-semibold">
+                Demo Mode: Click the link below to verify directly:
+            </p>
+            <a href="{{ $directLink }}"
+                class="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition mt-2 inline-block transition-all duration-300 hover:bg-green-600 hover:scale-105">
+                Verify Email (Demo)
+            </a>
+        @else
+            {{-- Local Instructions --}}
+            {{-- <p class="mt-4 text-gray-600">
+                If you’re running locally, the verification email is logged in <code>storage/logs/laravel.log</code>.
+                Open it and copy the link to verify your account.
+            </p> --}}
         {{-- Resend Form --}}
         <form method="POST" action="{{ route('verification.send') }}" class="mt-8">
             @csrf
@@ -38,6 +53,7 @@
                 Resend Verification Email
             </button>
         </form>
+        @endif
 
         {{-- Logout --}}
         <form method="POST" action="{{ route('logout') }}" class="mt-4">

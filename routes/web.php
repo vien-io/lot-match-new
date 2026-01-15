@@ -26,6 +26,7 @@ use App\Http\Controllers\{
     UserManagementController,
     UserSettingsController
 };
+use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Middleware\CheckRole;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -49,6 +50,7 @@ Route::get('/check-db', function() {
     } catch (\Exception $e) {
         return "Database connection error: " . $e->getMessage();
     }
+
 });
 
 Route::get('/', function () {
@@ -249,9 +251,13 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request) {
 })->name('verification.verify');
 
 // Notice page
-Route::get('/email/verify', function () {
+Route::get('/email.verify', [VerificationController::class, 'showVerificationNotice'])
+    ->middleware('auth')
+    ->name('verification.notice');
+    
+/* Route::get('/email/verify', function () {
     return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+})->middleware('auth')->name('verification.notice'); */
 
 // Resend verification email
 Route::post('/email/verification-notification', function (Request $request) {
