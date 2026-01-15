@@ -20,6 +20,7 @@ use App\Http\Controllers\{
     ForecastController,
     ReviewController,
     DashboardController,
+    DebugController,
     MapController,
     OwnerVerificationController,
     SearchController,
@@ -41,17 +42,22 @@ Auth::routes(['verify' => true]);
 | Public Routes
 |--------------------------------------------------------------------------
 */
+    /*
+    |--------------------------------------------------------------------------
+    | For Render Debugging
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/check-db', function() {
+        try {
+            $driver = DB::connection()->getPDO()->getAttribute(PDO::ATTR_DRIVER_NAME);
+            $version = DB::select('SELECT version() AS version')[0]->version;
+            return "Connected to database: $driver, version: $version";
+        } catch (\Exception $e) {
+            return "Database connection error: " . $e->getMessage();
+        }
+    });
+    Route::get('/debug-verification-link', [DebugController::class, 'verificationLink']);
 
-Route::get('/check-db', function() {
-    try {
-        $driver = DB::connection()->getPDO()->getAttribute(PDO::ATTR_DRIVER_NAME);
-        $version = DB::select('SELECT version() AS version')[0]->version;
-        return "Connected to database: $driver, version: $version";
-    } catch (\Exception $e) {
-        return "Database connection error: " . $e->getMessage();
-    }
-
-});
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -254,7 +260,7 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request) {
 Route::get('/email.verify', [VerificationController::class, 'showVerificationNotice'])
     ->middleware('auth')
     ->name('verification.notice');
-    
+
 /* Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice'); */
