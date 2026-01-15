@@ -22,11 +22,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        if ($this->app->environment('local')) {
-            // Trust the ngrok host
-            URL::forceRootUrl(config('app.url'));
-            URL::forceScheme('https'); // only if using HTTPS via ngrok
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
         }
+
     }
 
 

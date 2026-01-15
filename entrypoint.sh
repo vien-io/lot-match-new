@@ -1,7 +1,18 @@
 #!/bin/sh
 
-# Run migrations and seed database
-php artisan migrate --force
-php artisan db:seed --force
+set -e
 
-php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
+# Optionally run migrations & seeders if environent variable is true
+if [ "$RUN_DB_MIGRATIONS" = "true" ]; then
+    echo "Running database migrations and seeders..."
+    php artisan migrate --force
+    php artisan db:seed --force
+else
+    echo "Skipping DB migrations and seeders"
+fi
+
+# Clear cached config 
+rm -f bootstrap/cache/config.php
+
+echo "Starting Apache in foreground..."
+apache2-foreground
