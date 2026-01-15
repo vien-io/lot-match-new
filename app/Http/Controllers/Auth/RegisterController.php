@@ -52,6 +52,7 @@ class RegisterController extends Controller
             'role' => 'buyer',
         ]);
 
+        $user->sendEmailVerificationNotification();
         Auth::login($user);
         // redirect user to login
         return redirect()->route('dashboard')->with('success', 'Account created successfully! You may now sign in.');

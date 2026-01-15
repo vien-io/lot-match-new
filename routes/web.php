@@ -63,17 +63,11 @@ Route::post('/signin', [AuthController::class, 'signin'])->name('signin.submit')
 Route::get('/signup', [RegisterController::class, 'showRegistrationForm'])->name('signup');
 Route::post('/signup', [RegisterController::class, 'register'])->name('signup.submit');
 
-
 // Password reset
 Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])
     ->name('password.request');
 
-// Static pages (we may not need some of these)
 Route::get('/about', [PageController::class, 'about'])->name('about');
-Route::get('/contact', [ContactController::class, 'showForm'])->name('contact');
-Route::post('/contact', [ContactController::class, 'submitForm'])->name('contact.submit');
-
-
 
 // Public API endpoints for blocks/lots
 Route::get('/blocks', [BlockController::class, 'getBlocks']);
@@ -226,12 +220,6 @@ Route::get('/email/verified-success', function () {
     return view('auth.verified-success');
 })->name('verification.success');
 
-/* Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect()->route('verification.success');
-})->middleware(['auth', 'signed'])->name('verification.verify'); */
-
-
 Route::get('/email/verify/{id}/{hash}', function (Request $request) {
 
     // Log for debugging
@@ -259,8 +247,6 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request) {
 
     return redirect()->route('verification.success');
 })->name('verification.verify');
-
-
 
 // Notice page
 Route::get('/email/verify', function () {
