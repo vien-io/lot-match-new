@@ -54,6 +54,7 @@ class VerificationController extends Controller
                 ['id' => $user->id, 'hash' => sha1($user->email)]
             );
         }
+        $directLink = preg_replace('/^http:/', 'https:', $directLink);
 
         return view('auth.verify-email', [
             'directLink' => $directLink,
