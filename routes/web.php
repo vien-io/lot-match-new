@@ -28,6 +28,7 @@ use App\Http\Controllers\{
 };
 use App\Http\Middleware\CheckRole;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 
@@ -39,6 +40,17 @@ Auth::routes(['verify' => true]);
 | Public Routes
 |--------------------------------------------------------------------------
 */
+
+Route::get('/check-db', function() {
+    try {
+        $driver = DB::connection()->getPDO()->getAttribute(PDO::ATTR_DRIVER_NAME);
+        $version = DB::select('SELECT version() AS version')[0]->version;
+        return "Connected to database: $driver, version: $version";
+    } catch (\Exception $e) {
+        return "Database connection error: " . $e->getMessage();
+    }
+});
+
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
