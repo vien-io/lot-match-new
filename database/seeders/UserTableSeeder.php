@@ -34,23 +34,112 @@ class UserTableSeeder extends Seeder
         for ($i = 1; $i <= 50; $i++) {
             $first = $firstNames[array_rand($firstNames)];
             $last = $lastNames[array_rand($lastNames)];
-            $name = "$first $last";
-            $email = strtolower(Str::slug($first . '.' . $last . $i)) . '@example.com';
+
+            $username = strtolower(Str::slug($first.$last.$i));
+            $email = $username . '@example.com';
 
             $users[] = [
-                'id' => $i,
-                'name' => $name,
+                'username' => $username,
+                'first_name' => $first,
+                'last_name' => $last,
                 'email' => $email,
-                'password' => bcrypt('password123'),
+                'password' => bcrypt('Password123'),
+                'role' => 'buyer',
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
         }
 
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        DB::table('users')->truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        // demo users
+        $specialUsers = [
+            [
+                'username' => 'vien',
+                'first_name' => 'Vienry',
+                'last_name' => 'Omania',
+                'email' => 'vienryomania@gmail.com',
+                'password' => bcrypt('Password123'),
+                'role' => 'admin',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'username' => 'admin',
+                'first_name' => 'Admin',
+                'last_name' => 'User',
+                'email' => 'admin@example.com',
+                'password' => bcrypt('Password123'),
+                'role' => 'admin',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'username' => 'buyer',
+                'first_name' => 'Buyer',
+                'last_name' => 'User',
+                'email' => 'buyer@example.com',
+                'password' => bcrypt('Password123'),
+                'role' => 'buyer',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'username' => 'owner1',
+                'first_name' => 'Owner',
+                'last_name' => 'Block1',
+                'email' => 'owner1@example.com',
+                'password' => bcrypt('Password123'),
+                'role' => 'owner',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'username' => 'owner2',
+                'first_name' => 'Owner',
+                'last_name' => 'Block2',
+                'email' => 'owner2@example.com',
+                'password' => bcrypt('Password123'),
+                'role' => 'owner',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'username' => 'owner3',
+                'first_name' => 'Owner',
+                'last_name' => 'Block3',
+                'email' => 'owner3@example.com',
+                'password' => bcrypt('Password123'),
+                'role' => 'owner',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'username' => 'owner4',
+                'first_name' => 'Owner',
+                'last_name' => 'Block4',
+                'email' => 'owner4@example.com',
+                'password' => bcrypt('Password123'),
+                'role' => 'owner',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+        ];
 
+        $users = array_merge($users, $specialUsers);
+
+    
+
+
+        // insert users
         DB::table('users')->insert($users);
+
+        // Assign lots to owners (blocks 1–4)
+        foreach (range(1, 4) as $blockId) {
+            $owner = DB::table('users')->where('username', 'owner'.$blockId)->first();
+            if ($owner) {
+                DB::table('lots')
+                    ->where('block_id', $blockId)
+                    ->update(['owner_id' => $owner->id]);
+            }
+        }
     }
 }

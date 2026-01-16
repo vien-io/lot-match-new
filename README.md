@@ -1,66 +1,202 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# LotMatch – 3D Real Estate Analytics Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+LotMatch is a web-based real estate analytics and visualization system that combines immersive 3D exploration, AI-powered sentiment analysis, and forecasted property ratings. It is designed for property developers, researchers, and administrators who need actionable insights from subdivision data.
 
-## About Laravel
+--------------------------------------------------------------------
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Key Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* 3D Property Visualization using Three.js
+* User Reviews and AI Sentiment Analysis using NLP models
+* EMA-based Rating Forecasting for subdivision blocks
+* AI-Generated Block Summaries
+* Dynamic Charts and Analytics with Chart.js
+* Laravel + TailwindCSS full-stack architecture
+* Asynchronous Background Jobs for smooth performance
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+--------------------------------------------------------------------
 
-## Learning Laravel
+## System Architecture
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+LotMatch follows a modular MVC architecture enhanced with micro-interactions and background processing.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Backend (Laravel)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**Controllers**
 
-## Laravel Sponsors
+* `ReviewController` – Review CRUD operations
+* `ForecastController` – EMA forecasting and analytics
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+**Jobs / Workers**
 
-### Premium Partners
+* `AnalyzeSentimentJob` – NLP-based sentiment classification
+* `GenerateBlockSummaryJob` – AI-generated summaries per block
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+**Models**
 
-## Contributing
+* `User`, `Block`, `Review`, `Forecast`, `Summary`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Database Tables**
 
-## Code of Conduct
+* `users`
+* `blocks`
+* `reviews`
+* `forecasts`
+* `summaries`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Frontend
 
-## Security Vulnerabilities
+* Laravel Blade for server-rendered views
+* TailwindCSS for responsive, modern UI
+* Three.js for 3D visualization engine
+* Chart.js for data and forecast charts
+* Vite for modular JavaScript bundling
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+--------------------------------------------------------------------
 
-## License
+## Data Flow Overview
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. User submits a review via the UI
+2. `ReviewController` stores the review
+3. `AnalyzeSentimentJob` evaluates sentiment
+4. `GenerateBlockSummaryJob` updates AI summary
+5. `ForecastController` recalculates EMA forecasts
+6. Frontend dynamically refreshes charts, summaries, and 3D modals
+
+--------------------------------------------------------------------
+
+## Dashboard Module (`dashboard.blade.php`)
+
+The dashboard serves as the system’s central analytics hub.
+
+**Includes:**
+
+* Personalized welcome section
+* Statistic cards (blocks, lots, ratings, reviews)
+* Lightweight 3D subdivision preview
+* Rating distribution charts
+* Recent reviews panel
+
+--------------------------------------------------------------------
+
+## 3D Map Interface (`3dmap.blade.php`)
+
+This page hosts the core interactive experience of LotMatch.
+
+**Features:**
+
+* Full-screen 3D navigation (pan, zoom, rotate)
+* Lot modal with attributes, images, and risk data
+* Block modal with reviews, summaries, and forecasts
+* Full forecast report modal
+* AI status indicators and tooltips
+
+--------------------------------------------------------------------
+
+## 3D Visualization Engine (`3dmap.js`)
+
+Handles the full Three.js environment:
+
+* Scene, camera, renderer, controls, and lighting
+* InstancedMesh for high-performance lot rendering
+* Raycasting for hover and click detection
+* Post-processing with EffectComposer (Outline + FXAA)
+
+**Rendering Loop:**
+
+```js
+requestAnimationFrame(animate);
+controls.update();
+composer.render();
+```
+
+--------------------------------------------------------------------
+
+## Modular Three.js Components
+
+| Module         | Responsibility                      |
+| -------------- | ----------------------------------- |
+| `initScene`    | Base scene creation                 |
+| `initRenderer` | WebGL renderer setup                |
+| `initCamera`   | Perspective camera (40° FOV)        |
+| `initControls` | OrbitControls with damping          |
+| `initLights`   | Ambient & directional lights        |
+| `initSky`      | Sky dome and lighting               |
+| `loadHouses`   | Loads models and InstancedMesh lots |
+
+--------------------------------------------------------------------
+
+## AI and Analytics Modules
+
+### Forecasting (`forecastHandler.js`)
+
+* Fetches `/forecast/block/:id`
+* Renders historical and predicted EMA ratings
+* Highlights forecast points
+
+### Reviews (`reviewHandler.js`)
+
+* Handles review CRUD via AJAX
+* Triggers AI jobs on submission
+* Polls backend for forecast completion
+* Refreshes summaries and charts dynamically
+
+--------------------------------------------------------------------
+
+## Algorithms Used
+
+* Sentiment Analysis – NLP-based tone classification
+* Exponential Moving Average (EMA) – Rating trend forecasting
+* Data Aggregation – Combines sentiment and ratings
+* Predictive Visualization – Chart.js trend lines
+
+--------------------------------------------------------------------
+
+## Example Workflow
+
+**Submitting a Review:**
+
+1. User posts a rating and comment
+2. Backend stores the review
+3. AI analyzes sentiment
+4. Block summary is regenerated
+5. EMA forecast is recalculated
+6. UI updates charts, summaries, and 3D views
+
+--------------------------------------------------------------------
+
+## Demo Accounts
+
+LotMatch comes with pre-seeded users for testing:
+
+| Username | Role  | Email                  | Password    |
+|----------|-------|------------------------|-------------|
+| admin    | admin | admin@example.com      | Password123 |
+| buyer    | buyer | buyer@example.com      | Password123 |
+| owner1   | owner | owner1@example.com     | Password123 |
+| owner2   | owner | owner2@example.com     | Password123 |
+| owner3   | owner | owner3@example.com     | Password123 |
+| owner4   | owner | owner4@example.com     | Password123 |
+
+Use these accounts to explore admin dashboards, review submissions, and 3D map features.
+
+--------------------------------------------------------------------
+
+## Design Philosophy
+
+* Immersive Interaction – 3D replaces static tables
+* Immediate Intelligence – Reviews trigger AI insights
+* Scalable Performance – Instanced rendering
+* Clean UI – Minimalist TailwindCSS design
+
+--------------------------------------------------------------------
+
+## Summary
+
+LotMatch transforms traditional real estate data into a living, intelligent, and interactive visualization system by merging:
+
+* AI-powered analytics
+* Immersive 3D exploration
+* Real-time forecasting dashboards
+
+LotMatch turns raw property data into actionable insight.
