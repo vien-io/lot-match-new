@@ -125,6 +125,7 @@ export function initClickHandler({
                         if (data.error) {
                             console.error("Backend error:", data.error);
                         } else {
+                            console.log("showBlockDetails contains: ", data);
                             showBlockDetails(data);
                             fetchForecast(blockId);
                         }

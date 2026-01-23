@@ -247,10 +247,12 @@ class ReviewController extends Controller
         $block->load('reviews.user');
 
         $reviewsMapped = $block->reviews->map(function ($review) {
+            $user = $review->user;
+            $username = $user ? trim($user->first_name . ' ' . $user->last_name) : 'Unknown Person';
             return [
                 'id' => $review->id,
                 'user_id' => $review->user_id,
-                'user_name' => $review->user->name ?? 'Unknown', 
+                'user_name' => $username, 
                 'role' => $review->user->role ?? 'buyer',
                 'rating' => $review->rating,
                 'comment' => $review->comment,
