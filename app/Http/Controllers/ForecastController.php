@@ -136,15 +136,20 @@ class ForecastController extends Controller
     public function getBlockSentimentTrends($blockId)
     {
         $results = DB::table('reviews')
-        ->selectRaw('
-            DATE_FORMAT(created_at, "%Y-%m") as month,
-            sentiment,
-            COUNT(*) as count
-        ')
+        ->select(
+            DB::raw('EXTRACT(YEAR FROM created_at) AS year'),
+            DB::raw('EXTRACT(MONTH FROM created_at) AS month'),
+            'sentiment',
+            DB::raw('COUNT(*) as count')
+        )
         ->where('block_id', $blockId)
-        ->groupBy('month', 'sentiment')
+        ->groupBy('year', 'month', 'sentiment')
         ->orderBy('month')
-        ->get();
+        ->get()
+        ->map(function ($item) {
+            $item->month = sprintf('%04d-%02d', $item->year, $item->month);
+            return $item;
+        });
 
         $sentimentByMonth = [];
 
@@ -165,15 +170,20 @@ class ForecastController extends Controller
     public function fetchSentimentTrends($blockId)
     {
         $results = DB::table('reviews')
-            ->selectRaw('
-                DATE_FORMAT(created_at, "%Y-%m") as month,
-                sentiment,
-                COUNT(*) as count
-            ')
+            ->select(
+                DB::raw('EXTRACT(YEAR FROM created_at) AS year'),
+                DB::raw('EXTRACT(MONTH FROM created_at) AS month'),
+                'sentiment',
+                DB::raw('COUNT(*) as count')
+            )
             ->where('block_id', $blockId)
-            ->groupBy('month', 'sentiment')
+            ->groupBy('year', 'month', 'sentiment')
             ->orderBy('month')
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                $item->month = sprintf('%04d-%02d', $item->year, $item->month);
+                return $item;
+            }); 
 
         $sentimentByMonth = [];
 

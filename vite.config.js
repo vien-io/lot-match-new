@@ -17,6 +17,7 @@ export default defineConfig({
                 'resources/js/signup.js',
                 'resources/css/app.css',
                 'resources/sass/app.scss',
+                'resources/css/print.css'
             ],
             refresh: true,
         }),

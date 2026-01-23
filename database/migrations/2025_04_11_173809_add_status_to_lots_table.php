@@ -14,7 +14,7 @@ class AddStatusToLotsTable extends Migration
     public function up()
     {
         Schema::table('lots', function (Blueprint $table) {
-            $table->enum('status', ['available', 'reserved'])->default('available');
+            $table->enum('status', ['available', 'sold'])->default('available');
         });
     }
 

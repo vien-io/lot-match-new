@@ -23,6 +23,10 @@ if [ "$RUN_DB_MIGRATIONS" = "true" ]; then
     php artisan db:seed --class=ReviewsTableSeeder --force
     echo "ReviewsTableSeeder finished!"
 
+    echo "Seeding UpdateSoldLotsSeeder..."
+    php artisan db:seed --class=UpdateSoldLotsSeeder --force
+    echo "UpdateSoldLotsSeeder finished!"
+    
 else
     echo "Skipping DB migrations and seeders"
 fi

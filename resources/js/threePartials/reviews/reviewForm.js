@@ -112,7 +112,7 @@ export function bindFormHandler(block) {
             }
 
             if (res.ok) {
-                console.log("data:", data);
+                // console.log("data:", data);
                 const blockId = data.block?.id || data.review?.block_id;
                 if (!blockId) return;
 
@@ -132,7 +132,7 @@ export function bindFormHandler(block) {
                 }
                 
                 blockData.lots = Array.isArray(blockData.lots) ? blockData.lots : cachedLots;
-                console.log('block AFTER submit fetch:', structuredClone(blockData));
+                // console.log('block AFTER submit fetch:', structuredClone(blockData));
 
                 // --- mark new review as temporary
 

@@ -59,6 +59,10 @@ export function updateForecastTimestamp(forecastUpdatedAt = null) {
         const diffSec = Math.floor(diffMs / 1000);
         let display = '';
 
+        if (diffSec < 0) {
+            timestampEl.textContent = 'Just updated';
+            return;
+        }
         if (diffSec < 60) display = `Updated ${diffSec}s ago`;
         else if (diffSec < 3600) display = `${Math.floor(diffSec / 60)}m ago`;
         else if (diffSec < 7200) display = `${Math.floor(diffSec / 3600)}h ago`;
