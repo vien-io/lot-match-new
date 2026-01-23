@@ -27,9 +27,11 @@ else
     echo "Skipping DB migrations and seeders"
 fi
 
-
 # Clear cached config 
 rm -f bootstrap/cache/config.php
+
+echo "Starting Laravel queue worker in background..."
+php artisan queue:work --sleep=3 --tries=3 &
 
 echo "Starting Apache in foreground..."
 apache2-foreground

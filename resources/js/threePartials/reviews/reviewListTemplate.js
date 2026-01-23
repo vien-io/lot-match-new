@@ -65,7 +65,7 @@ export function reviewListTemplate(block) {
                     ? block.lots.some(lot => lot.owner_id === review.user_id)
                     : false;
 
-                console.log('Review: ', review);
+                // console.log('Review: ', review);
 
                 if (review.role === 'owner' && ownsBlock) {
                     ownerTag = `<span class="owner-tag tw-inline-block tw-text-green-900 tw-bg-green-200 tw-rounded tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2"
