@@ -72,6 +72,11 @@
                     <h3 class="tw-text-[#717171] tw-font-semibold">
                         Forecasting Data
                         <span id="forecast-timestamp" class="tw-ml-2 tw-text-sm tw-text-green-400"></span>
+                        {{-- <span 
+                            id="forecast-timestamp" 
+                            class="tw-ml-2 tw-text-sm tw-text-green-400"
+                            data-updated-at="{{ $forecast->updated_at ? $forecast->updated_at->timestamp * 1000 : '' }}">
+                        </span> --}}
                     </h3>
                     <div id="block-summary" class="tw-max-h-48 tw-overflow-y-auto tw-mt-2 custom-scrollbar"></div>
 

@@ -43,7 +43,7 @@ export function updateForecastTimestamp(forecastUpdatedAt = null) {
     if (forecastUpdatedAt) {
         timestampEl.dataset.updatedAt = new Date(forecastUpdatedAt).getTime();
     } else if (!timestampEl.dataset.updatedAt) {
-        timestampEl.dataset.updatedAt = Date.now();
+        timestampEl.dataset.updatedAt = timestampEl.dataset.updatedAt || Date.now();
     }
 
     if (forecastTimestampInterval) {

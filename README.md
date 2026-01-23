@@ -1,18 +1,19 @@
 # LotMatch – 3D Real Estate Analytics Platform
 
-LotMatch is a web-based real estate analytics and visualization system that combines immersive 3D exploration, AI-powered sentiment analysis, and forecasted property ratings. It is designed for property developers, researchers, and administrators who need actionable insights from subdivision data.
+LotMatch is a web-based real estate analytics and visualization system that combines immersive 3D exploration, AI-powered sentiment analysis, and forecasted property ratings. Designed for property developers, researchers, and administrators, it transforms raw subdivision data into actionable insights through interactive visualization, predictive analytics, and real-time AI feedback.
 
 --------------------------------------------------------------------
 
 ## Key Features
 
-* 3D Property Visualization using Three.js
-* User Reviews and AI Sentiment Analysis using NLP models
-* EMA-based Rating Forecasting for subdivision blocks
-* AI-Generated Block Summaries
-* Dynamic Charts and Analytics with Chart.js
-* Laravel + TailwindCSS full-stack architecture
-* Asynchronous Background Jobs for smooth performance
+* 3D Property Visualization – Explore lots and blocks with full interactivity using Three.js.
+* User Reviews & AI Sentiment Analysis – NLP models classify user comments as positive, neutral, or negative.
+* EMA-based Rating Forecasting – Smooth historical ratings to predict block performance trends.
+* AI-Generated Block Summaries – Dynamic summaries of user feedback for each subdivision block.
+* Dynamic Charts & Analytics – Trend lines and rating distributions rendered with Chart.js.
+* Laravel + TailwindCSS Full-Stack Architecture – Responsive UI with modular MVC design.
+* Asynchronous Background Jobs – Ensures smooth performance while processing AI sentiment and forecasts.
+* Real-Time Updates – Reviews trigger live updates to charts, summaries, and 3D modals.
 
 --------------------------------------------------------------------
 
@@ -62,6 +63,16 @@ LotMatch follows a modular MVC architecture enhanced with micro-interactions and
 4. `GenerateBlockSummaryJob` updates AI summary
 5. `ForecastController` recalculates EMA forecasts
 6. Frontend dynamically refreshes charts, summaries, and 3D modals
+
+--------------------------------------------------------------------
+
+## Algorithms Used
+
+1. Exponential Moving Average (EMA) – Smooths historical ratings to forecast trends.
+2. Sentiment Analysis – Classifies reviews as positive, neutral, or negative using NLP models.
+3. Data Aggregation – Consolidates ratings and sentiments into AI-generated block summaries.
+4. Predictive Visualization – Chart.js displays historical and forecasted trends.
+5. 3D Interaction Logic – Raycasting detects hover/click events to trigger modals and highlight lots/blocks.
 
 --------------------------------------------------------------------
 
@@ -140,15 +151,6 @@ composer.render();
 * Triggers AI jobs on submission
 * Polls backend for forecast completion
 * Refreshes summaries and charts dynamically
-
---------------------------------------------------------------------
-
-## Algorithms Used
-
-* Sentiment Analysis – NLP-based tone classification
-* Exponential Moving Average (EMA) – Rating trend forecasting
-* Data Aggregation – Combines sentiment and ratings
-* Predictive Visualization – Chart.js trend lines
 
 --------------------------------------------------------------------
 
