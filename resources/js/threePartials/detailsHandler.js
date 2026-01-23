@@ -18,7 +18,7 @@ export async function showLotDetails(lot) {
     const modalId = isSold ? "lot-sold-modal" : "lot-modal";
     const modal = document.getElementById(modalId);
 
-    console.log(lot.name, "Block:", lot.block_id, "Status:", lot.status);
+    // console.log(lot.name, "Block:", lot.block_id, "Status:", lot.status);
 
     if (!modal) {
         console.error(`Modal ${modalId} not found!`);
@@ -102,7 +102,7 @@ export async function showLotDetails(lot) {
 
 export function showBlockDetails(block) {
     window.currentBlockId = block.id;
-    console.log("showBlockDetails called with:", block);
+    // console.log("showBlockDetails called with:", block);
 
     const modal = document.getElementById("block-modal");
     const closeButton = modal.querySelector(".block-close");

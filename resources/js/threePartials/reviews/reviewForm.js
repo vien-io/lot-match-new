@@ -56,7 +56,7 @@ export function bindFormHandler(block) {
     reviewForm.addEventListener('submit', async function (e) {
         e.preventDefault();
 
-        console.log('Block BEFORE submit:', structuredClone(block));
+        // console.log('Block BEFORE submit:', structuredClone(block));
 
         const comment = document.getElementById('review-comment').value;
         const rating = ratingInput.value;
@@ -132,7 +132,7 @@ export function bindFormHandler(block) {
                 }
                 
                 blockData.lots = Array.isArray(blockData.lots) ? blockData.lots : cachedLots;
-                console.log('block AFTER submit fetch:', structuredClone(blockData));
+                // console.log('block AFTER submit fetch:', structuredClone(blockData));
 
                 // --- mark new review as temporary
 

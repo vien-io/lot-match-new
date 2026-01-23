@@ -22,6 +22,7 @@ use App\Http\Controllers\{
     DashboardController,
     DebugController,
     MapController,
+    OpenAITestController,
     OwnerVerificationController,
     SearchController,
     UserManagementController,
@@ -57,6 +58,14 @@ Auth::routes(['verify' => true]);
         }
     });
     Route::get('/debug-verification-link', [DebugController::class, 'verificationLink']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Test Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/test-openai', [OpenAITestController::class, 'test']);
+
 
 
 Route::get('/', function () {

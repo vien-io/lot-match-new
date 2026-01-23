@@ -3,7 +3,7 @@ export function reviewListTemplate(block) {
     const reviews = block.reviews ?? [];
     const showOwnerTags = window.showOwnerTags ?? false;
 
-    console.log(reviews);
+    // console.log(reviews);
 
     // --- SORT REVIEWS ---
     const sortedReviews = reviews.sort((a, b) => {
@@ -64,6 +64,8 @@ export function reviewListTemplate(block) {
                 const ownsBlock = Array.isArray(block?.lots)
                     ? block.lots.some(lot => lot.owner_id === review.user_id)
                     : false;
+
+                console.log('Review: ', review);
 
                 if (review.role === 'owner' && ownsBlock) {
                     ownerTag = `<span class="owner-tag tw-inline-block tw-text-green-900 tw-bg-green-200 tw-rounded tw-px-2 tw-py-0.5 tw-text-xs tw-ml-2"
