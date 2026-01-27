@@ -30,6 +30,7 @@ use App\Http\Controllers\{
 };
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Middleware\CheckRole;
+use App\Models\Block;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -58,6 +59,9 @@ Auth::routes(['verify' => true]);
         }
     });
     Route::get('/debug-verification-link', [DebugController::class, 'verificationLink']);
+    Route::get('/debug/blocks', function () {
+        return Block::all();
+    })->middleware('auth.basic');
 
     /*
     |--------------------------------------------------------------------------
