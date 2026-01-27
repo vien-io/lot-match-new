@@ -17,7 +17,7 @@ export async function pollForecastStatus(blockId, maxAttempts = 20, delay = 2000
                 if (data.status === 'done') {
                     console.log(`✅ Forecast job for block ${blockId} completed on attempt ${attempt + 1}`);
                     loadBlockSummary(blockId);
-                    updateForecastTimestamp(data.forecast_updated_at);
+                    // updateForecastTimestamp(data.forecast_updated_at);
                     addNotification(`Forecast for Block ${blockId} completed successfully.`);
                     return true;
                 }
@@ -42,8 +42,9 @@ export function updateForecastTimestamp(forecastUpdatedAt = null) {
 
     if (forecastUpdatedAt) {
         timestampEl.dataset.updatedAt = new Date(forecastUpdatedAt).getTime();
-    } else if (!timestampEl.dataset.updatedAt) {
-        timestampEl.dataset.updatedAt = timestampEl.dataset.updatedAt || Date.now();
+        console.log("forecastUpdatedAt is populated", forecastUpdatedAt, timestampEl.dataset.updatedAt);
+    } else {
+        console.log("no forecastUpdatedAt!");
     }
 
     if (forecastTimestampInterval) {
@@ -63,10 +64,14 @@ export function updateForecastTimestamp(forecastUpdatedAt = null) {
             timestampEl.textContent = 'Just updated';
             return;
         }
+
         if (diffSec < 60) display = `Updated ${diffSec}s ago`;
         else if (diffSec < 3600) display = `${Math.floor(diffSec / 60)}m ago`;
         else if (diffSec < 7200) display = `${Math.floor(diffSec / 3600)}h ago`;
-        else display = '';
+        else {
+            display = `Updated ${Math.floor(diffSec / 86400)}d ago`;
+            console.log('else branch triggered', { diffSec, display });
+        }
 
         timestampEl.textContent = display;
         timestampEl.style.color = (diffSec >= 300) ? 'gray' : '';
@@ -82,9 +87,4 @@ export function updateForecastTimestamp(forecastUpdatedAt = null) {
     }, 10000);
 }
 
-// Optional: update on DOM load
-if (document.readyState === "loading") {
-    window.addEventListener("DOMContentLoaded", updateForecastTimestamp);
-} else {
-    updateForecastTimestamp();
-}
+

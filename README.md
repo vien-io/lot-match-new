@@ -4,6 +4,23 @@ LotMatch is a web-based real estate analytics and visualization system that comb
 
 --------------------------------------------------------------------
 
+## Demo Accounts
+
+LotMatch comes with pre-seeded users for testing:
+
+| Username | Role  | Email                  | Password    |
+|----------|-------|------------------------|-------------|
+| admin    | admin | admin@example.com      | Password123 |
+| buyer    | buyer | buyer@example.com      | Password123 |
+| owner1   | owner | owner1@example.com     | Password123 |
+| owner2   | owner | owner2@example.com     | Password123 |
+| owner3   | owner | owner3@example.com     | Password123 |
+| owner4   | owner | owner4@example.com     | Password123 |
+
+Use these accounts to explore admin dashboards, review submissions, and 3D map features.
+
+--------------------------------------------------------------------
+
 ## Key Features
 
 * 3D Property Visualization – Explore lots and blocks with full interactivity using Three.js.
@@ -164,23 +181,6 @@ composer.render();
 4. Block summary is regenerated
 5. EMA forecast is recalculated
 6. UI updates charts, summaries, and 3D views
-
---------------------------------------------------------------------
-
-## Demo Accounts
-
-LotMatch comes with pre-seeded users for testing:
-
-| Username | Role  | Email                  | Password    |
-|----------|-------|------------------------|-------------|
-| admin    | admin | admin@example.com      | Password123 |
-| buyer    | buyer | buyer@example.com      | Password123 |
-| owner1   | owner | owner1@example.com     | Password123 |
-| owner2   | owner | owner2@example.com     | Password123 |
-| owner3   | owner | owner3@example.com     | Password123 |
-| owner4   | owner | owner4@example.com     | Password123 |
-
-Use these accounts to explore admin dashboards, review submissions, and 3D map features.
 
 --------------------------------------------------------------------
 

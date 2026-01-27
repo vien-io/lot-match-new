@@ -1,28 +1,11 @@
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 import 'chartjs-adapter-date-fns';
-import { updateForecastTimestamp } from './reviews/forecast.js';
 
 let forecastChart = null;
 
 export function fetchForecast(blockId) {
     const isAdmin = document.body.getAttribute('data-is-admin') === '1';
-/*     if (!isAdmin) {
-        console.log("User is not an admin");
-        return;
-    } */
-
-
-    /* fetch(`/forecast/data/${blockId}`)
-        .then(response => response.json())
-        .then(data => {
-            renderForecast(data)
-            updateForecastTimestamp(data.forecast_updated_at);
-        })
-        .catch(error => {
-            console.error('Error fetching forecast:', error);
-            document.getElementById('forecasting-data').innerHTML = `<p>Error loading forecast.</p>`;
-        }); */
 
     fetch(`/forecast/block/${blockId}`)
     .then(response => response.json())

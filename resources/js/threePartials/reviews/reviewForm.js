@@ -1,4 +1,4 @@
-import { pollForecastStatus, updateForecastTimestamp } from './forecast.js';
+import { pollForecastStatus } from './forecast.js';
 import { renderReviewSection } from '../reviewHandler';
 import { fetchForecast } from '../forecastHandler';
 

@@ -223,7 +223,7 @@ class ForecastController extends Controller
             'detailed_report' => $block->full_forecast_report,
             'forecast' => $block->forecasted_rating,
             'sentiment' => json_decode($block->sentiment_data, true) ?? [],
-            'forecast_updated_at' => $block->forecast_updated_at,
+            'forecast_updated_at' => $block->forecast_updated_at?->toISOString(),
         ]);
         
     }

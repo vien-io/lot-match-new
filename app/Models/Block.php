@@ -22,6 +22,10 @@ class Block extends Model
         'forecast_updated_at',
         'forecast_status',
     ]; 
+
+    protected $casts = [
+        'forecast_updated_at' => 'datetime',
+    ];
     
     // Block has many lots
     public function lots()
