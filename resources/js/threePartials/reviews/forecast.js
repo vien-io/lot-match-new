@@ -42,7 +42,6 @@ export function updateForecastTimestamp(forecastUpdatedAt = null) {
 
     if (forecastUpdatedAt) {
         timestampEl.dataset.updatedAt = new Date(forecastUpdatedAt).getTime();
-        console.log("forecastUpdatedAt is populated", forecastUpdatedAt, timestampEl.dataset.updatedAt);
     } else {
         console.log("no forecastUpdatedAt!");
     }
@@ -68,10 +67,7 @@ export function updateForecastTimestamp(forecastUpdatedAt = null) {
         if (diffSec < 60) display = `Updated ${diffSec}s ago`;
         else if (diffSec < 3600) display = `${Math.floor(diffSec / 60)}m ago`;
         else if (diffSec < 7200) display = `${Math.floor(diffSec / 3600)}h ago`;
-        else {
-            display = `Updated ${Math.floor(diffSec / 86400)}d ago`;
-            console.log('else branch triggered', { diffSec, display });
-        }
+        else display = `Updated ${Math.floor(diffSec / 86400)}d ago`;
 
         timestampEl.textContent = display;
         timestampEl.style.color = (diffSec >= 300) ? 'gray' : '';

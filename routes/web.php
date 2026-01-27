@@ -44,24 +44,29 @@ Auth::routes(['verify' => true]);
 | Public Routes
 |--------------------------------------------------------------------------
 */
-    /*
-    |--------------------------------------------------------------------------
-    | For Render Debugging
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/check-db', function() {
-        try {
-            $driver = DB::connection()->getPDO()->getAttribute(PDO::ATTR_DRIVER_NAME);
-            $version = DB::select('SELECT version() AS version')[0]->version;
-            return "Connected to database: $driver, version: $version";
-        } catch (\Exception $e) {
-            return "Database connection error: " . $e->getMessage();
-        }
-    });
-    Route::get('/debug-verification-link', [DebugController::class, 'verificationLink']);
-    Route::get('/debug/blocks', function () {
-        return Block::all();
-    })->middleware('auth.basic');
+    if (config('app.render')) {
+        /*
+        |--------------------------------------------------------------------------
+        | For Render Debugging
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/check-db', function() {
+            try {
+                $driver = DB::connection()->getPDO()->getAttribute(PDO::ATTR_DRIVER_NAME);
+                $version = DB::select('SELECT version() AS version')[0]->version;
+                return "Connected to database: $driver, version: $version";
+            } catch (\Exception $e) {
+                return "Database connection error: " . $e->getMessage();
+            }
+        });
+        Route::get('/debug-verification-link', [DebugController::class, 'verificationLink']);
+        Route::get('/debug/blocks', function () {
+            return Block::all();
+        })->middleware('auth.basic');
+        Route::get('/debug/users', function() {
+            return User::all();
+        })->middleware('auth.basic');
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -69,6 +74,8 @@ Auth::routes(['verify' => true]);
     |--------------------------------------------------------------------------
     */
     Route::get('/test-openai', [OpenAITestController::class, 'test']);
+  
+    
 
 
 

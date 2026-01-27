@@ -1,8 +1,14 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verified Successfully</title>
 
-@section('title', 'Email Verified Successfully')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body>
 
-@section('content')
 <div class="tw-bg-gradient-to-br tw-from-green-50 tw-to-white tw-min-h-screen tw-flex tw-items-center tw-justify-center">
 
   <div class="tw-bg-white tw-rounded-2xl tw-shadow-lg tw-px-10 tw-py-12 tw-text-center tw-max-w-md tw-border tw-border-gray-100 tw-transition-all tw-duration-300 hover:tw-shadow-xl">
@@ -15,13 +21,11 @@
       </svg>
     </div>
 
-    {{-- Title & Message --}}
     <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800">Email Verified!</h1>
     <p class="tw-text-gray-600 tw-mt-3">
       Your email has been successfully verified. You can now explore all features of your account.
     </p>
 
-    {{-- Button --}}
     <a href="/dashboard"
        class="tw-inline-block tw-mt-8 tw-bg-green-500 tw-text-white tw-px-8 tw-py-2.5 tw-rounded-full tw-font-semibold tw-transition-all tw-duration-300 hover:tw-bg-green-600 hover:tw-scale-105">
        Go to Dashboard
@@ -29,4 +33,6 @@
 
   </div>
 </div>
-@endsection
+
+</body>
+</html>

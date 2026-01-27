@@ -40,19 +40,13 @@
                 Verify Email (Demo)
             </a>
         @else
-            {{-- Local Instructions --}}
-            {{-- <p class="mt-4 text-gray-600">
-                If you’re running locally, the verification email is logged in <code>storage/logs/laravel.log</code>.
-                Open it and copy the link to verify your account.
-            </p> --}}
-        {{-- Resend Form --}}
-        <form method="POST" action="{{ route('verification.send') }}" class="mt-8">
-            @csrf
-            <button type="submit"
-                class="bg-blue-500 text-white px-8 py-2.5 rounded-full font-semibold transition-all duration-300 hover:bg-blue-600 hover:scale-105">
-                Resend Verification Email
-            </button>
-        </form>
+            <form method="POST" action="{{ route('verification.send') }}" class="mt-8">
+                @csrf
+                <button type="submit"
+                    class="bg-blue-500 text-white px-8 py-2.5 rounded-full font-semibold transition-all duration-300 hover:bg-blue-600 hover:scale-105">
+                    Resend Verification Email
+                </button>
+            </form>
         @endif
 
         {{-- Logout --}}

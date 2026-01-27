@@ -93,6 +93,61 @@
         </div>
     </div>
 
+    <!-- Right side (Render Demo / Accounts) -->
+    @if (config('app.render'))
+        <div class="tw-absolute tw-top-3 tw-right-3 tw-w-full lg:tw-w-1/5 tw-bg-white tw-rounded-2xl tw-shadow-lg tw-p-6 ">
+            <h3 class="tw-text-xl tw-font-bold tw-mb-2 tw-text-center tw-text-green-600">Render Demo Accounts</h3>
+            <p class="tw-text-gray-600 tw-text-center tw-text-sm mb-4">
+                Use one of these accounts to log in during demo
+            </p>
+
+            <div class="tw-overflow-x-auto">
+                <table class="tw-w-full tw-table-auto tw-text-sm tw-border-collapse">
+                    <thead>
+                        <tr class="tw-bg-green-100 tw-text-green-800">
+                            <th class="tw-px-3 tw-py-2 tw-text-left tw-font-semibold">Username</th>
+                            <th class="tw-px-3 tw-py-2 tw-text-left tw-font-semibold">Role</th>
+                            <th class="tw-px-3 tw-py-2 tw-text-left tw-font-semibold">Password</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tw-text-gray-700">
+                        <tr class="tw-border-b hover:tw-bg-gray-50 tw-cursor-pointer" onclick="fillDemo('admin@example.com', 'Password123')">
+                            <td class="tw-px-3 tw-py-2">admin</td>
+                            <td class="tw-px-3 tw-py-2">admin</td>
+                            <td class="tw-px-3 tw-py-2">Password123</td>
+                        </tr>
+                        <tr class="tw-border-b hover:tw-bg-gray-50 tw-cursor-pointer" onclick="fillDemo('buyer@example.com', 'Password123')">
+                            <td class="tw-px-3 tw-py-2">buyer</td>
+                            <td class="tw-px-3 tw-py-2">buyer</td>
+                            <td class="tw-px-3 tw-py-2">Password123</td>
+                        </tr>
+                        <tr class="tw-border-b hover:tw-bg-gray-50 tw-cursor-pointer" onclick="fillDemo('owner1@example.com', 'Password123')">
+                            <td class="tw-px-3 tw-py-2">owner1</td>
+                            <td class="tw-px-3 tw-py-2">owner</td>
+                            <td class="tw-px-3 tw-py-2">Password123</td>
+                        </tr>
+                        <tr class="tw-border-b hover:tw-bg-gray-50 tw-cursor-pointer" onclick="fillDemo('owner2@example.com', 'Password123')">
+                            <td class="tw-px-3 tw-py-2">owner2</td>
+                            <td class="tw-px-3 tw-py-2">owner</td>
+                            <td class="tw-px-3 tw-py-2">Password123</td>
+                        </tr>
+                        <tr class="tw-border-b hover:tw-bg-gray-50 tw-cursor-pointer" onclick="fillDemo('owner3@example.com', 'Password123')">
+                            <td class="tw-px-3 tw-py-2">owner3</td>
+                            <td class="tw-px-3 tw-py-2">owner</td>
+                            <td class="tw-px-3 tw-py-2">Password123</td>
+                        </tr>
+                        <tr class="hover:tw-bg-gray-50 tw-cursor-pointer" onclick="fillDemo('owner4@example.com', 'Password123')">
+                            <td class="tw-px-3 tw-py-2">owner4</td>
+                            <td class="tw-px-3 tw-py-2">owner</td>
+                            <td class="tw-px-3 tw-py-2">Password123</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endif
+
+
     {{-- Font Awesome for icons --}}
     <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
 </body>
