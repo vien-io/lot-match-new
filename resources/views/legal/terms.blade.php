@@ -1,67 +1,133 @@
-<div class="tw-space-y-6 tw-text-gray-700">
-    <h1 class="tw-text-3xl tw-font-bold tw-text-purple-600 tw-flex tw-items-center tw-gap-2">
-        📜 LotMatch Terms of Service (TOS)
-    </h1>
+<div class="tw-space-y-6 tw-text-sm tw-leading-7 tw-text-[#666666]">
 
-    <p class="tw-text-sm tw-text-gray-500">
-        <strong>Effective Date:</strong> November 2025 <br>
-        <strong>Last Updated:</strong> November 2025
-    </p>
+    <!-- Document Introduction -->
+    <div class="tw-space-y-3">
+        <h1 class="tw-text-xl tw-font-semibold tw-tracking-tight tw-text-[#111111]">
+            Terms of Service
+        </h1>
 
-    <p>
-        Welcome to <strong>LotMatch</strong> — a web-based real estate analytics and visualization platform.
-        By accessing or using LotMatch, you agree to comply with and be bound by these Terms of Service (“Terms”).
-        Please read them carefully before using the platform.
-    </p>
+        <div class="tw-flex tw-flex-wrap tw-gap-x-6 tw-gap-y-1 tw-border-b tw-border-[#C4C4C4]/70 tw-pb-4 tw-text-xs tw-text-[#666666]">
+            <p>
+                <span class="tw-font-medium tw-text-[#111111]">Effective date:</span>
+                November 2025
+            </p>
 
-    <h2 class="tw-text-2xl tw-font-semibold tw-text-purple-600">1. Acceptance of Terms</h2>
+            <p>
+                <span class="tw-font-medium tw-text-[#111111]">Last updated:</span>
+                November 2025
+            </p>
+        </div>
 
-    <ul class="tw-list-disc tw-pl-6 tw-space-y-2">
-        <li>By registering, accessing, or using LotMatch, you confirm that you have read, understood, and agreed to these Terms.</li>
-        <li>You are at least 18 years old or have the legal capacity to enter into this agreement.</li>
-        <li>You consent to the collection and processing of your data as described in our Privacy Policy.</li>
-    </ul>
+        <p>
+            Welcome to <strong class="tw-font-semibold tw-text-[#111111]">LotMatch</strong> — a web-based real estate analytics and visualization platform. By accessing or using LotMatch, you agree to comply with and be bound by these Terms of Service (“Terms”). Please read them carefully before using the platform.
+        </p>
+    </div>
 
-    <h2 class="tw-text-2xl tw-font-semibold tw-text-purple-600">2. Description of Service</h2>
+    <!-- 01: Acceptance of Terms -->
+    <section class="tw-space-y-3">
+        <h2 class="tw-border-b tw-border-[#C4C4C4]/60 tw-pb-2 tw-text-base tw-font-semibold tw-text-[#111111]">
+            <span class="tw-mr-2 tw-font-medium tw-text-[#06A987]">01</span>
+            Acceptance of Terms
+        </h2>
 
-    <p>
-        LotMatch provides users with 3D real estate visualization, property insights, and AI-powered analytics.
-        The service may include data visualizations, review systems, and predictive analytics features that evolve over time.
-    </p>
+        <ul class="tw-list-disc tw-space-y-2 tw-pl-5">
+            <li>
+                By registering, accessing, or using LotMatch, you confirm that you have read, understood, and agreed to these Terms.
+            </li>
+            <li>
+                You are at least 18 years old or have the legal capacity to enter into this agreement.
+            </li>
+            <li>
+                You consent to the collection and processing of your data as described in our Privacy Policy.
+            </li>
+        </ul>
+    </section>
 
-    <h2 class="tw-text-2xl tw-font-semibold tw-text-purple-600">3. User Responsibilities</h2>
+    <!-- 02: Description of Service -->
+    <section class="tw-space-y-3">
+        <h2 class="tw-border-b tw-border-[#C4C4C4]/60 tw-pb-2 tw-text-base tw-font-semibold tw-text-[#111111]">
+            <span class="tw-mr-2 tw-font-medium tw-text-[#06A987]">02</span>
+            Description of Service
+        </h2>
 
-    <ul class="tw-list-disc tw-pl-6 tw-space-y-2">
-        <li>You agree to provide accurate and up-to-date information during registration.</li>
-        <li>You are responsible for maintaining the confidentiality of your login credentials.</li>
-        <li>You will not use LotMatch for illegal activities, spam, or unauthorized data collection.</li>
-    </ul>
+        <p>
+            LotMatch provides users with 3D real estate visualization, property insights, and AI-powered analytics. The service may include data visualizations, review systems, and predictive analytics features that evolve over time.
+        </p>
+    </section>
 
-    <h2 class="tw-text-2xl tw-font-semibold tw-text-purple-600">4. Content Ownership</h2>
+    <!-- 03: User Responsibilities -->
+    <section class="tw-space-y-3">
+        <h2 class="tw-border-b tw-border-[#C4C4C4]/60 tw-pb-2 tw-text-base tw-font-semibold tw-text-[#111111]">
+            <span class="tw-mr-2 tw-font-medium tw-text-[#06A987]">03</span>
+            User Responsibilities
+        </h2>
 
-    <p>
-        Users retain ownership of their submitted reviews, comments, and media.
-        By posting content on LotMatch, you grant us a non-exclusive, royalty-free license to display and process that content for platform functionality and analytics.
-    </p>
+        <ul class="tw-list-disc tw-space-y-2 tw-pl-5">
+            <li>
+                You agree to provide accurate and up-to-date information during registration.
+            </li>
+            <li>
+                You are responsible for maintaining the confidentiality of your login credentials.
+            </li>
+            <li>
+                You will not use LotMatch for illegal activities, spam, or unauthorized data collection.
+            </li>
+        </ul>
+    </section>
 
-    <h2 class="tw-text-2xl tw-font-semibold tw-text-purple-600">5. Limitation of Liability</h2>
+    <!-- 04: Content Ownership -->
+    <section class="tw-space-y-3">
+        <h2 class="tw-border-b tw-border-[#C4C4C4]/60 tw-pb-2 tw-text-base tw-font-semibold tw-text-[#111111]">
+            <span class="tw-mr-2 tw-font-medium tw-text-[#06A987]">04</span>
+            Content Ownership
+        </h2>
 
-    <p>
-        LotMatch is provided on an “as-is” basis. We do not guarantee uninterrupted availability or accuracy of AI-generated insights. 
-        We are not liable for any indirect or consequential damages resulting from your use of the platform.
-    </p>
+        <p>
+            Users retain ownership of their submitted reviews, comments, and media. By posting content on LotMatch, you grant us a non-exclusive, royalty-free license to display and process that content for platform functionality and analytics.
+        </p>
+    </section>
 
-    <h2 class="tw-text-2xl tw-font-semibold tw-text-purple-600">6. Modifications</h2>
+    <!-- 05: Limitation of Liability -->
+    <section class="tw-space-y-3">
+        <h2 class="tw-border-b tw-border-[#C4C4C4]/60 tw-pb-2 tw-text-base tw-font-semibold tw-text-[#111111]">
+            <span class="tw-mr-2 tw-font-medium tw-text-[#06A987]">05</span>
+            Limitation of Liability
+        </h2>
 
-    <p>
-        We may update these Terms periodically. Continued use of LotMatch after updates constitutes your acceptance of the revised Terms.
-    </p>
+        <p>
+            LotMatch is provided on an “as-is” basis. We do not guarantee uninterrupted availability or accuracy of AI-generated insights. We are not liable for any indirect or consequential damages resulting from your use of the platform.
+        </p>
+    </section>
 
-    <h2 class="tw-text-2xl tw-font-semibold tw-text-purple-600">7. Contact</h2>
+    <!-- 06: Modifications -->
+    <section class="tw-space-y-3">
+        <h2 class="tw-border-b tw-border-[#C4C4C4]/60 tw-pb-2 tw-text-base tw-font-semibold tw-text-[#111111]">
+            <span class="tw-mr-2 tw-font-medium tw-text-[#06A987]">06</span>
+            Modifications
+        </h2>
 
-    <p>
-        For inquiries about these Terms, please contact us at:
-    </p>
+        <p>
+            We may update these Terms periodically. Continued use of LotMatch after updates constitutes your acceptance of the revised Terms.
+        </p>
+    </section>
 
-    <p class="tw-font-medium tw-text-purple-600">📧 lotmatchapp@gmail.com</p>
+    <!-- 07: Contact -->
+    <section class="tw-space-y-3">
+        <h2 class="tw-border-b tw-border-[#C4C4C4]/60 tw-pb-2 tw-text-base tw-font-semibold tw-text-[#111111]">
+            <span class="tw-mr-2 tw-font-medium tw-text-[#06A987]">07</span>
+            Contact
+        </h2>
+
+        <p>
+            For inquiries about these Terms, please contact us at:
+        </p>
+
+        <p>
+            <a href="mailto:lotmatchapp@gmail.com"
+               class="tw-font-medium tw-text-[#087F69] tw-underline tw-underline-offset-4 hover:tw-text-[#065F50] focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#06EBB6]">
+                lotmatchapp@gmail.com
+            </a>
+        </p>
+    </section>
+
 </div>

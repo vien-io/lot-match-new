@@ -4,7 +4,7 @@ import Alpine from 'alpinejs';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import './components/lotSelector.js';
 import './components/userLotForm.js';
-
+import './features/password-toggle.js';
 
 
 // ====================
