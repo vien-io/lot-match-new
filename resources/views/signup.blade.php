@@ -65,7 +65,7 @@
             @endif
 
             <!-- Registration Form -->
-            <form method="POST" action="{{ route('signup') }}" class="tw-space-y-5">
+            <form method="POST" action="{{ route('signup.submit') }}" class="tw-space-y-5">
                 @csrf
 
                 <!-- First Name and Last Name -->

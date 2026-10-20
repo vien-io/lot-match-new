@@ -10,8 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
-{
-    
+{   
     /**
      * Where to redirect users after registration.
      *
@@ -30,7 +29,7 @@ class RegisterController extends Controller
         return view('signup');
     }
 
- /**
+    /**
      * Handle user registration.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -54,7 +53,7 @@ class RegisterController extends Controller
 
         $user->sendEmailVerificationNotification();
         Auth::login($user);
-        // redirect user to login
+        
         return redirect()->route('dashboard')->with('success', 'Account created successfully! You may now sign in.');
     }
 }

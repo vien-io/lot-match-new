@@ -20,7 +20,6 @@
     <img src="{{ url('images/logoLM.png') }}" alt="..." class="lotmatch-logo">
     <div class="lotmatch-title">Welcome to LotMatch!</div>
 </div>
-
 ---
 
 # Verify Your Email Address

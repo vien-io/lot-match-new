@@ -1,38 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Verified Successfully</title>
+@extends('layouts.auth')
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body>
+@section('title', 'Email Verified')
 
-<div class="tw-bg-gradient-to-br tw-from-green-50 tw-to-white tw-min-h-screen tw-flex tw-items-center tw-justify-center">
+@section('content')
+<div class="tw-w-full tw-max-w-md tw-rounded-2xl tw-border tw-border-gray-200 tw-bg-white tw-p-8 tw-text-center tw-shadow-sm">
 
-  <div class="tw-bg-white tw-rounded-2xl tw-shadow-lg tw-px-10 tw-py-12 tw-text-center tw-max-w-md tw-border tw-border-gray-100 tw-transition-all tw-duration-300 hover:tw-shadow-xl">
-
-    {{-- Icon --}}
-    <div class="tw-bg-green-100 tw-rounded-full tw-p-4 tw-inline-flex tw-items-center tw-justify-center tw-mb-6">
-      <svg xmlns="http://www.w3.org/2000/svg" class="tw-h-12 tw-w-12 tw-text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9 12l2 2l4-4m5 2a9 9 0 11-18 0a9 9 0 0118 0z" />
-      </svg>
+    {{-- Success icon --}}
+    <div class="tw-mx-auto tw-mb-6 tw-flex tw-h-16 tw-w-16 tw-items-center tw-justify-center tw-rounded-full tw-bg-[#E6FBF4]">
+        <svg
+            class="tw-h-8 tw-w-8 tw-text-[#087F5B]"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 13l4 4L19 7"
+            />
+        </svg>
     </div>
 
-    <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800">Email Verified!</h1>
-    <p class="tw-text-gray-600 tw-mt-3">
-      Your email has been successfully verified. You can now explore all features of your account.
+    {{-- Success message --}}
+    <h1 class="tw-mb-3 tw-text-2xl tw-font-semibold tw-tracking-tight tw-text-[#111111]">
+        Email verified successfully
+    </h1>
+
+    <p class="tw-mb-6 tw-text-sm tw-leading-6 tw-text-[#666666]">
+        Your email is verified. Redirecting you to your dashboard...
     </p>
 
-    <a href="/dashboard"
-       class="tw-inline-block tw-mt-8 tw-bg-green-500 tw-text-white tw-px-8 tw-py-2.5 tw-rounded-full tw-font-semibold tw-transition-all tw-duration-300 hover:tw-bg-green-600 hover:tw-scale-105">
-       Go to Dashboard
+    {{-- Progress indicator --}}
+    <div class="tw-mb-4 tw-h-1 tw-overflow-hidden tw-rounded-full tw-bg-gray-100">
+        <div
+            id="redirect-progress"
+            class="tw-h-full tw-w-0 tw-rounded-full tw-bg-[#06EBB6]"
+            style="transition: width 3s linear;"
+        ></div>
+    </div>
+
+    <p class="tw-mb-5 tw-text-xs tw-text-[#666666]">
+        Redirecting in <span id="redirect-countdown">3</span> seconds
+    </p>
+
+    {{-- Manual fallback --}}
+    <a
+        href="{{ route('dashboard') }}"
+        class="tw-inline-flex tw-w-full tw-items-center tw-justify-center tw-rounded-xl tw-bg-[#06EBB6] tw-px-5 tw-py-3 tw-text-sm tw-font-semibold tw-text-[#06100D] tw-transition hover:tw-bg-[#1ED9D7] focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#06EBB6] focus:tw-ring-offset-2"
+    >
+        Continue to dashboard
     </a>
 
-  </div>
 </div>
 
-</body>
-</html>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const countdown = document.getElementById('redirect-countdown');
+        const progress = document.getElementById('redirect-progress');
+
+        let seconds = 3;
+
+        // Start the animation after the browser renders the initial width.
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                progress.style.width = '100%';
+            });
+        });
+
+        const timer = setInterval(function () {
+            seconds--;
+            countdown.textContent = seconds;
+
+            if (seconds <= 0) {
+                clearInterval(timer);
+                window.location.href = @json(route('dashboard'));
+            }
+        }, 1000);
+    });
+</script>
+@endsection
