@@ -1,0 +1,292 @@
+/* ========================================
+   LOTMATCH — SIDEBAR
+======================================== */
+
+.lm-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 80px;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    background: #06100D;
+    border-right: 1px solid #183129;
+    box-shadow: 4px 0 24px rgba(6, 16, 13, 0.08);
+    transition: box-shadow 250ms ease;
+    scrollbar-width: none;
+}
+
+.lm-sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+.lm-sidebar.lm-sidebar-scrolled {
+    box-shadow: 6px 0 28px rgba(6, 16, 13, 0.20);
+}
+
+.lm-sidebar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    transition:
+        background 220ms ease,
+        transform 220ms ease;
+}
+
+.lm-sidebar-logo:hover {
+    background: rgba(6, 235, 182, 0.07);
+    transform: translateY(-1px);
+}
+
+.lm-sidebar-logo img {
+    display: block;
+    object-fit: contain;
+}
+
+.lm-sidebar-divider {
+    flex-shrink: 0;
+    width: 42px;
+    height: 1px;
+    margin: 0 auto 22px;
+    background: rgba(196, 196, 196, 0.18);
+}
+
+.lm-sidebar-nav {
+    gap: 9px;
+    padding: 0 12px 20px;
+    box-sizing: border-box;
+}
+
+.lm-sidebar-section-divider {
+    flex-shrink: 0;
+    width: 34px;
+    height: 1px;
+    margin: 12px auto;
+    background: rgba(196, 196, 196, 0.16);
+}
+
+.lm-sidebar-lower-divider {
+    margin-top: auto;
+}
+
+/* Navigation links.
+   These rules assume the component forwards its `active`
+   classes to the rendered link element. */
+
+.lm-sidebar .lm-sidebar-link,
+.lm-sidebar .lm-sidebar-link-active {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 46px;
+    min-width: 48px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    color: #9AA9A3;
+    text-decoration: none;
+    transition:
+        color 200ms ease,
+        background 200ms ease,
+        border-color 200ms ease,
+        transform 200ms ease;
+}
+
+.lm-sidebar .lm-sidebar-link:hover {
+    color: #1ED9D7;
+    background: #102820;
+    border-color: rgba(30, 217, 215, 0.12);
+    transform: translateY(-1px);
+}
+
+.lm-sidebar .lm-sidebar-link-active {
+    color: #06EBB6;
+    background: #103027;
+    border-color: rgba(6, 235, 182, 0.13);
+}
+
+/* Slim active indicator */
+.lm-sidebar .lm-sidebar-link-active::before {
+    content: "";
+    position: absolute;
+    left: -13px;
+    top: 11px;
+    bottom: 11px;
+    width: 3px;
+    border-radius: 0 4px 4px 0;
+    background: #06EBB6;
+    box-shadow: 0 0 12px rgba(6, 235, 182, 0.20);
+}
+
+.lm-sidebar .lm-sidebar-link-active:hover {
+    color: #1ED9D7;
+    background: #14372D;
+}
+
+.lm-sidebar .lm-sidebar-link:focus-visible,
+.lm-sidebar .lm-sidebar-link-active:focus-visible {
+    outline: 2px solid #1ED9D7;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lm-sidebar,
+    .lm-sidebar-logo,
+    .lm-sidebar .lm-sidebar-link,
+    .lm-sidebar .lm-sidebar-link-active {
+        transition: none;
+    }
+
+    .lm-sidebar-logo:hover,
+    .lm-sidebar .lm-sidebar-link:hover {
+        transform: none;
+    }
+}
+
+
+.lm-app-content {
+    min-width: 0;
+    width: calc(100% - 80px);
+    margin-left: 80px;
+}
+
+@media (max-width: 640px) {
+    .lm-sidebar {
+        width: 68px;
+    }
+
+    .lm-app-content {
+        width: calc(100% - 68px);
+        margin-left: 68px;
+    }
+}
+
+
+
+/* ========================================
+   LOTMATCH — SIDEBAR HOVER
+======================================== */
+
+.lm-sidebar .lm-sidebar-link,
+.lm-sidebar .lm-sidebar-link-active {
+    overflow: visible;
+    transition:
+        color 220ms ease,
+        background 220ms ease,
+        border-color 220ms ease,
+        box-shadow 220ms ease,
+        transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.lm-sidebar .lm-sidebar-link i,
+.lm-sidebar .lm-sidebar-link-active i,
+.lm-sidebar .lm-sidebar-link svg,
+.lm-sidebar .lm-sidebar-link-active svg {
+    transition:
+        transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        filter 220ms ease,
+        color 220ms ease;
+}
+
+.lm-sidebar .lm-sidebar-link:hover {
+    color: #1ED9D7;
+    background: linear-gradient(
+        135deg,
+        rgba(30, 217, 215, 0.12),
+        rgba(6, 235, 182, 0.06)
+    );
+    border-color: rgba(30, 217, 215, 0.20);
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.12),
+        inset 0 0 12px rgba(30, 217, 215, 0.025);
+    transform: translateX(3px);
+}
+
+.lm-sidebar .lm-sidebar-link:hover i,
+.lm-sidebar .lm-sidebar-link:hover svg {
+    transform: scale(1.10);
+    filter: drop-shadow(0 0 5px rgba(30, 217, 215, 0.28));
+}
+
+.lm-sidebar .lm-sidebar-link-active {
+    box-shadow: inset 0 0 16px rgba(6, 235, 182, 0.035);
+}
+
+.lm-sidebar .lm-sidebar-link-active:hover {
+    color: #06EBB6;
+    background: linear-gradient(
+        135deg,
+        #163B30,
+        #103027
+    );
+    border-color: rgba(6, 235, 182, 0.28);
+    box-shadow:
+        0 4px 18px rgba(6, 235, 182, 0.08),
+        inset 0 0 14px rgba(6, 235, 182, 0.045);
+    transform: translateX(3px);
+}
+
+.lm-sidebar .lm-sidebar-link-active:hover i,
+.lm-sidebar .lm-sidebar-link-active:hover svg {
+    transform: scale(1.10);
+    filter: drop-shadow(0 0 6px rgba(6, 235, 182, 0.38));
+}
+
+.lm-sidebar-logo:hover {
+    background: rgba(6, 235, 182, 0.09);
+    box-shadow: 0 0 20px rgba(6, 235, 182, 0.07);
+}
+
+.lm-sidebar .lm-sidebar-link:focus-visible,
+.lm-sidebar .lm-sidebar-link-active:focus-visible {
+    outline: 2px solid #1ED9D7;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lm-sidebar .lm-sidebar-link,
+    .lm-sidebar .lm-sidebar-link-active,
+    .lm-sidebar .lm-sidebar-link i,
+    .lm-sidebar .lm-sidebar-link-active i,
+    .lm-sidebar .lm-sidebar-link svg,
+    .lm-sidebar .lm-sidebar-link-active svg,
+    .lm-sidebar-logo {
+        transition: none;
+    }
+
+    .lm-sidebar .lm-sidebar-link:hover,
+    .lm-sidebar .lm-sidebar-link-active:hover,
+    .lm-sidebar-logo:hover {
+        transform: none;
+    }
+}
+
+
+
+.lm-dashboard {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+

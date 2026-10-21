@@ -151,13 +151,13 @@
         </div>
 
         <aside class="lm-side-column">
-            {{-- Existing interactive 3D map --}}
+            {{-- 3D Model --}}
             <section class="lm-panel lm-map-panel">
                 <div class="lm-panel-header">
                     <div>
-                        <h2 class="lm-panel-title">Lot overview</h2>
+                        <h2 class="lm-panel-title">Lot Preview</h2>
                         <p class="lm-panel-description">
-                            Explore the interactive lot map.
+                            Rotate the model as you like
                         </p>
                     </div>
                 </div>
@@ -172,7 +172,7 @@
 
                 <div class="lm-map-caption">
                     <span class="lm-status-dot"></span>
-                    Interactive 3D map
+                    3d Model of the House
                 </div>
             </section>
         </aside>

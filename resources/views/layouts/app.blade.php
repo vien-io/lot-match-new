@@ -21,143 +21,156 @@
         'resources/sass/app.scss', 
         'resources/js/app.js',
         'resources/js/settings.js',
-        'resources/css/dashboard.css'
+        'resources/css/dashboard.css',
+        'resources/css/sidebar.css'
     ])
-
-
-
-    
 </head>
 <body class="tw-bg-gray-50">
     <div id="app" class="tw-flex">
-    
         {{-- Sidebar --}}
         @auth
-        <div 
+        <aside
             x-data="{ scrolled: false }"
             x-init="window.addEventListener('scroll', () => scrolled = window.scrollY > 10)"
-            :class="scrolled ? 'tw-shadow-md' : 'tw-shadow-none'"
-            class="sidebar tw-bg-white tw-shadow-lg tw-w-20 tw-flex tw-flex-col tw-items-center tw-py-6 tw-sticky tw-top-0 tw-h-screen tw-transition-shadow tw-duration-300 tw-z-50"
+            :class="scrolled ? 'lm-sidebar-scrolled' : ''"
+            class="sidebar lm-sidebar tw-flex tw-flex-col tw-items-center tw-py-6 tw-z-50"
+            aria-label="Main navigation"
         >
-
             {{-- Logo --}}
-            <div class="tw-mb-3 tw-mt-0">
-                <img src="/images/logoLM.png" alt="LotM" class="tw-w-12 tw-h-12">
-            </div>
+            <a href="{{ route('dashboard') }}"
+            class="lm-sidebar-logo tw-mb-5"
+            aria-label="LotMatch dashboard">
+                <img src="{{ asset('images/logoLM.png') }}"
+                    alt="LotMatch"
+                    class="tw-w-12 tw-h-12">
+            </a>
 
             {{-- Divider --}}
-            <div 
-                :class="scrolled 
-                    ? 'tw-w-14 tw-opacity-100' 
-                    : 'tw-w-0 tw-opacity-0'"
-                class="tw-border-t tw-border-gray-300 tw-mx-auto tw-mb-4 tw-transition-all tw-duration-700 tw-ease-in-out">
-            </div>
+            <div class="lm-sidebar-divider"></div>
 
-            {{-- Dashboard --}}
-            <x-sidebar-icon 
-                href="{{ route('dashboard') }}"
-                icon="fas fa-home"
-                tooltip="Dashboard"
-                :active="request()->routeIs('dashboard') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-            />
+            {{-- Main navigation --}}
+            <nav class="lm-sidebar-nav tw-flex tw-flex-col tw-items-center tw-w-full"
+                aria-label="Primary navigation">
 
-            {{-- 3D Map --}}
-            <x-sidebar-icon 
-                href="{{ route('3dmap') }}"
-                icon="fas fa-map"
-                tooltip="3D Map"
-                :active="request()->routeIs('3dmap') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-            />
-
-            {{-- Reviews & Ratings --}}
-            <x-sidebar-icon 
-                href="{{ route('reviews.index') }}"
-                icon="fas fa-star"
-                tooltip="Reviews & Ratings"
-                :active="request()->routeIs('reviews*') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-            />
-
-            {{-- AI Summary & Forecasting --}}
-            <x-sidebar-icon 
-                href="{{ route('forecast') }}"
-                icon="fas fa-robot"
-                tooltip="AI Summary & Forecasting"
-                :active="request()->routeIs('forecast') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-            />
-
-            {{-- Role-specific --}}
-            @if(auth()->user()->role === 'admin')
-                {{-- Property Management --}}
-                <x-sidebar-icon 
-                    href="{{ route('properties.index') }}" 
-                    icon="fas fa-vihara" 
-                    tooltip="Property Management"
-                    :active="request()->routeIs('properties.*') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-                />
-
-                {{-- Data Analytics --}}
-                <x-sidebar-icon 
-                    href="{{ route('analytics.block_ratings') }}" 
-                    icon="fas fa-chart-line" 
-                    tooltip="Data Analytics"
-                    :active="request()->routeIs('analytics.block_ratings') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-                />
-
-                {{-- User Management --}}
-                <x-sidebar-icon 
-                    href="{{ route('usermanagement.index') }}"
-                    icon="fas fa-users" 
-                    tooltip="User Management"
-                    :active="request()->routeIs('usermanagement.index') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-                />
-
-                {{-- Owner Verification Requests --}}
                 <x-sidebar-icon
-                    href="{{ route('owner-verification.index') }}"
-                    icon="fas fa-clipboard-list"
-                    tooltip="Owner Requests"
-                    :active="request()->routeIs('owner-verification.index') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+                    href="{{ route('dashboard') }}"
+                    icon="fas fa-home"
+                    tooltip="Dashboard"
+                    :active="request()->routeIs('dashboard')
+                        ? 'lm-sidebar-link-active'
+                        : 'lm-sidebar-link'"
                 />
 
-                {{-- Activity Logs --}}
-                <x-sidebar-icon 
-                    href="{{ route('activity-logs.index') }}" 
-                    icon="fas fa-list-alt" 
-                    tooltip="Activity Logs"
-                    :active="request()->routeIs('activity-logs.index') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-                />
-
-            @endif
-
-            @if(auth()->user()->role === 'buyer')
-                {{-- Request Ownership --}}
                 <x-sidebar-icon
-                    href="{{ route('owner-verification.create') }}"
-                    icon="fas fa-file-upload"
-                    tooltip="Request Ownership"
-                    :active="request()->routeIs('owner-verification.create') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
+                    href="{{ route('3dmap') }}"
+                    icon="fas fa-map"
+                    tooltip="3D Map"
+                    :active="request()->routeIs('3dmap')
+                        ? 'lm-sidebar-link-active'
+                        : 'lm-sidebar-link'"
                 />
-            @endif
 
-            @if(auth()->user()->role === 'owner')
-                {{-- Owners do not manage properties globally, only their assigned ones --}}
-                {{-- We can add owner-specific property management here --}}
-            @endif
+                <x-sidebar-icon
+                    href="{{ route('reviews.index') }}"
+                    icon="fas fa-star"
+                    tooltip="Reviews & Ratings"
+                    :active="request()->routeIs('reviews*')
+                        ? 'lm-sidebar-link-active'
+                        : 'lm-sidebar-link'"
+                />
 
-            {{-- Documentation / About --}}
-            <x-sidebar-icon 
-                href="{{ route('about') }}"
-                icon="fas fa-info-circle"
-                tooltip="Documentation / About"
-                :active="request()->routeIs('about') ? 'tw-bg-green-500 tw-text-white' : 'tw-text-gray-400 hover:tw-bg-green-100 hover:tw-text-green-500'"
-            />
+                <x-sidebar-icon
+                    href="{{ route('forecast') }}"
+                    icon="fas fa-robot"
+                    tooltip="AI Summary & Forecasting"
+                    :active="request()->routeIs('forecast')
+                        ? 'lm-sidebar-link-active'
+                        : 'lm-sidebar-link'"
+                />
 
-        </div>
+                {{-- Admin navigation --}}
+                @if(auth()->user()->role === 'admin')
+                    <div class="lm-sidebar-section-divider"></div>
+
+                    <x-sidebar-icon
+                        href="{{ route('properties.index') }}"
+                        icon="fas fa-vihara"
+                        tooltip="Property Management"
+                        :active="request()->routeIs('properties.*')
+                            ? 'lm-sidebar-link-active'
+                            : 'lm-sidebar-link'"
+                    />
+
+                    <x-sidebar-icon
+                        href="{{ route('analytics.block_ratings') }}"
+                        icon="fas fa-chart-line"
+                        tooltip="Data Analytics"
+                        :active="request()->routeIs('analytics.block_ratings')
+                            ? 'lm-sidebar-link-active'
+                            : 'lm-sidebar-link'"
+                    />
+
+                    <x-sidebar-icon
+                        href="{{ route('usermanagement.index') }}"
+                        icon="fas fa-users"
+                        tooltip="User Management"
+                        :active="request()->routeIs('usermanagement.index')
+                            ? 'lm-sidebar-link-active'
+                            : 'lm-sidebar-link'"
+                    />
+
+                    <x-sidebar-icon
+                        href="{{ route('owner-verification.index') }}"
+                        icon="fas fa-clipboard-list"
+                        tooltip="Owner Requests"
+                        :active="request()->routeIs('owner-verification.index')
+                            ? 'lm-sidebar-link-active'
+                            : 'lm-sidebar-link'"
+                    />
+
+                    <x-sidebar-icon
+                        href="{{ route('activity-logs.index') }}"
+                        icon="fas fa-list-alt"
+                        tooltip="Activity Logs"
+                        :active="request()->routeIs('activity-logs.index')
+                            ? 'lm-sidebar-link-active'
+                            : 'lm-sidebar-link'"
+                    />
+                @endif
+
+                {{-- Buyer navigation --}}
+                @if(auth()->user()->role === 'buyer')
+                    <div class="lm-sidebar-section-divider"></div>
+
+                    <x-sidebar-icon
+                        href="{{ route('owner-verification.create') }}"
+                        icon="fas fa-file-upload"
+                        tooltip="Request Ownership"
+                        :active="request()->routeIs('owner-verification.create')
+                            ? 'lm-sidebar-link-active'
+                            : 'lm-sidebar-link'"
+                    />
+                @endif
+
+                {{-- Documentation --}}
+                <div class="lm-sidebar-section-divider lm-sidebar-lower-divider"></div>
+
+                <x-sidebar-icon
+                    href="{{ route('about') }}"
+                    icon="fas fa-info-circle"
+                    tooltip="Documentation / About"
+                    :active="request()->routeIs('about')
+                        ? 'lm-sidebar-link-active'
+                        : 'lm-sidebar-link'"
+                />
+            </nav>
+        </aside>
         @endauth
 
+        
 
         {{-- Main content --}}
-        <div class="tw-flex-1 tw-flex tw-flex-col">
+        <div class="lm-app-content tw-flex-1 tw-flex tw-flex-col">
             {{-- Navbar --}}
             <nav class="tw-bg-white tw-shadow-lg tw-px-6 tw-py-3 tw-h-16 tw-inline-block">
                 <div class="tw-flex tw-justify-end tw-items-center tw-w-auto">
