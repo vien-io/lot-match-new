@@ -177,14 +177,16 @@
             </section>
         </aside>
     </div>
+
+    <!-- FOOTER -->
+    <footer class="tw-py-6 tw-text-center tw-text-sm tw-text-gray-500 tw-mt-12">
+      © 2025 LotMatch Interactive 3D Mapping with Forecasting Data Analytics. All rights reserved.
+    </footer>
 </div>
 @endsection
 
 @section('scripts')
-    {{-- Keep the existing Chart.js dependency. --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    {{-- Existing 3D map module; keep its expected container ID. --}}
     @vite('resources/js/dashboardMap.js')
 
     <script>

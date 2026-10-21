@@ -384,6 +384,11 @@
         height: 100%;
         min-height: 300px;
         overflow: hidden;
+        margin: 0 auto;
+    }
+    #dashboard-map-container canvas {
+        display: block;
+        overflow: visible;
     }
 
     #tooltiip {

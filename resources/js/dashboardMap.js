@@ -13,20 +13,29 @@ function initThreeJS() {
 
     // scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xFFFFFF);
+    scene.background = null;
 
     // camera
-    const camera = new THREE.PerspectiveCamera(80, width / height, 0.1, 1000);
-    camera.position.set(5, 3, 7);
+    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+    camera.position.set(7, 7, 7);
     camera.lookAt(0, 0, 0);
     window.threeCamera = camera;
+    
+    const gridHelper = new THREE.GridHelper(
+        100,
+        50,
+        0xB0B0B0,
+        0xE5E7EB
+    );
 
+    gridHelper.position.y = -2.1;
+    scene.add(gridHelper);
 
- 
-
-    // renderer
-    const renderer = new THREE.WebGLRenderer();
-    console.log('Container size: ', container.clientWidth, container.clientHeight);
+    const renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true
+    });
+    
     renderer.setSize(width, height);
     container.appendChild(renderer.domElement);
 
