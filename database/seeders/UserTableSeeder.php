@@ -130,7 +130,7 @@ class UserTableSeeder extends Seeder
 
 
         // insert users
-        DB::table('users')->insert($users);
+        DB::table('users')->insertOrIgnore($users);
 
         // Assign lots to owners (blocks 1–4)
         foreach (range(1, 4) as $blockId) {

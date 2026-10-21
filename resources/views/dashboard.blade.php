@@ -3,243 +3,290 @@
 @section('title', 'LotMatch Dashboard')
 
 @section('content')
-<div class = "tw-bg-gradient-to-br tw-from-green-50 tw-to-white">
-  <div class="tw-min-h-screen tw-flex">
 
-
-      {{-- Main Content --}}
-      <div class="tw-flex-1 tw-p-8">
-
-        {{-- Welcome Section --}}
-        <div class="tw-mb-8">
-          <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800">Welcome, {{ auth()->user()->first_name . ' ' . auth()->user()->last_name ?? 'Dear Visitor' }}!</h1>
-          <p class="tw-text-gray-600">Here is the overview of Sameera Subdivision.</p>
+<div class="lm-dashboard">
+    <header class="lm-heading">
+        <div>
+            <span class="lm-eyebrow">Overview</span>
+            <h1>Dashboard</h1>
+            <p>Monitor your lots, ratings, and customer feedback.</p>
         </div>
+    </header>
 
-        {{-- Statistic Cards --}}
-        <div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-4 tw-gap-6 tw-mb-10">
-
-        {{-- Total Blocks (Blue) --}}
-        <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6 tw-text-center
-                    tw-border tw-border-transparent tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-lg hover:tw-border-blue-400">
-          <div class="tw-text-4xl tw-font-semibold tw-text-blue-500">{{ $totalBlocks }}</div>
-          <div class="tw-text-gray-500 tw-mt-2">Total Blocks</div>
-        </div>
-
-        {{-- Total Lots (Green) --}}
-        <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6 tw-text-center
-                    tw-border tw-border-transparent tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-lg hover:tw-border-green-400">
-          <div class="tw-text-4xl tw-font-semibold tw-text-green-500">{{ number_format($totalLots) }}</div>
-          <div class="tw-text-gray-500 tw-mt-2">Total Lots</div>
-        </div>
-
-        {{-- Average Rating (Yellow) --}}
-        <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6 tw-text-center
-                    tw-border tw-border-transparent tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-lg hover:tw-border-yellow-400">
-          <div class="tw-text-4xl tw-font-semibold tw-text-yellow-500">{{ number_format($avgRating, 1) }}/5</div>
-          <div class="tw-text-gray-500 tw-mt-2">Average Rating</div>
-        </div>
-
-        {{-- New Reviews (Purple) --}}
-        <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6 tw-text-center
-                    tw-border tw-border-transparent tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-lg hover:tw-border-purple-400">
-          <div class="tw-text-4xl tw-font-semibold tw-text-purple-500">{{ $newReviewsThisMonth }}</div>
-          <div class="tw-text-gray-500 tw-mt-2">New Reviews This Month</div>
-        </div>
-
-      </div>
-
-
-        {{-- Main Content Grid --}}
-        <div class="tw-grid tw-grid-cols-1 lg:tw-grid-cols-3 tw-gap-6">
-
-          {{-- Left: Map Preview --}}
-          <div class="lg:tw-col-span-2 tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6 tw-h-[800px]">
-            <h2 class="tw-text-xl tw-font-semibold tw-mb-4 tw-text-gray-800">3D Model Preview</h2>
-            <div id="dashboard-map-container" 
-              class="tw-border tw-border-gray-200 tw-rounded-lg tw-h-[640px] tw-bg-gray-50 tw-overflow-hidden tw-relative">
-              <div id="tooltiip">
-                <span id="tooltip-text"></span>
-              </div>
+    {{-- Key metrics --}}
+    <section class="lm-metrics" aria-label="Dashboard metrics">
+        <article class="lm-metric">
+            <div class="lm-metric-label">Total Blocks</div>
+            <div class="lm-metric-value">
+                {{ number_format($totalBlocks ?? 0) }}
             </div>
-          </div>
+            <div class="lm-metric-note">Blocks across LotMatch</div>
+        </article>
 
-          {{-- Right: Analytics & Reviews --}}
-          <div class="tw-flex tw-flex-col tw-gap-6">
-
-            {{-- Ratings Chart --}}
-            <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6">
-              <h2 class="tw-text-xl tw-font-semibold tw-mb-4 tw-text-gray-800">Ratings Distribution</h2>
-              <div style="width: 100%; height: 300px;">
-                <canvas id="ratingsChart" height="200"></canvas>
-              </div>
+        <article class="lm-metric">
+            <div class="lm-metric-label">Total Lots</div>
+            <div class="lm-metric-value">
+                {{ number_format($totalLots ?? 0) }}
             </div>
+            <div class="lm-metric-note">Registered lots</div>
+        </article>
 
-            {{-- Recent Reviews --}}
-            <div class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-p-6">
-              <h2 class="tw-text-xl tw-font-semibold tw-mb-4 tw-text-gray-800">Recent Reviews</h2>
-              <ul class="tw-space-y-4 tw-max-h-64 tw-overflow-y-auto">
-                @forelse ($recentReviews as $review)
-                  <li class="tw-bg-white tw-border tw-border-gray-200 tw-rounded-lg tw-p-4 tw-shadow-sm" data-review-id="{{ $review->id }}">
-                    <div class="tw-flex tw-items-center tw-justify-between">
-                      <div class="tw-flex tw-items-center tw.space-x-2">
-                        <strong class="tw-text-gray-800">
-                          {{ $review->user->first_name . ' ' . $review->user->last_name ?? 'Anonymous' }}
-                        </strong>
-                        <span class="tw-text-gray-500">→ {{ $review->block->name ?? 'Unknown Block' }}</span>
-                        {!! $ownerTag ?? '' !!}
-                      </div>
-                      <div class="tw-flex tw-space-x-1">
-                        @php
-                          $rating = $review->rating ?? 0;
-                        @endphp
-                        @for ($i = 1; $i <= 5; $i++)
-                          @if ($i <= $rating)
-                            {{-- Filled star --}}
-                            <svg class="tw-w-4 tw-h-4 tw-text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.962a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.962c.3.922-.755 1.688-1.54 1.118l-3.37-2.447a1 1 0 00-1.176 0l-3.37 2.447c-.784.57-1.838-.196-1.539-1.118l1.286-3.962a1 1 0 00-.364-1.118L2.064 9.39c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.285-3.962z"/>
-                            </svg>
-                          @else
-                            {{-- Empty star --}}
-                            <svg class="tw-w-4 tw-h-4 tw-text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.962a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.962c.3.922-.755 1.688-1.54 1.118l-3.37-2.447a1 1 0 00-1.176 0l-3.37 2.447c-.784.57-1.838-.196-1.539-1.118l1.286-3.962a1 1 0 00-.364-1.118L2.064 9.39c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.285-3.962z"/>
-                            </svg>
-                          @endif
-                        @endfor
-                      </div>
+        <article class="lm-metric">
+            <div class="lm-metric-label">Average Rating</div>
+            <div class="lm-metric-value">
+                {{ number_format((float) ($avgRating ?? 0), 1) }}
+                <span style="font-size: 17px; color: #D9A82E;">★</span>
+            </div>
+            <div class="lm-metric-note">
+                <strong>{{ number_format($newReviewsThisMonth ?? 0) }}</strong>
+                new reviews this month
+            </div>
+        </article>
+    </section>
+
+    {{-- Main dashboard --}}
+    <div class="lm-dashboard-grid">
+        <div class="lm-main-column">
+
+            {{-- Rating analytics --}}
+            <section class="lm-panel lm-panel-dark">
+                <div class="lm-panel-header">
+                    <div>
+                        <h2 class="lm-panel-title">Ratings distribution</h2>
+                        <p class="lm-panel-description">
+                            Understand how customers rate their experience.
+                        </p>
                     </div>
+                </div>
 
-                    <p class="tw-text-gray-700 tw-mt-2">{{ Str::limit($review->comment, 200) }}</p>
-
-                    <div class="tw-flex tw-items-center tw-justify-between tw-mt-3">
-                      <small class="tw-text-gray-500">
-                        {{ \Carbon\Carbon::parse($review->created_at)->format('M d, Y h:i A') }}
-                      </small>
-                      {!! $buttons ?? '' !!}
+                <div class="lm-rating-summary">
+                    <span class="lm-rating-number">
+                        {{ number_format((float) ($avgRating ?? 0), 1) }}
+                    </span>
+                    <div>
+                        <div class="lm-stars" aria-label="Average rating">
+                            ★★★★★
+                        </div>
+                        <div class="lm-rating-caption">
+                            Average customer rating
+                        </div>
                     </div>
-                  </li>
-                @empty
-                  <li class="tw-text-gray-500">No recent reviews.</li>
-                @endforelse
-              </ul>
-            </div>
-          </div>
+                </div>
+
+                <div class="lm-chart-container">
+                    <canvas id="ratingsChart"
+                            aria-label="Ratings distribution chart"></canvas>
+                </div>
+            </section>
+
+            {{-- Recent reviews --}}
+            <section class="lm-panel">
+                <div class="lm-panel-header">
+                    <div>
+                        <h2 class="lm-panel-title">Recent Reviews</h2>
+                        <p class="lm-panel-description">
+                            The latest feedback from your customers.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lm-reviews-list">
+                    @forelse ($recentReviews ?? [] as $review)
+                        <article
+                            class="lm-review"
+                            id="review-{{ $review->id }}"
+                            data-review-id="{{ $review->id }}"
+                        >
+                            <div class="lm-review-top">
+                              <div class="lm-reviewer">
+                                  <div class="lm-review-avatar" aria-hidden="true">
+                                      {{ strtoupper(substr((string) ($review->user->first_name ?? 'U'), 0, 1)) }}
+                                  </div>
+
+                                  <div style="min-width: 0;">
+                                      <div class="lm-reviewer-info">
+                                          <div class="lm-reviewer-name">
+                                              {{ trim(($review->user->first_name ?? '') . ' ' . ($review->user->last_name ?? '')) ?: 'Customer' }}
+                                          </div>
+
+                                          <span class="lm-review-block">
+                                              → {{ $review->block->name ?? 'Unknown Block' }}
+                                          </span>
+                                      </div>
+
+                                      <div class="lm-review-date">
+                                          {{ $review->created_at?->format('M d, Y') ?? '' }}
+                                      </div>
+                                  </div>
+                              </div>
+
+                               <div class="lm-review-stars"
+                                  aria-label="{{ (int) ($review->rating ?? 0) }} out of 5 stars">
+                                  @for ($star = 1; $star <= 5; $star++)
+                                      {{ $star <= (int) ($review->rating ?? 0) ? '★' : '☆' }}
+                                  @endfor
+                              </div>
+                            </div>
+
+                            <p class="lm-review-comment">
+                                {{ $review->comment ?? '' }}
+                            </p>
+
+                            {{-- Preserve existing owner-specific review controls here. --}}
+                            @if (!empty($ownerTag) || !empty($buttons))
+                                <div class="lm-review-actions">
+                                    {!! $ownerTag ?? '' !!}
+                                    {!! $buttons ?? '' !!}
+                                </div>
+                            @endif
+                        </article>
+                    @empty
+                        <div class="lm-empty-state">
+                            <strong>No reviews yet</strong>
+                            Customer reviews will appear here when available.
+                        </div>
+                    @endforelse
+                </div>
+            </section>
         </div>
-      </div>
+
+        <aside class="lm-side-column">
+            {{-- Existing interactive 3D map --}}
+            <section class="lm-panel lm-map-panel">
+                <div class="lm-panel-header">
+                    <div>
+                        <h2 class="lm-panel-title">Lot overview</h2>
+                        <p class="lm-panel-description">
+                            Explore the interactive lot map.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lm-map-viewport">
+                    <div id="dashboard-map-container">
+                        <div id="tooltiip">
+                            <span id="tooltip-text"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lm-map-caption">
+                    <span class="lm-status-dot"></span>
+                    Interactive 3D map
+                </div>
+            </section>
+        </aside>
     </div>
-    <!-- FOOTER -->
-    <footer class="tw-py-6 tw-text-center tw-text-sm tw-text-gray-500 tw-mt-12">
-      © 2025 LotMatch Interactive 3D Mapping with Forecasting Data Analytics. All rights reserved.
-    </footer>
 </div>
-  
-  @endsection
+@endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  const ctx = document.getElementById('ratingsChart').getContext('2d');
+    {{-- Keep the existing Chart.js dependency. --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-  gradient.addColorStop(0, 'rgba(34, 197, 94, 0.8)');
-  gradient.addColorStop(1, 'rgba(34, 197, 94, 0.3)');
+    {{-- Existing 3D map module; keep its expected container ID. --}}
+    @vite('resources/js/dashboardMap.js')
 
-  const ratingsData = @json($ratingsDistribution);
-  const labels = Object.keys(ratingsData);
-  const data = Object.values(ratingsData);
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const canvas = document.getElementById('ratingsChart');
 
-  let delayed; 
-
-  setTimeout(() => {
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Number of Ratings',
-          data: data,
-          backgroundColor: gradient,
-          borderColor: 'rgba(34, 197, 94, 1)',
-          borderWidth: 1,
-          borderRadius: {topLeft: 10, topRight: 10, bottomLeft: 2, bottomRight: 2},
-          maxBarThickness: 40,
-          hoverBackgroundColor: 'rgba(34, 197, 94, 1)',
-          hoverBorderColor: 'rgba(64, 184, 108, 1)',
-          hoverBorderWidth: 2,
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: {
-          duration: 1000,
-          easing: 'easeOutQuart',
-          onComplete: () => {
-            delayed = true;
-          },
-          delay: (context) => {
-            let delay = 0;
-            if (context.type === 'data' && context.mode === 'default' && !delayed) {
-              delay = context.dataIndex * 300 + context.datasetIndex * 100; 
+            if (!canvas || typeof Chart === 'undefined') {
+                return;
             }
-            return delay;
-          }
-        },
-        scales: {
-          x: {
-            ticks: { color: '#334155', font: { family: "'Nunito', sans-serif", weight: '600', size: 14 } },
-            grid: { display: false },
-          },
-          y: {
-            beginAtZero: true,
-            precision: 0,
-            ticks: { color: '#334155', font: { family: "'Nunito', sans-serif", weight: '600', size: 14 } },
-            grid: { color: 'rgba(148, 163, 184, 0.3)', drawBorder: false, borderDash: [5, 5] }
-          }
-        },
-        plugins: {
-          title: {
-            display: true,
-            text: 'Ratings Distribution Overview',
-            color: '#166534',
-            font: { family: "'Nunito', sans-serif", size: 18, weight: '700' },
-            padding: { top: 10, bottom: 20 }
-          },
-          legend: {
-            display: true,
-            labels: { color: '#334155', font: { family: "'Nunito', sans-serif", size: 14, weight: '600' } }
-          },
-          tooltip: {
-            backgroundColor: 'rgba(34, 197, 94, 0.9)',
-            titleFont: { family: "'Nunito', sans-serif", size: 16, weight: '700' },
-            bodyFont: { family: "'Nunito', sans-serif", size: 14 },
-            padding: 10,
-            cornerRadius: 6,
-            callbacks: {
-              label: ctx => `Count: ${ctx.parsed.y}`,
-              title: ctx => `Rating: ${ctx[0].label}`
-            }
-          }
-        }
-      },
-      plugins: [{
-        id: 'barShadow',
-        beforeDatasetDraw(chart) {
-          const ctx = chart.ctx;
-          ctx.save();
-          ctx.shadowColor = 'rgba(0,0,0,0.15)';
-          ctx.shadowBlur = 10;
-          ctx.shadowOffsetX = 0;
-          ctx.shadowOffsetY = 4;
-        },
-        afterDatasetDraw(chart) {
-          chart.ctx.restore();
-        }
-      }]
-    });
-  }, 1200);
-  
-</script>
 
-@vite('resources/js/dashboardMap.js')
+            // Uses the existing controller-provided ratings data.
+            const rawRatings = @json($ratingsDistribution ?? []);
+
+            let labels = [];
+            let values = [];
+
+            if (Array.isArray(rawRatings)) {
+                labels = rawRatings.map((item, index) =>
+                    item.label ?? item.rating ?? `${index + 1}`
+                );
+
+                values = rawRatings.map(item =>
+                    Number(item.count ?? item.total ?? item.value ?? 0)
+                );
+            } else if (rawRatings && typeof rawRatings === 'object') {
+                labels = Object.keys(rawRatings);
+                values = Object.values(rawRatings).map(Number);
+            }
+
+            const styles = getComputedStyle(document.documentElement);
+            const mint = styles.getPropertyValue('--lm-mint').trim() || '#06EBB6';
+            const teal = styles.getPropertyValue('--lm-teal').trim() || '#1ED9D7';
+
+            Chart.defaults.color = '#A6B6B0';
+            Chart.defaults.font.family = 'inherit';
+
+            new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Reviews',
+                        data: values,
+                        backgroundColor: [
+                            'rgba(6, 235, 182, 0.45)',
+                            'rgba(30, 217, 215, 0.55)',
+                            'rgba(6, 235, 182, 0.65)',
+                            'rgba(30, 217, 215, 0.80)',
+                            mint
+                        ],
+                        borderColor: [mint, teal, mint, teal, mint],
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        maxBarThickness: 42
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#111A16',
+                            titleColor: '#FFFFFF',
+                            bodyColor: '#D9E5DF',
+                            borderColor: '#294238',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            border: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#A6B6B0'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255,255,255,0.08)'
+                            },
+                            border: {
+                                display: false
+                            },
+                            ticks: {
+                                precision: 0,
+                                color: '#A6B6B0'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 @endsection
+
