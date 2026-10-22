@@ -360,36 +360,236 @@
         flex-direction: column;
         flex: 1;
         min-height: 0;
-        background: white;
+        padding: 20px;
+        background: #FFFFFF;
+        border: 1px solid #E3EAE6;
+        border-radius: 14px;
+        box-shadow: 0 2px 8px rgba(6, 16, 13, 0.04);
+        overflow: hidden;
+        transition: border-color 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .lm-map-panel:hover {
+        border-color: #6bd19e;
+        box-shadow: 0 5px 18px rgba(6, 16, 13, 0.07);
     }
 
     .lm-map-panel .lm-panel-header {
-        padding-bottom: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 0 0 18px;
+    }
+
+    .lm-preview-heading {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+    }
+
+    .lm-preview-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 42px;
+        height: 42px;
+        color: #06100D;
+        background: #E6FBF4;
+        border: 1px solid #C9F5E6;
+        border-radius: 11px;
+        font-size: 17px;
+    }
+
+    .lm-map-panel .lm-panel-title {
+        margin: 0;
+        color: #111111;
+        font-size: 16px;
+        font-weight: 650;
+        letter-spacing: -0.3px;
+    }
+
+    .lm-map-panel .lm-panel-description {
+        margin: 5px 0 0;
+        color: #666666;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .lm-preview-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        flex-shrink: 0;
+        padding: 7px 10px;
+        color: #36574A;
+        background: #F0F8F4;
+        border: 1px solid #DCEBE3;
+        border-radius: 7px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
     }
 
     .lm-map-viewport {
+        display: flex;
+        flex-direction: column;
         flex: 1;
         position: relative;
         overflow: hidden;
         min-height: 300px;
         min-width: 0;
-        margin: 0 15px 15px;
-        border: 1px solid var(--lm-border);
-        border-radius: 9px;
-        background: #F1F5F3;
+        margin: 0;
+        background: #F7FAF8;
+        border: 1px solid #E1E9E4;
+        border-radius: 11px;
+    }
+
+    .lm-preview-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 12px 14px;
+        background: #FFFFFF;
+        border-bottom: 1px solid #E8EEEA;
+        color: #777F7A;
+        font-size: 10px;
+        font-weight: 650;
+        letter-spacing: 0.65px;
+    }
+
+    .lm-preview-ready {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: #47715F;
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: 0;
     }
 
     #dashboard-map-container {
+        position: relative;
+        flex: 1;
         width: 100%;
         height: 100%;
-        min-height: 300px;
+        min-height: 250px;
         overflow: hidden;
         margin: 0 auto;
+        background: #F7FAF8;
     }
+
     #dashboard-map-container canvas {
         display: block;
-        overflow: visible;
+        max-width: 100%;
+        cursor: grab;
     }
+
+    #dashboard-map-container canvas:active {
+        cursor: grabbing;
+    }
+
+
+    .lm-preview-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px 24px;
+        padding: 12px 14px;
+        color: #666666;
+        background: #FFFFFF;
+        border-top: 1px solid #E8EEEA;
+        font-size: 11px;
+    }
+
+    .lm-preview-controls span {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .lm-preview-controls i {
+        color: #149B78;
+        font-size: 12px;
+    }
+
+    .lm-map-panel .lm-map-caption {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px 2px 2px;
+        color: #111111;
+    }
+
+    .lm-map-caption strong {
+        display: block;
+        margin-bottom: 4px;
+        color: #222B26;
+        font-size: 12px;
+        font-weight: 650;
+    }
+
+    .lm-map-caption p {
+        margin: 0;
+        color: #777F7A;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .lm-map-caption > i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 36px;
+        height: 36px;
+        color: #149B78;
+        background: #EAF8F1;
+        border: 1px solid #D9F0E4;
+        border-radius: 9px;
+        font-size: 15px;
+    }
+
+    @media (max-width: 600px) {
+        .lm-map-panel {
+            padding: 14px;
+            border-radius: 12px;
+        }
+
+        .lm-map-panel .lm-panel-header {
+            gap: 10px;
+            padding-bottom: 14px;
+        }
+
+        .lm-preview-icon {
+            width: 36px;
+            height: 36px;
+            font-size: 15px;
+        }
+
+        .lm-preview-badge {
+            padding: 6px 8px;
+            font-size: 9px;
+        }
+
+        .lm-map-viewport {
+            min-height: 300px;
+        }
+
+        .lm-preview-controls {
+            gap: 10px 16px;
+            padding: 11px 8px;
+            font-size: 10px;
+        }
+    }
+
 
     #tooltiip {
         z-index: 10;

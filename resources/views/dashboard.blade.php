@@ -151,28 +151,58 @@
         </div>
 
         <aside class="lm-side-column">
-            {{-- 3D Model --}}
+            {{-- 3D House Preview --}}
             <section class="lm-panel lm-map-panel">
+
                 <div class="lm-panel-header">
-                    <div>
-                        <h2 class="lm-panel-title">Lot Preview</h2>
-                        <p class="lm-panel-description">
-                            Rotate the model as you like
-                        </p>
+                    <div class="lm-preview-heading">
+                        <div class="lm-preview-icon">
+                            <i class="fas fa-house"></i>
+                        </div>
+
+                        <div>
+                            <h2 class="lm-panel-title">House Preview</h2>
+                            <p class="lm-panel-description">
+                                Explore the property in 3D
+                            </p>
+                        </div>
                     </div>
+
+                    <span class="lm-preview-badge">
+                        3D VIEW
+                    </span>
                 </div>
 
                 <div class="lm-map-viewport">
+                    <div class="lm-preview-toolbar">
+                        <span>INTERACTIVE MODEL</span>
+                        <span class="lm-preview-ready">
+                            <span class="lm-status-dot"></span>
+                            Ready to explore
+                        </span>
+                    </div>
+
                     <div id="dashboard-map-container">
                         <div id="tooltiip">
                             <span id="tooltip-text"></span>
                         </div>
                     </div>
+
+                    <div class="lm-preview-controls">
+                        <span>
+                            <i class="fas fa-arrows-alt"></i>
+                            Drag to rotate
+                        </span>
+                    </div>
                 </div>
 
                 <div class="lm-map-caption">
-                    <span class="lm-status-dot"></span>
-                    3d Model of the House
+                    <div>
+                        <strong>Explore every angle</strong>
+                        <p>Inspect the exterior from different perspectives.</p>
+                    </div>
+
+                    <i class="fas fa-cube"></i>
                 </div>
             </section>
         </aside>
