@@ -16,14 +16,15 @@
     {{-- logo --}}
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
-
     @vite([
         'resources/sass/app.scss', 
         'resources/js/app.js',
         'resources/js/settings.js',
         'resources/css/dashboard.css',
-        'resources/css/sidebar.css'
+        'resources/css/sidebar.css',
+        'resources/css/notification.css'
     ])
+    
 </head>
 <body class="tw-bg-gray-50">
     <div id="app" class="tw-flex">
@@ -172,135 +173,95 @@
                 />
             </nav>
 
+            {{-- Bottom Account Selector --}}
+            <div class="lm-sidebar-account" x-data="{ open: false }">
 
+                <button
+                    type="button"
+                    @click="open = !open"
+                    @keydown.escape.window="open = false"
+                    class="lm-sidebar-account-trigger"
+                    :aria-expanded="open.toString()"
+                    aria-label="Open account menu"
+                >
+                    {{-- User Avatar --}}
+                    <img
+                        src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->first_name . ' ' . Auth::user()->last_name) . '&background=06EBB6&color=06100D&rounded=true' }}"
+                        alt="User Avatar"
+                        class="lm-sidebar-avatar"
+                    >
 
+                    {{-- Account Details: revealed when sidebar expands --}}
+                    <div class="lm-sidebar-account-details">
+                        <span class="lm-sidebar-account-name">
+                            {{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}
+                        </span>
 
-{{-- Bottom Account Selector --}}
-<div class="lm-sidebar-account" x-data="{ open: false }">
+                        <span class="lm-sidebar-account-role">
+                            {{ ucfirst(Auth::user()->role) }}
+                        </span>
+                    </div>
 
-    <button
-        type="button"
-        @click="open = !open"
-        @keydown.escape.window="open = false"
-        class="lm-sidebar-account-trigger"
-        :aria-expanded="open.toString()"
-        aria-label="Open account menu"
-    >
-        {{-- User Avatar --}}
-        <img
-            src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->first_name . ' ' . Auth::user()->last_name) . '&background=06EBB6&color=06100D&rounded=true' }}"
-            alt="User Avatar"
-            class="lm-sidebar-avatar"
-        >
+                    {{-- Dropdown Chevron --}}
+                    <i
+                        class="fas fa-chevron-down lm-sidebar-account-chevron"
+                        :class="{ 'is-open': open }"
+                    ></i>
+                </button>
 
-        {{-- Account Details: revealed when sidebar expands --}}
-        <div class="lm-sidebar-account-details">
-            <span class="lm-sidebar-account-name">
-                {{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}
-            </span>
+                {{-- Account Dropdown --}}
+                <div
+                    x-cloak
+                    x-show="open"
+                    x-transition:enter="tw-transition tw-ease-out tw-duration-150"
+                    x-transition:enter-start="tw-opacity-0 tw-translate-y-1"
+                    x-transition:enter-end="tw-opacity-100 tw-translate-y-0"
+                    @click.outside="open = false"
+                    class="lm-sidebar-account-menu"
+                >
+                    <div class="lm-sidebar-account-menu-header">
+                        <span>{{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}</span>
+                        <small>{{ ucfirst(Auth::user()->role) }} account</small>
+                    </div>
 
-            <span class="lm-sidebar-account-role">
-                {{ ucfirst(Auth::user()->role) }}
-            </span>
-        </div>
+                    <a href="{{ route('profile') }}" class="lm-sidebar-account-menu-link">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
 
-        {{-- Dropdown Chevron --}}
-        <i
-            class="fas fa-chevron-down lm-sidebar-account-chevron"
-            :class="{ 'is-open': open }"
-        ></i>
-    </button>
+                    <a
+                        href="javascript:void(0);"
+                        id="settings-btn"
+                        @click="open = false"
+                        class="lm-sidebar-account-menu-link"
+                    >
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
 
-    {{-- Account Dropdown --}}
-    <div
-        x-cloak
-        x-show="open"
-        x-transition:enter="tw-transition tw-ease-out tw-duration-150"
-        x-transition:enter-start="tw-opacity-0 tw-translate-y-1"
-        x-transition:enter-end="tw-opacity-100 tw-translate-y-0"
-        @click.outside="open = false"
-        class="lm-sidebar-account-menu"
-    >
-        <div class="lm-sidebar-account-menu-header">
-            <span>{{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}</span>
-            <small>{{ ucfirst(Auth::user()->role) }} account</small>
-        </div>
+                    <div class="lm-sidebar-account-menu-divider"></div>
 
-        <a href="{{ route('profile') }}" class="lm-sidebar-account-menu-link">
-            <i class="fas fa-user"></i>
-            <span>Profile</span>
-        </a>
-
-        <a
-            href="javascript:void(0);"
-            id="settings-btn"
-            @click="open = false"
-            class="lm-sidebar-account-menu-link"
-        >
-            <i class="fas fa-cog"></i>
-            <span>Settings</span>
-        </a>
-
-        <div class="lm-sidebar-account-menu-divider"></div>
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit"
-                class="lm-sidebar-account-menu-link lm-sidebar-logout">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
-            </button>
-        </form>
-    </div>
-
-</div>
-
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="lm-sidebar-account-menu-link lm-sidebar-logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
         </aside>
         @endauth
-
-        
 
         {{-- Main content --}}
         <div class="lm-app-content tw-flex-1 tw-flex tw-flex-col">
             {{-- Navbar --}}
-            <nav class="tw-bg-white tw-shadow-lg tw-px-6 tw-py-3 tw-h-16 tw-inline-block">
-                <div class="tw-flex tw-justify-end tw-items-center tw-w-auto">
-
-                    {{-- search bar --}}
-                    {{-- <div class="tw-relative tw-flex-grow tw-mx-4" x-data="searchPlaceholderCycle()">
-                        <span class="tw-absolute tw-left-3 tw-top-1/2 tw-transform tw--translate-y-1/2 tw-text-gray-400">
-                            <i class="fas fa-magnifying-glass"></i>
-                        </span>
-                        <form action="{{ route('search') }}" method="GET">
-                            <input 
-                                type="search" 
-                                name="q"
-                                :placeholder="placeholders[current]"
-                                class="tw-w-full tw-pl-10 tw-pr-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-green-400 focus:tw-outline-none"
-                            />
-                        </form>
-                    </div> --}}
-
                     {{-- Right Actions --}}
                     <div class="tw-flex tw-items-center tw-gap-4">
-                        @guest
-                            <a href="{{ route('login') }}" 
-                            class="tw-flex tw-items-center tw-justify-center tw-px-3 tw-py-1 tw-rounded-lg tw-text-gray-500 hover:tw-bg-green-100 hover:tw-text-green-500 tw-transition-colors">
-                                Login
-                            </a>
-                            <a href="{{ route('register') }}" 
-                            class="tw-flex tw-items-center tw-justify-center tw-px-3 tw-py-1 tw-rounded-lg tw-bg-green-500 tw-text-white hover:tw-bg-green-600 tw-transition-colors">
-                                Sign Up
-                            </a>
-                        @else
-
-
-
-
-
                         {{-- Notification Icon --}}
-                        <div 
-                            class="tw-relative tw-mr-4" 
+                        <div
+                            class="lm-notification-widget"
                             x-data="{
                                 openNotif: false, 
                                 notifications: JSON.parse(localStorage.getItem('notifications') || '[]'), 
@@ -383,64 +344,10 @@
                                 </div>
                             </div>
                         </div>
-
-
-                        {{-- dropdown --}}
-                        <div class="tw-relative" x-data="{ open: false }">
-                            <button @click="open = !open" 
-                                class="tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-1 tw-rounded-lg tw-text-gray-700 hover:tw-bg-green-100 hover:tw-text-green-500 tw-transition-colors">
-
-                                {{-- user avatar --}}
-                                <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->first_name . ' ' . Auth::user()->last_name) . '&background=34d399&color=fff&rounded=true' }}" 
-                                    alt="User Avatar"
-                                    class="tw-w-8 tw-h-8 tw-rounded-full tw-object-cover">
-
-                                {{-- username --}}
-                                <span>{{ Auth::user()->first_name . " " . Auth::user()->last_name }}</span>
-
-                                {{-- role tag --}}
-                                @if(Auth::user()->role === 'admin')
-                                    <span class="tw-bg-blue-500 tw-text-white tw-text-xs tw-px-2 tw-py-0.5 tw-rounded-full">
-                                        Admin
-                                    </span>
-                                @elseif(Auth::user()->role === 'owner')
-                                    <span class="tw-bg-green-500 tw-text-white tw-text-xs tw-px-2 tw-py-0.5 tw-rounded-full">
-                                        Owner
-                                    </span>
-                                @endif
-
-                                <svg
-                                    :class="{'tw-rotate-180': !open}" 
-                                    class="tw-w-4 tw-h-4 tw-transition-transform tw-duration-300" 
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                </svg>
-                            </button>
-                            {{-- dropdown menu --}}
-                            <div x-show="open" @click.away="open = false" 
-                                class="tw-absolute tw-right-0 tw-mt-2 tw-w-40 tw-bg-white tw-rounded-lg tw-shadow-lg tw-border tw-border-gray-200 tw-z-50">
-                                <a href="{{ route('profile') }}" 
-                                    class="tw-block tw-px-4 tw-py-2 tw-text-gray-700 hover:tw-bg-green-100">
-                                    Profile
-                                </a>
-                                <a href="javascript:void(0);"
-                                    id="settings-btn" 
-                                    class="tw-block tw-px-4 tw-py-2 tw-text-gray-700 hover:tw-bg-green-100">
-                                    Settings
-                                </a>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit" 
-                                            class="tw-w-full tw-text-left tw-px-4 tw-py-2 tw-text-gray-700 hover:tw-bg-red-100">
-                                        Logout
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                        @endguest
                     </div>
-                </div>
-            </nav>
+
+
+
             <main class="tw-p-4">
                 @yield('content')
                 @yield('scripts')
