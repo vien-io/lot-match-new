@@ -6,6 +6,7 @@
     position: fixed;
     inset: 0 auto 0 0;
     width: 80px;
+    min-width: 80px;
     height: 100vh;
     height: 100dvh;
     overflow-y: auto;
@@ -14,8 +15,43 @@
     background: #06100D;
     border-right: 1px solid #183129;
     box-shadow: 4px 0 24px rgba(6, 16, 13, 0.08);
-    transition: box-shadow 250ms ease;
+    transition: width 250ms ease, min-width 250ms ease,
+                box-shadow 250ms ease;
     scrollbar-width: none;
+}
+
+.lm-sidebar-item {
+    width: 100%;
+    padding: 0 12px;
+    box-sizing: border-box;
+}
+
+.lm-sidebar-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+
+.lm-sidebar-icon {
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+}
+
+.lm-sidebar-label {
+    display: none;
+    white-space: nowrap;
+    opacity: 0;
+    color: inherit;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .lm-sidebar::-webkit-scrollbar {
@@ -26,29 +62,6 @@
     box-shadow: 6px 0 28px rgba(6, 16, 13, 0.20);
 }
 
-.lm-sidebar-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
-    transition:
-        background 220ms ease,
-        transform 220ms ease;
-}
-
-.lm-sidebar-logo:hover {
-    background: rgba(6, 235, 182, 0.07);
-    transform: translateY(-1px);
-}
-
-.lm-sidebar-logo img {
-    display: block;
-    object-fit: contain;
-}
-
 .lm-sidebar-divider {
     flex-shrink: 0;
     width: 42px;
@@ -57,10 +70,10 @@
     background: rgba(196, 196, 196, 0.18);
 }
 
-.lm-sidebar-nav {
-    gap: 9px;
-    padding: 0 12px 20px;
-    box-sizing: border-box;
+/* Keep navigation items from being centered by the parent */
+.lm-sidebar nav {
+    width: 100%;
+    align-items: stretch;
 }
 
 .lm-sidebar-section-divider {
@@ -141,13 +154,11 @@
 
 @media (prefers-reduced-motion: reduce) {
     .lm-sidebar,
-    .lm-sidebar-logo,
     .lm-sidebar .lm-sidebar-link,
     .lm-sidebar .lm-sidebar-link-active {
         transition: none;
     }
 
-    .lm-sidebar-logo:hover,
     .lm-sidebar .lm-sidebar-link:hover {
         transform: none;
     }
@@ -172,15 +183,85 @@
 }
 
 
-
 /* ========================================
-   LOTMATCH — SIDEBAR HOVER
+   LOTMATCH — SIDEBAR BASE
 ======================================== */
 
-.lm-sidebar .lm-sidebar-link,
-.lm-sidebar .lm-sidebar-link-active {
-    overflow: visible;
+.lm-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    display: flex;
+    flex-direction: column;
+
+    width: 76px;
+    min-width: 76px;
+    height: 100vh;
+    height: 100dvh;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+
+    background: #06100D;
+    border-right: 1px solid #183129;
+    box-shadow: 4px 0 24px rgba(6, 16, 13, 0.08);
+
+    scrollbar-width: none;
+
     transition:
+        width 250ms ease,
+        min-width 250ms ease,
+        box-shadow 250ms ease;
+}
+
+.lm-sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Expand on hover or keyboard focus */
+.lm-sidebar:hover,
+.lm-sidebar:focus-within {
+    width: 350px;
+    min-width: 250px;
+    box-shadow: 4px 0 24px rgba(6, 16, 13, 0.18);
+}
+
+
+/* ========================================
+   SIDEBAR — NAVIGATION LAYOUT
+======================================== */
+
+.lm-sidebar nav {
+    width: 100%;
+    min-width: 0;
+    align-items: stretch;
+}
+
+.lm-sidebar-item {
+    width: 100%;
+    min-width: 0;
+    padding: 0 12px;
+    box-sizing: border-box;
+}
+
+.lm-sidebar-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    width: 100%;
+    height: 48px;
+    padding: 0;
+    box-sizing: border-box;
+
+    overflow: visible;
+    white-space: nowrap;
+    text-decoration: none;
+
+    transition:
+        justify-content 250ms ease,
+        padding 250ms ease,
         color 220ms ease,
         background 220ms ease,
         border-color 220ms ease,
@@ -188,64 +269,279 @@
         transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
+/* Keep icons centered when collapsed */
+.lm-sidebar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 48px;
+
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+}
+
+/* Align links to the left when expanded */
+.lm-sidebar:hover .lm-sidebar-link,
+.lm-sidebar:focus-within .lm-sidebar-link {
+    justify-content: flex-start;
+}
+
+/* Hide labels while collapsed */
+.lm-sidebar .lm-sidebar-label {
+    display: none;
+    opacity: 0;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Reveal inline labels while expanded */
+.lm-sidebar:hover .lm-sidebar-label,
+.lm-sidebar:focus-within .lm-sidebar-label {
+    display: inline-block;
+    opacity: 1;
+}
+
+
+/* ========================================
+   SIDEBAR — ICON ANIMATIONS
+======================================== */
+
 .lm-sidebar .lm-sidebar-link i,
-.lm-sidebar .lm-sidebar-link-active i,
-.lm-sidebar .lm-sidebar-link svg,
-.lm-sidebar .lm-sidebar-link-active svg {
+.lm-sidebar .lm-sidebar-link svg {
     transition:
         transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
         filter 220ms ease,
         color 220ms ease;
 }
 
-.lm-sidebar .lm-sidebar-link:hover {
+
+/* ========================================
+   SIDEBAR — HOVER STATES
+======================================== */
+
+.lm-sidebar .lm-sidebar-item:hover .lm-sidebar-link {
     color: #1ED9D7;
+
     background: linear-gradient(
         135deg,
         rgba(30, 217, 215, 0.12),
         rgba(6, 235, 182, 0.06)
     );
+
     border-color: rgba(30, 217, 215, 0.20);
+
     box-shadow:
         0 4px 14px rgba(0, 0, 0, 0.12),
         inset 0 0 12px rgba(30, 217, 215, 0.025);
+
     transform: translateX(3px);
 }
 
-.lm-sidebar .lm-sidebar-link:hover i,
-.lm-sidebar .lm-sidebar-link:hover svg {
+.lm-sidebar .lm-sidebar-item:hover {
+    background-color: rgba(30, 217, 214, 0.056)
+}
+
+.lm-sidebar .lm-sidebar-item:hover .lm-sidebar-link i,
+.lm-sidebar .lm-sidebar-item:hover .lm-sidebar-link svg {
     transform: scale(1.10);
     filter: drop-shadow(0 0 5px rgba(30, 217, 215, 0.28));
 }
 
+
+/* ========================================
+   SIDEBAR — ACTIVE LINK
+======================================== */
+
+/* Supports the active class on the same anchor */
+.lm-sidebar .lm-sidebar-link.active,
 .lm-sidebar .lm-sidebar-link-active {
     box-shadow: inset 0 0 16px rgba(6, 235, 182, 0.035);
 }
 
+.lm-sidebar .lm-sidebar-link.active:hover,
 .lm-sidebar .lm-sidebar-link-active:hover {
     color: #06EBB6;
+
     background: linear-gradient(
         135deg,
         #163B30,
         #103027
     );
+
     border-color: rgba(6, 235, 182, 0.28);
+
     box-shadow:
         0 4px 18px rgba(6, 235, 182, 0.08),
         inset 0 0 14px rgba(6, 235, 182, 0.045);
+
     transform: translateX(3px);
 }
 
+.lm-sidebar .lm-sidebar-link.active:hover i,
+.lm-sidebar .lm-sidebar-link.active:hover svg,
 .lm-sidebar .lm-sidebar-link-active:hover i,
 .lm-sidebar .lm-sidebar-link-active:hover svg {
     transform: scale(1.10);
     filter: drop-shadow(0 0 6px rgba(6, 235, 182, 0.38));
 }
 
-.lm-sidebar-logo:hover {
-    background: rgba(6, 235, 182, 0.09);
+
+
+/* ========================================
+   SIDEBAR — STABLE LOGO POSITION
+======================================== */
+
+.lm-sidebar-logo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+
+    width: 100%;
+    min-height: 48px;
+    padding: 0 12px;
+    box-sizing: border-box;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-decoration: none;
+    border-radius: 12px;
+
+    transition:
+        background 220ms ease,
+        box-shadow 220ms ease;
+}
+
+
+/* ========================================
+   LOTMATCH — LOGO ICON
+======================================== */
+
+.lm-sidebar-logo-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 48px;
+
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+
+    isolation: isolate;
+    border-radius: 12px;
+    overflow: hidden;
+
+    background: #06EBB6;
+    box-shadow: 0 3px 12px rgba(6, 235, 182, 0.12);
+
+    transition:
+        background 220ms ease,
+        box-shadow 220ms ease,
+        border-radius 220ms ease,
+        transform 220ms ease;
+}
+
+/* Tint the logo to match the sidebar */
+.lm-sidebar-logo-icon img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+
+    filter: brightness(0) saturate(100%)
+            invert(5%) sepia(17%) saturate(1510%)
+            hue-rotate(105deg) brightness(94%) contrast(105%);
+
+    transition: filter 220ms ease;
+}
+
+/* Brand text is hidden without affecting icon position */
+.lm-sidebar-logo-text {
+    flex: 0 0 auto;
+    white-space: nowrap;
+
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-6px);
+
+    transition:
+        opacity 180ms ease,
+        transform 180ms ease,
+        visibility 180ms ease;
+}
+
+/* Reveal text without changing icon alignment */
+.lm-sidebar:hover .lm-sidebar-logo-text,
+.lm-sidebar:focus-within .lm-sidebar-logo-text {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+/* Logo hover effect */
+.lm-sidebar-logo:hover .lm-sidebar{
     box-shadow: 0 0 20px rgba(6, 235, 182, 0.07);
 }
+
+
+/* ========================================
+   LOGO — SHINE HOVER
+======================================== */
+
+/* Shine layer */
+.lm-sidebar-logo-icon::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+
+    top: -50%;
+    left: -80%;
+    width: 45%;
+    height: 200%;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.48),
+        transparent
+    );
+
+    transform: skewX(-22deg);
+    transition: left 500ms ease;
+    pointer-events: none;
+}
+
+/* Trigger shine when logo is hovered */
+.lm-sidebar-logo:hover .lm-sidebar-logo-icon::after {
+    left: 140%;
+}
+
+.lm-sidebar-logo:hover .lm-sidebar-logo-icon img {
+    transform: scale(1.04);
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .lm-sidebar-logo-icon,
+    .lm-sidebar-logo-icon img,
+    .lm-sidebar-logo-icon::after {
+        transition: none;
+    }
+}
+
+
+
+/* ========================================
+   SIDEBAR — KEYBOARD ACCESSIBILITY
+======================================== */
 
 .lm-sidebar .lm-sidebar-link:focus-visible,
 .lm-sidebar .lm-sidebar-link-active:focus-visible {
@@ -253,18 +549,74 @@
     outline-offset: 3px;
 }
 
+
+/* ========================================
+   SIDEBAR — ACCOUNT SELECTOR
+======================================== */
+
+/* Account details hidden when collapsed */
+.lm-sidebar .lm-sidebar-account-details,
+.lm-sidebar .lm-sidebar-account-chevron {
+    display: none;
+    opacity: 0;
+}
+
+/* Reveal account details when expanded */
+.lm-sidebar:hover .lm-sidebar-account-details,
+.lm-sidebar:focus-within .lm-sidebar-account-details {
+    display: flex;
+    opacity: 1;
+}
+
+.lm-sidebar:hover .lm-sidebar-account-chevron,
+.lm-sidebar:focus-within .lm-sidebar-account-chevron {
+    display: block;
+    opacity: 1;
+}
+
+/* Account trigger spacing */
+.lm-sidebar:hover .lm-sidebar-account-trigger,
+.lm-sidebar:focus-within .lm-sidebar-account-trigger {
+    gap: 10px;
+}
+
+
+/* ========================================
+   DASHBOARD — FADE-IN
+======================================== */
+
+.lm-dashboard {
+    animation: lm-dashboard-fade-in 600ms ease-in-out;
+}
+
+@keyframes lm-dashboard-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* ========================================
+   REDUCED MOTION ACCESSIBILITY
+======================================== */
+
 @media (prefers-reduced-motion: reduce) {
+    .lm-sidebar,
     .lm-sidebar .lm-sidebar-link,
-    .lm-sidebar .lm-sidebar-link-active,
     .lm-sidebar .lm-sidebar-link i,
-    .lm-sidebar .lm-sidebar-link-active i,
     .lm-sidebar .lm-sidebar-link svg,
-    .lm-sidebar .lm-sidebar-link-active svg,
-    .lm-sidebar-logo {
+    .lm-sidebar-logo,
+    .lm-dashboard {
+        animation: none;
         transition: none;
     }
 
     .lm-sidebar .lm-sidebar-link:hover,
+    .lm-sidebar .lm-sidebar-link.active:hover,
     .lm-sidebar .lm-sidebar-link-active:hover,
     .lm-sidebar-logo:hover {
         transform: none;
@@ -273,20 +625,232 @@
 
 
 
-.lm-dashboard {
-    animation: fadeIn 0.6s ease-in-out;
+
+
+/* ========================================
+   SIDEBAR ACCOUNT SELECTOR
+======================================== */
+
+/* Bottom account area */
+.lm-sidebar-account {
+    position: relative;
+    width: calc(100% - 20px);
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid #26352F;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Account trigger */
+.lm-sidebar-account-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 100%;
+    min-height: 44px;
+    padding: 7px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: transparent;
+    color: #FFFFFF;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.2s ease,
+                border-color 0.2s ease;
 }
+
+.lm-sidebar-account-trigger:hover,
+.lm-sidebar-account-trigger:focus-visible {
+    background: #12271E;
+    border-color: #294438;
+    outline: none;
+}
+
+.lm-sidebar-account-trigger:focus-visible {
+    box-shadow: 0 0 0 2px #06EBB6;
+}
+
+/* Avatar */
+.lm-sidebar-avatar {
+    display: block;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #365347;
+}
+
+/* Account name and role */
+.lm-sidebar-account-details {
+    display: none;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.lm-sidebar-account-name {
+    overflow: hidden;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lm-sidebar-account-role {
+    color: #9AADA3;
+    font-size: 10px;
+    text-transform: capitalize;
+}
+
+/* Chevron */
+.lm-sidebar-account-chevron {
+    display: none;
+    margin-left: auto;
+    color: #9AADA3;
+    font-size: 10px;
+    transition: transform 0.2s ease;
+}
+
+.lm-sidebar-account-chevron.is-open {
+    transform: rotate(180deg);
+}
+
+/* account menu */
+
+.lm-sidebar-account-menu {
+    position: absolute;
+    z-index: 100;
+    left: 0;
+    bottom: calc(100% + 10px);
+    width: 100%;
+    padding: 7px;
+
+    color: #111111;
+    background: #FFFFFF;
+    border: 1px solid #E1E7E2;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(6, 16, 13, 0.16);
+}
+
+
+/* Dropdown identity header */
+.lm-sidebar-account-menu-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px;
+    border-bottom: 1px solid #E8EEEA;
+    margin-bottom: 5px;
+}
+
+.lm-sidebar-account-menu-header > span {
+    color: #111111;
+    font-size: 13px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.lm-sidebar-account-menu-header small {
+    color: #666666;
+    font-size: 11px;
+}
+
+/* Dropdown links and buttons */
+.lm-sidebar-account-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: #333D37;
+    font-family: inherit;
+    font-size: 12px;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s ease,
+                background-color 0.15s ease;
+}
+
+.lm-sidebar-account-menu-link i {
+    width: 15px;
+    color: #66766D;
+    text-align: center;
+}
+
+.lm-sidebar-account-menu-link:hover,
+.lm-sidebar-account-menu-link:focus-visible {
+    color: #06100D;
+    background: #E8FBF3;
+    outline: none;
+}
+
+.lm-sidebar-account-menu-link:hover i {
+    color: #078C68;
+}
+
+/* Logout */
+.lm-sidebar-account-menu-divider {
+    height: 1px;
+    margin: 5px 4px;
+    background: #E8EEEA;
+}
+
+.lm-sidebar-account-menu-link.lm-sidebar-logout {
+    color: #B42318;
+}
+
+.lm-sidebar-account-menu-link.lm-sidebar-logout i {
+    color: #B42318;
+}
+
+.lm-sidebar-account-menu-link.lm-sidebar-logout:hover {
+    background: #FFF0EF;
+}
+
+/* Hide Alpine-controlled content before initialization */
+[x-cloak] {
+    display: none !important;
+}
+
+/* ========================================
+   SIDEBAR — BACKGROUND DIMMING
+======================================== */
+
+.lm-sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+
+    background: rgba(6, 16, 13, 0.28);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity 250ms ease,
+        visibility 250ms ease;
+}
+
+/* Dim background when sidebar expands */
+body:has(.lm-sidebar:hover) .lm-sidebar-backdrop,
+body:has(.lm-sidebar:focus-within) .lm-sidebar-backdrop {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Keep sidebar above the overlay */
+.lm-sidebar {
+    z-index: 50;
+}
+
 
 
 

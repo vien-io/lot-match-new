@@ -27,6 +27,7 @@
 </head>
 <body class="tw-bg-gray-50">
     <div id="app" class="tw-flex">
+        <div class="lm-sidebar-backdrop"></div>
         {{-- Sidebar --}}
         @auth
         <aside
@@ -36,14 +37,20 @@
             class="sidebar lm-sidebar tw-flex tw-flex-col tw-items-center tw-py-6 tw-z-50"
             aria-label="Main navigation"
         >
+            
             {{-- Logo --}}
             <a href="{{ route('dashboard') }}"
-            class="lm-sidebar-logo tw-mb-5"
+            class="lm-sidebar-logo"
             aria-label="LotMatch dashboard">
-                <img src="{{ asset('images/logoLM.png') }}"
-                    alt="LotMatch"
-                    class="tw-w-12 tw-h-12">
+
+                <span class="lm-sidebar-logo-icon">
+                    <img src="{{ asset('images/logoLM.png') }}"
+                        alt="">
+                </span>
+
+                <span class="lm-sidebar-logo-text">LOT<span>MATCH</span></span>
             </a>
+
 
             {{-- Divider --}}
             <div class="lm-sidebar-divider"></div>
@@ -164,6 +171,90 @@
                         : 'lm-sidebar-link'"
                 />
             </nav>
+
+
+
+
+{{-- Bottom Account Selector --}}
+<div class="lm-sidebar-account" x-data="{ open: false }">
+
+    <button
+        type="button"
+        @click="open = !open"
+        @keydown.escape.window="open = false"
+        class="lm-sidebar-account-trigger"
+        :aria-expanded="open.toString()"
+        aria-label="Open account menu"
+    >
+        {{-- User Avatar --}}
+        <img
+            src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->first_name . ' ' . Auth::user()->last_name) . '&background=06EBB6&color=06100D&rounded=true' }}"
+            alt="User Avatar"
+            class="lm-sidebar-avatar"
+        >
+
+        {{-- Account Details: revealed when sidebar expands --}}
+        <div class="lm-sidebar-account-details">
+            <span class="lm-sidebar-account-name">
+                {{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}
+            </span>
+
+            <span class="lm-sidebar-account-role">
+                {{ ucfirst(Auth::user()->role) }}
+            </span>
+        </div>
+
+        {{-- Dropdown Chevron --}}
+        <i
+            class="fas fa-chevron-down lm-sidebar-account-chevron"
+            :class="{ 'is-open': open }"
+        ></i>
+    </button>
+
+    {{-- Account Dropdown --}}
+    <div
+        x-cloak
+        x-show="open"
+        x-transition:enter="tw-transition tw-ease-out tw-duration-150"
+        x-transition:enter-start="tw-opacity-0 tw-translate-y-1"
+        x-transition:enter-end="tw-opacity-100 tw-translate-y-0"
+        @click.outside="open = false"
+        class="lm-sidebar-account-menu"
+    >
+        <div class="lm-sidebar-account-menu-header">
+            <span>{{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}</span>
+            <small>{{ ucfirst(Auth::user()->role) }} account</small>
+        </div>
+
+        <a href="{{ route('profile') }}" class="lm-sidebar-account-menu-link">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+
+        <a
+            href="javascript:void(0);"
+            id="settings-btn"
+            @click="open = false"
+            class="lm-sidebar-account-menu-link"
+        >
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </a>
+
+        <div class="lm-sidebar-account-menu-divider"></div>
+
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit"
+                class="lm-sidebar-account-menu-link lm-sidebar-logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </form>
+    </div>
+
+</div>
+
         </aside>
         @endauth
 
