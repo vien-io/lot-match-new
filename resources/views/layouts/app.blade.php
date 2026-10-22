@@ -22,7 +22,8 @@
         'resources/js/settings.js',
         'resources/css/dashboard.css',
         'resources/css/sidebar.css',
-        'resources/css/notification.css'
+        'resources/css/notification.css',
+        'resources/css/header.css'
     ])
     
 </head>
@@ -345,9 +346,7 @@
                         </div>
                     </div>
 
-
-
-            <main class="tw-p-4">
+            <main class="tw-p-10">
                 @yield('content')
                 @yield('scripts')
             </main>
