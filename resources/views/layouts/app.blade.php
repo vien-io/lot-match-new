@@ -52,13 +52,12 @@
                 <span class="lm-sidebar-logo-text">LOT<span>MATCH</span></span>
             </a>
 
-
-            {{-- Divider --}}
-            <div class="lm-sidebar-divider"></div>
-
             {{-- Main navigation --}}
             <nav class="lm-sidebar-nav tw-flex tw-flex-col tw-items-center tw-w-full"
                 aria-label="Primary navigation">
+
+                {{-- Divider --}}
+                <div class="lm-sidebar-section-divider"></div>
 
                 <x-sidebar-icon
                     href="{{ route('dashboard') }}"
@@ -161,7 +160,7 @@
                 @endif
 
                 {{-- Documentation --}}
-                <div class="lm-sidebar-section-divider lm-sidebar-lower-divider"></div>
+                <div class="lm-sidebar-section-divider"></div>
 
                 <x-sidebar-icon
                     href="{{ route('about') }}"

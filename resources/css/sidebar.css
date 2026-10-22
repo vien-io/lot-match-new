@@ -26,19 +26,6 @@
     box-sizing: border-box;
 }
 
-.lm-sidebar-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    width: 100%;
-    padding: 0;
-    box-sizing: border-box;
-    overflow: hidden;
-    text-decoration: none;
-}
-
-
 .lm-sidebar-icon {
     width: 48px;
     min-width: 48px;
@@ -62,14 +49,6 @@
     box-shadow: 6px 0 28px rgba(6, 16, 13, 0.20);
 }
 
-.lm-sidebar-divider {
-    flex-shrink: 0;
-    width: 42px;
-    height: 1px;
-    margin: 0 auto 22px;
-    background: rgba(196, 196, 196, 0.18);
-}
-
 /* Keep navigation items from being centered by the parent */
 .lm-sidebar nav {
     width: 100%;
@@ -78,10 +57,18 @@
 
 .lm-sidebar-section-divider {
     flex-shrink: 0;
-    width: 34px;
+    width: calc(100% - 32px);
     height: 1px;
-    margin: 12px auto;
-    background: rgba(196, 196, 196, 0.16);
+    margin: 12px 0 12px 16px;
+    background: rgba(196, 196, 196, 0.658);
+    transition: 
+        width 0.3s ease,
+        background 0.3s ease;
+}
+
+.lm-sidebar:hover .lm-sidebar-section-divider {
+        background: rgba(196, 196, 196, 0.358);
+
 }
 
 .lm-sidebar-lower-divider {
@@ -99,8 +86,8 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    width: 48px;
-    height: 46px;
+    width: 100%;
+    height: 80%;
     min-width: 48px;
     padding: 0;
     border: 1px solid transparent;
@@ -113,13 +100,6 @@
         background 200ms ease,
         border-color 200ms ease,
         transform 200ms ease;
-}
-
-.lm-sidebar .lm-sidebar-link:hover {
-    color: #1ED9D7;
-    background: #102820;
-    border-color: rgba(30, 217, 215, 0.12);
-    transform: translateY(-1px);
 }
 
 .lm-sidebar .lm-sidebar-link-active {
@@ -141,10 +121,7 @@
     box-shadow: 0 0 12px rgba(6, 235, 182, 0.20);
 }
 
-.lm-sidebar .lm-sidebar-link-active:hover {
-    color: #1ED9D7;
-    background: #14372D;
-}
+
 
 .lm-sidebar .lm-sidebar-link:focus-visible,
 .lm-sidebar .lm-sidebar-link-active:focus-visible {
@@ -244,30 +221,6 @@
     box-sizing: border-box;
 }
 
-.lm-sidebar-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-
-    width: 100%;
-    height: 48px;
-    padding: 0;
-    box-sizing: border-box;
-
-    overflow: visible;
-    white-space: nowrap;
-    text-decoration: none;
-
-    transition:
-        justify-content 250ms ease,
-        padding 250ms ease,
-        color 220ms ease,
-        background 220ms ease,
-        border-color 220ms ease,
-        box-shadow 220ms ease,
-        transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
-}
 
 /* Keep icons centered when collapsed */
 .lm-sidebar-icon {
@@ -339,54 +292,11 @@
     transform: translateX(3px);
 }
 
-.lm-sidebar .lm-sidebar-item:hover {
-    background-color: rgba(30, 217, 214, 0.056)
-}
-
 .lm-sidebar .lm-sidebar-item:hover .lm-sidebar-link i,
 .lm-sidebar .lm-sidebar-item:hover .lm-sidebar-link svg {
     transform: scale(1.10);
     filter: drop-shadow(0 0 5px rgba(30, 217, 215, 0.28));
 }
-
-
-/* ========================================
-   SIDEBAR — ACTIVE LINK
-======================================== */
-
-/* Supports the active class on the same anchor */
-.lm-sidebar .lm-sidebar-link.active,
-.lm-sidebar .lm-sidebar-link-active {
-    box-shadow: inset 0 0 16px rgba(6, 235, 182, 0.035);
-}
-
-.lm-sidebar .lm-sidebar-link.active:hover,
-.lm-sidebar .lm-sidebar-link-active:hover {
-    color: #06EBB6;
-
-    background: linear-gradient(
-        135deg,
-        #163B30,
-        #103027
-    );
-
-    border-color: rgba(6, 235, 182, 0.28);
-
-    box-shadow:
-        0 4px 18px rgba(6, 235, 182, 0.08),
-        inset 0 0 14px rgba(6, 235, 182, 0.045);
-
-    transform: translateX(3px);
-}
-
-.lm-sidebar .lm-sidebar-link.active:hover i,
-.lm-sidebar .lm-sidebar-link.active:hover svg,
-.lm-sidebar .lm-sidebar-link-active:hover i,
-.lm-sidebar .lm-sidebar-link-active:hover svg {
-    transform: scale(1.10);
-    filter: drop-shadow(0 0 6px rgba(6, 235, 182, 0.38));
-}
-
 
 
 /* ========================================
