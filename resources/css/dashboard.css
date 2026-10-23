@@ -586,7 +586,7 @@
     }
 
     .lm-reviews-list {
-        padding: 0 21px;
+        padding: 0 21px 21px 21px;
     }
 
     .lm-review {
@@ -611,10 +611,12 @@
         pointer-events: none;
         transition: opacity 220ms ease;
     }
+    .lm-review:nth-child(5)::after {
+        display: none;
+    }
     .lm-review:hover::after {
         opacity: 0;
     }
-
     .lm-review:hover {
         transform: translateY(-2px);
         border-color: rgba(6, 235, 182, 0.45);

@@ -21,6 +21,8 @@
 }
 
 .lm-sidebar-item {
+    display: flex;
+    align-items: center;
     width: 100%;
     padding: 0 12px;
     box-sizing: border-box;
@@ -87,9 +89,9 @@
     justify-content: start;
     flex-shrink: 0;
     width: 100%;
-    height: 80%;
+    height: 85%;
     min-width: 48px;
-    padding: 0;
+    padding: 7px 0;
     border: 1px solid transparent;
     border-radius: 12px;
     background: transparent;
@@ -120,8 +122,6 @@
     background: #06EBB6;
     box-shadow: 0 0 12px rgba(6, 235, 182, 0.20);
 }
-
-
 
 .lm-sidebar .lm-sidebar-link:focus-visible,
 .lm-sidebar .lm-sidebar-link-active:focus-visible {
@@ -214,12 +214,7 @@
     align-items: stretch;
 }
 
-.lm-sidebar-item {
-    width: 100%;
-    min-width: 0;
-    padding: 0 12px;
-    box-sizing: border-box;
-}
+
 
 
 /* Keep icons centered when collapsed */
