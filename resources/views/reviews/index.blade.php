@@ -27,7 +27,7 @@
             <section class="tw-min-w-0 tw-space-y-6">
 
                 {{-- Rating Overview --}}
-                <div class="tw-rounded-xl tw-border tw-border-[#C4C4C4]/70 tw-bg-white tw-p-5 sm:tw-p-6">
+                <div class="tw-rounded-xl tw-border tw-border-[#C4C4C4]/70 tw-bg-white tw-p-10 sm:tw-p-12">
 
                     <div class="tw-mb-5 tw-flex tw-items-center tw-justify-between tw-gap-4">
                         <div>
@@ -60,11 +60,11 @@
                         </select>
                     </div>
 
-                    <div class="tw-grid tw-grid-cols-1 tw-gap-6 md:tw-grid-cols-[200px_minmax(0,1fr)] md:tw-gap-8">
+                    <div class="tw-grid tw-grid-cols-1 tw-gap-6 md:tw-grid-cols-[320px_minmax(0,1fr)] md:tw-gap-8">
 
                         {{-- Average Rating --}}
                         <div id="averageRatingDisplay"
-                             class="tw-flex tw-flex-col tw-items-start tw-justify-center tw-border-b tw-border-[#C4C4C4]/60 tw-pb-6 md:tw-border-b-0 md:tw-border-r md:tw-pb-0 md:tw-pr-8">
+                             class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-border-b tw-border-[#C4C4C4]/60 tw-pb-6 md:tw-border-b-0 md:tw-border-r md:tw-pb-0 md:tw-pr-8">
 
                             <p class="tw-text-sm tw-font-medium tw-text-[#666666]">
                                 Average rating
@@ -85,7 +85,7 @@
                             </div>
 
                             <p id="totalReviews"
-                               class="tw-mt-2 tw-text-sm tw-text-[#666666]">
+                               class="tw-mt-2 tw-text-sm tw-text-[#666666] tw-text-center">
                                 Based on {{ $reviews->count() }} reviews
                             </p>
                         </div>
@@ -100,7 +100,7 @@
                                         : 0;
                                 @endphp
 
-                                <div class="tw-grid tw-grid-cols-[54px_minmax(0,1fr)_32px] tw-items-center tw-gap-3">
+                                <div class="tw-grid tw-grid-cols-[84px_minmax(0,1fr)_52px] tw-items-center tw-gap-3">
                                     <span class="tw-text-sm tw-text-[#666666]">
                                         {{ $star }} star{{ $star > 1 ? 's' : '' }}
                                     </span>
