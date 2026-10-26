@@ -27,9 +27,9 @@
             <section class="tw-min-w-0 tw-space-y-6">
 
                 {{-- Rating Overview --}}
-                <div class="tw-rounded-xl tw-border tw-border-[#C4C4C4]/70 tw-bg-white tw-p-10 sm:tw-p-12">
+                <div class="tw-rounded-xl tw-border tw-border-[#C4C4C4]/70 tw-bg-white tw-p-5 sm:tw-p-6">
 
-                    <div class="tw-mb-5 tw-flex tw-items-center tw-justify-between tw-gap-4">
+                    <div class="tw-mb-5 tw-flex tw-items-start tw-justify-between tw-gap-4">
                         <div>
                             <h2 class="tw-text-base tw-font-semibold tw-text-[#111111]">
                                 Community overview
@@ -60,7 +60,7 @@
                         </select>
                     </div>
 
-                    <div class="tw-grid tw-grid-cols-1 tw-gap-6 md:tw-grid-cols-[320px_minmax(0,1fr)] md:tw-gap-8">
+                    <div class="tw-grid tw-grid-cols-1 tw-gap-6 md:tw-grid-cols-[320px_minmax(0,1fr)] md:tw-gap-8 tw-my-5">
 
                         {{-- Average Rating --}}
                         <div id="averageRatingDisplay"
@@ -145,7 +145,7 @@
                          class="tw-max-h-[650px] tw-overflow-y-auto tw-divide-y tw-divide-[#C4C4C4]/50 tw-scrollbar-thin tw-scrollbar-thumb-[#C4C4C4] tw-scrollbar-track-transparent">
 
                         @forelse($reviews as $review)
-                            <article class="tw-flex tw-gap-3 tw-p-5 tw-transition-colors hover:tw-bg-[#D9D9D9]/15 sm:tw-gap-4 sm:tw-px-6">
+                            <article class="tw-flex tw-gap-3 tw-p-5 sm:tw-gap-4 sm:tw-px-6">
 
                                 {{-- Reviewer Avatar --}}
                                 <img
@@ -158,10 +158,12 @@
                                 <div class="tw-min-w-0 tw-flex-1">
 
                                     <div class="tw-flex tw-flex-col tw-gap-2 sm:tw-flex-row sm:tw-items-start sm:tw-justify-between">
-                                        <div class="tw-min-w-0">
+                                        <div class="tw-flex tw-gap-2 tw-min-w-0">
                                             <h3 class="tw-break-words tw-text-sm tw-font-semibold tw-text-[#111111]">
                                                 {{ trim(($review->user?->first_name ?? '') . ' ' . ($review->user?->last_name ?? '')) ?: 'Deleted User' }}
                                             </h3>
+
+                                            <span class="tw-text-xs tw-text-[#C4C4C4]">•</span>
 
                                             <p class="tw-mt-1 tw-text-xs tw-text-[#666666]">
                                                 {{ $review->block?->name ?? 'Unknown Block' }}
@@ -180,12 +182,9 @@
                                             {!! str_repeat('★', $review->rating) !!}{!! str_repeat('☆', 5 - $review->rating) !!}
                                         </div>
 
-                                        <span class="tw-text-xs tw-font-medium tw-text-[#666666]">
-                                            {{ $review->rating }}.0 / 5
-                                        </span>
                                     </div>
 
-                                    <p class="tw-mt-3 tw-whitespace-pre-line tw-break-words tw-text-sm tw-leading-6 tw-text-[#444444]">
+                                    <p class="tw-mt-3 tw-break-words tw-text-sm tw-leading-6 tw-text-[#444444]">
                                         {{ filled($review->comment) ? $review->comment : 'No comment provided.' }}
                                     </p>
                                 </div>
@@ -307,21 +306,26 @@
                             {{-- Comment --}}
                             <div>
                                 <label for="reviewComment"
-                                       class="tw-mb-2 tw-block tw-text-sm tw-font-medium tw-text-[#111111]">
+                                    class="tw-mb-2 tw-block tw-text-sm tw-font-medium tw-text-[#111111]">
                                     Comment
                                     <span class="tw-font-normal tw-text-[#666666]">(optional)</span>
                                 </label>
 
                                 <textarea id="reviewComment"
-                                          name="comment"
-                                          rows="5"
-                                          placeholder="What was your experience like?"
-                                          class="tw-w-full tw-resize-y tw-rounded-lg tw-border tw-border-[#C4C4C4] tw-bg-white tw-px-3 tw-py-3 tw-text-sm tw-leading-6 tw-text-[#111111] tw-outline-none tw-transition placeholder:tw-text-[#999999] focus:tw-border-[#06100D] focus:tw-ring-2 focus:tw-ring-[#06EBB6]/40">{{ old('comment') }}</textarea>
+                                        name="comment"
+                                        rows="5"
+                                        placeholder="What was your experience like?"
+                                        class="tw-w-full tw-resize-y tw-rounded-lg tw-border tw-border-[#C4C4C4] tw-bg-white tw-px-3 tw-py-3 tw-text-sm tw-leading-6 tw-text-[#111111] tw-outline-none tw-transition placeholder:tw-text-[#999999] focus:tw-border-[#06100D] focus:tw-ring-2 focus:tw-ring-[#06EBB6]/40">{{ old('comment') }}</textarea>
+
+                                <p id="commentError"
+                                class="tw-mt-1.5 tw-hidden tw-text-xs tw-text-red-600"
+                                role="alert"></p>
 
                                 @error('comment')
                                     <p class="tw-mt-1.5 tw-text-xs tw-text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
+
 
                             {{-- Submit --}}
                             <button type="submit"

@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             BlocksTableSeeder::class,
             LotSeeder::class,
-            ReviewsTableSeeder::class,
             UserTableSeeder::class,
+            ReviewsTableSeeder::class,
         ]);
     }
 

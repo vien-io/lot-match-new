@@ -73,12 +73,9 @@ class ReviewController extends Controller
             ]);
         }
 
-        $blocks = Block::all(); 
+        $blocks = Block::orderBy('id')->get(); 
         return view('reviews.index', compact('reviews', 'averageRating', 'ratingCounts', 'blocks'));
     }
-
-
-
 
 
     public function checkToxicity(string $comment): bool
@@ -160,13 +157,6 @@ class ReviewController extends Controller
         // BASIC CONTENT FILTERS
         // -----------------------------
         if ($comment) {
-            /* if ($this->checkToxicity($comment)) {
-                return response()->json([
-                    'message' => 'Comment detected as toxic. Please revise.'
-                ], 422);
-            } else {
-                Log::error('Toxicity Check failed!');
-            } */
             
             if (strlen(trim($comment)) < 15) {
                 return response()->json([
@@ -195,7 +185,7 @@ class ReviewController extends Controller
             $pattern = '/(' . implode('|', $this->bannedWords) . '|https?:\/\/\S+)/i';
             if (preg_match($pattern, $comment)) {
                 return response()->json([
-                    'message' => 'Comment contains prohibited content or links.'
+                    'message' => 'Comment contains prohibited word, content, or links.'
                 ], 422);
             }
         }
