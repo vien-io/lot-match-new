@@ -20,6 +20,17 @@
     animation: tw-shimmer 1.6s ease-in-out infinite;
 }
 
+.tw-skeleton-dark {
+    background: linear-gradient(
+        90deg,
+        #101f18 25%,
+        #1b3026 50%,
+        #101f18 75%
+    );
+    background-size: 200% 100%;
+    animation: tw-shimmer 1.6s ease-in-out infinite;
+}
+
 @keyframes tw-pulse-dot {
     0%, 100% {
         opacity: 0.35;

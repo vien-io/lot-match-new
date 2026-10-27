@@ -266,7 +266,7 @@
                     </div>
 
                     {{-- Rating Content --}}
-                    <div class="tw-p-4 sm:tw-p-5">
+                    <div id="satisfactionRatingCard" class="tw-p-4 sm:tw-p-5">
                         <div class="tw-relative tw-overflow-hidden tw-rounded-xl tw-border tw-border-white/[0.06] tw-bg-[#101F18] tw-p-5 sm:tw-p-6">
 
                             {{-- Subtle background accent --}}
@@ -383,7 +383,7 @@
                     </div>
 
                     {{-- Chart Content --}}
-                    <div class="tw-p-4 sm:tw-p-5">
+                    <div  id="sentimentChartEmptyState" class="tw-p-4 sm:tw-p-5">
 
                         {{-- Chart / Empty State Container --}}
                         <div class="tw-relative tw-flex tw-min-h-[280px] tw-items-center tw-justify-center tw-overflow-hidden tw-rounded-xl tw-border tw-border-[#E8EBE8] tw-bg-[#FAFBFA] sm:tw-min-h-[300px]">
