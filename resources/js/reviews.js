@@ -184,12 +184,31 @@ document.addEventListener('DOMContentLoaded', function() {
             averageStarsEl.innerHTML = '★'.repeat(Math.round(data.averageRating)) + '☆'.repeat(5 - Math.round(data.averageRating));
             totalReviewsEl.textContent = `Based on ${data.totalReviews} reviews`;
 
-            for (let i=5; i>=1; i--) {
-                const bar = document.getElementById(`rating-bar-${i}`);
+            for (let i = 5; i >= 1; i--) {
+                const count = Number(data.ratingCounts[i] ?? 0);
+
                 const percent = data.totalReviews
-                    ? (data.ratingCounts[i] / data.totalReviews) * 100
+                    ? (count / data.totalReviews) * 100
                     : 0;
-                if (bar) bar.style.width = percent + '%';
+
+                const bar = document.getElementById(`rating-bar-${i}`);
+                const countEl = document.getElementById(`rating-count-${i}`);
+
+                // Update the progress bar width.
+                if (bar) {
+                    bar.style.width = percent + '%';
+
+                    // Update accessibility information.
+                    bar.parentElement.setAttribute(
+                        'aria-valuenow',
+                        Math.round(percent)
+                    );
+                }
+
+                // Update the number beside the bar.
+                if (countEl) {
+                    countEl.textContent = count;
+                }
             }
 
             renderReviews(data.reviews);

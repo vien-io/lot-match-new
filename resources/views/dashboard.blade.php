@@ -208,9 +208,9 @@
         </aside>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="tw-py-6 tw-text-center tw-text-sm tw-text-gray-500 tw-mt-12">
-      © 2025 LotMatch Interactive 3D Mapping with Forecasting Data Analytics. All rights reserved.
+    {{-- Footer --}}
+    <footer class="tw-pt-2 tw-text-center tw-text-xs tw-leading-5 tw-text-[#666666]">
+        © {{ date('Y') }} LotMatch Interactive 3D Mapping with Forecasting Data Analytics. All rights reserved.
     </footer>
 </div>
 @endsection
