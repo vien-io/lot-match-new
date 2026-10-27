@@ -592,7 +592,7 @@
     .lm-review {
         position: relative;
         border: 1px solid transparent;
-        padding: 12px;
+        padding: 12px 12px 22px 12px;
         border-radius: 12px;
         transition:
             transform 220ms ease,
@@ -645,24 +645,24 @@
         align-items: center;
         justify-content: space-between;
         gap: 12px;
-        margin-bottom: 9px;
+        margin-bottom: 15px;
+    }
+    .lm-reviewer-head {
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
     .lm-reviewer-info {
         display: flex;
-        align-items: center;
         flex-wrap: wrap;
         gap: 8px;
     }
 
     .lm-review-block {
         color: #666666;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 400;
         transition: color 180ms ease;
-    }
-
-    .lm-review-block::first-letter {
-        color: #06EBB6;
     }
 
     .lm-reviewer {
@@ -695,7 +695,6 @@
 
     .lm-reviewer-name {
         overflow: hidden;
-        margin-bottom: 3px;
         font-size: 13px;
         font-weight: 600;
         text-overflow: ellipsis;
@@ -711,7 +710,7 @@
         flex-shrink: 0;
         color: #D9A82E;
         font-size: 12px;
-        letter-spacing: 1px;
+        letter-spacing: -2px;
         transition: transform 220ms ease;
     }
 
@@ -826,10 +825,6 @@
 
         .lm-panel-header {
             padding: 17px 16px 14px;
-        }
-
-        .lm-reviews-list {
-            padding: 0 16px;
         }
 
         .lm-review-footer {

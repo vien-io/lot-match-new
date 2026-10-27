@@ -26,51 +26,10 @@ class ReviewsTableSeeder extends Seeder
         $blocks = range(1, 37); 
         $sentiments = ['positive', 'negative'];
 
-        $positiveComments = [
-            'Absolutely loved it! Worth every penny.',
-            'Fantastic experience — would definitely come back!',
-            'Peaceful environment and great amenities.',
-            'Everything exceeded my expectations.',
-            'A hidden gem! Perfect for families.',
-            'Highly recommended — top-notch service.',
-            'Superb location and very relaxing vibe.',
-            'Modern and clean facilities, loved it!',
-            'Beautiful place, staff were very accommodating.',
-            'Comfortable and well-maintained surroundings.',
-            'Perfect spot for a weekend getaway.',
-            'Truly a five-star experience!',
-            'Amazing atmosphere and attention to detail.',
-            'Great investment potential in this area.',
-            'Loved the greenery and peaceful environment.',
-            'Smooth process and friendly staff.',
-            'Excellent community and amenities.',
-            'Had an unforgettable stay!',
-            'Spacious and beautifully designed units.',
-            'Everything went perfectly — highly satisfied!'
-        ];
+        $comments = require database_path('seeders/data/ReviewComments.php');
 
-        $negativeComments = [
-            'Disappointed — not as advertised.',
-            'Poor service and unfriendly staff.',
-            'Had several issues with cleanliness.',
-            'Definitely not worth the price.',
-            'Would not recommend — waste of money.',
-            'Very noisy and uncomfortable stay.',
-            'Bad experience overall, needs improvement.',
-            'Too crowded and poorly maintained.',
-            'Customer support was unhelpful.',
-            'Construction nearby ruined the experience.',
-            'Looks nice in photos but reality is different.',
-            'Felt unsafe in the area.',
-            'Overpriced for what it offers.',
-            'Terrible maintenance, leaking ceilings.',
-            'Wouldn’t come back again.',
-            'Slow response from management.',
-            'The rooms were dirty and smelled bad.',
-            'Facilities were outdated and broken.',
-            'Staff ignored our requests multiple times.',
-            'Completely regret choosing this place.'
-        ];
+        $positiveComments = $comments['positive'];
+        $negativeComments = $comments['negative'];
 
         $now = Carbon::now();
 

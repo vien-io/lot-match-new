@@ -39,7 +39,7 @@ export async function onBlockChange(blockId) {
         const data = await res.json();
 
         // TESTING ONLY: simulate a 32-second delay.
-        await new Promise(resolve => setTimeout(resolve, 32000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
         console.log('Forecast data:', data);
 

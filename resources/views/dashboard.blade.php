@@ -108,24 +108,32 @@
                                           <div class="lm-reviewer-name">
                                               {{ trim(($review->user->first_name ?? '') . ' ' . ($review->user->last_name ?? '')) ?: 'Customer' }}
                                           </div>
-
-                                          <span class="lm-review-block">
-                                              → {{ $review->block->name ?? 'Unknown Block' }}
-                                          </span>
                                       </div>
 
-                                      <div class="lm-review-date">
-                                          {{ $review->created_at?->format('M d, Y') ?? '' }}
-                                      </div>
+                                      <div class="lm-reviewer-head">
+                                            <span class="lm-review-date">
+                                                {{ $review->created_at?->format('M d, Y') ?? '' }}
+                                            </span>
+                                            <span class="tw-inline-block tw-h-[4px] tw-w-[4px] tw-rounded-full tw-bg-current tw-align-middle tw-text-[#D3D3D3]"></span>
+                                            <span class="lm-review-block">
+                                                {{ $review->block->name ?? 'Unknown Block' }}
+                                            </span>
+                                        </div>
                                   </div>
                               </div>
 
-                               <div class="lm-review-stars"
-                                  aria-label="{{ (int) ($review->rating ?? 0) }} out of 5 stars">
-                                  @for ($star = 1; $star <= 5; $star++)
-                                      {{ $star <= (int) ($review->rating ?? 0) ? '★' : '☆' }}
-                                  @endfor
-                              </div>
+                               <div class="tw-flex tw-flex-col tw-items-start">
+                                    <div class="lm-review-stars"
+                                        aria-label="{{ (int) ($review->rating ?? 0) }} out of 5 stars">
+                                        @for ($star = 1; $star <= 5; $star++)
+                                            {{ $star <= (int) ($review->rating ?? 0) ? '★' : '☆' }}
+                                        @endfor
+                                    </div>
+
+                                    <span class="tw-mt-1 tw-text-[11px] tw-text-gray-500">
+                                        {{ (int) ($review->rating ?? 0) }} out of 5
+                                    </span>
+                                </div>
                             </div>
 
                             <p class="lm-review-comment">
