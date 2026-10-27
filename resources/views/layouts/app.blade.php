@@ -23,7 +23,8 @@
         'resources/css/dashboard.css',
         'resources/css/sidebar.css',
         'resources/css/notification.css',
-        'resources/css/header.css'
+        'resources/css/header.css',
+        'resources/css/components/forecast-loading.css'
     ])
     
 </head>

@@ -1,4 +1,8 @@
+// used by forecast page
+
 import Chart from 'chart.js/auto';
+import { resolve } from 'chart.js/helpers';
+import { onBlockChange } from '../pages/forecast/block-forecast.js';
 
 let sentimentChart = null;
 
@@ -109,108 +113,8 @@ function renderForecastNarrative(container, report) {
   container.innerHTML = html;
 }
 
-// Main async function
-async function onBlockChange(blockId) {
-  const summaryDiv  = document.getElementById('aiSummary');
-  const narrativeDiv = document.getElementById('aiForecastNarrative');
-  const forecastDiv  = document.getElementById('aiForecastRating');
-  const starsDiv     = document.getElementById('forecastStars');
-  const chartCanvas  = document.getElementById('sentimentChart');
-
-  if (!blockId) {
-    summaryDiv.textContent   = 'Select a block to see the summary.';
-    narrativeDiv.textContent = 'Select a block to see the full forecast.';
-    forecastDiv.textContent  = '--';
-    starsDiv.innerHTML       = '☆☆☆☆☆';
-    if (sentimentChart) sentimentChart.destroy();
-    return;
-  }
-
-  summaryDiv.textContent   = 'Loading summary...';
-  narrativeDiv.textContent = 'Loading forecast...';
-  forecastDiv.textContent  = '--';
-  starsDiv.innerHTML       = '☆☆☆☆☆';
-
-  try {
-    const res = await fetch(`/api/forecast/db/${blockId}`, { headers: { 'Accept': 'application/json' } });
-    const data = await res.json();
-
-    // Update summary and forecast
-    summaryDiv.textContent  = data.summary || 'No summary available.';
-    forecastDiv.textContent = data.forecast !== null ? `${data.forecast} / 5` : '--';
-    renderStars(starsDiv, data.forecast);
-
-    // Render detailed forecast narrative if JSON
-    const detailed = data.detailed_report;
-    if (detailed && (typeof detailed === 'object' || (typeof detailed === 'string' && detailed.trim().startsWith('{')))) {
-      const reportJson = typeof detailed === 'string' ? JSON.parse(detailed) : detailed;
-      renderForecastNarrative(narrativeDiv, reportJson);
-    } else {
-      narrativeDiv.textContent = detailed || 'No full forecast narrative available.';
-    }
-
-    // Build & render chart
-    if (sentimentChart) sentimentChart.destroy();
-    const { labels, datasets } = buildSentimentDatasets(data.sentiment);
-    console.log(data.sentiment);
-
-    if (labels.length) {
-      // compute dynamic max value
-      const allValues = datasets.flatMap(ds => ds.data);
-      const maxValue = Math.max(...allValues, 5); 
-
-      const ctx = document.getElementById('sentimentChart').getContext('2d');
-      sentimentChart = new Chart(ctx, {
-        type: 'line',
-        data: { labels, datasets },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false, // let the container handle height
-          plugins: {
-            legend: { position: 'bottom' },
-            title: {
-              display: true,
-              text: 'Sentiment Trends Over Time'
-            },
-          },
-          interaction: {
-            intersect: false,
-            mode: 'index', // show all tooltips on hover
-          },
-          scales: {
-            x: {
-              display: true,
-              title: {
-                display: true,
-                text: 'Month'
-              }
-            },
-            y: {
-              display: true,
-              title: {
-                display: true,
-                text: 'Number of Comments'
-              },
-              beginAtZero: true,
-              suggestedMin: 0,
-              max: maxValue,
-              ticks: { precision: 0 }
-            }
-          }
-        }
-      });
-    }
-
-
-  } catch (err) {
-    console.error(err);
-    summaryDiv.textContent   = 'Error fetching summary.';
-    narrativeDiv.textContent = '';
-    forecastDiv.textContent  = '--';
-    starsDiv.innerHTML       = '☆☆☆☆☆';
-    if (sentimentChart) sentimentChart.destroy();
-  }
-}
+// ON-BLOCK CHANGE
+window.onBlockChange = onBlockChange;
 
 // Initialize listener
 function init() {

@@ -205,7 +205,7 @@ class ForecastController extends Controller
 
     public function getForecastDataFromDb($blockId)
     {
-        Log::info("getForecastDataFromDB is called");
+        Log::info("Forecast From DB --> BLOCK ID is: " . $blockId);
         $block = Block::find($blockId);
 
         if(!$block) {
@@ -217,6 +217,14 @@ class ForecastController extends Controller
                 'forecast_updated_at' => null,
             ]);
         }
+
+        Log::info("Response Data: ", [
+            'summary' => $block->ai_summary,
+            'detailed_report' => $block->full_forecast_report,
+            'forecast' => $block->forecasted_rating,
+            'sentiment' => json_decode($block->sentiment_data, true) ?? [],
+            'forecast_updated_at' => $block->forecast_updated_at?->toISOString()
+        ]);
 
         return response()->json([
             'summary' => $block->ai_summary,
