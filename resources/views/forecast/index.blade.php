@@ -300,7 +300,7 @@
                                     </div>
 
                                     {{-- Rating Indicator --}}
-                                    <div class="tw-w-full sm:tw-max-w-[180px]">
+                                    <div class="tw-w-full sm:tw-max-w-[230px]">
                                         <div class="tw-flex tw-items-center tw-justify-between">
                                             <span class="tw-text-xs tw-text-[#93A399]">
                                                 Satisfaction level
@@ -320,7 +320,7 @@
 
                                         <div class="tw-mt-2 tw-flex tw-justify-between tw-text-[10px] tw-text-[#718278]">
                                             <span>0</span>
-                                            <span>5.0</span>
+                                            <span>100%</span>
                                         </div>
                                     </div>
 

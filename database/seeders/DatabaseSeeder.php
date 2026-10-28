@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             LotSeeder::class,
             UserTableSeeder::class,
             ReviewsTableSeeder::class,
+            BlockAiSummarySeeder::class,
+            ForecastRatingsSeeder::class,
         ]);
     }
 

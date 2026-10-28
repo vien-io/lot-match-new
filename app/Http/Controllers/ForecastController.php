@@ -6,17 +6,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Services\SummaryService;
+use App\Services\ForecastService;
 use App\Models\Block;
-
-
 
 class ForecastController extends Controller
 {
     protected $summaryService;
+    protected $forecastService;
 
-    public function __construct(SummaryService $summaryService)
-    {
+    public function __construct(
+        SummaryService $summaryService,
+        ForecastService $forecastService
+    ) {
         $this->summaryService = $summaryService;
+        $this->forecastService = $forecastService;
     }
 
     public function forecastPage()
@@ -78,32 +81,16 @@ class ForecastController extends Controller
             'sentiment' => json_decode($block->sentiment_data, true) ?? [],
         ]);
     }
-    
-    
-
 
     // exponential moving average logic (EMA)
     public function calculateForecast($blockId, $alpha = 0.3)
     {
-        $ratingsQuery = DB::table('reviews')
-        ->where('block_id', $blockId)
-        ->orderBy('created_at', 'asc')
-        ->select('rating', 'created_at')
-        ->get();
-
-        if ($ratingsQuery->isEmpty()) {
-            return null;
-        }
-
-        $ratings = $ratingsQuery->pluck('rating')->toArray();
-
-        $ema = $ratings[0];
-        for ($i = 1; $i < count($ratings); $i++) {
-            $ema = $alpha * $ratings[$i] + (1 - $alpha) * $ema;
-        }
-
-        return round($ema, 2);
+        return $this->forecastService->calculateForecast(
+            (int) $blockId,
+            (float) $alpha
+        );
     }
+
 
     // for the chart
     public function forecastBlockRating($blockId, $alpha = 0.3)
@@ -205,7 +192,6 @@ class ForecastController extends Controller
 
     public function getForecastDataFromDb($blockId)
     {
-        Log::info("Forecast From DB --> BLOCK ID is: " . $blockId);
         $block = Block::find($blockId);
 
         if(!$block) {
@@ -213,27 +199,25 @@ class ForecastController extends Controller
                 'summary' => null,
                 'detailed_report' => null,
                 'forecast' => null,
+                'satisfaction' => null,
                 'sentiment' => [],
                 'forecast_updated_at' => null,
             ]);
         }
 
-        Log::info("Response Data: ", [
-            'summary' => $block->ai_summary,
-            'detailed_report' => $block->full_forecast_report,
-            'forecast' => $block->forecasted_rating,
-            'sentiment' => json_decode($block->sentiment_data, true) ?? [],
-            'forecast_updated_at' => $block->forecast_updated_at?->toISOString()
-        ]);
+        $forecast = $block->forecasted_rating;
+        $satisfaction = $forecast !== null
+            ? round((($forecast - 1) / 4) * 100, 2)
+            : null;
 
         return response()->json([
             'summary' => $block->ai_summary,
             'detailed_report' => $block->full_forecast_report,
             'forecast' => $block->forecasted_rating,
+            'satisfaction' => $satisfaction,
             'sentiment' => json_decode($block->sentiment_data, true) ?? [],
             'forecast_updated_at' => $block->forecast_updated_at?->toISOString(),
         ]);
-        
     }
 
     public function status($blockId)

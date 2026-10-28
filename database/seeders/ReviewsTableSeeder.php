@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 class ReviewsTableSeeder extends Seeder
 {
@@ -12,51 +13,167 @@ class ReviewsTableSeeder extends Seeder
     {
         $driver = DB::getDriverName();
 
-        if ($driver === 'mysql'){
+        // Clear existing reviews.
+        if ($driver === 'mysql') {
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-            DB::table('reviews')->truncate();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-        } else if ($driver === 'pgsql') {
-            DB::statement('TRUNCATE TABLE reviews RESTART IDENTITY CASCADE;');
+
+            try {
+                DB::table('reviews')->truncate();
+            } finally {
+                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            }
+        } elseif ($driver === 'pgsql') {
+            DB::statement(
+                'TRUNCATE TABLE reviews RESTART IDENTITY CASCADE;'
+            );
         } else {
             DB::table('reviews')->delete();
         }
-        
 
-        $blocks = range(1, 37); 
-        $sentiments = ['positive', 'negative'];
+        $blocks = range(1, 37);
 
-        $comments = require database_path('seeders/data/ReviewComments.php');
+        // Load the comment arrays.
+        $comments = require database_path(
+            'seeders/data/ReviewComments.php'
+        );
 
-        $positiveComments = $comments['positive'];
-        $negativeComments = $comments['negative'];
+        $positiveComments = array_values(
+            $comments['positive'] ?? []
+        );
 
-        $now = Carbon::now();
+        $negativeComments = array_values(
+            $comments['negative'] ?? []
+        );
 
-        $userIds = DB::table('users')->pluck('id')->toArray();
+        // Validate the expected comment counts.
+        if (
+            count($positiveComments) !== 98 ||
+            count($negativeComments) !== 50
+        ) {
+            throw new RuntimeException(
+                'Expected 98 positive and 50 negative comments. Found '
+                . count($positiveComments) . ' positive and '
+                . count($negativeComments) . ' negative.'
+            );
+        }
 
-        for ($i = 1; $i <= 200; $i++) {
-            $blockId = $blocks[array_rand($blocks)];
-            $userId = $userIds[array_rand($userIds)];
-            $sentiment = $sentiments[array_rand($sentiments)];
+        // Use existing users in a predictable order.
+        $userIds = DB::table('users')
+            ->orderBy('id')
+            ->pluck('id')
+            ->all();
 
-            if ($sentiment === 'positive') {
-                $rating = rand(4, 5);
-                $comment = $positiveComments[array_rand($positiveComments)];
-            } else {
-                $rating = rand(1, 2);
-                $comment = $negativeComments[array_rand($negativeComments)];
+        if (empty($userIds)) {
+            throw new RuntimeException(
+                'No users found. Please seed users before reviews.'
+            );
+        }
+
+        /*
+         * DETERMINISTIC DISTRIBUTION
+         *
+         * Blocks 1–24:
+         *   3 positive + 1 negative
+         *
+         * Blocks 25–37:
+         *   2 positive + 2 negative
+         *
+         * Total:
+         *   98 positive + 50 negative = 148 reviews
+         *
+         * No shuffle(), rand(), or array_rand().
+         */
+
+        $positiveIndex = 0;
+        $negativeIndex = 0;
+        $reviewIndex = 0;
+
+        $baseDate = Carbon::create(
+            2026, 1, 1, 9, 0, 0
+        );
+
+        $reviews = [];
+
+        foreach ($blocks as $blockId) {
+            $positiveCount = $blockId <= 24 ? 3 : 2;
+            $negativeCount = $blockId <= 24 ? 1 : 2;
+
+            // Assign positive comments in their original array order.
+            for ($i = 0; $i < $positiveCount; $i++) {
+                $comment = $positiveComments[$positiveIndex];
+
+                // Deterministic positive ratings: vary between 3 and 5.
+                $positiveRatings = [5, 4, 5, 3, 4, 5, 4, 4, 5, 3];
+
+                $rating = $positiveRatings[
+                    ($positiveIndex * 3 + $blockId) % count($positiveRatings)
+                ];
+
+                $createdAt = $baseDate
+                    ->copy()
+                    ->addDays($reviewIndex);
+
+                $reviews[] = [
+                    'user_id' => $userIds[
+                        $reviewIndex % count($userIds)
+                    ],
+                    'block_id' => $blockId,
+                    'rating' => $rating,
+                    'comment' => $comment,
+                    'sentiment' => 'positive',
+                    'created_at' => $createdAt,
+                    'updated_at' => $createdAt,
+                ];
+
+                $positiveIndex++;
+                $reviewIndex++;
             }
 
-            DB::table('reviews')->insert([
-                'user_id' => $userId,
-                'block_id' => $blockId,
-                'rating' => $rating,
-                'comment' => $comment,
-                'sentiment' => $sentiment,
-                'created_at' => $now->copy()->subDays(rand(0, 365)),
-                'updated_at' => $now,
-            ]);
+            // Assign negative comments in their original array order.
+            for ($i = 0; $i < $negativeCount; $i++) {
+                $comment = $negativeComments[$negativeIndex];
+
+                // Deterministic negative ratings: vary between 1 and 3.
+                $negativeRatings = [1, 2, 1, 3, 2, 1, 2, 2, 3, 1];
+
+                $rating = $negativeRatings[
+                    ($negativeIndex * 3 + $blockId) % count($negativeRatings)
+                ];
+
+                $createdAt = $baseDate
+                    ->copy()
+                    ->addDays($reviewIndex);
+
+                $reviews[] = [
+                    'user_id' => $userIds[
+                        $reviewIndex % count($userIds)
+                    ],
+                    'block_id' => $blockId,
+                    'rating' => $rating,
+                    'comment' => $comment,
+                    'sentiment' => 'negative',
+                    'created_at' => $createdAt,
+                    'updated_at' => $createdAt,
+                ];
+
+                $negativeIndex++;
+                $reviewIndex++;
+            }
         }
+
+        // Insert reviews in batches.
+        foreach (array_chunk($reviews, 100) as $batch) {
+            DB::table('reviews')->insert($batch);
+        }
+
+        $this->command?->info(
+            'Successfully seeded ' . count($reviews)
+            . ' reviews across 37 blocks.'
+        );
+
+        $this->command?->info(
+            'Positive: ' . $positiveIndex
+            . ' | Negative: ' . $negativeIndex
+        );
     }
 }

@@ -1,10 +1,10 @@
-
 import {
     showSummaryLoading,
     showNarrativeLoading,
     showRatingLoading,
     showSentimentChartLoading
 } from './forecast-skeletons.js';
+import { renderStars, renderSatisfaction } from '../../charts/forecast.js';
 
 // Save the original empty states once.
 const summaryDiv = document.getElementById('aiSummary');
@@ -71,11 +71,18 @@ export async function onBlockChange(blockId) {
             }
 
             if (updatedStarsDiv) {
-                // Replace this with your actual rating-to-stars logic if needed.
-                updatedStarsDiv.textContent = '☆☆☆☆☆';
+                renderStars(updatedStarsDiv, data.forecast)
             }
+
         } else {
             ratingCard.innerHTML = ratingCardOriginalHTML;
+        }
+
+        // Satisfaction
+        if (data.satisfaction != null) {
+            renderSatisfaction(data.satisfaction);
+        } else {
+            renderSatisfaction(null);
         }
 
         // Sentiment chart

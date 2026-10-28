@@ -3,7 +3,7 @@
 @section('title', 'Reviews & Ratings')
 
 @section('content')
-<main class="tw-mx-auto tw-w-full tw-max-w-[1440px] tw-space-y-6 tw-pb-8">
+<main class="tw-mx-auto tw-w-full tw-max-w-[1040px] tw-space-y-6 tw-pb-8">
     {{-- Page heading and primary action --}}
     <header class="lm-heading">
         <div>
