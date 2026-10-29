@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             ReviewsTableSeeder::class,
             BlockAiSummarySeeder::class,
             ForecastRatingsSeeder::class,
+            FullForecastReportSeeder::class,
         ]);
     }
 

@@ -6,6 +6,7 @@ import {
 } from "./forecast-skeletons.js";
 import { renderStars, renderSatisfaction } from "../../charts/forecast.js";
 import { renderSentimentChart } from "../../charts/sentiment-chart.js";
+import { marked } from "marked";
 
 // Save the original empty states once.
 const summaryDiv = document.getElementById("aiSummary");
@@ -19,7 +20,6 @@ const ratingCardOriginalHTML = ratingCard.innerHTML;
 const sentimentEmptyStateHTML = sentimentEmptyState.innerHTML;
 
 export async function onBlockChange(blockId) {
-
     // Display independent loading animations.
     showSummaryLoading(summaryDiv);
     showNarrativeLoading(narrativeDiv);
@@ -38,7 +38,7 @@ export async function onBlockChange(blockId) {
         const data = await res.json();
 
         // TESTING ONLY: simulate a 32-second delay.
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        // await new Promise((resolve) => setTimeout(resolve, 2000));
 
         console.log("Forecast data:", data);
 
@@ -51,7 +51,11 @@ export async function onBlockChange(blockId) {
 
         // Detailed report
         if (data.detailed_report != null) {
-            narrativeDiv.textContent = data.detailed_report;
+            const report = data.detailed_report
+                .replace(/^\n+|\n+$/g, "")
+                .replace(/^ {4}/gm, "");
+            narrativeDiv.innerHTML = marked.parse(report);
+            // narrativeDiv.textContent = data.detailed_report;
         } else {
             narrativeDiv.innerHTML = narrativeEmptyState;
         }
@@ -96,7 +100,6 @@ export async function onBlockChange(blockId) {
         if (data.forecast_updated_at != null) {
             // TODO: Update your timestamp element.
         }
-
     } catch (error) {
         console.error("Failed to load forecast:", error);
 

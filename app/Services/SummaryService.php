@@ -125,28 +125,68 @@ class SummaryService
         })->implode('; ');
 
         $prompt = <<<PROMPT
-        Produce a detailed, professional, multi-paragraph report for each section, using examples and full sentences. Expand on context, analysis, and recommendations.
-        The "executive_summary' and 'recommendations' fields should be at least 3–5 full paragraphs, while the forecast_details should be at lest 5-8 full paragraphs of deep analysis and prediction focusing on what property trends are likely based on the summary.
+        Produce a professional, concise, and easy-to-scan neighborhood property forecast report based on the supplied data.
 
-        Reformat the following neighborhood forecast into a professional, structured JSON report.
+        Use clear, natural language and prioritize actionable insights over lengthy explanations. Avoid repeating the same observations, risks, or recommendations across sections. Every paragraph must introduce a distinct insight. Keep the entire report reasonably short while preserving meaningful analysis.
 
-        Include these fields:
-        - executive_summary (string)
-        - sentiment_analysis (string)
-        - monthly_sentiment (array of objects with month, positive, negative)
-        - forecast_details (string)
-        - recommendations (array of strings)
+        ### Required Output Sections
 
-        Keep the meaning and forecast values exactly the same. Output only valid JSON.
+        1. Executive Summary
 
-        Forecast paragraph:
+        - Write 2-3 short paragraphs summarizing the neighborhood's overall outlook, forecasted rating, satisfaction score, and most important findings.
+        - Highlight the main strengths and the most significant concern.
+
+        2. Sentiment Analysis
+
+        - Write 1-2 short paragraphs explaining the dominant sentiment, key positive and negative themes, and what they suggest about resident satisfaction.
+        - Interpret the data cautiously, especially when the number of reviews is limited.
+
+        3. Monthly Sentiment
+
+        - Present the data in a compact Markdown table with three columns: Month, Positive, and Negative.
+        - Include only the months provided in the input. Do not invent missing months or assume that missing data represents zero sentiment.
+        - Add a brief note only when necessary to clarify data limitations.
+
+        4. Forecast Details
+
+        - Write 3-4 focused paragraphs analyzing the most likely neighborhood and property-market trends based on the summary, monthly sentiment, forecasted rating, and satisfaction score.
+        - Explain the likely implications for neighborhood appeal, buyer interest, property maintenance, and future market performance where relevant.
+        - Distinguish data-supported observations from potential future outcomes. Do not claim that property prices will rise or fall without sufficient market evidence.
+        - Include the most important risks and uncertainties without repeating the Executive Summary.
+
+        5. Recommendations
+
+        - Provide 3-5 concise, actionable recommendations as a numbered list.
+        - Each recommendation should begin with a clear action and briefly explain its purpose.
+        - Avoid lengthy paragraphs and redundant advice.
+
+        ### Formatting and Readability Rules
+
+        - Use Markdown headings, short paragraphs, and bullet points where appropriate.
+        - Aim for 2-4 sentences per paragraph.
+        - Bold only important figures, key findings, and significant risks.
+        - Avoid unnecessary introductions, conclusions, filler, and repeated explanations.
+        - Do not force additional content merely to meet a paragraph count.
+        - Preserve the accuracy of all supplied figures and sentiment data. Do not invent evidence or unsupported trends.
+        - Keep the report focused on the specific neighborhood rather than generic real-estate advice.
+
+        ### Input Data
+
+        Forecast Summary:\
         {$summary}
 
-        Monthly Sentiment Data:
+        Monthly Sentiment Data:\
         {$sentimentText}
 
-        Forecasted Rating:
+        Forecasted Rating:\
         {$forecastedRating}
+
+        Satisfaction Score:
+        (percentage of the forecasted rating)
+
+        ### Output Requirements
+
+        Return Markdown only, not JSON. Include all five sections in the specified order.
         PROMPT;
 
 

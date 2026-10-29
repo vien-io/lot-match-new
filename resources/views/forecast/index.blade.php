@@ -183,7 +183,7 @@
                     <div class="tw-p-5 sm:tw-p-7">
                         <div id="aiForecastNarrative"
                              aria-live="polite"
-                             class="tw-max-h-[600px] tw-overflow-y-auto tw-break-words tw-pr-2 tw-text-sm tw-leading-7 tw-text-[#414842] tw-scrollbar-thin tw-scrollbar-thumb-[#CDD4CE] tw-scrollbar-track-transparent">
+                             class="tw-max-h-[600px] tw-overflow-y-auto tw-overflow-x-hidden tw-break-words tw-pr-[100px] tw-text-sm tw-leading-7 tw-text-[#414842] tw-scrollbar-thin tw-scrollbar-thumb-[#CDD4CE] tw-scrollbar-track-transparent tw-ml-[50px]">
                             
                             <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-px-6 tw-py-12 tw-text-center">
 
