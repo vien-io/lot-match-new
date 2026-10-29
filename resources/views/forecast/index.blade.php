@@ -383,7 +383,7 @@
                     </div>
 
                     {{-- Chart Content --}}
-                    <div id="sentimentChartSection" class="tw-p-4 sm:tw-p-5">
+                    <div id="sentimentEmptyStateOuter" class="tw-p-4 sm:tw-p-5">
 
                         {{-- Chart / Empty State Container --}}
                         <div class="tw-relative tw-flex tw-min-h-[280px] tw-items-center tw-justify-center tw-overflow-hidden tw-rounded-xl tw-border tw-border-[#E8EBE8] tw-bg-[#FAFBFA] sm:tw-min-h-[300px]">

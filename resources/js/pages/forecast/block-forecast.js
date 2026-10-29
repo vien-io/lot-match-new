@@ -11,18 +11,14 @@ import { renderSentimentChart } from "../../charts/sentiment-chart.js";
 const summaryDiv = document.getElementById("aiSummary");
 const narrativeDiv = document.getElementById("aiForecastNarrative");
 const ratingCard = document.getElementById("satisfactionRatingCard");
-const sentimentEmptyState = document.getElementById("sentimentEmptyState");
+const sentimentEmptyState = document.getElementById("sentimentEmptyStateOuter");
 
 const summaryEmptyState = summaryDiv.innerHTML;
 const narrativeEmptyState = narrativeDiv.innerHTML;
 const ratingCardOriginalHTML = ratingCard.innerHTML;
 const sentimentEmptyStateHTML = sentimentEmptyState.innerHTML;
 
-let sentimentChartInstance = null;
-
 export async function onBlockChange(blockId) {
-    const forecastDiv = document.getElementById("aiForecastRating");
-    const starsDiv = document.getElementById("forecastStars");
 
     // Display independent loading animations.
     showSummaryLoading(summaryDiv);
@@ -88,13 +84,9 @@ export async function onBlockChange(blockId) {
             renderSatisfaction(null);
         }
 
-        console.log({
-            "sentiment: ": data.sentiment,
-            "length: ": Object.keys(data.sentiment)?.length 
-        })
-
         // Sentiment chart
         if (Object.keys(data.sentiment)?.length > 0) {
+            sentimentEmptyState.innerHTML = sentimentEmptyStateHTML;
             renderSentimentChart(data.sentiment);
         } else {
             sentimentEmptyState.innerHTML = sentimentEmptyStateHTML;
@@ -104,6 +96,7 @@ export async function onBlockChange(blockId) {
         if (data.forecast_updated_at != null) {
             // TODO: Update your timestamp element.
         }
+
     } catch (error) {
         console.error("Failed to load forecast:", error);
 

@@ -1,6 +1,7 @@
 import { Chart } from "chart.js";
 
 let sentimentChartInstance = null;
+let sentimentChartCanvas = null;
 
 export function renderSentimentChart(sentiment) {
     const sentimentEmptyState = document.getElementById("sentimentEmptyState");
@@ -88,11 +89,20 @@ export function renderSentimentChart(sentiment) {
         ],
     };
 
-    // Update the existing chart instead of creating duplicates.
-    if (sentimentChartInstance) {
-        sentimentChartInstance.data = chartData;
-        sentimentChartInstance.update();
+    if (!sentimentEmptyState || !sentimentChartContainer || !sentimentCanvas) {
+        console.error("Sentiment chart elements missing:", {
+            sentimentEmptyState,
+            sentimentChartContainer,
+            sentimentCanvas,
+        });
         return;
+    }
+
+    // If the canvas was replaced, destroy the old chart instance.
+    if (sentimentChartInstance && sentimentChartCanvas !== sentimentCanvas) {
+        sentimentChartInstance.destroy();
+        sentimentChartInstance = null;
+        sentimentChartCanvas = null;
     }
 
     // Create the chart for the first time.
