@@ -7,7 +7,6 @@ use App\Models\Block;
 use App\Models\Lot;
 use Illuminate\Support\Facades\Storage;
 use App\Models\LotImage;
-use Illuminate\Support\Facades\Log;
 
 class PropertyController extends Controller
 {
@@ -16,19 +15,38 @@ class PropertyController extends Controller
     {
         $query = Lot::with(['images', 'block'])->latest();
 
-        // search filter (matches block name, lot name, or status)
+        // Search by lot, block, or status.
         if ($request->filled('search')) {
             $search = $request->search;
+
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                ->orWhere('status', 'like', "%{$search}%")
-                ->orWhereHas('block', fn($b) => $b->where('name', 'like', "%{$search}%"));
+                $q->where('name', 'ilike', "%{$search}%")
+                    ->orWhere('status', 'ilike', "%{$search}%")
+                    ->orWhereHas('block', function ($blockQuery) use ($search) {
+                        $blockQuery->where('name', 'ilike', "%{$search}%");
+                    });
             });
         }
 
-        // fetch filtered + paginated properties
-        $properties = $query->paginate(35);
-        $blocks = Block::all();
+        // Status filter.
+        if (in_array($request->status, ['available', 'sold'], true)) {
+            $query->whereRaw(
+                'LOWER(status) = ?',
+                [$request->status]
+            );
+        }
+
+        // Block filter.
+        if ($request->filled('block')) {
+            $query->where('block_id', $request->block);
+        }
+
+        $properties = $query->paginate(10)->withQueryString();
+
+        $blocks = Block::query()
+            ->whereHas('lots')
+            ->orderBy('name')
+            ->get();
 
         return view('properties.index', compact('properties', 'blocks'));
     }
@@ -51,7 +69,7 @@ class PropertyController extends Controller
 
         $numbers = array_map('trim', explode(',', $request->lot_numbers));
 
-        foreach($numbers as $num) {
+        foreach ($numbers as $num) {
             $lot = Lot::create([
                 'block_id'  => $request->block_id,
                 'name'      => 'Lot ' . $num,
@@ -65,8 +83,8 @@ class PropertyController extends Controller
             ]);
 
             // handle lot images
-            if($request->hasFile('lot_images')) {
-                foreach($request->file('lot_images') as $file) {
+            if ($request->hasFile('lot_images')) {
+                foreach ($request->file('lot_images') as $file) {
                     $path = $file->store('lot_images', 'public');
                     $lot->images()->create([
                         'path' => 'storage/' . $path,
@@ -74,7 +92,7 @@ class PropertyController extends Controller
                 }
             }
         }
-        
+
 
         return redirect()->route('properties.index')
             ->with('success', 'Property added successfully!');
@@ -96,7 +114,7 @@ class PropertyController extends Controller
         ]);
 
         $numbers = array_map('trim', explode(',', $request->lot_numbers));
-        $lotNumber = $numbers[0]; 
+        $lotNumber = $numbers[0];
         $property = Lot::findOrFail($id);
 
         // Update property fields
@@ -134,7 +152,7 @@ class PropertyController extends Controller
         }
 
         return redirect()->route('properties.index')
-                        ->with('success', 'Property updated successfully!');
+            ->with('success', 'Property updated successfully!');
     }
 
 
@@ -144,7 +162,7 @@ class PropertyController extends Controller
 
         // Delete all related image files from storage
         foreach ($property->images as $image) {
-            $path = str_replace('storage/', '', $image->path); 
+            $path = str_replace('storage/', '', $image->path);
 
             if (Storage::disk('public')->exists($path)) {
                 Storage::disk('public')->delete($path);
@@ -155,12 +173,13 @@ class PropertyController extends Controller
         $property->delete();
 
         return redirect()->route('properties.index')
-                        ->with('success', 'Property and its images deleted successfully!');
+            ->with('success', 'Property and its images deleted successfully!');
     }
 
 
 
-    public function addImage(Request $request) {
+    public function addImage(Request $request)
+    {
         $request->validate([
             'lot_id' => 'required|exists:lots,id',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
