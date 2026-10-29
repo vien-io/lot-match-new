@@ -109,9 +109,14 @@ class ReviewsTableSeeder extends Seeder
                     ($positiveIndex * 3 + $blockId) % count($positiveRatings)
                 ];
 
+                $dayOffset = ($reviewIndex * 47 + $blockId * 13) % 301;
+                $hour = 8 + (($reviewIndex * 5 + $blockId) % 12);
+                $minute = ($reviewIndex * 17 + $blockId * 7) % 60;
+
                 $createdAt = $baseDate
                     ->copy()
-                    ->addDays($reviewIndex);
+                    ->addDays($dayOffset)
+                    ->setTime($hour, $minute, 0);
 
                 $reviews[] = [
                     'user_id' => $userIds[

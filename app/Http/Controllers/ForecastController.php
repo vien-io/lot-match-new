@@ -178,11 +178,11 @@ class ForecastController extends Controller
             $month = $row->month;
             $sentiment = $row->sentiment;
 
-            if (!in_array($sentiment, ['positive', 'neutral', 'negative'])) {
+            if (!in_array($sentiment, ['positive', 'negative'])) {
                 $sentiment = 'neutral';
             }
             if (!isset($sentimentByMonth[$month])) {
-                $sentimentByMonth[$month] = ['positive' => 0, 'neutral' => 0, 'negative' => 0];
+                $sentimentByMonth[$month] = ['positive' => 0, 'negative' => 0];
             }
             $sentimentByMonth[$month][$sentiment] = $row->count;
         }
@@ -210,12 +210,14 @@ class ForecastController extends Controller
             ? round((($forecast - 1) / 4) * 100, 2)
             : null;
 
+        $sentiment = $this->fetchSentimentTrends($blockId);
+        
         return response()->json([
             'summary' => $block->ai_summary,
             'detailed_report' => $block->full_forecast_report,
             'forecast' => $block->forecasted_rating,
             'satisfaction' => $satisfaction,
-            'sentiment' => json_decode($block->sentiment_data, true) ?? [],
+            'sentiment' => $sentiment,
             'forecast_updated_at' => $block->forecast_updated_at?->toISOString(),
         ]);
     }
@@ -227,10 +229,6 @@ class ForecastController extends Controller
         if (!$block) {
             return response()->json(['status' => 'not_found'], 404);
         }
-
-        /* $isDone = !empty($block->ai_summary)
-            || !empty($block->forecasted_rating)
-            || !empty($block->sentiment_data); */
 
         return response()->json([
             'status' => $block->forecast_status,

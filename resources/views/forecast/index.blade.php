@@ -383,7 +383,7 @@
                     </div>
 
                     {{-- Chart Content --}}
-                    <div  id="sentimentChartEmptyState" class="tw-p-4 sm:tw-p-5">
+                    <div id="sentimentChartSection" class="tw-p-4 sm:tw-p-5">
 
                         {{-- Chart / Empty State Container --}}
                         <div class="tw-relative tw-flex tw-min-h-[280px] tw-items-center tw-justify-center tw-overflow-hidden tw-rounded-xl tw-border tw-border-[#E8EBE8] tw-bg-[#FAFBFA] sm:tw-min-h-[300px]">
@@ -395,7 +395,7 @@
                             </div>
 
                             {{-- Keep the canvas for Chart.js --}}
-                            <div id="sentimentChartEmptyState"
+                            <div id="sentimentEmptyState"
                                 class="tw-relative tw-z-10 tw-flex tw-w-full tw-flex-col tw-items-center tw-px-6 tw-py-10 tw-text-center">
 
                                 <div class="tw-relative tw-flex tw-h-16 tw-w-16 tw-items-center tw-justify-center tw-rounded-2xl tw-border tw-border-[#DDE8DF] tw-bg-white tw-shadow-[0_4px_16px_rgba(34,92,66,0.06)]">

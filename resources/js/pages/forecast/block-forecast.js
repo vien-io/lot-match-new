@@ -2,24 +2,27 @@ import {
     showSummaryLoading,
     showNarrativeLoading,
     showRatingLoading,
-    showSentimentChartLoading
-} from './forecast-skeletons.js';
-import { renderStars, renderSatisfaction } from '../../charts/forecast.js';
+    showSentimentChartLoading,
+} from "./forecast-skeletons.js";
+import { renderStars, renderSatisfaction } from "../../charts/forecast.js";
+import { renderSentimentChart } from "../../charts/sentiment-chart.js";
 
 // Save the original empty states once.
-const summaryDiv = document.getElementById('aiSummary');
-const narrativeDiv = document.getElementById('aiForecastNarrative');
-const ratingCard = document.getElementById('satisfactionRatingCard');
-const sentimentEmptyState = document.getElementById('sentimentChartEmptyState');
+const summaryDiv = document.getElementById("aiSummary");
+const narrativeDiv = document.getElementById("aiForecastNarrative");
+const ratingCard = document.getElementById("satisfactionRatingCard");
+const sentimentEmptyState = document.getElementById("sentimentEmptyState");
 
 const summaryEmptyState = summaryDiv.innerHTML;
 const narrativeEmptyState = narrativeDiv.innerHTML;
 const ratingCardOriginalHTML = ratingCard.innerHTML;
 const sentimentEmptyStateHTML = sentimentEmptyState.innerHTML;
 
+let sentimentChartInstance = null;
+
 export async function onBlockChange(blockId) {
-    const forecastDiv = document.getElementById('aiForecastRating');
-    const starsDiv = document.getElementById('forecastStars');
+    const forecastDiv = document.getElementById("aiForecastRating");
+    const starsDiv = document.getElementById("forecastStars");
 
     // Display independent loading animations.
     showSummaryLoading(summaryDiv);
@@ -29,7 +32,7 @@ export async function onBlockChange(blockId) {
 
     try {
         const res = await fetch(`/api/forecast/db/${blockId}`, {
-            headers: { Accept: 'application/json' }
+            headers: { Accept: "application/json" },
         });
 
         if (!res.ok) {
@@ -39,9 +42,9 @@ export async function onBlockChange(blockId) {
         const data = await res.json();
 
         // TESTING ONLY: simulate a 32-second delay.
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
 
-        console.log('Forecast data:', data);
+        console.log("Forecast data:", data);
 
         // Summary
         if (data.summary != null) {
@@ -63,17 +66,17 @@ export async function onBlockChange(blockId) {
             // Restore the original card structure before updating its values.
             ratingCard.innerHTML = ratingCardOriginalHTML;
 
-            const updatedForecastDiv = document.getElementById('aiForecastRating');
-            const updatedStarsDiv = document.getElementById('forecastStars');
+            const updatedForecastDiv =
+                document.getElementById("aiForecastRating");
+            const updatedStarsDiv = document.getElementById("forecastStars");
 
             if (updatedForecastDiv) {
                 updatedForecastDiv.textContent = data.forecast;
             }
 
             if (updatedStarsDiv) {
-                renderStars(updatedStarsDiv, data.forecast)
+                renderStars(updatedStarsDiv, data.forecast);
             }
-
         } else {
             ratingCard.innerHTML = ratingCardOriginalHTML;
         }
@@ -85,16 +88,14 @@ export async function onBlockChange(blockId) {
             renderSatisfaction(null);
         }
 
+        console.log({
+            "sentiment: ": data.sentiment,
+            "length: ": Object.keys(data.sentiment)?.length 
+        })
+
         // Sentiment chart
-        if (data.sentiment?.length > 0) {
-            // Hide the empty state and show the chart container.
-            const chartEmptyState = document.getElementById('sentimentChartEmptyState');
-            const chartContainer = document.getElementById('sentimentChartContainer');
-
-            if (chartEmptyState) chartEmptyState.classList.add('tw-hidden');
-            if (chartContainer) chartContainer.classList.remove('tw-hidden');
-
-            // TODO: Update your Chart.js chart using data.sentiment.
+        if (Object.keys(data.sentiment)?.length > 0) {
+            renderSentimentChart(data.sentiment);
         } else {
             sentimentEmptyState.innerHTML = sentimentEmptyStateHTML;
         }
@@ -104,7 +105,7 @@ export async function onBlockChange(blockId) {
             // TODO: Update your timestamp element.
         }
     } catch (error) {
-        console.error('Failed to load forecast:', error);
+        console.error("Failed to load forecast:", error);
 
         summaryDiv.innerHTML = summaryEmptyState;
         narrativeDiv.innerHTML = narrativeEmptyState;
