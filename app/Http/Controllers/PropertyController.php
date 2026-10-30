@@ -48,6 +48,13 @@ class PropertyController extends Controller
             ->orderBy('name')
             ->get();
 
+        // Return only the table when the request is AJAX.
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('properties.property-results', compact('properties'))->render(),
+            ]);
+        }
+
         return view('properties.index', compact('properties', 'blocks'));
     }
 
@@ -55,9 +62,9 @@ class PropertyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'block_id'  => 'required|exists:blocks,id',
+            'block_id' => 'required|exists:blocks,id',
             'lot_numbers' => 'required|string',
-            'lot_area'  => 'required|numeric',
+            'lot_area' => 'required|numeric',
             'floor_area' => 'required|numeric',
             'price' => 'required|numeric|min:1|max:999999999999999.99',
             'status' => 'required|in:available,sold',
@@ -71,9 +78,9 @@ class PropertyController extends Controller
 
         foreach ($numbers as $num) {
             $lot = Lot::create([
-                'block_id'  => $request->block_id,
-                'name'      => 'Lot ' . $num,
-                'lot_area'  => $request->lot_area,
+                'block_id' => $request->block_id,
+                'name' => 'Lot ' . $num,
+                'lot_area' => $request->lot_area,
                 'floor_area' => $request->floor_area ?? 1,
                 'price' => $request->price,
                 'status' => $request->status,
@@ -101,10 +108,10 @@ class PropertyController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'block_id'    => 'required|exists:blocks,id',
+            'block_id' => 'required|exists:blocks,id',
             'lot_numbers' => 'required|string',
-            'lot_area'    => 'required|numeric',
-            'floor_area'  => 'required|numeric',
+            'lot_area' => 'required|numeric',
+            'floor_area' => 'required|numeric',
             'price' => 'required|numeric',
             'status' => 'required|in:available,sold',
             'orientation' => 'required|string',
@@ -119,15 +126,15 @@ class PropertyController extends Controller
 
         // Update property fields
         $property->update([
-            'block_id'    => $request->block_id,
-            'name'        => 'Lot ' . $lotNumber,
-            'lot_area'    => $request->lot_area,
-            'floor_area'  => $request->floor_area,
-            'price'       => $request->price,
-            'status'      => $request->status,
+            'block_id' => $request->block_id,
+            'name' => 'Lot ' . $lotNumber,
+            'lot_area' => $request->lot_area,
+            'floor_area' => $request->floor_area,
+            'price' => $request->price,
+            'status' => $request->status,
             'orientation' => $request->orientation,
-            'sunlight'    => $request->sunlight,
-            'flood_risk'  => $request->flood_risk,
+            'sunlight' => $request->sunlight,
+            'flood_risk' => $request->flood_risk,
         ]);
 
         // Delete selected interior images (DB + physical file)

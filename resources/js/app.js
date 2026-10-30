@@ -5,6 +5,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import './components/lotSelector.js';
 import './components/userLotForm.js';
 import './features/password-toggle.js';
+import './pages/properties/properties.js';
 
 
 // ====================
@@ -37,10 +38,8 @@ window.searchPlaceholderCycle = function() {
 // ====================
 // ALPINE.JS
 // ====================
-document.addEventListener('DOMContentLoaded', () => {
-    window.Alpine = Alpine;
-    Alpine.start();
-});
+window.Alpine = Alpine;
+Alpine.start();
 
 
 

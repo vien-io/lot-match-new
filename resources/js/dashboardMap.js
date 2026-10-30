@@ -4,7 +4,6 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { contain } from 'three/src/extras/TextureUtils.js';
 
 function initThreeJS() {
-    console.log('initthreejs is called');
     const container = document.getElementById('dashboard-map-container');
 
     // container size
@@ -552,6 +551,5 @@ function initThreeJS() {
 }
 
  window.addEventListener('load', () => {
-       console.log('Window load event triggered');
        initThreeJS();
    });

@@ -23,7 +23,6 @@
                 <button
                     type="button"
                     data-status="{{ $value }}"
-                    onclick="setPropertyFilter('status', '{{ $value }}')"
                     aria-pressed="{{ $currentStatus === $value ? 'true' : 'false' }}"
                     class="tw-inline-flex tw-items-center tw-justify-center tw-rounded-lg tw-border tw-px-3.5 tw-py-2 tw-text-sm tw-font-medium tw-transition-colors focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-[#06EBB6]
                         {{ $currentStatus === $value
@@ -138,15 +137,3 @@
         </button>
     </div>
 </div>
-
-<script>
-    function setPropertyFilter(name, value) {
-        const form = document.getElementById('propertyFilters');
-
-        if (name === 'status') {
-            document.getElementById('statusFilter').value = value;
-        }
-
-        form.requestSubmit();
-    }
-</script>
