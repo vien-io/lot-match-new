@@ -40,6 +40,7 @@
                     Filter by block
                 </label>
 
+
                 <select
                     id="blockFilter"
                     name="block"
@@ -49,7 +50,7 @@
 
                     <option value="">All blocks</option>
 
-                    @foreach ($blocks as $block)
+                    @foreach ($blocks as $index => $block)
                         <option
                             value="{{ $block->id }}"
                             @selected((string) request('block') === (string) $block->id)>
