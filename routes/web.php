@@ -187,8 +187,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/lots/add-image', [LotController::class, 'addImage'])->name('lots.addImage');
     Route::get('/lots/{lotId}/images', [LotImageController::class, 'index']);
     Route::get('/lots/fallback-images', [LotImageController::class, 'fallback']);
-
-
+    Route::delete('/property-images/{image}', [PropertyController::class, 'destroyImage'])
+    ->name('properties.images.destroy');
 
     // ------------------------
     // Buyer Routes (Owner Verification Requests)

@@ -1,104 +1,131 @@
+// ADD PROPERTY MODAL
+document
+    .getElementById("addPropertyButton")
+    ?.addEventListener("click", openAddModal);
 
-const searchForm = document.getElementById("propertyFilters");
+// Open Add Property Modal
+function openAddModal() {
+    const modal = document.getElementById("addPropertyModal");
+    const form = document.getElementById("propertyForm");
 
-// Only initialize property filters on pages containing the property form.
-if (searchForm) {
-    const searchInput = searchForm.querySelector('input[name="search"]');
+    form.reset();
 
-    // Handle status and other property filters.
-    function setPropertyFilter(name, value) {
-        if (name === "status") {
-            document.getElementById("statusFilter").value = value;
-            updateStatusHighlight(value);
-        }
+    form.action = "/properties";
+    document.getElementById("propertyMethod").value = "POST";
 
-        searchForm.requestSubmit();
-    }
+    document.getElementById("propertyModalTitle").textContent = "Add Property";
+    document.getElementById("propertySubmitButton").textContent =
+        "Add Property";
 
-    // Handle status filter buttons.
-    document.querySelectorAll("[data-status]").forEach(button => {
-        button.addEventListener("click", () => {
-            setPropertyFilter("status", button.dataset.status);
-        });
-    });
+    // Clear existing images
+    document.getElementById("existingImagesContainer").innerHTML = "";
 
-    let searchTimeout;
-    let activeController = null;
-
-    // Fetch and update the property table without reloading.
-    async function fetchProperties(url, updateHistory = true) {
-        if (activeController) {
-            activeController.abort();
-        }
-
-        activeController = new AbortController();
-
-        try {
-            const response = await fetch(url, {
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest",
-                    Accept: "application/json",
-                },
-                signal: activeController.signal,
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to fetch properties.");
-            }
-
-            const data = await response.json();
-
-            document.getElementById("propertyResults").outerHTML = data.html;
-
-            if (updateHistory) {
-                window.history.pushState({}, "", url);
-            }
-        } catch (error) {
-            if (error.name !== "AbortError") {
-                console.error(error);
-            }
-        }
-    }
-
-    // Intercept form submission.
-    searchForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        const params = new URLSearchParams(new FormData(searchForm));
-        const url = `${searchForm.action}?${params.toString()}`;
-
-        fetchProperties(url);
-    });
-
-    // Automatically search after the user stops typing.
-    if (searchInput) {
-        searchInput.addEventListener("input", function () {
-            clearTimeout(searchTimeout);
-
-            searchTimeout = setTimeout(() => {
-                searchForm.requestSubmit();
-            }, 400);
-        });
-    }
-
-    // Restore previous results when navigating browser history.
-    window.addEventListener("popstate", function () {
-        fetchProperties(window.location.href, false);
-    });
-
-    function updateStatusHighlight(selectedStatus) {
-        document.querySelectorAll("[data-status]").forEach(button => {
-            const isActive = button.dataset.status === selectedStatus;
-
-            button.setAttribute("aria-pressed", isActive);
-
-            button.classList.toggle("tw-border-[#06100D]", isActive);
-            button.classList.toggle("tw-bg-[#06100D]", isActive);
-            button.classList.toggle("tw-text-white", isActive);
-
-            button.classList.toggle("tw-border-[#C4C4C4]", !isActive);
-            button.classList.toggle("tw-bg-white", !isActive);
-            button.classList.toggle("tw-text-[#444444]", !isActive);
-        });
-    }
+    modal.classList.replace("tw-hidden", "tw-flex");
 }
+
+const addPropertyModal = document.getElementById("addPropertyModal");
+
+addPropertyModal?.addEventListener("click", (event) => {
+    if (event.target === addPropertyModal) {
+        addPropertyModal.classList.replace("tw-flex", "tw-hidden");
+    }
+});
+
+// EDIT PROPERTY MODAL
+window.openEditModal = function (
+    id,
+    name,
+    lotArea,
+    floorArea,
+    blockId,
+    price,
+    status,
+    orientation,
+    sunlight,
+    floodRisk,
+    images = [],
+) {
+    const modal = document.getElementById("addPropertyModal");
+    const form = document.getElementById("propertyForm");
+
+    form.reset();
+
+    // Update form action and method
+    form.action = `/properties/${id}`;
+    document.getElementById("propertyMethod").value = "PUT";
+
+    // Update modal heading and button
+    document.getElementById("propertyModalTitle").textContent = "Edit Property";
+    document.getElementById("propertySubmitButton").textContent =
+        "Save Changes";
+
+    // Populate existing fields
+    document.getElementById("addBlockId").value = blockId;
+    document.getElementById("addLotNumber").value = name.replace(/Lot\s*/i, "");
+    document.getElementById("addLotArea").value = lotArea;
+    document.getElementById("addFloorArea").value = floorArea;
+    document.getElementById("price").value = price;
+    document.getElementById("addStatus").value = status;
+    document.getElementById("addOrientation").value = orientation?.toLowerCase() ?? "";
+    document.getElementById("addSunlight").value = sunlight?.toLowerCase() ?? "";
+    document.getElementById("addFloodRisk").value = floodRisk?.toLowerCase() ?? "";
+
+    // Populate existing images
+    const container = document.getElementById("existingImagesContainer");
+    container.innerHTML = "";
+
+    images.forEach((img) => {
+        const div = document.createElement("div");
+        div.className = "tw-relative";
+
+        const image = document.createElement("img");
+        image.src = img.url;
+        image.alt = "Existing property image";
+        image.className = "tw-h-20 tw-w-20 tw-rounded-lg tw-object-cover";
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className =
+            "tw-absolute tw-right-0 tw-top-0 tw-flex tw-h-5 tw-w-5 tw-items-center tw-justify-center tw-rounded-full tw-bg-red-500 tw-text-white hover:tw-bg-red-600";
+        button.textContent = "×";
+        button.setAttribute("aria-label", "Remove existing image");
+        button.onclick = () => removeExistingImage(img.id, button);
+
+        div.append(image, button);
+        container.appendChild(div);
+    });
+
+    modal.classList.replace("tw-hidden", "tw-flex");
+};
+
+// REMOVE EXISTING PROPERTY IMAGE
+window.removeExistingImage = function (imageId, btn) {
+    // mark the image for deletion
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "delete_images[]";
+    input.value = imageId;
+    document.getElementById("editPropertyForm").appendChild(input);
+
+    // remove from UI
+    btn.parentElement.remove();
+};
+
+window.closeEditModal = function () {
+    document.getElementById("editPropertyModal").classList.add("tw-hidden");
+};
+
+
+// PRICE VALIDATION
+const priceInput = document.getElementById("price");
+const priceError = document.getElementById("priceError");
+
+priceInput?.addEventListener("input", () => {
+    const value = parseFloat(priceInput.value);
+
+    if (value > 999999999999999.99) {
+        priceError.textContent = "Price is too high!";
+    } else {
+        priceError.textContent = "";
+    }
+});

@@ -45,8 +45,8 @@
         </div>
 
         {{-- Form --}}
-        <form id="propertyForm" method="POST" action="{{ route('properties.store') }}" enctype="multipart/form-data" autocomplete="off"
-            class="tw-flex tw-min-h-0 tw-flex-1 tw-flex-col tw-mx-2">
+        <form id="propertyForm" method="POST" action="{{ route('properties.store') }}" enctype="multipart/form-data"
+            autocomplete="off" class="tw-flex tw-min-h-0 tw-flex-1 tw-flex-col tw-mx-2">
 
             @csrf
             <input type="hidden" name="_method" id="propertyMethod" value="POST">
@@ -304,11 +304,7 @@
 
                             <div
                                 class="tw-flex tw-h-11 tw-w-11 tw-items-center tw-justify-center tw-rounded-xl tw-bg-white tw-text-[#06100D] tw-shadow-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="tw-h-5 tw-w-5" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="1.7">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 16V4m0 0L7 9m5-5l5 5M5 16v3a1 1 0 001 1h12a1 1 0 001-1v-3" />
-                                </svg>
+                                <i class="fa-solid fa-arrow-up-from-bracket tw-text-lg" aria-hidden="true"></i>
                             </div>
 
                             <div>

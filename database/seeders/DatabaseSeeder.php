@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             BlockAiSummarySeeder::class,
             ForecastRatingsSeeder::class,
             FullForecastReportSeeder::class,
+            LotImageSeeder::class,
         ]);
     }
 

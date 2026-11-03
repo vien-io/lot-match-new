@@ -3,7 +3,12 @@
 @section('title', 'Manage Properties')
 
 @section('content')
-    @vite('resources/css/print.css')
+    @vite([
+        'resources/css/print.css',
+        'resources/js/pages/properties/properties.js',
+        'resources/js/pages/properties/property-gallery.js',
+        'resources/js/pages/properties/property-filters.js'
+    ])
     <main class="tw-mx-auto tw-w-full tw-max-w-[1600px]">
         {{-- Page Header --}}
         <div class="tw-flex tw-flex-col tw-gap-4 sm:tw-flex-row sm:tw-items-center sm:tw-justify-between">
@@ -25,11 +30,11 @@
         {{-- Success Message --}}
         @if(session('success'))
             <div class="tw-mb-5 tw-rounded-lg tw-border
-                        tw-border-[#06EBB6]/40 tw-bg-[#06EBB6]/10 tw-p-4" role="status">
+                tw-border-[#06EBB6]/40 tw-bg-[#06EBB6]/10 tw-p-4" role="status">
 
                 <div class="tw-flex tw-items-center tw-gap-2">
                     <i class="fa-solid fa-circle-check
-                              tw-text-sm tw-text-[#059669]" aria-hidden="true"></i>
+                        tw-text-sm tw-text-[#059669]" aria-hidden="true"></i>
 
                     <p class="tw-text-sm tw-font-semibold tw-text-[#065F46]">
                         Property saved successfully
@@ -44,44 +49,43 @@
 
         {{-- Validation Errors --}}
         @if($errors->any())
-            <div class="tw-mb-5 tw-rounded-lg tw-border
-                                        tw-border-red-200 tw-bg-red-50/70 tw-p-4" role="alert">
+                <div class="tw-mb-5 tw-rounded-lg tw-border
+            tw-border-red-200 tw-bg-red-50/70 tw-p-4" role="alert">
 
-                <div class="tw-flex tw-items-center tw-gap-2">
-                    <i class="fa-solid fa-circle-exclamation
-                                              tw-text-sm tw-text-red-600" aria-hidden="true"></i>
+                    <div class="tw-flex tw-items-center tw-gap-2">
+                        <i class="fa-solid fa-circle-exclamation
+                    tw-text-sm tw-text-red-600" aria-hidden="true"></i>
 
-                    <p class="tw-text-sm tw-font-semibold tw-text-red-800">
-                        Unable to save property
+                        <p class="tw-text-sm tw-font-semibold tw-text-red-800">
+                            Unable to save property
+                        </p>
+
+                        <span class="tw-ml-auto tw-rounded-md
+                        tw-bg-red-100 tw-px-2 tw-py-0.5
+                        tw-text-xs tw-font-medium tw-text-red-700">
+                            {{ $errors->count() }}
+                            {{ Str::plural('error', $errors->count()) }}
+                        </span>
+                    </div>
+
+                    <p class="tw-mt-1 tw-text-xs tw-text-red-700/60">
+                        Please correct the following information and try again.
                     </p>
 
-                    <span class="tw-ml-auto tw-rounded-md
-                                                 tw-bg-red-100 tw-px-2 tw-py-0.5
-                                                 tw-text-xs tw-font-medium tw-text-red-700">
-                        {{ $errors->count() }}
-                        {{ Str::plural('error', $errors->count()) }}
-                    </span>
+                    <ul class="tw-mt-3 tw-mx-2 tw-space-y-2 tw-border-t tw-border-red-200 tw-pt-3">
+                        @foreach($errors->all() as $error)
+                            <li class="tw-flex tw-items-center tw-gap-2
+                                tw-text-sm tw-text-red-700">
+
+                                <i class="fa-regular fa-circle-xmark tw-mt-0.5
+                                    tw-shrink-0 tw-text-xs" aria-hidden="true"></i>
+
+                                <span class="tw-text-xs">{{ $error }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
-
-                <p class="tw-mt-1 tw-text-xs tw-text-red-700/60">
-                    Please correct the following information and try again.
-                </p>
-
-                <ul class="tw-mt-3 tw-mx-2 tw-space-y-2 tw-border-t tw-border-red-200 tw-pt-3">
-                    @foreach($errors->all() as $error)
-                        <li class="tw-flex tw-items-center tw-gap-2
-                                                               tw-text-sm tw-text-red-700">
-
-                            <i class="fa-regular fa-circle-xmark tw-mt-0.5
-                                                                  tw-shrink-0 tw-text-xs" aria-hidden="true"></i>
-
-                            <span class="tw-text-xs">{{ $error }}</span>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
         @endif
-
 
         {{-- Property Table Panel --}}
         <section class="tw-overflow-hidden tw-rounded-xl tw-border tw-border-[#C4C4C4]/70 tw-bg-white">
@@ -113,7 +117,3 @@
     @include('properties.lot-image-modal')
 
 @endsection
-
-@push('scripts')
-    @vite('resources/js/properties.js')
-@endpush

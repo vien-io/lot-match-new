@@ -1,5 +1,9 @@
 {{-- Printable Table --}}
 <div id="printable">
+    <div class="print-header">
+        <h1>Property Inventory Report</h1>
+        <p>Sameera Subdivision | Generated: {{ now()->format('F d, Y h:i A') }}</p>
+    </div>
     <div class="tw-overflow-x-auto">
         <table class="tw-w-full tw-whitespace-nowrap tw-text-left tw-text-sm">
             <thead class="tw-bg-[#06100D] tw-text-white">
@@ -23,7 +27,7 @@
                     <th scope="col" class="tw-px-4 tw-py-3.5 tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wide">
                         Flood Risk</th>
                     <th scope="col"
-                        class="tw-px-4 tw-py-3.5 tw-text-center tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wide">
+                        class="no-print tw-px-4 tw-py-3.5 tw-text-center tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wide">
                         Actions</th>
                 </tr>
             </thead>
@@ -54,15 +58,13 @@
 
                         <td class="tw-px-4 tw-py-2">
                             @if($property->status === 'available')
-                                <span
-                                    class="tw-inline-flex tw-items-center tw-gap-1.5 tw-rounded-md tw-bg-[#06EBB6]/20 tw-px-2.5 tw-py-1 tw-text-xs tw-font-semibold tw-text-[#06100D]">
-                                    <span class="tw-h-1.5 tw-w-1.5 tw-rounded-full tw-bg-[#087F5B]"></span>
+                                <span class="status-available tw-inline-flex tw-items-center tw-gap-1.5 tw-rounded-md tw-bg-[#06EBB6]/20 tw-px-2.5 tw-py-1 tw-text-xs tw-font-semibold tw-text-[#06100D]">
+                                    <span class="no-print tw-h-1.5 tw-w-1.5 tw-rounded-full tw-bg-[#087F5B]"></span>
                                     Available
                                 </span>
                             @else
-                                <span
-                                    class="tw-inline-flex tw-items-center tw-gap-1.5 tw-rounded-md tw-bg-[#ff9494]/60 tw-px-2.5 tw-py-1 tw-text-xs tw-font-semibold tw-text-[#974d4d]">
-                                    <span class="tw-h-1.5 tw-w-1.5 tw-rounded-full tw-bg-[#9e6464]"></span>
+                                <span class="status-sold tw-inline-flex tw-items-center tw-gap-1.5 tw-rounded-md tw-bg-[#ff9494]/60 tw-px-2.5 tw-py-1 tw-text-xs tw-font-semibold tw-text-[#974d4d]">
+                                    <span class="no-print tw-h-1.5 tw-w-1.5 tw-rounded-full tw-bg-[#9e6464]"></span>
                                     {{ ucfirst($property->status) }}
                                 </span>
                             @endif
@@ -80,7 +82,7 @@
                             {{ $property->flood_risk ? ucfirst($property->flood_risk) : '—' }}
                         </td>
 
-                        <td class="tw-px-4 tw-py-2">
+                        <td class="no-print tw-px-4 tw-py-2">
                             <div class="tw-flex tw-items-center tw-justify-center tw-gap-1">
 
                                 @php
@@ -92,7 +94,15 @@
 
                                 {{-- View Images --}}
                                 <button type="button" aria-label="View images for {{ $property->name }}" title="View images"
-                                    onclick='openLotImageGallery({{ $property->id }}, @json($imagesArray->pluck("url")))'
+                                    onclick="openLotImageGallery(
+                                        {{ $property->id }},
+                                        {{ Js::from($property->images->map(fn($image) => [
+                                            'id' => $image->id,
+                                            'url' => Storage::url(
+                                                str_replace('storage/', '', $image->path)
+                                            ),
+                                        ])) }}
+                                    )"
                                     class="tw-inline-flex tw-h-9 tw-w-9 tw-items-center tw-justify-center
                                        tw-rounded-lg tw-text-[#666666]
                                        tw-transition-colors tw-duration-200

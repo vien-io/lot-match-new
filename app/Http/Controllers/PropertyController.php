@@ -19,12 +19,12 @@ class PropertyController extends Controller
             ->join('blocks', 'lots.block_id', '=', 'blocks.id')
             ->orderBy('blocks.name', 'asc')
             ->orderByRaw("
-                            CASE
-                                WHEN SPLIT_PART(lots.name, ' ', 2) ~ '^[0-9]+$'
-                                THEN CAST(SPLIT_PART(lots.name, ' ', 2) AS INTEGER)
-                                ELSE NULL
-                            END ASC NULLS LAST
-                        ")
+                CASE
+                    WHEN SPLIT_PART(lots.name, ' ', 2) ~ '^[0-9]+$'
+                    THEN CAST(SPLIT_PART(lots.name, ' ', 2) AS INTEGER)
+                    ELSE NULL
+                END ASC NULLS LAST
+            ")
             ->select('lots.*');
 
         // Search by lot, block, or status.
@@ -74,7 +74,7 @@ class PropertyController extends Controller
         $request->merge([
             'lot_number' => 'Lot ' . trim($request->lot_number),
         ]);
-        
+
         $validated = $request->validate([
             'block_id' => 'required|integer|min:1',
             'lot_number' => [
@@ -226,20 +226,17 @@ class PropertyController extends Controller
             ->with('success', 'Property and its images deleted successfully!');
     }
 
-
-
-    public function addImage(Request $request)
+    public function destroyImage(LotImage $image)
     {
-        $request->validate([
-            'lot_id' => 'required|exists:lots,id',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
+        // Delete the physical image
+        Storage::disk('public')->delete($image->path);
+
+        // Delete the database record
+        $image->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Image deleted successfully.',
         ]);
-
-        $lot = Lot::find($request->lot_id);
-        $path = $request->file('image')->store('uploads/lots', 'public');
-
-        $lot->interiorImages()->create(['image_path' => 'storage/' . $path]);
-
-        return response()->json(['success' => true, 'path' => 'storage/' . $path]);
     }
 }

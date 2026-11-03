@@ -1,29 +1,132 @@
+@page {
+    size: A4 landscape;
+    margin: 12mm;
+}
+
+.print-header {
+    display: none;
+}
+
 @media print {
+    /* Hide everything outside the printable area */
     body * {
         visibility: hidden;
     }
 
-    #printable, #printable * {
+    #printable,
+    #printable * {
         visibility: visible;
     }
 
+    /* Position printable content at the top of the page */
     #printable {
         position: absolute;
-        left: 0;
         top: 0;
+        left: 0;
         width: 100%;
+        margin: 0;
+        padding: 0;
+        background: white;
+        color: #111111;
+        font-family: Arial, Helvetica, sans-serif;
     }
 
-    .tw-px-3, .tw-py-1, .tw-bg-blue-600, .tw-hover\:tw-bg-blue-700 {
-        display: none;
+    /* Print heading */
+    .print-header {
+        display: block;
+        margin-bottom: 18px;
     }
 
-    table {
-        font-size: 14pt;
+    .print-header h1 {
+        font-size: 20pt;
+        font-weight: 700;
+        margin: 0 0 5px;
     }
 
-    #printable th:last-child,
-    #printable td:last-child {
-        display: none;
+    .print-header p {
+        font-size: 9pt;
+        color: #555555;
+        margin: 0;
+    }
+
+    /* Table layout */
+    #printable table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: auto;
+        font-size: 9pt;
+        white-space: normal;
+    }
+
+    #printable thead {
+        display: table-header-group;
+    }
+
+    #printable tr {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    #printable th {
+        background: #06100D !important;
+        color: white !important;
+        font-size: 8pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        padding: 9px 7px;
+        text-align: left;
+        border: 1px solid #333333;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    #printable td {
+        padding: 8px 7px;
+        border: 1px solid #D9D9D9;
+        color: #222222;
+        vertical-align: middle;
+    }
+
+    #printable tbody tr:nth-child(even) {
+        background: #F5F5F5 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* Status colors */
+    #printable .status-available,
+    #printable .status-sold {
+        background: transparent !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+
+    #printable .status-available {
+        color: #087F5B !important;
+        font-weight: 700;
+    }
+
+    #printable .status-sold {
+        color: #974D4D !important;
+        font-weight: 700;
+    }
+    /* Numeric columns */
+    #printable .text-right {
+        text-align: right;
+    }
+
+    /* Hide action buttons and their column */
+    #printable .no-print {
+        display: none !important;
+    }
+
+    /* Avoid unnecessary dashboard styling */
+    #printable .tw-overflow-x-auto {
+        overflow: visible !important;
+    }
+
+    #printable .tw-whitespace-nowrap {
+        white-space: normal !important;
     }
 }
