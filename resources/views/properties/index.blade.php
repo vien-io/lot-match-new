@@ -15,8 +15,7 @@
                 </div>
 
             </header>
-            <button type="button"
-                onclick="document.getElementById('addPropertyModal').classList.replace('tw-hidden', 'tw-flex')"
+            <button type="button" id="addPropertyButton"
                 class="tw-inline-flex tw-w-fit tw-items-center tw-justify-center tw-gap-2 tw-rounded-lg tw-bg-[#06EBB6] tw-px-4 tw-py-2.5 tw-text-sm tw-font-semibold tw-text-[#06100D] tw-transition-colors hover:tw-bg-[#1ED9D7] focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-[#06100D] focus-visible:tw-ring-offset-2">
                 <span class="tw-text-lg tw-leading-none" aria-hidden="true">+</span>
                 Add Property
@@ -25,48 +24,64 @@
 
         {{-- Success Message --}}
         @if(session('success'))
-            <div class="tw-flex tw-items-start tw-gap-3 tw-border-b tw-border-[#06EBB6]/30 tw-bg-[#06EBB6]/10 tw-px-5 tw-py-3.5"
-                role="status">
-                <span class="tw-font-semibold tw-text-[#06100D]" aria-hidden="true">✓</span>
-                <p class="tw-text-sm tw-text-[#06100D]">{{ session('success') }}</p>
+            <div class="tw-mb-5 tw-rounded-lg tw-border
+                        tw-border-[#06EBB6]/40 tw-bg-[#06EBB6]/10 tw-p-4" role="status">
+
+                <div class="tw-flex tw-items-center tw-gap-2">
+                    <i class="fa-solid fa-circle-check
+                              tw-text-sm tw-text-[#059669]" aria-hidden="true"></i>
+
+                    <p class="tw-text-sm tw-font-semibold tw-text-[#065F46]">
+                        Property saved successfully
+                    </p>
+                </div>
+
+                <p class="tw-mt-1 tw-text-xs tw-text-[#047857]">
+                    {{ session('success') }}
+                </p>
             </div>
         @endif
 
         {{-- Validation Errors --}}
         @if($errors->any())
-            <div class="tw-mb-5 tw-flex tw-items-start tw-gap-3
-                        tw-rounded-xl tw-border tw-border-[#FCA5A5]/70
-                        tw-bg-[#FEF2F2] tw-p-4"
-                role="alert">
+            <div class="tw-mb-5 tw-rounded-lg tw-border
+                                        tw-border-red-200 tw-bg-red-50/70 tw-p-4" role="alert">
 
-                <div class="tw-flex tw-h-9 tw-w-9 tw-shrink-0 tw-items-center
-                            tw-justify-center tw-rounded-lg tw-bg-white
-                            tw-text-[#DC2626] tw-shadow-sm">
-                    <i class="fa-solid fa-circle-exclamation tw-text-base"
-                        aria-hidden="true"></i>
-                </div>
+                <div class="tw-flex tw-items-center tw-gap-2">
+                    <i class="fa-solid fa-circle-exclamation
+                                              tw-text-sm tw-text-red-600" aria-hidden="true"></i>
 
-                <div class="tw-min-w-0 tw-flex-1">
-                    <p class="tw-text-sm tw-font-semibold tw-text-[#991B1B]">
+                    <p class="tw-text-sm tw-font-semibold tw-text-red-800">
                         Unable to save property
                     </p>
 
-                    <p class="tw-mt-0.5 tw-text-xs tw-text-[#666666]">
-                        Please review the following information and try again.
-                    </p>
-
-                    <ul class="tw-mt-3 tw-space-y-1.5">
-                        @foreach($errors->all() as $error)
-                            <li class="tw-flex tw-items-start tw-gap-2 tw-text-sm tw-text-[#B91C1C]">
-                                <span class="tw-mt-1.5 tw-h-1.5 tw-w-1.5 tw-shrink-0
-                                            tw-rounded-full tw-bg-[#DC2626]"></span>
-                                <span>{{ $error }}</span>
-                            </li>
-                        @endforeach
-                    </ul>
+                    <span class="tw-ml-auto tw-rounded-md
+                                                 tw-bg-red-100 tw-px-2 tw-py-0.5
+                                                 tw-text-xs tw-font-medium tw-text-red-700">
+                        {{ $errors->count() }}
+                        {{ Str::plural('error', $errors->count()) }}
+                    </span>
                 </div>
+
+                <p class="tw-mt-1 tw-text-xs tw-text-red-700/60">
+                    Please correct the following information and try again.
+                </p>
+
+                <ul class="tw-mt-3 tw-mx-2 tw-space-y-2 tw-border-t tw-border-red-200 tw-pt-3">
+                    @foreach($errors->all() as $error)
+                        <li class="tw-flex tw-items-center tw-gap-2
+                                                               tw-text-sm tw-text-red-700">
+
+                            <i class="fa-regular fa-circle-xmark tw-mt-0.5
+                                                                  tw-shrink-0 tw-text-xs" aria-hidden="true"></i>
+
+                            <span class="tw-text-xs">{{ $error }}</span>
+                        </li>
+                    @endforeach
+                </ul>
             </div>
         @endif
+
 
         {{-- Property Table Panel --}}
         <section class="tw-overflow-hidden tw-rounded-xl tw-border tw-border-[#C4C4C4]/70 tw-bg-white">

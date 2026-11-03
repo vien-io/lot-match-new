@@ -61,8 +61,8 @@
                                 </span>
                             @else
                                 <span
-                                    class="tw-inline-flex tw-items-center tw-gap-1.5 tw-rounded-md tw-bg-[#D9D9D9]/60 tw-px-2.5 tw-py-1 tw-text-xs tw-font-semibold tw-text-[#444444]">
-                                    <span class="tw-h-1.5 tw-w-1.5 tw-rounded-full tw-bg-[#666666]"></span>
+                                    class="tw-inline-flex tw-items-center tw-gap-1.5 tw-rounded-md tw-bg-[#ff9494]/60 tw-px-2.5 tw-py-1 tw-text-xs tw-font-semibold tw-text-[#974d4d]">
+                                    <span class="tw-h-1.5 tw-w-1.5 tw-rounded-full tw-bg-[#9e6464]"></span>
                                     {{ ucfirst($property->status) }}
                                 </span>
                             @endif

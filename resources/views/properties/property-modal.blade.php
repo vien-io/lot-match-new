@@ -1,4 +1,4 @@
-{{-- Add Property Modal --}}
+{{-- Property Modal --}}
 <div id="addPropertyModal"
     class="tw-fixed tw-inset-0 tw-z-50 tw-hidden tw-items-center tw-justify-center tw-bg-[#06100D]/60 tw-p-3 sm:tw-p-5"
     role="dialog" aria-modal="true" aria-labelledby="addPropertyTitle" aria-describedby="addPropertyDescription">
@@ -8,13 +8,13 @@
 
         {{-- Header --}}
         <div class="tw-flex tw-shrink-0 tw-items-center tw-justify-between
-    tw-border-b tw-border-[#C4C4C4]/50
-    tw-px-5 tw-py-5 sm:tw-px-7">
+        tw-border-b tw-border-[#C4C4C4]/50
+        tw-px-5 tw-py-5 sm:tw-px-7">
 
 
             {{-- Title --}}
             <div class=" tw-min-w-0">
-                <h2 id="addPropertyTitle" class="tw-text-xl tw-font-semibold tw-tracking-tight tw-text-[#111111]">
+                <h2 id="propertyModalTitle" class="tw-text-xl tw-font-semibold tw-tracking-tight tw-text-[#111111]">
                     Add Property
                 </h2>
 
@@ -45,10 +45,11 @@
         </div>
 
         {{-- Form --}}
-        <form method="POST" action="{{ route('properties.store') }}" enctype="multipart/form-data"
+        <form id="propertyForm" method="POST" action="{{ route('properties.store') }}" enctype="multipart/form-data" autocomplete="off"
             class="tw-flex tw-min-h-0 tw-flex-1 tw-flex-col tw-mx-2">
 
             @csrf
+            <input type="hidden" name="_method" id="propertyMethod" value="POST">
 
             {{-- Scrollable Content --}}
             <div class="tw-flex-1 tw-space-y-7 tw-overflow-y-auto tw-px-5 tw-py-6 sm:tw-px-7 tw-mb-5">
@@ -191,7 +192,7 @@
                         <div>
                             <label for="addStatus"
                                 class="tw-mb-1.5 tw-block tw-text-xs tw-font-semibold tw-text-[#333333]">
-                                Availability Status <span class="tw-text-red-500">*</span>
+                                Availability Status
                             </label>
 
                             <select id="addStatus" name="status"
@@ -347,7 +348,7 @@
                         Cancel
                     </button>
 
-                    <button type="submit"
+                    <button type="submit" id="propertySubmitButton"
                         class="tw-inline-flex tw-h-10 tw-items-center tw-justify-center tw-gap-2 tw-rounded-lg tw-bg-[#06EBB6] tw-px-6 tw-text-sm tw-font-semibold tw-text-[#06100D] tw-shadow-sm tw-transition-all hover:tw-bg-[#1ED9D7] hover:tw-shadow-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#06EBB6] focus:tw-ring-offset-2 active:tw-scale-[0.98]">
 
                         <svg xmlns="http://www.w3.org/2000/svg" class="tw-h-4 tw-w-4" viewBox="0 0 24 24" fill="none"

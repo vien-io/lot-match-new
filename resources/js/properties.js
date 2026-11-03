@@ -1,4 +1,28 @@
-// edit modal
+document
+    .getElementById("addPropertyButton")
+    ?.addEventListener("click", openAddModal);
+
+// Open Add Property Modal
+function openAddModal() {
+    const modal = document.getElementById("addPropertyModal");
+    const form = document.getElementById("propertyForm");
+
+    form.reset();
+
+    form.action = "/properties";
+    document.getElementById("propertyMethod").value = "POST";
+
+    document.getElementById("propertyModalTitle").textContent = "Add Property";
+    document.getElementById("propertySubmitButton").textContent =
+        "Add Property";
+
+    // Clear existing images
+    document.getElementById("existingImagesContainer").innerHTML = "";
+
+    modal.classList.replace("tw-hidden", "tw-flex");
+}
+
+// Open Edit Property Modal
 window.openEditModal = function (
     id,
     name,
@@ -12,33 +36,59 @@ window.openEditModal = function (
     floodRisk,
     images = [],
 ) {
-    document.getElementById("editPropertyId").value = id;
-    let lotNumber = name.replace(/Lot\s*/i, "");
-    document.getElementById("editLotNumbers").value = lotNumber;
-    document.getElementById("editLotArea").value = lotArea;
-    document.getElementById("editFloorArea").value = floorArea;
-    document.getElementById("editPrice").value = price;
-    document.getElementById("editStatus").value = status;
-    document.getElementById("editOrientation").value = orientation;
-    document.getElementById("editBlockId").value = blockId;
-    document.getElementById("editSunlight").value = sunlight;
-    document.getElementById("editFloodRisk").value = floodRisk;
-    document.getElementById("editPropertyForm").action = "/properties/" + id;
+    const modal = document.getElementById("addPropertyModal");
+    const form = document.getElementById("propertyForm");
 
-    // populate existing images
+    form.reset();
+
+    // Update form action and method
+    form.action = `/properties/${id}`;
+    document.getElementById("propertyMethod").value = "PUT";
+
+    // Update modal heading and button
+    document.getElementById("propertyModalTitle").textContent = "Edit Property";
+    document.getElementById("propertySubmitButton").textContent =
+        "Save Changes";
+
+    // Populate existing fields
+    document.getElementById("addBlockId").value = blockId;
+
+    document.getElementById("addLotNumber").value = name.replace(/Lot\s*/i, "");
+
+    document.getElementById("addLotArea").value = lotArea;
+    document.getElementById("addFloorArea").value = floorArea;
+    document.getElementById("price").value = price;
+    document.getElementById("addStatus").value = status;
+    document.getElementById("addOrientation").value = orientation ?? "";
+    document.getElementById("addSunlight").value = sunlight ?? "";
+    document.getElementById("addFloodRisk").value = floodRisk ?? "";
+
+    // Populate existing images
     const container = document.getElementById("existingImagesContainer");
-    container.innerHTML = ""; // clear previous
+    container.innerHTML = "";
+
     images.forEach((img) => {
         const div = document.createElement("div");
         div.className = "tw-relative";
-        div.innerHTML = `
-            <img src="${img.url}" class="tw-w-20 tw-h-20 tw-object-cover tw-rounded">
-            <button type="button" class="tw-absolute tw-top-0 tw-right-0 tw-bg-red-500 tw-text-white tw-rounded-full tw-w-5 tw-h-5 tw-flex tw-items-center tw-justify-center hover:tw-bg-red-600" onclick="removeExistingImage(${img.id}, this)">×</button>
-        `;
+
+        const image = document.createElement("img");
+        image.src = img.url;
+        image.alt = "Existing property image";
+        image.className = "tw-h-20 tw-w-20 tw-rounded-lg tw-object-cover";
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className =
+            "tw-absolute tw-right-0 tw-top-0 tw-flex tw-h-5 tw-w-5 tw-items-center tw-justify-center tw-rounded-full tw-bg-red-500 tw-text-white hover:tw-bg-red-600";
+        button.textContent = "×";
+        button.setAttribute("aria-label", "Remove existing image");
+        button.onclick = () => removeExistingImage(img.id, button);
+
+        div.append(image, button);
         container.appendChild(div);
     });
 
-    document.getElementById("editPropertyModal").classList.replace("tw-hidden", "tw-flex");
+    modal.classList.replace("tw-hidden", "tw-flex");
 };
 
 window.removeExistingImage = function (imageId, btn) {

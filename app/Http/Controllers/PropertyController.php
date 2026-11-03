@@ -8,6 +8,7 @@ use App\Models\Lot;
 use Illuminate\Support\Facades\Storage;
 use App\Models\LotImage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class PropertyController extends Controller
 {
@@ -70,9 +71,22 @@ class PropertyController extends Controller
     // store a new property
     public function store(Request $request)
     {
+        $request->merge([
+            'lot_number' => 'Lot ' . trim($request->lot_number),
+        ]);
+        
         $validated = $request->validate([
             'block_id' => 'required|integer|min:1',
-            'lot_number' => 'required|string',
+            'lot_number' => [
+                'required',
+                'string',
+                Rule::unique('lots', 'name')
+                    ->where(fn($query) =>
+                        $query->where(
+                            'block_id',
+                            $request->block_id
+                        ))
+            ],
             'lot_area' => 'required|numeric',
             'floor_area' => 'required|numeric',
             'price' => 'required|numeric|min:1|max:999999999999999.99',
@@ -108,7 +122,7 @@ class PropertyController extends Controller
             // Create property.
             $lot = Lot::create([
                 'block_id' => $block->id,
-                'name' => 'Lot ' . trim($validated['lot_number']),
+                'name' => $validated['lot_number'],
                 'lot_area' => $validated['lot_area'],
                 'floor_area' => $validated['floor_area'],
                 'price' => $validated['price'],
@@ -138,7 +152,7 @@ class PropertyController extends Controller
     {
         $request->validate([
             'block_id' => 'required|exists:blocks,id',
-            'lot_numbers' => 'required|string',
+            'lot_number' => 'required|string',
             'lot_area' => 'required|numeric',
             'floor_area' => 'required|numeric',
             'price' => 'required|numeric',
@@ -149,7 +163,7 @@ class PropertyController extends Controller
             'lot_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
-        $numbers = array_map('trim', explode(',', $request->lot_numbers));
+        $numbers = array_map('trim', explode(',', $request->lot_number));
         $lotNumber = $numbers[0];
         $property = Lot::findOrFail($id);
 
