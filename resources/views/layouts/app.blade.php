@@ -30,20 +30,20 @@
         'resources/css/components/forecast-loading.css',
         'resources/css/pages/forecasting.css',
     ])
-
+    @stack('styles')
 </head>
 
-<body class="tw-bg-gray-50">
-    <div id="app" class="tw-flex">
+<body class="tw-bg-gray-50 {{ request()->is('3dmap') ? 'tw-overflow-hidden' : '' }}">
+    <div id="app" class="tw-flex {{ request()->is('3dmap') ? 'tw-h-screen tw-overflow-hidden' : '' }}">
 
         @include('layouts.sidebar')
 
         {{-- Main content --}}
-        <div class="lm-app-content tw-flex-1 tw-flex tw-flex-col">
+        <div class="lm-app-content tw-flex-1 tw-flex tw-flex-col tw-min-w-0 tw-min-h-0 {{ request()->is('3dmap') ? 'lm-app-content-map' : '' }}">
 
             @include('components.notification')
 
-            <main class="tw-p-10">
+            <main class="{{ request()->is('3dmap') ? 'tw-flex-1 tw-flex tw-flex-col tw-min-h-0 tw-p-0' : 'tw-p-10' }}">
                 @yield('content')
                 @yield('scripts')
             </main>
@@ -52,7 +52,6 @@
 
     @include('components.modals.settings')
 
-    {{-- Page-specific JavaScript --}}
     @stack('scripts')
 </body>
 

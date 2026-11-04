@@ -1,0 +1,24 @@
+/* Rating Filter Buttons */
+.rating-filter-btn {
+    width: 100%;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #666666;
+    transition: all 150ms ease;
+}
+
+.rating-filter-btn:hover {
+    color: #06100D;
+}
+
+.rating-filter-btn[aria-pressed="true"] {
+    background-color: #06EBB6;
+    color: #06100D;
+}
+
+.rating-filter-btn:focus-visible {
+    outline: 2px solid #1ED9D7;
+    outline-offset: 2px;
+}

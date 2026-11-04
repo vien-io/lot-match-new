@@ -148,6 +148,11 @@
     margin-left: 80px;
 }
 
+.lm-app-content-map {
+    width: calc(100% - 75px);
+    margin-left: 75px;
+}
+
 @media (max-width: 640px) {
     .lm-sidebar {
         width: 68px;
