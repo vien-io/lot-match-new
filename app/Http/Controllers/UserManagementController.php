@@ -12,6 +12,28 @@ use Illuminate\Validation\ValidationException;
 
 class UserManagementController extends Controller
 {
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+
+        $users = User::query()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('username', 'like', "%{$search}%")
+                        ->orWhere('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('id', 'asc')
+            ->paginate(20);
+
+        return view(
+            'usermanagement.partials.user-table-rows',
+            compact('users')
+        );
+    }
+
     public function index(Request $request)
     {
         $query = User::query();

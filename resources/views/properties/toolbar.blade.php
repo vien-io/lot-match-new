@@ -84,9 +84,9 @@
 
             @if (request('search'))
                         <a href="{{ route('properties.index', array_filter([
-                    'status' => $currentStatus !== 'all' ? $currentStatus : null,
-                    'block' => request('block'),
-                ])) }}" aria-label="Clear search" title="Clear search"
+                                'status' => $currentStatus !== 'all' ? $currentStatus : null,
+                                'block' => request('block'),
+                            ])) }}" aria-label="Clear search" title="Clear search"
                             class="tw-shrink-0 tw-text-xs tw-font-medium tw-text-[#666666] hover:tw-text-[#111111]">
                             Clear
                         </a>

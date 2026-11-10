@@ -9,6 +9,7 @@ import './components/userLotForm.js';
 import './features/password-toggle.js';
 import './pages/properties/properties.js';
 import './pages/user-management/userModals.js';
+import './components/tableSearch.js'
 
 // ====================
 // ALPINE.JS

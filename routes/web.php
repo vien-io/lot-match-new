@@ -107,6 +107,7 @@ Route::get('/blocks/{blockId}/lots/{lotNumber}', [LotController::class, 'showLot
 // Search Bar
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('blocks/{blockId}/lots/{lotNumber}', [LotController::class, 'show'])->name('lots.show');
+Route::get('users/search', [UserManagementController::class, 'search'])->name('usermanagement.search');
 
 // Utilities
 Route::get('/lot/{lot}/summary', [LotController::class, 'getLotSummary']);
