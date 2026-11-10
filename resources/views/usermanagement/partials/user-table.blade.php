@@ -63,119 +63,67 @@
                         {{-- Role and owner lot assignment --}}
                         <td class="tw-px-4" x-data='userLotForm({{ $user->id }}, @json($user->role), @json($allLots))'>
                             @if(auth()->user()->role === 'admin')
-                                            <form class="form_button tw-w-full tw-max-w-[200px]" action="{{ route('usermanagement.role.update', $user->id) }}"
-                                                method="POST" x-ref="form">
+                                <form class="form_button tw-w-full tw-max-w-[200px]"
+                                    action="{{ route('usermanagement.role.update', $user->id) }}" method="POST" x-ref="form">
 
-                                                @csrf
-                                                @method('PATCH')
+                                    @csrf
+                                    @method('PATCH')
 
-                                                {{-- Preserve existing user details --}}
-                                                <input type="hidden" name="username" value="{{ $user->username }}">
-                                                <input type="hidden" name="first_name" value="{{ $user->first_name }}">
-                                                <input type="hidden" name="last_name" value="{{ $user->last_name }}">
-                                                <input type="hidden" name="email" value="{{ $user->email }}">
+                                    {{-- Preserve existing user details --}}
+                                    <input type="hidden" name="username" value="{{ $user->username }}" autocomplete="off">
+                                    <input type="hidden" name="first_name" value="{{ $user->first_name }}" autocomplete="off">
+                                    <input type="hidden" name="last_name" value="{{ $user->last_name }}" autocomplete="off">
+                                    <input type="hidden" name="email" value="{{ $user->email }}" autocomplete="off">
 
-                                                <div class="tw-flex tw-w-full tw-min-w-0 tw-items-center tw-gap-3">
+                                    <div class="tw-flex tw-w-full tw-min-w-0 tw-items-center tw-gap-3">
 
-                                                    {{-- Role selection --}}
-                                                    <select id="role-{{ $user->id }}" name="role" x-model="role" :class="{
-                                                            'tw-bg-yellow-100': hasChanges,
-                                                            'tw-bg-white': !hasChanges
-                                                        }" class="tw-w-[85%] tw-min-w-0 tw-shrink-0 tw-py-2 tw-rounded-md tw-border tw-border-[#C4C4C4] tw-bg-white tw-px-2.5 tw-text-sm tw-text-[#111111] focus:tw-border-[#06B995] focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#06EBB6]/20">
+                                        {{-- Role selection --}}
+                                        <select id="role-{{ $user->id }}" name="role" x-model="role" autocomplete="off"
+                                            @change="handleRoleChange($event)" 
+                                            @click="$nextTick(() => {
+                                                if (role === 'owner' && !showLotPopover) {
+                                                    openLotPopover($event);
+                                                }
+                                            })"
+                                            :class="{
+                                                                    'tw-bg-yellow-100': hasChanges,
+                                                                    'tw-bg-green-200': saveSuccess,
+                                                                    'tw-bg-white': !hasChanges && !saveSuccess
+                                                                }"
+                                            class="tw-transition-colors tw-duration-200 tw-ease-out tw-w-[85%] tw-min-w-0 tw-shrink-0 tw-py-2 tw-rounded-md tw-border tw-border-[#C4C4C4] tw-bg-white tw-px-2.5 tw-text-sm tw-text-[#111111] focus:tw-border-[#06B995] focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#06EBB6]/20">
 
-                                                        <option value="admin">Admin</option>
-                                                        <option value="owner">Owner</option>
-                                                        <option value="buyer">Buyer</option>
-                                                    </select>
+                                            <option value="admin">Admin</option>
+                                            <option value="owner">Owner</option>
+                                            <option value="buyer">Buyer</option>
+                                        </select>
 
-                                                    {{-- Action buttons and success message --}}
-                                                    <div x-cloak class="tw-flex tw-min-w-0 tw-flex-1 tw-items-center tw-gap-2">
+                                        {{-- Action buttons and success message --}}
+                                        <div x-cloak class="tw-flex tw-min-w-0 tw-flex-1 tw-items-center tw-gap-2">
 
-                                                        <button x-show="hasChanges" @click="save()" type="button" :disabled="saving"
-                                                            class="tw-bg-gray-400 hover:tw-bg-green-400 tw-h-[20px] tw-w-[20px] tw-shrink-0 tw-rounded-full tw-flex tw-items-center tw-justify-center">
+                                            <button x-show="hasChanges" @click="save()" type="button" :disabled="saving"
+                                                class="tw-bg-gray-400 hover:tw-bg-green-400 tw-h-[20px] tw-w-[20px] tw-shrink-0 tw-rounded-full tw-flex tw-items-center tw-justify-center">
 
-                                                            <i class="fa-solid fa-check fa-xs tw-text-white"></i>
-                                                        </button>
+                                                <i class="fa-solid fa-check fa-xs tw-text-white"></i>
+                                            </button>
 
-                                                        <button x-show="hasChanges" @click="resetForm()" type="button"
-                                                            class="tw-bg-gray-400 hover:tw-bg-red-400 tw-h-[20px] tw-w-[20px] tw-shrink-0 tw-rounded-full tw-flex tw-items-center tw-justify-center">
+                                            <button x-show="hasChanges" @click="resetForm()" type="button"
+                                                class="tw-bg-gray-400 hover:tw-bg-red-400 tw-h-[20px] tw-w-[20px] tw-shrink-0 tw-rounded-full tw-flex tw-items-center tw-justify-center">
 
-                                                            <i class="fa-solid fa-x fa-xs tw-text-white"></i>
-                                                        </button>
+                                                <i class="fa-solid fa-x fa-xs tw-text-white"></i>
+                                            </button>
 
-                                                        {{-- Success message --}}
-                                                        <span x-show="saveSuccess" x-cloak
-                                                            class="tw-min-w-[70px] tw-flex-1 tw-truncate tw-text-xs tw-text-[#176B4D]/70"
-                                                            title="Changes saved!">
-                                                            Saved!
-                                                        </span>
+                                            {{-- Success message --}}
+                                            <span x-show="saveSuccess" x-cloak
+                                                class="tw-min-w-[70px] tw-flex-1 tw-truncate tw-text-xs tw-text-[#176B4D]/70"
+                                                title="Changes saved!">
+                                                Saved!
+                                            </span>
 
-                                                    </div>
-                                                </div>
+                                        </div>
+                                    </div>
+                                </form>
 
-
-                                                {{-- Lot assignment is only shown for owners --}}
-                                                {{-- <div x-show="role === 'owner'" x-cloak class="tw-mt-3">
-                                                    <label for="lot-search-{{ $user->id }}"
-                                                        class="tw-mb-1 tw-block tw-text-xs tw-font-medium tw-text-[#666666]">
-                                                        Assigned properties
-                                                    </label>
-
-                                                    <div class="tw-relative">
-                                                        <input id="lot-search-{{ $user->id }}" type="text" x-model="query"
-                                                            @input="filterLots()" placeholder="Search lot or block..." autocomplete="off"
-                                                            class="tw-w-full tw-rounded-md tw-border tw-border-[#C4C4C4] tw-bg-white tw-px-3 tw-py-2 tw-text-xs tw-text-[#111111] placeholder:tw-text-[#999999] focus:tw-border-[#06B995] focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#06EBB6]/20"
-                                                            @click.outside="query=''; filteredLots=[]"
-                                                            @keydown.escape="query=''; filteredLots=[]">
-
-                                                        <div x-show="filteredLots.length > 0" x-cloak
-                                                            class="tw-absolute tw-left-0 tw-right-0 tw-z-20 tw-mt-1 tw-max-h-40 tw-overflow-y-auto tw-rounded-lg tw-border tw-border-[#C4C4C4] tw-bg-white tw-p-1 tw-shadow-lg">
-                                                            <template x-for="lot in filteredLots" :key="lot.id">
-                                                                <button type="button"
-                                                                    class="tw-block tw-w-full tw-rounded-md tw-px-3 tw-py-2 tw-text-left tw-text-xs tw-text-[#333333] hover:tw-bg-[#EAFBF6] focus:tw-bg-[#EAFBF6] focus:tw-outline-none"
-                                                                    @click="selectLot(lot)">
-                                                                    <span x-text="lot.name + ' (' + lot.block + ')'"></span>
-                                                                </button>
-                                                            </template>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="tw-mt-2 tw-space-y-1.5">
-                                                        <template x-for="(lot, index) in selectedLots" :key="lot.id">
-                                                            <div class="tw-flex tw-items-center tw-gap-2">
-                                                                <input type="hidden" name="lot_ids[]" :value="lot.id">
-                                                                <div
-                                                                    class="tw-min-w-0 tw-flex-1 tw-rounded-md tw-border tw-border-[#DDE4E1] tw-bg-[#F5F8F7] tw-px-2.5 tw-py-1.5">
-                                                                    <span class="tw-block tw-truncate tw-text-xs tw-text-[#333333]"
-                                                                        x-text="lot.name + ' (' + lot.block + ')'"></span>
-                                                                </div>
-                                                                <button type="button"
-                                                                    class="tw-rounded-md tw-p-1.5 tw-text-[#666666] hover:tw-bg-[#FDECEC] hover:tw-text-[#B42318] focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-red-200"
-                                                                    aria-label="Remove assigned property" @click="removeLot(index)">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="tw-h-4 tw-w-4"
-                                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                                        stroke-width="2">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                                            d="M6 18 18 6M6 6l12 12" />
-                                                                    </svg>
-                                                                </button>
-                                                            </div>
-                                                        </template>
-                                                    </div>
-                                                </div> --}}
-
-                                                {{-- <div x-show="hasChangess" x-cloak class="tw-mt-3 tw-flex tw-items-center tw-gap-2">
-                                                    <button type="submit"
-                                                        class="tw-rounded-md tw-bg-[#06EBB6] tw-px-3 tw-py-1.5 tw-text-xs tw-font-semibold tw-text-[#06100D] tw-transition-colors hover:tw-bg-[#1ED9D7] focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#06EBB6] focus:tw-ring-offset-1">
-                                                        Save changes
-                                                    </button>
-                                                    <button type="button"
-                                                        class="tw-rounded-md tw-border tw-border-[#C4C4C4] tw-bg-white tw-px-3 tw-py-1.5 tw-text-xs tw-font-medium tw-text-[#333333] hover:tw-bg-[#F5F7F6] focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#C4C4C4]"
-                                                        @click="resetForm()">
-                                                        Cancel
-                                                    </button>
-                                                </div> --}}
-                                            </form>
+                                @include('usermanagement.partials.popover', ['user' => $user])
                             @else
                                 <span
                                     class="tw-inline-flex tw-items-center tw-rounded-md tw-bg-[#F0F3F2] tw-px-2.5 tw-py-1 tw-text-xs tw-font-medium tw-capitalize tw-text-[#333333]">
@@ -205,7 +153,15 @@
                         <td class="tw-whitespace-nowrap tw-px-4">
                             <div class="tw-flex tw-gap-1">
                                 <button type="button"
-                                    onclick="openEditUserModal({{ Js::from($user->id) }}, {{ Js::from($user->username) }}, {{ Js::from($user->first_name) }}, {{ Js::from($user->last_name) }}, {{ Js::from($user->email) }})"
+                                 x-data
+                                    @click="$dispatch('edit-user', {
+                                            id: {{ $user->id }},
+                                            username: @js($user->username),
+                                            first_name: @js($user->first_name),
+                                            last_name: @js($user->last_name),
+                                            email: @js($user->email),
+                                            role: @js($user->role)
+                                        })"
                                     class="tw-rounded-md tw-p-2 tw-text-[#52645D]/50 tw-transition-colors hover:tw-bg-[#EAFBF6] hover:tw-text-[#087A61] focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#06EBB6]/40"
                                     aria-label="Edit {{ $user->username }}" title="Edit user">
                                     <i class="fas fa-pen"></i>

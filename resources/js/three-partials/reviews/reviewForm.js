@@ -1,6 +1,6 @@
 import { pollForecastStatus } from './forecast.js';
-import { renderReviewSection } from '../reviewHandler';
-import { fetchForecast } from '../forecastHandler';
+import { renderReviewSection } from '../reviewHandler.js';
+import { fetchForecast } from '../forecastHandler.js';
 
 export function bindRatingLogic() {
     document.querySelectorAll('input[name="stars"]').forEach(radio => {

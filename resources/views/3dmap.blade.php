@@ -6,7 +6,7 @@
     <div class="tw-relative tw-flex tw-flex-1 tw-min-h-0 tw-w-full tw-min-w-0">
         {{-- Loading Overlay --}}
         <div id="threejs-loading"
-            class="tw-absolute tw-inset-0 tw-bg-black/70 tw-flex tw-items-center tw-justify-center tw-z-[9999] tw-gap-4">
+            class="tw-absolute tw-inset-0 tw-bg-black/70 tw-flex tw-items-center tw-justify-center tw-z-[3] tw-gap-4">
             <svg class="tw-h-14 tw-w-14 tw-animate-spin" viewBox="0 0 50 50">
                 <circle cx="25" cy="25" r="20" stroke="rgba(255,255,255,0.2)" stroke-width="5" fill="none"></circle>
                 <circle cx="25" cy="25" r="20" stroke="url(#gradient)" stroke-width="5" stroke-linecap="round" fill="none"

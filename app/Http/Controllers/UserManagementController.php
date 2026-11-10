@@ -61,6 +61,7 @@ class UserManagementController extends Controller
                 'last_name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users',
                 'password' => 'required|string|min:6',
+                'role' => 'required|in:admin,owner,buyer',
             ]);
 
             Log::info('Validation passed', $validated);
@@ -139,27 +140,63 @@ class UserManagementController extends Controller
     {
         $validated = $request->validate([
             'role' => 'required|in:admin,owner,buyer',
+            'lot_ids' => 'nullable|array',
+            'lot_ids.*' => 'required|integer|distinct|exists:lots,id',
         ]);
 
         $newRole = $validated['role'];
-        $oldRole = $user->role;
+        $lotIds = $validated['lot_ids'] ?? [];
 
-        DB::transaction(function () use ($user, $newRole, $oldRole) {
+        DB::transaction(function () use ($user, $newRole, $lotIds) {
+
+            $oldRole = $user->role;
 
             $user->update([
                 'role' => $newRole,
             ]);
 
-            // Remove lot ownership if the user is no longer an owner.
-            if ($oldRole === 'owner' && $newRole !== 'owner') {
+            // If the user is no longer an owner, release all assigned lots.
+            if ($newRole !== 'owner') {
                 Lot::where('owner_id', $user->id)
                     ->update(['owner_id' => null]);
+
+                return;
+            }
+
+            // Lock selected lots to prevent conflicting assignments.
+            $lots = Lot::whereIn('id', $lotIds)
+                ->lockForUpdate()
+                ->get();
+
+            // Prevent assigning lots that belong to another owner.
+            $conflictingLot = $lots->first(
+                fn($lot) => $lot->owner_id !== null
+                    && $lot->owner_id != $user->id
+            );
+
+            if ($conflictingLot) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'lot_ids' => "Lot {$conflictingLot->name} is already assigned to another owner.",
+                ]);
+            }
+
+            // Remove assignments that were deselected.
+            Lot::where('owner_id', $user->id)
+                ->whereNotIn('id', $lotIds)
+                ->update(['owner_id' => null]);
+
+            // Assign the selected lots to this owner.
+            if (!empty($lotIds)) {
+                Lot::whereIn('id', $lotIds)
+                    ->update(['owner_id' => $user->id]);
             }
         });
 
         return response()->json([
-            'message' => 'User role updated successfully.',
+            'message' => 'User role and lot assignments updated successfully.',
             'role' => $user->role,
+            'assigned_lot_ids' => Lot::where('owner_id', $user->id)
+                ->pluck('id'),
         ]);
     }
 

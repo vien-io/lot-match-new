@@ -3,6 +3,7 @@ window.userLotForm = function (userId, initialRole, allLots) {
         userId: userId,
         role: initialRole,
         originalRole: initialRole, // track original role
+        saving: false,
         saveSuccess: false,
         allLots,
         successTimer: null,
@@ -12,6 +13,71 @@ window.userLotForm = function (userId, initialRole, allLots) {
             .map((l) => l.id),
         query: "",
         filteredLots: [],
+        showLotPopover: false,
+
+        selectedBlock: "",
+        selectedLotId: "",
+
+        popoverPosition: {
+            top: 0,
+            left: 0,
+        },
+
+        get availableBlocks() {
+            return [...new Set(this.allLots.map((lot) => lot.block))].sort(
+                (a, b) =>
+                    String(a).localeCompare(String(b), undefined, {
+                        numeric: true,
+                    }),
+            );
+        },
+
+        get availableLots() {
+            return this.allLots.filter(
+                (lot) => lot.block == this.selectedBlock,
+            );
+        },
+
+        handleRoleChange(event) {
+            if (this.role === "owner") {
+                this.openLotPopover(event);
+            } else {
+                this.showLotPopover = false;
+            }
+        },
+
+        openLotPopover(event) {
+            const rect = event.target.getBoundingClientRect();
+
+            const width = 320;
+            const gap = 8;
+            const margin = 12;
+
+            const left = Math.min(
+                Math.max(margin, rect.left),
+                window.innerWidth - width - margin,
+            );
+
+            this.popoverPosition = {
+                top: rect.bottom + gap,
+                left: left,
+            };
+
+            this.showLotPopover = true;
+        },
+
+        addSelectedLot() {
+            const lot = this.allLots.find(
+                (lot) => String(lot.id) === String(this.selectedLotId),
+            );
+
+            if (!lot || this.selectedLots.some((item) => item.id == lot.id)) {
+                return;
+            }
+
+            this.selectedLots.push(lot);
+            this.selectedLotId = "";
+        },
 
         // computed property to check if changes exist
         get hasChanges() {
@@ -45,6 +111,7 @@ window.userLotForm = function (userId, initialRole, allLots) {
                     },
                     body: JSON.stringify({
                         role: this.role,
+                        lot_ids: this.selectedLots.map((lot) => lot.id),
                     }),
                 });
 

@@ -1,11 +1,20 @@
 import './bootstrap';
 import { renderTopRatedLotsCards } from './charts/blockRatingsChart';
 import Alpine from 'alpinejs';
+
 import "@fortawesome/fontawesome-free/css/all.min.css";
+
 import './components/lotSelector.js';
 import './components/userLotForm.js';
 import './features/password-toggle.js';
 import './pages/properties/properties.js';
+import './pages/user-management/userModals.js';
+
+// ====================
+// ALPINE.JS
+// ====================
+window.Alpine = Alpine;
+Alpine.start();
 
 
 // ====================
@@ -33,14 +42,6 @@ window.searchPlaceholderCycle = function() {
         }
     }
 };
-
-
-// ====================
-// ALPINE.JS
-// ====================
-window.Alpine = Alpine;
-Alpine.start();
-
 
 
 // ====================

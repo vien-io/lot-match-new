@@ -1,4 +1,4 @@
-import { updateForecastTimestamp } from "./threePartials/reviews/forecast.js";
+import { updateForecastTimestamp } from "./three-partials/reviews/forecast.js";
 
 export function loadBlockSummary(blockId) {
     fetch(`api/forecast/db/${blockId}`)

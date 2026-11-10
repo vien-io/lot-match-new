@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { modalOpen } from './detailsHandler';
+import { modalOpen } from './detailsHandler.js';
 import { loadLotSummary } from './lot-summary.js';
 
 export function initClickHandler({ 
