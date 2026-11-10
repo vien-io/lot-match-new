@@ -9,6 +9,12 @@ class ActivityLogController extends Controller
 {
     public function index(Request $request)
     {
+        $request->validate([
+            'role' => ['nullable', 'string'],
+            'table_name' => ['nullable', 'string'],
+            'user_id' => ['nullable', 'integer', 'min:1'],
+        ]);
+
         $query = ActivityLog::query();
 
         if ($request->filled('role')) {
@@ -23,12 +29,21 @@ class ActivityLogController extends Controller
             $query->where('user_id', $request->user_id);
         }
 
-        $query->select('id', 'user_id', 'role', 'action', 'table_name', 'record_id', 'old_data', 'new_data', 'created_at');
+        $query->select(
+            'id',
+            'user_id',
+            'role',
+            'action',
+            'table_name',
+            'record_id',
+            'old_data',
+            'new_data',
+            'created_at'
+        );
 
         $logs = $query->orderBy('created_at', 'desc')
-                      ->paginate(25)
-                      ->appends($request->query());
-                      
+            ->paginate(25)
+            ->appends($request->query());
 
         return view('activity_logs.index', compact('logs'));
     }

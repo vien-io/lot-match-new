@@ -93,11 +93,9 @@
         {{-- Bottom Account Selector --}}
         <div class="lm-sidebar-account" x-data="{ accountMenuOpen: false }">
 
-            <button type="button" {{-- @click="accountMenuOpen = !accountMenuOpen"
-                @keydown.escape.window="accountMenuOpen = false" --}} @click="
-                    console.log('Account button clicked!');
+            <button type="button" 
+                @click="
                     accountMenuOpen = !accountMenuOpen;
-                    console.log('Dropdown state:', accountMenuOpen);
                 " @keydown.escape.window="accountMenuOpen = false" class="lm-sidebar-account-trigger"
                 :aria-expanded="accountMenuOpen.toString()" aria-label="Open account menu">
                 {{-- User Avatar --}}
@@ -122,7 +120,7 @@
             {{-- Account Dropdown --}}
             <div x-cloak x-show="accountMenuOpen" x-transition:enter="tw-transition tw-ease-out tw-duration-150"
                 x-transition:enter-start="tw-opacity-0 tw-translate-y-1"
-                x-transition:enter-end="tw-opacity-100 tw-translate-y-0" @click.outside="open = false"
+                x-transition:enter-end="tw-opacity-100 tw-translate-y-0" @click.outside="accountMenuOpen = false"
                 class="lm-sidebar-account-menu">
                 <div class="lm-sidebar-account-menu-header">
                     <span>{{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}</span>
