@@ -1,37 +1,58 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const collapsedHeight = "1.5rem";
+    const modal = document.getElementById('changeDetailsModal');
+    const oldDataContainer = document.getElementById('oldChangeData');
+    const newDataContainer = document.getElementById('newChangeData');
 
-    // Select all toggle buttons for JSON boxes
-    document.querySelectorAll('.toggle-json').forEach(button => {
-        button.addEventListener('click', () => {
-            // The JSON box is the previous sibling of the button
-            const box = button.parentElement.previousElementSibling;
+    if (!modal || !oldDataContainer || !newDataContainer) return;
 
-            if (box.dataset.expanded === 'true') {
-                // ----------- COLLAPSE -----------
-                box.textContent = box.dataset.truncated;
-                box.dataset.expanded = 'false';
+    const openModal = (oldData, newData) => {
+        oldDataContainer.textContent = oldData || 'No previous data';
+        newDataContainer.textContent = newData || 'No new data';
 
-                box.style.whiteSpace = 'nowrap';
-                box.style.overflow = 'hidden';
-                box.style.textOverflow = 'ellipsis';
-                box.style.maxHeight = collapsedHeight;
+        modal.classList.remove('tw-hidden');
+        modal.classList.add('tw-flex');
 
-                button.textContent = 'View More';
-            } else {
-                // ----------- EXPAND -----------
-                box.textContent = box.dataset.full;
-                box.dataset.expanded = 'true';
+        document.body.style.overflow = 'hidden';
+    };
 
-                box.style.whiteSpace = 'pre-wrap';
-                box.style.overflow = 'auto';
-                box.style.textOverflow = 'unset';
+    const closeModal = () => {
+        modal.classList.add('tw-hidden');
+        modal.classList.remove('tw-flex');
 
-                const scrollHeight = box.scrollHeight;
-                box.style.maxHeight = (scrollHeight > 200 ? 200 : scrollHeight) + 'px';
+        document.body.style.overflow = '';
+    };
 
-                button.textContent = 'Hide';
-            }
-        });
+    // Open comparison modal
+    document.addEventListener('click', (event) => {
+        const button = event.target.closest('.view-change-details');
+
+        if (!button) return;
+
+        openModal(
+            button.dataset.old,
+            button.dataset.new
+        );
+    });
+
+    // Close buttons
+    modal.querySelectorAll('[data-close-change-modal]').forEach(button => {
+        button.addEventListener('click', closeModal);
+    });
+
+    // Close when clicking the backdrop
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Close with Escape
+    document.addEventListener('keydown', (event) => {
+        if (
+            event.key === 'Escape' &&
+            !modal.classList.contains('tw-hidden')
+        ) {
+            closeModal();
+        }
     });
 });
