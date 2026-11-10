@@ -65,6 +65,17 @@ class UserTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'username' => 'jamie',
+                'first_name' => 'Jamie',
+                'last_name' => 'Santos',
+                'email' => 'jamieann@gmail.com',
+                'email_verified_at' => $now,
+                'password' => bcrypt('Password123'),
+                'role' => 'admin',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
                 'username' => 'admin',
                 'first_name' => 'Lucie',
                 'last_name' => 'Davis',

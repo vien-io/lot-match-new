@@ -44,38 +44,38 @@ Auth::routes(['verify' => true]);
 | Public Routes
 |--------------------------------------------------------------------------
 */
-    if (config('app.render')) {
-        /*
-        |--------------------------------------------------------------------------
-        | For Render Debugging
-        |--------------------------------------------------------------------------
-        */
-        Route::get('/check-db', function() {
-            try {
-                $driver = DB::connection()->getPDO()->getAttribute(PDO::ATTR_DRIVER_NAME);
-                $version = DB::select('SELECT version() AS version')[0]->version;
-                return "Connected to database: $driver, version: $version";
-            } catch (\Exception $e) {
-                return "Database connection error: " . $e->getMessage();
-            }
-        });
-        Route::get('/debug-verification-link', [DebugController::class, 'verificationLink']);
-        Route::get('/debug/blocks', function () {
-            return Block::all();
-        })->middleware('auth.basic');
-        Route::get('/debug/users', function() {
-            return User::all();
-        })->middleware('auth.basic');
-    }
-
+if (config('app.render')) {
     /*
     |--------------------------------------------------------------------------
-    | Test Routes
+    | For Render Debugging
     |--------------------------------------------------------------------------
     */
-    Route::get('/test-openai', [OpenAITestController::class, 'test']);
-  
-    
+    Route::get('/check-db', function () {
+        try {
+            $driver = DB::connection()->getPDO()->getAttribute(PDO::ATTR_DRIVER_NAME);
+            $version = DB::select('SELECT version() AS version')[0]->version;
+            return "Connected to database: $driver, version: $version";
+        } catch (\Exception $e) {
+            return "Database connection error: " . $e->getMessage();
+        }
+    });
+    Route::get('/debug-verification-link', [DebugController::class, 'verificationLink']);
+    Route::get('/debug/blocks', function () {
+        return Block::all();
+    })->middleware('auth.basic');
+    Route::get('/debug/users', function () {
+        return User::all();
+    })->middleware('auth.basic');
+}
+
+/*
+|--------------------------------------------------------------------------
+| Test Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/test-openai', [OpenAITestController::class, 'test']);
+
+
 
 
 
@@ -135,7 +135,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // ------------------------
     // 3d MAP
     // ------------------------
-    Route::get('/3dmap', fn() => view('3dmap'))->name('3dmap'); 
+    Route::get('/3dmap', fn() => view('3dmap'))->name('3dmap');
 
     // ------------------------
     // Property Management
@@ -188,7 +188,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/lots/{lotId}/images', [LotImageController::class, 'index']);
     Route::get('/lots/fallback-images', [LotImageController::class, 'fallback']);
     Route::delete('/property-images/{image}', [PropertyController::class, 'destroyImage'])
-    ->name('properties.images.destroy');
+        ->name('properties.images.destroy');
 
     // ------------------------
     // Buyer Routes (Owner Verification Requests)
@@ -210,6 +210,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/users', [UserManagementController::class, 'store'])->name('store');
             Route::get('/users/{user}/edit', [UserManagementController::class, 'edit'])->name('edit');
             Route::put('/users/{user}', [UserManagementController::class, 'update'])->name('update');
+            Route::patch('/users/{user}/role', [UserManagementController::class, 'updateRole'])
+                ->name('role.update');
             Route::delete('/users/{user}', [UserManagementController::class, 'destroy'])->name('destroy');
         });
 
@@ -253,26 +255,26 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request) {
     // Log for debugging
     Log::info('Verify URL hit', [
         'fullUrl' => $request->fullUrl(),
-        'scheme'  => $request->getScheme(),
-        'host'    => $request->getHost(),
-        'query'   => $request->query(),
+        'scheme' => $request->getScheme(),
+        'host' => $request->getHost(),
+        'query' => $request->query(),
     ]);
 
     $user = \App\Models\User::findOrFail($request->route('id'));
 
-    if (app()->isLocal() && ! $user->hasVerifiedEmail()) {
+    if (app()->isLocal() && !$user->hasVerifiedEmail()) {
         $user->markEmailAsVerified();
         return redirect()->route('verification.success');
     }
 
     if (!app()->environment('production')) {
-        if (! URL::hasValidSignature($request)) {
-        abort(403, 'Invalid Signature');
+        if (!URL::hasValidSignature($request)) {
+            abort(403, 'Invalid Signature');
         }
     }
-    
 
-    if (! $user->hasVerifiedEmail()) {
+
+    if (!$user->hasVerifiedEmail()) {
         $user->markEmailAsVerified();
     }
 

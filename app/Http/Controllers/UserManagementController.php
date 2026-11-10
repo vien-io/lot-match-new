@@ -6,6 +6,7 @@ use App\Models\Lot;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
@@ -16,16 +17,19 @@ class UserManagementController extends Controller
         $query = User::query();
 
         if ($search = $request->input('search')) {
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('username', 'like', "%{$search}%")
-                ->orWhere('first_name', 'like', "%{$search}%")
-                ->orWhere('last_name', 'like', "%{$search}%")
-                ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
         /** @var \Illuminate\Pagination\LengthAwarePaginator $users */
-        $users = $query->paginate(20)->withQueryString();
+        $users = $query
+            ->orderBy('id', 'asc')
+            ->paginate(20)
+            ->withQueryString();
 
         // Load all lots with their blocks
         $allLots = Lot::with('block')->get()->map(function ($l) {
@@ -49,14 +53,14 @@ class UserManagementController extends Controller
     public function store(Request $request)
     {
         Log::info('store function reached!!');
-        
+
         try {
             $validated = $request->validate([
                 'username' => 'required|string|max:255',
-                'first_name'     => 'required|string|max:255',
-                'last_name'     => 'required|string|max:255',
-                'email'    => 'required|email|unique:users',
-                'password' => 'required|string|min:6', 
+                'first_name' => 'required|string|max:255',
+                'last_name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|string|min:6',
             ]);
 
             Log::info('Validation passed', $validated);
@@ -131,6 +135,33 @@ class UserManagementController extends Controller
 
         return redirect()->route('usermanagement.index')->with('success', 'User updated successfully.');
     }
+    public function updateRole(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'role' => 'required|in:admin,owner,buyer',
+        ]);
+
+        $newRole = $validated['role'];
+        $oldRole = $user->role;
+
+        DB::transaction(function () use ($user, $newRole, $oldRole) {
+
+            $user->update([
+                'role' => $newRole,
+            ]);
+
+            // Remove lot ownership if the user is no longer an owner.
+            if ($oldRole === 'owner' && $newRole !== 'owner') {
+                Lot::where('owner_id', $user->id)
+                    ->update(['owner_id' => null]);
+            }
+        });
+
+        return response()->json([
+            'message' => 'User role updated successfully.',
+            'role' => $user->role,
+        ]);
+    }
 
     public function destroy(User $user)
     {
@@ -163,6 +194,6 @@ class UserManagementController extends Controller
         $user->update($request->only('name', 'username', 'email'));
         return redirect()->route('profile')->with('success', 'Profile updated.');
     }
-    
+
 
 }

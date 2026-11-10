@@ -10,30 +10,11 @@ class LotImageSeeder extends Seeder
 {
     public function run(): void
     {
-        $images = [
-            'sample01.jpeg',
-            'sample02.jpeg',
-            'sample03.jpeg',
-            'sample04.jpeg',
-            'sample05.jpeg',
-            'sample06.jpeg',
-            'sample07.jpeg',
-            'sample08.jpeg',
-            'sample09.jpeg',
-            'sample10.jpeg',
-            'sample11.jpeg',
-            'sample12.jpeg',
-            'sample01.jpg',
-            'sample02.jpg',
-            'sample03.jpg',
-            'sample04.jpg',
-            'sample05.jpg',
-            'sample01.webp',
-            'sample02.webp',
-            'sample03.webp',
-            'sample04.webp',
-            'sample05.webp',
-        ];
+        $images = [];
+
+        for ($i = 1; $i <= 32; $i++) {
+            $images[] = sprintf('sample%02d.jpg', $i);
+        }
 
         $lots = Lot::all();
 
