@@ -1,5 +1,5 @@
 // quickGuideModal.js
-import { setModalOpen, modalOpen } from '../threePartials/detailsHandler';
+import { setModalOpen, modalOpen } from '../three-partials/detailsHandler';
 
 export function initQuickGuideModal() {
     const modal = document.getElementById('quickGuideModal');

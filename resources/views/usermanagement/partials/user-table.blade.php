@@ -1,5 +1,5 @@
 {{-- User directory --}}
-<section
+<section x-data="{ allLots: @js($allLots) }"
     class="tw-overflow-hidden tw-rounded-xl tw-border tw-border-[#C4C4C4]/70 tw-bg-white tw-shadow-[0_2px_8px_rgba(6,16,13,0.04)]">
     @include('usermanagement.partials.toolbar')
 
@@ -61,7 +61,7 @@
                         </td>
 
                         {{-- Role and owner lot assignment --}}
-                        <td class="tw-px-4" x-data='userLotForm({{ $user->id }}, @json($user->role), @json($allLots))'>
+                        <td class="tw-px-4" x-data='userLotForm({{ $user->id }}, @json($user->role), allLots)'>
                             @if(auth()->user()->role === 'admin')
                                 <form class="form_button tw-w-full tw-max-w-[200px]"
                                     action="{{ route('usermanagement.role.update', $user->id) }}" method="POST" x-ref="form">
@@ -79,22 +79,20 @@
 
                                         {{-- Role selection --}}
                                         <select id="role-{{ $user->id }}" name="role" x-model="role" autocomplete="off"
-                                            @change="handleRoleChange($event)" 
-                                            @click="$nextTick(() => {
+                                            @change="handleRoleChange($event)" @click="$nextTick(() => {
                                                 if (role === 'owner' && !showLotPopover) {
-                                                    openLotPopover($event);
-                                                }
-                                            })"
-                                            :class="{
-                                                                    'tw-bg-yellow-100': hasChanges,
-                                                                    'tw-bg-green-200': saveSuccess,
-                                                                    'tw-bg-white': !hasChanges && !saveSuccess
-                                                                }"
+                                                        openLotPopover($event);
+                                                    }
+                                                })" :class="{
+                                                    'tw-bg-yellow-100': hasChanges,
+                                                    'tw-bg-green-200': saveSuccess,
+                                                    'tw-bg-white': !hasChanges && !saveSuccess
+                                                }"
                                             class="tw-transition-colors tw-duration-200 tw-ease-out tw-w-[85%] tw-min-w-0 tw-shrink-0 tw-py-2 tw-rounded-md tw-border tw-border-[#C4C4C4] tw-bg-white tw-px-2.5 tw-text-sm tw-text-[#111111] focus:tw-border-[#06B995] focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#06EBB6]/20">
 
-                                            <option value="admin">Admin</option>
-                                            <option value="owner">Owner</option>
-                                            <option value="buyer">Buyer</option>
+                                            <option value="admin" @selected($user->role === 'admin')>Admin</option>
+                                            <option value="owner" @selected($user->role === 'owner')>Owner</option>
+                                            <option value="buyer" @selected($user->role === 'buyer')>Buyer</option>
                                         </select>
 
                                         {{-- Action buttons and success message --}}
@@ -150,18 +148,16 @@
                         </td>
 
                         {{-- Edit and delete actions --}}
-                        <td class="tw-whitespace-nowrap tw-px-4">
+                        <td class="tw-whitespace-nowrap tw-px-4 tw-min-w-[120px]">
                             <div class="tw-flex tw-gap-1">
-                                <button type="button"
-                                 x-data
-                                    @click="$dispatch('edit-user', {
-                                            id: {{ $user->id }},
-                                            username: @js($user->username),
-                                            first_name: @js($user->first_name),
-                                            last_name: @js($user->last_name),
-                                            email: @js($user->email),
-                                            role: @js($user->role)
-                                        })"
+                                <button type="button" x-data @click="$dispatch('edit-user', {
+                                                id: {{ $user->id }},
+                                                username: @js($user->username),
+                                                first_name: @js($user->first_name),
+                                                last_name: @js($user->last_name),
+                                                email: @js($user->email),
+                                                role: @js($user->role)
+                                            })"
                                     class="tw-rounded-md tw-p-2 tw-text-[#52645D]/50 tw-transition-colors hover:tw-bg-[#EAFBF6] hover:tw-text-[#087A61] focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-[#06EBB6]/40"
                                     aria-label="Edit {{ $user->username }}" title="Edit user">
                                     <i class="fas fa-pen"></i>

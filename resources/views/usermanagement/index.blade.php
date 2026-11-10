@@ -36,6 +36,9 @@
 
         @include('usermanagement.partials.user-table')
     </div>
+
+    {{-- Existing user modal components --}}
+    @include('usermanagement.modals.user-form')
 @endsection
 
 @section('scripts')
@@ -43,6 +46,3 @@
         'resources/css/pages/user-management/user-management.css',
     ])
 @endsection
-
-{{-- Existing user modal components --}}
-@include('usermanagement.modals.user-form')

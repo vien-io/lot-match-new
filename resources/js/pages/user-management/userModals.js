@@ -1,6 +1,4 @@
 document.addEventListener('alpine:init', () => {
-    console.log('[userModals.js] Registering userModal');
-
     window.Alpine.data('userModal', () => ({
         isOpen: false,
         isEditing: false,

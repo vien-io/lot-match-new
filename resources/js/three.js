@@ -10,18 +10,18 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import gsap from "gsap";
 
-import { initRenderer, addResizeHandler } from './threePartials/initRenderer';
-import { initScene } from './threePartials/initScene';
-import { initCamera } from './threePartials/initCamera';
-import { initLights } from './threePartials/initLights';
-import { initControls } from './threePartials/initControls';
-import { initHelpers } from './threePartials/initHelpers';
-import { loadHouses } from './threePartials/loadHouses';
-import { initRaycasterOutlinePass } from './threePartials/initRaycasterOutlinePass';
-import { initClickHandler } from './threePartials/initClickHandler';
-import { fetchForecast } from './threePartials/forecastHandler';
-import { showLotDetails, showBlockDetails } from './threePartials/detailsHandler';
-import { initSky } from './threePartials/initSky';
+import { initRenderer, addResizeHandler } from './three-partials/initRenderer';
+import { initScene } from './three-partials/initScene';
+import { initCamera } from './three-partials/initCamera';
+import { initLights } from './three-partials/initLights';
+import { initControls } from './three-partials/initControls';
+import { initHelpers } from './three-partials/initHelpers';
+import { loadHouses } from './three-partials/loadHouses';
+import { initRaycasterOutlinePass } from './three-partials/initRaycasterOutlinePass';
+import { initClickHandler } from './three-partials/initClickHandler';
+import { fetchForecast } from './three-partials/forecastHandler';
+import { showLotDetails, showBlockDetails } from './three-partials/detailsHandler';
+import { initSky } from './three-partials/initSky';
 
 let needsRender = true;
 export function requestRender() {
