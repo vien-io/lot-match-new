@@ -1,19 +1,22 @@
 export function loadLotSummary(lotId) {
+    const summarySection = document.getElementById('lot-summary-section');
     const summaryDiv = document.getElementById('lot-summary-text');
-    summaryDiv.innerHTML = 'Loading AI summary...';
+
+    // Hide section initially
+    summarySection.classList.add('tw-hidden');
 
     fetch(`/lot/${lotId}/summary`)
         .then(res => res.json())
         .then(data => {
-            if (data.summary) {
+            if (data.summary?.trim()) {
                 displayLotSummary(data.summary);
-            } else {
-                summaryDiv.innerHTML = '<p>No summary available.</p>';
+
+                // Show section only when summary exists
+                summarySection.classList.remove('tw-hidden');
             }
         })
         .catch(err => {
-            console.error(err);
-            summaryDiv.innerHTML = '<p>Failed to load AI summary.</p>';
+            console.error('Failed to load lot summary:', err);
         });
 }
 

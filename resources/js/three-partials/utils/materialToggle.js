@@ -36,7 +36,7 @@ export function createToggle(labelText, mesh, texturedMaterial, basicMaterial, b
     legendDiv.className = `
         tw-fixed tw-top-20 tw-left-28 tw-bg-white/80 tw-px-4 tw-py-2
         tw-rounded-xl tw-shadow-[0_0_10px_rgba(0,0,0,0.15)] tw-font-sans tw-text-sm
-        tw-flex tw-gap-4 tw-items-center tw-backdrop-blur-sm tw-z-50
+        tw-flex tw-gap-4 tw-items-center tw-backdrop-blur-sm tw-z-3
     `;
     legendDiv.style.display = 'none'; 
     legendDiv.innerHTML = `

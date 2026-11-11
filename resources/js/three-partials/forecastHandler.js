@@ -1,115 +1,240 @@
+
 import { Chart, registerables } from 'chart.js';
-Chart.register(...registerables);
 import 'chartjs-adapter-date-fns';
+
+Chart.register(...registerables);
 
 let forecastChart = null;
 
 export function fetchForecast(blockId) {
-    const isAdmin = document.body.getAttribute('data-is-admin') === '1';
-
     fetch(`/forecast/block/${blockId}`)
-    .then(response => response.json())
-    .then(data => renderForecast(data))
-    .catch(error => {
-        console.error('Error fetching forecast:', error);
-        document.getElementById('forecasting-data').innerHTML = `<p>Error loading forecast.</p>`;
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error: ${response.status}`);
+            }
+
+            return response.json();
+        })
+        .then(data => renderForecast(data))
+        .catch(error => {
+            console.error('Error fetching forecast:', error);
+
+            const forecastValue = document.getElementById('forecast-value');
+
+            if (forecastValue) {
+                forecastValue.textContent = 'Unavailable';
+            }
+
+            if (forecastChart) {
+                forecastChart.destroy();
+                forecastChart = null;
+            }
+        });
 }
 
-
-
-/* ---------- HELPERS ---------- */
+/* ---------- RENDER FORECAST ---------- */
 function renderForecast(data) {
     const forecastDiv = document.getElementById('forecasting-data');
-    if (!forecastDiv) {
-        console.log("forecasting container not found");
+    const forecastValue = document.getElementById('forecast-value');
+    const canvas = document.getElementById('forecastChart');
+
+    if (!forecastDiv || !forecastValue || !canvas) {
+        console.warn('Forecast elements not found in the DOM.');
         return;
     }
 
-    if (data.forecasted_rating !== null) {
-        forecastDiv.innerHTML = `
-            <p><strong>Forecasted Rating:</strong> <span id="forecast-value">${data.forecasted_rating}</span></p>
-            <canvas id="forecastChart" width="400" height="200"></canvas>
-        `;
+    // No forecast available
+    if (data.forecasted_rating === null ||
+        data.forecasted_rating === undefined) {
 
-        const ratings = data.ratings.map(r => ({
-            x: new Date(r.created_at),
-            y: r.rating
-        }));
+        forecastValue.textContent = 'N/A';
 
-        // add forecast point
-        const lastDate = new Date(ratings[ratings.length - 1].x);
-        const nextDate = new Date(lastDate);
-        nextDate.setDate(lastDate.getDate() + 30);
-        ratings.push({ x: nextDate, y: data.forecasted_rating });
-        // console.log('Forecasted point:', ratings[ratings.length - 1]);
-
-        // destroy old chart if exists
-        if (forecastChart && typeof forecastChart.destroy === 'function') {
+        if (forecastChart) {
             forecastChart.destroy();
+            forecastChart = null;
         }
 
-        const ctx = document.getElementById('forecastChart').getContext('2d');
-        forecastChart = createForecastChart(ctx, ratings);
-
-    } else {
-        forecastDiv.innerHTML = `<p>No forecast available for this block.</p>`;
+        return;
     }
+
+    // Update the existing Blade element.
+    forecastValue.textContent = Number(data.forecasted_rating).toFixed(2);
+
+    // Prepare historical ratings.
+    const ratings = (data.ratings ?? []).map(r => ({
+        x: new Date(r.created_at),
+        y: Number(r.rating)
+    })).filter(r =>
+        !Number.isNaN(r.x.getTime()) && Number.isFinite(r.y)
+    );
+
+    // Add forecast point 30 days after the latest rating.
+    if (ratings.length > 0) {
+        const lastDate = ratings[ratings.length - 1].x;
+        const nextDate = new Date(lastDate);
+
+        nextDate.setDate(nextDate.getDate() + 30);
+
+        ratings.push({
+            x: nextDate,
+            y: Number(data.forecasted_rating)
+        });
+    } else {
+        // Display the forecast even when there is no historical data.
+        ratings.push({
+            x: new Date(),
+            y: Number(data.forecasted_rating)
+        });
+    }
+
+    // Destroy previous chart before creating another one.
+    if (forecastChart) {
+        forecastChart.destroy();
+        forecastChart = null;
+    }
+
+    const ctx = canvas.getContext('2d');
+
+    forecastChart = createForecastChart(ctx, ratings);
 }
 
+/* ---------- CHART CONFIGURATION ---------- */
 function createForecastChart(ctx, ratings) {
-    const gradient = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
-        gradient.addColorStop(0, 'hsla(142, 74%, 30%, 1.00)');   
-        gradient.addColorStop(1, 'hsla(86, 96%, 40%, 1.00)');   
+    return new Chart(ctx, {
+        type: 'line',
 
-        return new Chart(ctx, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: 'Rating Trend + Forecast',
-                        data: ratings,
-                        parsing: { xAxisKey: 'x', yAxisKey: 'y' },
-                        borderColor: gradient,
-                        backgroundColor: 'transparent',
-                        borderWidth: 2.5,
-                        tension: 0.3,
-                        pointBackgroundColor: (ctx) => {
-                            const index = ctx.dataIndex;
-                            return index === ratings.length - 1
-                                ? 'rgba(255, 255, 255, 1)'
-                                : 'hsl(142, 71%, 45%)'; 
-                        },
-                        pointRadius: (ctx) => ctx.dataIndex === ratings.length - 1 ? 6 : 0,
-                        pointHoverRadius: (ctx) => ctx.dataIndex === ratings.length - 1 ? 8 : 0,
-                        pointHitRadius: (ctx) => ctx.dataIndex === ratings.length - 1 ? 10 : 5
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: { unit: 'month' },
-                        title: { display: true, text: 'Date' },
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: { color: '#ccc' }
+        data: {
+            datasets: [
+                {
+                    label: 'Rating Trend + Forecast',
+                    data: ratings,
+
+                    parsing: {
+                        xAxisKey: 'x',
+                        yAxisKey: 'y'
                     },
-                    y: {
-                        suggestedMin: 1,
-                        suggestedMax: 5,
-                        title: { display: true, text: 'Rating' },
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: { color: '#ccc' }
+
+                    borderColor: '#06EBB6',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+
+                    tension: 0.3,
+
+                    pointBackgroundColor: (context) => {
+                        const isForecast =
+                            context.dataIndex === ratings.length - 1;
+
+                        return isForecast ? '#06100D' : '#06EBB6';
+                    },
+
+                    pointBorderColor: '#06EBB6',
+
+                    pointRadius: (context) =>
+                        context.dataIndex === ratings.length - 1 ? 5 : 3,
+
+                    pointHoverRadius: 6,
+                    pointHitRadius: 10
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+
+            layout: {
+                padding: 8
+            },
+
+            plugins: {
+                legend: {
+                    display: false
+                },
+
+                tooltip: {
+                    backgroundColor: '#06100D',
+                    titleColor: '#FFFFFF',
+                    bodyColor: '#E5EAE8',
+                    borderColor: '#263B33',
+                    borderWidth: 1,
+                    padding: 10,
+                    displayColors: false
+                }
+            },
+
+            scales: {
+                x: {
+                    type: 'time',
+
+                    time: {
+                        unit: 'month'
+                    },
+
+                    title: {
+                        display: true,
+                        text: 'Date',
+                        color: '#666666',
+                        font: {
+                            size: 10,
+                            weight: '600'
+                        }
+                    },
+
+                    grid: {
+                        color: '#F0F2F1',
+                        drawBorder: false
+                    },
+
+                    border: {
+                        display: false
+                    },
+
+                    ticks: {
+                        color: '#888888',
+                        font: {
+                            size: 10
+                        },
+                        maxRotation: 0
                     }
                 },
-                plugins: {
-                    legend: { display: false }
-                },
-                responsive: false,
-                maintainAspectRatio: false,
-                layout: { padding: 10 }
-            }
-        });
 
+                y: {
+                    min: 1,
+                    max: 5,
+
+                    title: {
+                        display: true,
+                        text: 'Rating',
+                        color: '#666666',
+                        font: {
+                            size: 10,
+                            weight: '600'
+                        }
+                    },
+
+                    grid: {
+                        color: '#F0F2F1',
+                        drawBorder: false
+                    },
+
+                    border: {
+                        display: false
+                    },
+
+                    ticks: {
+                        stepSize: 1,
+                        color: '#888888',
+                        font: {
+                            size: 10
+                        }
+                    }
+                }
+            }
+        }
+    });
 }

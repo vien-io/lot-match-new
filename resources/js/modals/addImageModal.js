@@ -84,11 +84,12 @@ export async function loadLotImages(lotId) {
         }
     }
 
-    currentImages = images.map(img => `/storage/${img.path}`);
+    currentImages = images.map(img => `/${img.path}`);
     currentImageIndex = 0;
 
     if (!imgEl) return;
 
+    console.log("currentImages :", currentImages);
     if (currentImages.length > 0) {
         imgEl.src = currentImages[0];
         imgEl.alt = `Lot Image 1 of ${currentImages.length}`;

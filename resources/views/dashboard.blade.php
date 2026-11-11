@@ -227,7 +227,7 @@
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @vite([
-        'resources/js/dashboardMap.js',
+        'resources/js/pages/dashboard/dashboardMap.js',
         'resources/js/pages/dashboard/dashboard.js'
     ])
     

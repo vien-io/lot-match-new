@@ -93,7 +93,8 @@ function initializeRatingsChart() {
                         color: '#A6B6B0'
                     }
                 }
-            }
+            },
+            animation: false,
         }
     });
 }
