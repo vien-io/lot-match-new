@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\{
-    ActivityLogController,
     AnalyticsController,
     Auth\ForgotPasswordController,
     Auth\LoginController,
@@ -25,8 +24,11 @@ use App\Http\Controllers\{
     OpenAITestController,
     OwnerVerificationController,
     SearchController,
-    UserManagementController,
     UserSettingsController
+};
+use App\Http\Controllers\Admin\{
+    ActivityLogController,
+    UserManagementController,
 };
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Middleware\CheckRole;
