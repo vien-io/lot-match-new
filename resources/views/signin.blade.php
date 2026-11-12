@@ -185,15 +185,15 @@
     {{-- Render Demo Accounts --}}
     @if (config('app.render'))
         <div class="tw-absolute tw-top-4 tw-right-4 tw-z-20
-                    tw-w-[calc(100%-2rem)] sm:tw-w-80
-                    tw-bg-white tw-rounded-2xl tw-shadow-xl
-                    tw-border tw-border-gray-200 tw-p-5">
+                            tw-w-[calc(100%-2rem)] sm:tw-w-80
+                            tw-bg-white tw-rounded-2xl tw-shadow-xl
+                            tw-border tw-border-gray-200 tw-p-5">
 
             {{-- Header --}}
             <div class="tw-flex tw-items-center tw-gap-3 tw-mb-2">
                 <div class="tw-w-10 tw-h-10 tw-rounded-xl
-                            tw-bg-emerald-50 tw-text-emerald-600
-                            tw-flex tw-items-center tw-justify-center">
+                                    tw-bg-emerald-50 tw-text-emerald-600
+                                    tw-flex tw-items-center tw-justify-center">
                     <i class="fas fa-users tw-text-lg"></i>
                 </div>
 
@@ -226,18 +226,18 @@
                 @endphp
 
                 @foreach ($demoAccounts as $account)
-                    <button type="button" onclick="fillDemo('{{ $account['email'] }}', '{{ $account['password'] }}')" class="tw-w-full tw-flex tw-items-center tw-justify-between
-                                   tw-p-3 tw-rounded-xl tw-border tw-border-gray-200
-                                   hover:tw-border-emerald-400 hover:tw-bg-emerald-50/60
-                                   tw-transition-all tw-duration-200 tw-text-left
-                                   focus:tw-outline-none focus:tw-ring-2
-                                   focus:tw-ring-emerald-400">
+                    <button type="button" onclick="fillDemo('{{ $account['username'] }}', '{{ $account['password'] }}')" class="tw-w-full tw-flex tw-items-center tw-justify-between
+                                                   tw-p-3 tw-rounded-xl tw-border tw-border-gray-200
+                                                   hover:tw-border-emerald-400 hover:tw-bg-emerald-50/60
+                                                   tw-transition-all tw-duration-200 tw-text-left
+                                                   focus:tw-outline-none focus:tw-ring-2
+                                                   focus:tw-ring-emerald-400">
 
                         <div class="tw-flex tw-items-center tw-gap-3">
                             <div class="tw-w-9 tw-h-9 tw-rounded-lg
-                                            tw-bg-{{ $account['color'] }}-50
-                                            tw-text-{{ $account['color'] }}-600
-                                            tw-flex tw-items-center tw-justify-center">
+                                                            tw-bg-{{ $account['color'] }}-50
+                                                            tw-text-{{ $account['color'] }}-600
+                                                            tw-flex tw-items-center tw-justify-center">
                                 <i class="fas {{ $account['icon'] }}"></i>
                             </div>
 
@@ -259,7 +259,7 @@
 
             {{-- Footer --}}
             <div class="tw-mt-4 tw-pt-3 tw-border-t tw-border-gray-100
-                        tw-flex tw-items-center tw-gap-2">
+                                tw-flex tw-items-center tw-gap-2">
                 <i class="fas fa-info-circle tw-text-emerald-500"></i>
                 <p class="tw-text-[11px] tw-text-gray-500">
                     Click any account to autofill the login form.
@@ -268,10 +268,12 @@
         </div>
     @endif
 
+    {{-- Application JavaScript --}}
+    @vite([
+        'resources/js/app.js',
+        'resources/js/pages/sign-in/autofill.js',
+    ])
 
-    {{-- Font Awesome for icons --}}
-    <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
-    @vite('resources/js/app.js')
 </body>
 
 </html>

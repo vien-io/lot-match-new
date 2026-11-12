@@ -1,15 +1,15 @@
-import './bootstrap';
-import { renderTopRatedLotsCards } from './charts/blockRatingsChart';
-import Alpine from 'alpinejs';
+import "./bootstrap";
+import { renderTopRatedLotsCards } from "./charts/blockRatingsChart";
+import Alpine from "alpinejs";
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-import './components/lotSelector.js';
-import './components/userLotForm.js';
-import './features/password-toggle.js';
-import './pages/properties/properties.js';
-import './pages/user-management/userModals.js';
-import './components/tableSearch.js'
+import "./components/lotSelector.js";
+import "./components/userLotForm.js";
+import "./features/password-toggle.js";
+import "./pages/properties/properties.js";
+import "./pages/user-management/userModals.js";
+import "./components/tableSearch.js";
 
 // ====================
 // ALPINE.JS
@@ -17,11 +17,10 @@ import './components/tableSearch.js'
 window.Alpine = Alpine;
 Alpine.start();
 
-
 // ====================
 // SEARCH PLACEHOLDER CYCLE
 // ====================
-window.searchPlaceholderCycle = function() {
+window.searchPlaceholderCycle = function () {
     return {
         current: 0,
         placeholders: [
@@ -34,51 +33,60 @@ window.searchPlaceholderCycle = function() {
             "Look up recent reviews or ratings...",
             "Search blocks with high ratings...",
             "Find lots with specific forecasts...",
-            "Search for your favorite property..."
+            "Search for your favorite property...",
         ],
         init() {
             setInterval(() => {
                 this.current = (this.current + 1) % this.placeholders.length;
-            }, 5000); 
-        }
-    }
+            }, 5000);
+        },
+    };
 };
-
 
 // ====================
 // BUTTON PRESS ANIMATION
 // ====================
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".btn-primary").forEach(button => {
-        button.addEventListener("mousedown", () => button.style.transform = "scale(0.9)");
-        button.addEventListener("mouseup", () => button.style.transform = "scale(1)");
-        button.addEventListener("mouseleave", () => button.style.transform = "scale(1)");
+    document.querySelectorAll(".btn-primary").forEach((button) => {
+        button.addEventListener(
+            "mousedown",
+            () => (button.style.transform = "scale(0.9)"),
+        );
+        button.addEventListener(
+            "mouseup",
+            () => (button.style.transform = "scale(1)"),
+        );
+        button.addEventListener(
+            "mouseleave",
+            () => (button.style.transform = "scale(1)"),
+        );
     });
 });
-
 
 // ====================
 // CONDITIONAL 3D MAP INITIALIZATION
 // ====================
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
     if (window.location.pathname === "/3dmap") {
         // Dynamically import ONLY when user visits /3dmap
-        const { default: initThreeJS } = await import('./three');
+        const { default: initThreeJS } = await import("./three");
         initThreeJS();
 
         // Fetch and populate block list dynamically
         const blockList = document.getElementById("block-list");
         if (!blockList) return;
 
-        fetch('/blocks')
-            .then(response => response.json())
-            .then(blocks => {
+        fetch("/blocks")
+            .then((response) => response.json())
+            .then((blocks) => {
                 blockList.innerHTML = ""; // Clear default list
-                blocks.forEach(block => {
+                blocks.forEach((block) => {
                     const blockItem = document.createElement("li");
                     blockItem.textContent = block.name;
                     blockItem.dataset.blockId = block.id;
-                    blockItem.dataset.blockName = block.name.toLowerCase().replace(" ", ""); // Normalize name
+                    blockItem.dataset.blockName = block.name
+                        .toLowerCase()
+                        .replace(" ", ""); // Normalize name
                     blockItem.classList.add("block-item");
 
                     // Click event to fetch lots and move camera
@@ -90,29 +98,28 @@ document.addEventListener('DOMContentLoaded', async () => {
                     blockList.appendChild(blockItem);
                 });
             })
-            .catch(error => console.error("Error fetching blocks:", error));
+            .catch((error) => console.error("Error fetching blocks:", error));
     }
 });
-
 
 // ====================
 // TOGGLE SIDE PANEL
 // ====================
 document.addEventListener("DOMContentLoaded", function () {
-    const toggleBtn = document.getElementById('toggle-panel');
+    const toggleBtn = document.getElementById("toggle-panel");
     if (!toggleBtn) return;
 
-    toggleBtn.addEventListener('click', function () {
-        let panel = document.getElementById('side-panel');
+    toggleBtn.addEventListener("click", function () {
+        let panel = document.getElementById("side-panel");
         if (!panel) return;
 
         const currentTransform = window.getComputedStyle(panel).transform;
-        panel.style.transform = (currentTransform === 'matrix(1, 0, 0, 1, 0, 0)')
-            ? 'translateX(-100%)'
-            : 'translateX(0)';
+        panel.style.transform =
+            currentTransform === "matrix(1, 0, 0, 1, 0, 0)"
+                ? "translateX(-100%)"
+                : "translateX(0)";
     });
 });
-
 
 // ====================
 // FETCH LOTS HELPER
@@ -120,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function fetchLots(blockId, blockItem) {
     console.log(`Fetching lots for block ID: ${blockId}`);
 
-    document.querySelectorAll(".lots-container").forEach(container => {
+    document.querySelectorAll(".lots-container").forEach((container) => {
         if (container.parentElement !== blockItem) {
             container.style.display = "none";
         }
@@ -133,25 +140,26 @@ function fetchLots(blockId, blockItem) {
         blockItem.appendChild(lotsContainer);
     }
 
-    lotsContainer.style.display = lotsContainer.style.display === "block" ? "none" : "block";
+    lotsContainer.style.display =
+        lotsContainer.style.display === "block" ? "none" : "block";
     lotsContainer.innerHTML = "<li>Loading lots...</li>";
 
     fetch(`/lots/${blockId}`)
-        .then(response => response.json())
-        .then(lots => {
-            lotsContainer.innerHTML = ""; 
+        .then((response) => response.json())
+        .then((lots) => {
+            lotsContainer.innerHTML = "";
             if (lots.length === 0) {
                 lotsContainer.innerHTML = "<li>No lots available</li>";
                 return;
             }
 
-            lots.forEach(lot => {
+            lots.forEach((lot) => {
                 const lotItem = document.createElement("li");
                 lotItem.textContent = `${lot.name}`;
                 lotsContainer.appendChild(lotItem);
             });
         })
-        .catch(error => {
+        .catch((error) => {
             console.error("Error fetching lots:", error);
             lotsContainer.innerHTML = "<li>Error loading lots</li>";
         });
@@ -161,15 +169,17 @@ function fetchLots(blockId, blockItem) {
 // ====================
 
 window.addNotification = function (message) {
-    const event = new CustomEvent('new-notification', {
+    const event = new CustomEvent("new-notification", {
         detail: {
             message,
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }
+            time: new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+            }),
+        },
     });
     window.dispatchEvent(event);
 };
-
 
 // ====================
 // PROFILE DROPDOWN
@@ -181,43 +191,49 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!profileIcon || !profileDropdown) return;
 
     profileIcon.addEventListener("click", function () {
-        profileDropdown.style.display = profileDropdown.style.display === "block" ? "none" : "block";
+        profileDropdown.style.display =
+            profileDropdown.style.display === "block" ? "none" : "block";
     });
 
     document.addEventListener("click", function (event) {
-        if (!profileIcon.contains(event.target) && !profileDropdown.contains(event.target)) {
+        if (
+            !profileIcon.contains(event.target) &&
+            !profileDropdown.contains(event.target)
+        ) {
             profileDropdown.style.display = "none";
         }
     });
 });
 
-
 // ====================
 // CHART INITIALIZATION
 // ====================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     renderTopRatedLotsCards();
 });
 
-
-document.addEventListener('DOMContentLoaded', () => {
-    const settingsModal = document.getElementById('settings-modal');
-    const openBtn = document.getElementById('settings-btn');
-    const closeBtn = document.getElementById('settings-close');
+document.addEventListener("DOMContentLoaded", () => {
+    const settingsModal = document.getElementById("settings-modal");
+    const openBtn = document.getElementById("settings-btn");
+    const closeBtn = document.getElementById("settings-close");
 
     if (openBtn && settingsModal) {
-        openBtn.addEventListener('click', () => {
-            settingsModal.classList.remove('tw-hidden');
+        openBtn.addEventListener("click", () => {
+            settingsModal.classList.remove("tw-hidden");
         });
     }
 
     if (closeBtn && settingsModal) {
-        closeBtn.addEventListener('click', () => {
-            settingsModal.classList.add('tw-hidden');
+        closeBtn.addEventListener("click", () => {
+            settingsModal.classList.add("tw-hidden");
         });
     }
 
-    settingsModal.addEventListener('click', (e) => {
-        if (e.target === settingsModal) settingsModal.classList.add('tw-hidden');
-    });
+    if (settingsModal) {
+        settingsModal.addEventListener("click", (e) => {
+            if (e.target === settingsModal) {
+                settingsModal.classList.add("tw-hidden");
+            }
+        });
+    }
 });
