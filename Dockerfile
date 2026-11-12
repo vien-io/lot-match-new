@@ -1,7 +1,7 @@
 # My Dockerfile
 
 # Use official PHP image with Apache
-FROM php:8.2-apache
+FROM php:8.5-apache
 
 # Set working directory
 WORKDIR /var/www/html
