@@ -5,6 +5,8 @@ import { loadLotImages } from "../modals/addImageModal";
 import { renderLotDetails } from "../pages/3d-map/utils/lotDetailsRenderer";
 import { renderLotStatus } from "../pages/3d-map/utils/lotStatusRenderer.js";
 import { renderBlockDetails } from "../pages/3d-map/utils/blockDetailsRenderer.js";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 
 export const modalOpen = { value: false };
 
@@ -167,74 +169,22 @@ viewFullReportBtn.addEventListener("click", async () => {
         if (!res.ok) throw new Error("Failed to fetch report");
 
         const data = await res.json();
+        const report = data.detailed_report;
 
-        // Parse the detailed_report JSON string
-        let report = null;
-        if (data.detailed_report) {
-            try {
-                report = JSON.parse(data.detailed_report);
-            } catch (err) {
-                console.error(
-                    "Failed to parse detailed_report:",
-                    err,
-                    data.detailed_report,
-                );
-            }
+        if (!report) {
+            return alert("No detailed report available.");
         }
 
-        if (!report)
-            return alert(
-                "No detailed report available. Try submitting a review to trigger report generation!",
-            );
-
         const modal = document.getElementById("full-report-modal");
-        const contentDiv = document.getElementById("full-report-content");
+        const reportContainer = document.getElementById("full-report-content");
 
-        const html = `
-    <div class="tw-group tw-p-3 tw-rounded-xl tw-transition-colors tw-duration-300 hover:tw-bg-[#1f1f1f]">
-        <h2 class="tw-text-lg tw-font-bold tw-text-white group-hover:tw-text-[#FACC15] tw-mt-4">Executive Summary</h2>
-        <p class="tw-mt-2 tw-text-gray-200">${report.executive_summary}</p>
-    </div>
+        // Convert Markdown to HTML and sanitize
+        const cleanedReport = report.replace(/^[ \t]+/gm, "").trim();
 
-    <div class="tw-group tw-p-3 tw-rounded-xl tw-transition-colors tw-duration-300 hover:tw-bg-[#1f1f1f]">
-        <h2 class="tw-text-lg tw-font-bold tw-text-white group-hover:tw-text-[#3B82F6] tw-mt-6">Sentiment Trend Analysis</h2>
-        <p class="tw-mt-2 tw-text-gray-200">${report.sentiment_analysis}</p>
-    </div>
+        const parsedHTML = marked.parse(cleanedReport);
 
-    <div class="tw-group tw-p-3 tw-rounded-xl tw-transition-colors tw-duration-300 hover:tw-bg-[#1f1f1f]">
-        <h2 class="tw-text-lg tw-font-bold tw-text-white group-hover:tw-text-[#10B981] tw-mt-6">
-            Monthly Sentiment Data
-        </h2>
-        <ul class="tw-list-disc tw-pl-5 tw-mt-2">
-            ${report.monthly_sentiment
-                .map(
-                    (m) => `
-                <li class="tw-text-gray-200">
-                    <span class="tw-font-medium">${m.month}</span>:
-                    <span class="tw-text-gray-400 group-hover:tw-text-green-400">${m.positive} positive</span>,
-                    <span class="tw-text-gray-400 group-hover:tw-text-red-400">${m.negative} negative</span>
-                </li>
-            `,
-                )
-                .join("")}
-        </ul>
-    </div>
+        reportContainer.innerHTML = DOMPurify.sanitize(parsedHTML);
 
-
-    <div class="tw-group tw-p-3 tw-rounded-xl tw-transition-colors tw-duration-300 hover:tw-bg-[#1f1f1f]">
-        <h2 class="tw-text-lg tw-font-bold tw-text-white group-hover:tw-text-[#F97316] tw-mt-6">Forecast Details</h2>
-        <p class="tw-mt-2 tw-text-gray-200">${report.forecast_details}</p>
-    </div>
-
-    <div class="tw-group tw-p-3 tw-rounded-xl tw-transition-colors tw-duration-300 hover:tw-bg-[#1f1f1f]">
-        <h2 class="tw-text-lg tw-font-bold tw-text-white group-hover:tw-text-[#8B5CF6] tw-mt-6">Recommendations</h2>
-        <ul class="tw-list-disc tw-pl-5 tw-mt-2">
-            ${report.recommendations.map((r) => `<li class="tw-text-gray-200">${r}</li>`).join("")}
-        </ul>
-    </div>
-`;
-
-        contentDiv.innerHTML = html;
         modal.classList.remove("tw-hidden");
     } catch (err) {
         console.error("Error loading report:", err);
@@ -242,10 +192,7 @@ viewFullReportBtn.addEventListener("click", async () => {
     }
 });
 
-// Close button
-document.getElementById("close-full-report").addEventListener("click", () => {
-    document.getElementById("full-report-modal").classList.add("tw-hidden");
-});
+const modal = document.getElementById("full-report-modal");
 
 // Close on outside click
 document
@@ -255,3 +202,15 @@ document
             event.currentTarget.classList.add("tw-hidden");
         }
     });
+
+function closeFullReport() {
+    modal.classList.add("tw-hidden");
+}
+
+document
+    .getElementById("close-full-report")
+    .addEventListener("click", closeFullReport);
+
+document
+    .getElementById("close-full-report-footer")
+    .addEventListener("click", closeFullReport);

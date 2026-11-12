@@ -14,13 +14,13 @@ export function initHouseHover(composer, camera, model, renderer) {
         camera,
     );
 
-    outlinePass.edgeStrength = 3.0;
-    outlinePass.edgeGlow = 0;
+    outlinePass.edgeStrength = 1.5;
+    outlinePass.edgeGlow = 3.8;
     outlinePass.edgeThickness = 1.0;
     outlinePass.pulsePeriod = 0;
 
-    outlinePass.visibleEdgeColor.set("#c4c4c4");
-    outlinePass.hiddenEdgeColor.set("#c4c4c4");
+    outlinePass.visibleEdgeColor.set("#9BCFC2");
+    outlinePass.hiddenEdgeColor.set("#9BCFC2");
 
     composer.addPass(outlinePass);
 
@@ -57,6 +57,7 @@ export function initHouseHover(composer, camera, model, renderer) {
 
             outlinePass.selectedObjects = [];
             composer.removePass(outlinePass);
+            outlinePass.dispose();
         },
     };
 }

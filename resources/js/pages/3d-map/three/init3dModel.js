@@ -4,9 +4,11 @@ import { OrbitControls } from "three/examples/jsm/Addons.js";
 import { initHouseHover } from "./house-hover.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass.js";
 
 let animationFrameId;
 let houseHoverInstance = null;
+let composer = null;
 
 export function init3DModel(container, modelUrl) {
     // Clear container
@@ -29,8 +31,26 @@ export function init3DModel(container, modelUrl) {
 
     const renderPass = new RenderPass(scene, camera);
     composer.addPass(renderPass);
-
     composer.renderPass = renderPass;
+
+    // Outline
+    const outlinePass = new OutlinePass(
+        new THREE.Vector2(width, height),
+        scene,
+        camera
+    );
+
+    outlinePass.selectedObjects = [];
+
+    outlinePass.edgeStrength = 3.0;
+    outlinePass.edgeGlow = 0;
+    outlinePass.edgeThickness = 1.0;
+    outlinePass.pulsePeriod = 0;
+
+    outlinePass.visibleEdgeColor.set("#c4c4c4");
+    outlinePass.hiddenEdgeColor.set("#c4c4c4");
+
+    composer.addPass(outlinePass);
 
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -93,7 +113,8 @@ export function init3DModel(container, modelUrl) {
                 });
             });
 
-            scene.add(model);
+            // Always outline the entire model
+            outlinePass.selectedObjects = [model];
             houseHoverInstance = initHouseHover(
                 composer,
                 camera,

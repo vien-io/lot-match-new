@@ -32,6 +32,10 @@
         @include('partials.side-panel')
     </div>
 
+    @push('styles')
+        @vite('resources/css/components/full-report.css')
+    @endpush
+
     {{-- Modals --}}
     @include('partials.modals.lot-modal')
     @include('partials.modals.block-modal')
