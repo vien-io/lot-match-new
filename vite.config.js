@@ -6,6 +6,7 @@ export default defineConfig({
         laravel({
             input: [
                 "resources/js/app.js",
+                "resources/js/pages/dashboard/dashboard.js",
                 "resources/js/pages/dashboard/dashboardMap.js",
                 "resources/js/settings.js",
                 "resources/js/reviews.js",
