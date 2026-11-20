@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             ForecastRatingsSeeder::class,
             FullForecastReportSeeder::class,
             LotImageSeeder::class,
+            OwnerVerificationSeeder::class,
         ]);
     }
 
