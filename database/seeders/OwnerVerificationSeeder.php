@@ -34,7 +34,7 @@ class OwnerVerificationSeeder extends Seeder
             $lotId = $lots[$i % $lots->count()];
 
             $proofDocument = sprintf(
-                'owner-verifications/sample_proof_%02d.png',
+                'owner_verifications/sample_proof_%02d.png',
                 $i + 1
             );
 
