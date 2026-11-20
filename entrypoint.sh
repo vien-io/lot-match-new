@@ -34,6 +34,9 @@ fi
 # Clear cached config 
 rm -f bootstrap/cache/config.php
 
+echo "Creating storage symlink..."
+php artisan storage:link
+
 echo "Starting Laravel queue worker in background..."
 php artisan queue:work --sleep=3 --tries=3 &
 
