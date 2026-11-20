@@ -1,41 +1,32 @@
+
 #!/bin/sh
 
 set -e
 
-# Optionally run migrations & seeders if environment variable is true
+# Optionally run migrations & all seeders if environment variable is true
 if [ "$RUN_DB_MIGRATIONS" = "true" ]; then
-    echo "Running database migrations and seeders..."
-    php artisan migrate:fresh --force
+    echo "Running fresh migrations and all database seeders..."
 
-    echo "Seeding BlocksTableSeeder..."
-    php artisan db:seed --class=BlocksTableSeeder --force
-    echo "BlocksTableSeeder finished!"
+    php artisan migrate:fresh --seed --force
 
-    echo "Seeding LotSeeder..."
-    php artisan db:seed --class=LotSeeder --force
-    echo "LotSeeder finished!"
-
-    echo "Seeding UserTableSeeder..."
-    php artisan db:seed --class=UserTableSeeder --force
-    echo "UserTableSeeder finished!"
-
-    echo "Seeding ReviewsTableSeeder..."
-    php artisan db:seed --class=ReviewsTableSeeder --force
-    echo "ReviewsTableSeeder finished!"
-
-    echo "Seeding UpdateSoldLotsSeeder..."
-    php artisan db:seed --class=UpdateSoldLotsSeeder --force
-    echo "UpdateSoldLotsSeeder finished!"
-    
+    echo "Database migrations and seeders completed!"
 else
     echo "Skipping DB migrations and seeders"
 fi
 
-# Clear cached config 
+# Clear cached config
 rm -f bootstrap/cache/config.php
 
+# Recreate public storage symlink
 echo "Creating storage symlink..."
-php artisan storage:link
+
+if [ -L public/storage ]; then
+    rm public/storage
+fi
+
+php artisan storage:link --force
+
+echo "Storage symlink created!"
 
 echo "Starting Laravel queue worker in background..."
 php artisan queue:work --sleep=3 --tries=3 &
